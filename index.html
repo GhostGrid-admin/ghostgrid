@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GhostGrid Intro</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1, h2 {
+      margin: 0;
+      text-align: center;
+      text-shadow: 0 0 5px white;
+      font-size: 3.75em;
+    }
+
+    .language-selection {
+      margin-top: 50px;
+      display: flex;
+      gap: 80px;
+    }
+
+    .language-option {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .language-option img {
+      width: 100px;
+      height: auto;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+    }
+
+    .language-option span {
+      display: block;
+      margin-top: 10px;
+      color: #00ff00;
+      font-size: 1.5em;
+      text-shadow: 0 0 4px white;
+    }
+
+    #text {
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: .15em solid #00ff00;
+      animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 19ch }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #00ff00 }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="text" data-i18n="intro_title">Welcome to GhostGrid</h1>
+  <h2 id="subline" style="opacity: 0;" data-i18n="intro_subline">Your gateway to digital freedom</h2>
+
+  <div class="language-selection">
+    <div class="language-option" onclick="playSoundAndSetLanguage('sv')">
+      <img src="flag-sweden.png" alt="Svenska">
+      <span data-i18n="flag_sv">SV</span>
+    </div>
+    <div class="language-option" onclick="playSoundAndSetLanguage('en')">
+      <img src="flag-uk.png" alt="English">
+      <span data-i18n="flag_en">EN</span>
+    </div>
+  </div>
+
+  <!-- Ljudfil -->
+  <audio id="keystrokeAudio" src="keystroke.mp3"></audio>
+
+  <script>
+    // Visa underrubrik efter introtext
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById("subline").style.opacity = 1;
+      }, 3100);
+    };
+
+    // Spara språkval och navigera vidare
+    function playSoundAndSetLanguage(lang) {
+      const audio = document.getElementById("keystrokeAudio");
+      audio.volume = 0.8;
+      audio.play().then(() => {
+        setTimeout(() => {
+          localStorage.setItem("language", lang);
+          window.location.href = "login.html";
+        }, 800);
+      }).catch(() => {
+        localStorage.setItem("language", lang);
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+
+  <script src="language.js"></script>
+</body>
+</html>

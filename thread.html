@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diskussionstråd – GhostGrid</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding-top: 100px;
+      background-color: #0a0a0a;
+      color: #b8f6ff;
+      font-family: 'Courier New', monospace;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 15px;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+      z-index: 0;
+    }
+
+    body::before { left: 0; }
+    body::after { right: 0; }
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.4em;
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      color: #ffffff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+    }
+
+    .thread-container {
+      background-color: rgba(0, 0, 0, 0.85);
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+    }
+
+    .post {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .post strong {
+      color: #ccffff;
+    }
+
+    .reaction-bar {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .reaction-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .reaction-btn:hover { opacity: 1; }
+    .reaction-btn span { font-size: 1.4em; }
+    .highlighted { filter: drop-shadow(0 0 4px #00ffcc); opacity: 1 !important; }
+
+    .new-comment { margin-top: 30px; }
+    .new-comment textarea {
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+    .new-comment button {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: black;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .new-comment button:hover { background-color: #111; }
+
+    .reply-button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background-color: #00ff66;
+      color: black;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00ff66;
+      transition: 0.2s;
+    }
+    .reply-button:hover {
+      background-color: #00cc55;
+      box-shadow: 0 0 12px #00ff66;
+    }
+
+    .post.level-0 { border-left: 4px solid #00ff66; }
+    .post.level-1 { border-left: 4px solid #bb00ff; }
+    .post.level-2 { border-left: 4px solid #ff0080; }
+    .post.level-3 { border-left: 4px solid #ffcc00; }
+    .post.level-4 { border-left: 4px solid #00ccff; }
+    .post.level-5 { border-left: 4px solid #ff4444; }
+    .post.level-6 { border-left: 4px solid #ffffff; }
+
+    @media (max-width: 500px) {
+      body { padding-top: 80px; font-size: 1.1em; }
+      h1 { font-size: 1.4rem; }
+      .post { padding: 12px; font-size: 0.95em; }
+      .reaction-bar { gap: 6px; }
+      .reaction-btn span { font-size: 1.2em; }
+      .new-comment textarea, textarea { font-size: 1em; }
+      .reply-button { padding: 10px 16px; font-size: 1em; }
+      .nav-content a { font-size: 1.2em; }
+      .search-container input { font-size: 1.1em; }
+      .post.level-1, .post.level-2, .post.level-3,
+      .post.level-4, .post.level-5, .post.level-6 {
+        margin-left: 15px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="Sök..." id="searchInput" />
+      </div>
+    </div>
+  </nav>
+  <div class="thread-container">
+    <h1 id="threadTitle">Laddar tråd...</h1>
+    <div id="postList"></div>
+    <div class="new-comment">
+      <textarea id="commentInput" rows="4" placeholder="Skriv en kommentar..."></textarea>
+      <button onclick="addComment()">Skicka kommentar</button>
+    </div>
+  </div>
+
+<script type="module">
+import { db, auth } from './scripts/firebase-init.js';
+import {
+  doc, getDoc, collection, addDoc, getDocs, serverTimestamp, updateDoc
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+const params = new URLSearchParams(window.location.search);
+const threadId = params.get("id");
+const threadTitle = document.getElementById("threadTitle");
+const postList = document.getElementById("postList");
+const commentInput = document.getElementById("commentInput");
+
+let currentUser = null;
+const threadRef = doc(db, "threads", threadId);
+
+const emojis = [
+  { name: "heart", icon: "❤️" },
+  { name: "thumb-up", icon: "👍" },
+  { name: "thumb-down", icon: "👎" },
+  { name: "smile", icon: "😀" },
+  { name: "angry", icon: "😠" },
+  { name: "sad", icon: "😢" },
+  { name: "crying", icon: "😭" },
+  { name: "confused", icon: "😕" },
+  { name: "wow", icon: "😮" },
+  { name: "broken-heart", icon: "💔" }
+];
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  loadThread();
+});
+
+async function loadThread() {
+  const snap = await getDoc(threadRef);
+  if (!snap.exists()) {
+    threadTitle.textContent = "Tråden hittades inte.";
+    return;
+  }
+  threadTitle.textContent = snap.data().title;
+  loadComments();
+}
+
+async function loadComments() {
+  const commentsRef = collection(threadRef, "comments");
+  const snapshot = await getDocs(commentsRef);
+  const allComments = [];
+
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    allComments.push({ id: docSnap.id, ...data });
+  });
+
+  const tree = buildCommentTree(allComments);
+  postList.innerHTML = "";
+  tree.forEach(comment => {
+    postList.appendChild(renderComment(comment));
+  });
+}
+
+function buildCommentTree(comments, parentId = null) {
+  return comments
+    .filter(c => c.parentId === parentId)
+    .sort((a, b) => a.timestamp?.seconds - b.timestamp?.seconds)
+    .map(comment => ({
+      ...comment,
+      children: buildCommentTree(comments, comment.id)
+    }));
+}
+
+function renderComment(comment, level = 0) {
+  const div = document.createElement("div");
+  div.className = `post level-${level % 7}`;
+  div.style.marginLeft = `${level * 30}px`;
+  div.innerHTML = `<strong>${comment.username || "Anonym"}</strong>: ${comment.text}`;
+
+  const reactions = document.createElement("div");
+  reactions.className = "reaction-bar";
+
+  const reactionCounts = {};
+  const userReactions = comment.reactions || {};
+  Object.values(userReactions).forEach(r => {
+    reactionCounts[r] = (reactionCounts[r] || 0) + 1;
+  });
+
+  emojis.forEach(emoji => {
+    const btn = document.createElement("div");
+    btn.className = "reaction-btn";
+    if (currentUser && userReactions[currentUser.uid] === emoji.name) btn.classList.add("highlighted");
+
+    const img = document.createElement("span");
+    img.textContent = emoji.icon;
+
+    const count = document.createElement("span");
+    count.textContent = reactionCounts[emoji.name] || 0;
+
+    if (currentUser) {
+      btn.onclick = async () => {
+        const newReaction = userReactions[currentUser.uid] === emoji.name ? null : emoji.name;
+        await updateDoc(doc(db, "threads", threadId, "comments", comment.id), {
+          [`reactions.${currentUser.uid}`]: newReaction
+        });
+        loadComments();
+      };
+    }
+
+    btn.appendChild(img);
+    btn.appendChild(count);
+    reactions.appendChild(btn);
+  });
+
+  div.appendChild(reactions);
+
+  const replyWrapper = document.createElement("div");
+  replyWrapper.style.marginTop = "5px";
+
+  const replyBtn = document.createElement("button");
+  replyBtn.textContent = "Svara";
+  replyBtn.className = "reply-button";
+  replyBtn.onclick = () => {
+    const input = document.createElement("textarea");
+    input.placeholder = "Skriv ett svar...";
+    input.style.width = "100%";
+    input.rows = 2;
+
+    const sendBtn = document.createElement("button");
+    sendBtn.textContent = "Skicka svar";
+    sendBtn.style.marginTop = "5px";
+    sendBtn.onclick = async () => {
+      const text = input.value.trim();
+      if (!text || !currentUser) return;
+      await addDoc(collection(threadRef, "comments"), {
+        text,
+        username: currentUser.displayName || "Anonym",
+        timestamp: serverTimestamp(),
+        reactions: {},
+        parentId: comment.id
+      });
+      const confirmation = document.createElement("div");
+      confirmation.textContent = "✅ 1 nytt svar tillagt... laddar om...";
+      confirmation.style.color = "#00ff66";
+      confirmation.style.marginTop = "8px";
+      confirmation.style.fontStyle = "italic";
+      replyWrapper.appendChild(confirmation);
+      setTimeout(() => { loadComments(); }, 1000);
+    };
+
+    replyWrapper.appendChild(input);
+    replyWrapper.appendChild(sendBtn);
+    replyBtn.disabled = true;
+  };
+
+  replyWrapper.appendChild(replyBtn);
+  div.appendChild(replyWrapper);
+
+  if (comment.children && comment.children.length > 0) {
+    const toggleBtn = document.createElement("button");
+    const numReplies = comment.children.length;
+    toggleBtn.textContent = `Visa ${numReplies} svar`;
+    toggleBtn.className = "reply-button";
+    toggleBtn.style.marginTop = "10px";
+
+    const childrenContainer = document.createElement("div");
+    childrenContainer.style.display = "none";
+    childrenContainer.style.marginTop = "10px";
+
+    comment.children.forEach(child => {
+      childrenContainer.appendChild(renderComment(child, level + 1));
+    });
+
+    toggleBtn.onclick = () => {
+      const isVisible = childrenContainer.style.display === "block";
+      childrenContainer.style.display = isVisible ? "none" : "block";
+      toggleBtn.textContent = isVisible ? `Visa ${numReplies} svar` : `Dölj ${numReplies} svar`;
+    };
+
+    div.appendChild(toggleBtn);
+    div.appendChild(childrenContainer);
+  }
+
+  return div;
+}
+
+async function addComment() {
+  const text = commentInput.value.trim();
+  if (!text || !currentUser) return;
+  await addDoc(collection(threadRef, "comments"), {
+    text,
+    username: currentUser.displayName || "Anonym",
+    timestamp: serverTimestamp(),
+    reactions: {},
+    parentId: null
+  });
+  commentInput.value = "";
+  loadComments();
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        const term = searchInput.value.trim();
+        if (term.length > 1) {
+          window.location.href = `search.html?query=${encodeURIComponent(term)}`;
+        }
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

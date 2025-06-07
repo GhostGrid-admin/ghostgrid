@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vänner – GhostGrid</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding-top: 110px;
+    }
+
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 15px;
+      z-index: 0;
+    }
+
+    body::before {
+      left: 0;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+    }
+
+    body::after {
+      right: 0;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+    }
+
+    .navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.3em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.2em;
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      color: #ffffff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+    }
+
+    .friends-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #00ff00;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .friend-card, .search-result {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #00ff00;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #00ff00;
+      color: black;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+
+    button:hover {
+      background-color: #00cc00;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Sök användare..." />
+      </div>
+    </div>
+  </nav>
+
+  <div class="friends-container">
+    <h2>Dina vänner</h2>
+    <div id="friendList"></div>
+
+    <h2>Inkommande vänförfrågningar</h2>
+    <div id="incomingRequests"></div>
+
+    <h2>Sökresultat</h2>
+    <div id="searchResults"></div>
+  </div>
+
+  <script type="module">
+    import { db, auth } from "./scripts/firebase-init.js";
+    import {
+      collection, doc, getDoc, getDocs, setDoc, deleteDoc,
+      updateDoc, arrayUnion, serverTimestamp, query, where
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const friendList = document.getElementById("friendList");
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const incomingDiv = document.getElementById("incomingRequests");
+
+    let currentUserId = null;
+    let currentUsername = "";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return location.href = "login.html";
+      currentUserId = user.uid;
+
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (userSnap.exists()) currentUsername = userSnap.data().username;
+
+      const friendSnap = await getDocs(collection(db, "users", user.uid, "friends"));
+      friendSnap.forEach((docSnap) => {
+        const data = docSnap.data();
+        const div = document.createElement("div");
+        div.classList.add("friend-card");
+        div.innerHTML = `<strong>${data.username}</strong><br><button onclick="alert('Meddelandefunktion snart!')">Meddela</button>`;
+        friendList.appendChild(div);
+      });
+
+      const requestSnap = await getDocs(collection(db, "users", user.uid, "friendRequests"));
+      requestSnap.forEach((docSnap) => {
+        const fromId = docSnap.id;
+        const fromData = docSnap.data();
+
+        const div = document.createElement("div");
+        div.classList.add("friend-card");
+        div.innerHTML = `
+          <strong>${fromData.username}</strong> skickade en förfrågan.<br>
+          <button onclick="acceptRequest('${fromId}', '${fromData.username}')">Acceptera</button>
+          <button onclick="declineRequest('${fromId}')">Neka</button>
+        `;
+        incomingDiv.appendChild(div);
+      });
+    });
+
+    searchInput.addEventListener("input", async () => {
+      const search = searchInput.value.trim().toLowerCase();
+      searchResults.innerHTML = "";
+      if (!search || search.length < 2) return;
+
+      const q = query(collection(db, "users"), where("username", ">=", search));
+      const snapshot = await getDocs(q);
+      snapshot.forEach(docSnap => {
+        if (docSnap.id === currentUserId) return;
+        const data = docSnap.data();
+
+        const div = document.createElement("div");
+        div.classList.add("search-result");
+        div.innerHTML = `
+          <strong>${data.username}</strong><br>
+          <button onclick="sendFriendRequest('${docSnap.id}', '${data.username}')">Lägg till vän</button>
+          <button onclick="alert('Meddelandefunktion snart!')">Meddela</button>
+        `;
+        searchResults.appendChild(div);
+      });
+    });
+
+    window.sendFriendRequest = async (receiverId, receiverUsername) => {
+      if (!currentUserId) return;
+      await setDoc(doc(db, "users", receiverId, "friendRequests", currentUserId), {
+        username: currentUsername,
+        timestamp: serverTimestamp()
+      });
+      alert("Vänförfrågan skickad till " + receiverUsername + "!");
+    };
+
+    window.acceptRequest = async (fromId, fromUsername) => {
+      const userRef = doc(db, "users", currentUserId);
+      const otherRef = doc(db, "users", fromId);
+
+      await updateDoc(userRef, {
+        friends: arrayUnion({ id: fromId, username: fromUsername })
+      });
+
+      await updateDoc(otherRef, {
+        friends: arrayUnion({ id: currentUserId, username: currentUsername })
+      });
+
+      await deleteDoc(doc(db, "users", currentUserId, "friendRequests", fromId));
+      alert("Du och " + fromUsername + " är nu vänner!");
+      location.reload();
+    };
+
+    window.declineRequest = async (fromId) => {
+      await deleteDoc(doc(db, "users", currentUserId, "friendRequests", fromId));
+      alert("Förfrågan nekad.");
+      location.reload();
+    };
+  </script>
+</body>
+</html>

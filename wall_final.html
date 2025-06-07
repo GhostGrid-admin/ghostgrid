@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Väggen – GhostGrid</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme-handler.js" defer></script>
+  <script src="search-handler.js" defer></script>
+  <style>
+    body {
+      margin: 0;
+      padding-top: 100px;
+      background-color: #0a0a0a;
+      color: #b8f6ff;
+      font-family: 'Courier New', monospace;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 15px;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+      z-index: 0;
+    }
+
+    body::before { left: 0; }
+    body::after { right: 0; }
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.4em;
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      color: #ffffff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+    }
+
+    .wall-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .wall-title {
+      font-size: 2.2em;
+      text-align: center;
+      color: #80ffcc;
+      margin-bottom: 30px;
+      text-shadow: 0 0 6px #ffffff;
+    }
+
+    .post {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    .post strong {
+      color: #ccffff;
+    }
+
+    .reactions button, .comments button {
+      margin-right: 5px;
+      background-color: #7b00b3;
+      border: none;
+      padding: 5px 10px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .reactions button:hover, .comments button:hover {
+      background-color: #a64dff;
+    }
+
+    .comments input[type="text"] {
+      width: 100%;
+      margin-top: 8px;
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #555;
+      background-color: #1a1a2d;
+      color: white;
+    }
+
+    .search-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .search-filter button {
+      background-color: #8000ff;
+      border: none;
+      padding: 6px 14px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+
+    .search-filter button:hover {
+      background-color: #a64dff;
+    }
+
+    .login-warning {
+      color: #ff9999;
+      font-style: italic;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="Sök..." id="searchInput" oninput="filterPosts()" />
+      </div>
+    </div>
+  </nav>
+
+  <div class="wall-container">
+    <h1 class="wall-title">Gemensamma Inlägg</h1>
+
+    <div class="search-filter">
+      <button onclick="setFilter('all')">Alla</button>
+      <button onclick="setFilter('text')">Text</button>
+      <button onclick="setFilter('image')">Bilder</button>
+      <button onclick="setFilter('audio')">Ljud</button>
+      <button onclick="setFilter('video')">Klipp</button>
+    </div>
+
+    <div id="postsContainer"></div>
+  </div>
+
+  <script src="wall-functionality.js"></script> <!-- Om du har denna -->
+  <script src="language.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostGrid Forum</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 60px #7b00ff, 0 0 60px 15px #00ffcc;
+      z-index: 9999;
+      animation: pulseGlow 6s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: inset 0 0 60px #7b00ff, 0 0 30px 10px #00ffcc; }
+      100% { box-shadow: inset 0 0 110px #a933ff, 0 0 70px 15px #00ffaa; }
+    }
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-container input {
+      padding: 10px 18px 10px 42px;
+      font-size: 1.4em;
+      font-family: 'Courier New', monospace;
+      background-color: #0c0c0c;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      border-radius: 14px;
+      outline: none;
+      box-shadow:
+        inset 0 0 5px #00ffcc,
+        0 0 12px #7b00ff,
+        0 0 20px #00ffcc;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 3px #00ffcc;
+    }
+
+    .search-container input:hover,
+    .search-container input:focus {
+      box-shadow:
+        inset 0 0 6px #00ffee,
+        0 0 18px #8800ff,
+        0 0 30px #00ffee;
+      background-color: #111;
+    }
+
+    .search-container::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      pointer-events: none;
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+
+    .forum-layout {
+      display: flex;
+      gap: 20px;
+    }
+
+    .forum-main {
+      flex: 1;
+    }
+
+    .forum-sidebar {
+      width: 300px;
+      position: sticky;
+      top: 120px;
+      background-color: rgba(0,0,0,0.8);
+      border-left: 2px solid #00ffcc;
+      padding: 20px;
+      border-radius: 10px;
+      height: fit-content;
+    }
+
+    .forum-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 140px auto 80px auto;
+      padding: 30px;
+    }
+
+    .search-bar input {
+      padding: 12px 20px;
+      font-size: 1.2em;
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid #00ffcc;
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 10px #7b00ff, 0 0 5px #00ffcc;
+    }
+
+    .forum-category {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 5px solid #00ffcc;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .forum-category:hover {
+      transform: scale(1.02);
+    }
+
+    .category-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    .category-description {
+      font-size: 0.95em;
+      color: #bbbbbb;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" id="globalSearchInput" placeholder="Sök...">
+      </div>
+    </div>
+  </nav>
+
+  <div class="forum-container forum-layout">
+    <div class="forum-main">
+      <h1>GhostGrid Forum</h1>
+
+      <div class="search-bar">
+        <input type="text" placeholder="🔍 Sök trådar eller kategorier...">
+      </div>
+
+      <div class="forum-category" onclick="location.href='tech-heaven.html'">
+        <div class="category-title">Tech Heaven</div>
+        <div class="category-description">Diskutera hårdvara, mjukvara, internet och framtidens prylar.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='ai-framtiden.html'">
+        <div class="category-title">AI & Framtiden</div>
+        <div class="category-description">Allt om artificiell intelligens, robotik och framtidsscenarier.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='varlden-samhallet.html'">
+        <div class="category-title">Världen & Samhället</div>
+        <div class="category-description">Tankar kring politik, nyheter, klimat och samhällsfrågor.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='kod-projekt.html'">
+        <div class="category-title">Kod & Projekt</div>
+        <div class="category-description">Dela kod, be om hjälp eller visa upp dina projekt.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='tankar-kanslor.html'">
+        <div class="category-title">Tankar & Känslor</div>
+        <div class="category-description">För dig som vill prata fritt om livet, känslor eller vardagen.</div>
+      </div>
+    </div>
+
+    <div class="forum-sidebar">
+      <h3>Info</h3>
+      <p>Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt. </p>
+      <p>💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const query = this.value.trim();
+        if (query) {
+          window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

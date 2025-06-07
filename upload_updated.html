@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostGrid – Ladda upp</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding-top: 100px;
+      background-color: #0a0a0a;
+      color: #b8f6ff;
+      font-family: 'Courier New', monospace;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 15px;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 15px;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+      z-index: 0;
+    }
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.4em;
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      color: #ffffff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+    }
+
+    .search-container input::placeholder {
+      color: #bbbbbb;
+    }
+
+    .upload-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 25px;
+      margin: auto;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 15px #66ffcc;
+    }
+
+    .upload-box h1 {
+      text-align: center;
+      color: #80ffcc;
+      text-shadow: 0 0 4px #ffffff;
+    }
+
+    textarea, input[type="file"], button, label {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #b8f6ff;
+      background-color: #111;
+      border: 1px solid #66ffcc;
+      padding: 0.6rem;
+      border-radius: 6px;
+    }
+
+    button[type="submit"] {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #00ccaa;
+    }
+
+    #spinner {
+      display: none;
+      width: 50px;
+      margin: 10px auto;
+    }
+
+    audio {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="Sök..." id="searchInput" />
+      </div>
+    </div>
+  </nav>
+
+  <div class="upload-box">
+    <h1>Ladda upp innehåll</h1>
+    <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
+
+    <form id="uploadForm">
+      <label for="text">Skriv ett inlägg:</label>
+      <textarea id="text" placeholder="Vad vill du dela med dig av?"></textarea>
+
+      <label for="image">Ladda upp en bild:</label>
+      <input type="file" id="image" accept="image/*" />
+
+      <label for="video">Ladda upp ett klipp (valfritt):</label>
+      <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
+
+      <label for="audio">Ladda upp ljudfil (valfritt):</label>
+      <input type="file" id="audio" accept="audio/*" />
+
+      <label>
+        <input type="checkbox" id="temporary" />
+        Gör detta till ett tillfälligt inlägg (försvinner om 24h)
+      </label>
+
+      <label>Mikrofoninspelning (valfritt):</label>
+      <button type="button" id="recordButton">🎤 Starta inspelning</button>
+      <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
+      <audio id="audioPreview" controls></audio>
+
+      <button type="submit">Ladda upp</button>
+    </form>
+  </div>
+
+  <script src="theme-toggle.js"></script>
+  <script src="language.js"></script>
+
+  <!-- Sökfälts-funktion -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query.length >= 2) {
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            }
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

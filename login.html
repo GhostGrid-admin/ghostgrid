@@ -1,0 +1,145 @@
+<!DOCTYPE html> 
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="login_page_title">Logga in – GhostGrid</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ff00;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 5px white;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-shadow: 0 0 3px white;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1em;
+      color: black;
+      background-color: #00ff00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00cc00;
+    }
+
+    .extra-options {
+      margin-top: 25px;
+      font-size: 0.9em;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .purple-button {
+      background-color: #8000ff;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 0 8px #ffffff;
+      transition: 0.3s;
+    }
+
+    .purple-button:hover {
+      background-color: #a64dff;
+      box-shadow: 0 0 12px #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <!-- 🎵 Keystroke-ljud -->
+  <audio id="keystrokeAudio" src="keystroke.mp3" autoplay muted></audio>
+
+  <div class="login-container">
+    <h1 data-i18n="login_title">Logga in på GhostGrid</h1>
+
+    <form id="loginForm">
+      <label for="email" data-i18n="email">E-postadress</label>
+      <input type="email" id="email" name="email" required placeholder="" data-i18n="email_placeholder">
+
+      <label for="password" data-i18n="password">Lösenord</label>
+      <input type="password" id="password" name="password" required placeholder="" data-i18n="password_placeholder">
+
+      <button type="submit" data-i18n="login_button">Logga in</button>
+
+      <div class="extra-options">
+        <a href="reset-password.html" class="purple-button" data-i18n="forgot_password">Glömt ditt lösenord?</a>
+        <a href="register.html" class="purple-button" data-i18n="create_account">Skapa nytt konto</a>
+      </div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { auth } from "./scripts/firebase-init.js";
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    window.addEventListener("load", () => {
+      const audio = document.getElementById("keystrokeAudio");
+      audio.muted = false;
+      audio.volume = 0.8;
+      audio.play().catch(() => {});
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Fel: " + error.message);
+      }
+    });
+  </script>
+
+  <script src="language.js"></script>
+</body>
+</html>

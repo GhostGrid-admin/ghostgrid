@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Världen & Samhället – GhostGrid</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #00ffcc;
+      overflow-x: hidden;
+    }
+
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 60px;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle, #8800ff 0%, transparent 70%);
+    }
+    .glow-left { left: 0; }
+    .glow-right { right: 0; }
+
+    .forum-container {
+      background: rgba(0, 0, 0, 0.85);
+      margin: 80px auto;
+      padding: 30px;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #00ffcc;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+    }
+
+    .create-thread-btn {
+      margin-top: 30px;
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background-color: #00ffcc;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .create-thread-form {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      background: #111;
+      border: 1px solid #00ffcc;
+      border-radius: 8px;
+    }
+
+    .create-thread-form input,
+    .create-thread-form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 6px;
+    }
+
+    .create-thread-form input[type="file"] {
+      padding: 0;
+    }
+
+    .create-thread-form button {
+      width: 100%;
+      padding: 12px;
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+
+  <div class="forum-container">
+    <h1 id="forum-title">Världen & Samhället</h1>
+
+    <div id="thread-list"></div>
+
+    <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
+
+    <div class="create-thread-form" id="formSection">
+      <input type="text" id="threadTitle" placeholder="">
+      <textarea id="threadContent" rows="5" placeholder=""></textarea>
+      <input type="file" id="threadImage" accept="image/*">
+      <button id="submit-btn" onclick="submitThread()">Skicka</button>
+    </div>
+  </div>
+
+  <script>
+    const lang = localStorage.getItem("language") || "sv";
+
+    const translations = {
+      sv: {
+        title: "🌍 Världen & Samhället",
+        createButton: "➕ Skapa ny tråd",
+        threadTitle: "Rubrik på tråden",
+        threadContent: "Vad vill du diskutera?",
+        submit: "Skicka"
+      },
+      en: {
+        title: "🌍 World & Society",
+        createButton: "➕ Create new thread",
+        threadTitle: "Thread title",
+        threadContent: "What do you want to discuss?",
+        submit: "Submit"
+      }
+    };
+
+    const t = translations[lang];
+    document.getElementById("forum-title").innerText = t.title;
+    document.getElementById("create-btn").innerText = t.createButton;
+    document.getElementById("threadTitle").placeholder = t.threadTitle;
+    document.getElementById("threadContent").placeholder = t.threadContent;
+    document.getElementById("submit-btn").innerText = t.submit;
+
+    function toggleForm() {
+      const form = document.getElementById("formSection");
+      form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
+    }
+
+    function submitThread() {
+      alert(t.submit + " – (Firebase-kod läggs in här)");
+    }
+  </script>
+</body>
+</html>
