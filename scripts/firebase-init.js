@@ -8,9 +8,9 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/11.8.1/firebase
 // Firebase-konfiguration för GhostGrid
 const firebaseConfig = {
   apiKey: "AIzaSyCMeJhxPqWyXB1tZqpN0YdYHOEzKlCB-RM",
-  authDomain: "ghosrtgrid.firebaseapp.com",
-  projectId: "ghosrtgrid",
-  storageBucket: "ghosrtgrid.appspot.com",
+authDomain: "ghostgrid.firebaseapp.com",
+projectId: "ghostgrid",
+storageBucket: "ghostgrid.appspot.com",
   messagingSenderId: "867043406657",
   appId: "1:867043406657:web:0cd071cddcf463aaaae7c0",
   measurementId: "G-MS8XVKCJT2"
