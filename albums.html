@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Mina Album – GhostGrid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    .album {
+      border: 1px solid #00ff00;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    .album img {
+      max-width: 150px;
+      margin: 10px;
+      border: 1px solid #00ff00;
+      border-radius: 8px;
+    }
+    button {
+      background: #00ff00;
+      color: black;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mina Album</h1>
+  <div id="albumsContainer"></div>
+
+  <script type="module">
+    import { db, auth } from "./scripts/firebase-init.js";
+    import { collection, getDocs, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const container = document.getElementById("albumsContainer");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return alert("Du måste vara inloggad.");
+      const uid = user.uid;
+      const albumsRef = collection(db, "users", uid, "albums");
+      const albumsSnap = await getDocs(albumsRef);
+
+      albumsSnap.forEach(async (albumDoc) => {
+        const albumData = albumDoc.data();
+        const albumId = albumDoc.id;
+
+        const albumDiv = document.createElement("div");
+        albumDiv.className = "album";
+        albumDiv.innerHTML = `<h2>${albumData.name}</h2><div id="album-${albumId}"></div>`;
+        container.appendChild(albumDiv);
+
+        // Hämta bilder i albumet
+        const imagesRef = collection(db, "users", uid, "albums", albumId, "images");
+        const imagesSnap = await getDocs(imagesRef);
+        const imageContainer = document.getElementById(`album-${albumId}`);
+
+        imagesSnap.forEach((imgDoc) => {
+          const imgData = imgDoc.data();
+          const img = document.createElement("img");
+          img.src = imgData.url;
+          imageContainer.appendChild(img);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
