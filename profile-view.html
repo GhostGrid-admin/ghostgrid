@@ -38,14 +38,14 @@
   </style>
 </head>
 <body style="margin:0; padding:0; background:black; color:white;">
-  <div id="profile-output" style="width:100%; min-height:100vh;"></div>
-  <button id="likeBtn" style="position:fixed; bottom:20px; right:20px; padding:10px 20px; font-size:16px;">❤️ Gilla</button>
-  <div class="like-counter" id="likeCounter">0</div>
-  <div id="likeInfo"></div>
+<div style="text-align:center; margin-top:40px;">
+  <img id="profile-pic-display" src="" alt="Profilbild" style="width:140px; height:140px; border-radius:50%; border:2px solid #00ff00; box-shadow:0 0 15px #00ff00;" />
+  <br />
+  <button id="likeImageBtn" style="margin-top:10px; background:#000; color:#00ff00; border:1px solid #00ff00; padding:8px 16px; border-radius:6px; cursor:pointer;">❤️ Gilla profilbild</button>
+  <div id="imageLikesInfo" style="margin-top:10px; color:white;"></div>
+</div>
 
-  <button id="picLikeBtn" style="position:fixed; bottom:60px; right:20px; padding:10px 20px; font-size:16px;">🖼️❤️</button>
-  <div class="pic-like-counter" id="picLikeCounter">0</div>
-  <div id="picLikeInfo"></div>
+<div id="profile-output" style="width:100%; min-height:100vh; padding:20px;"></div>
 
   <script type="module">
     import { auth, db } from "./scripts/firebase-init.js";
