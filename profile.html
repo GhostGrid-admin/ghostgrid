@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -148,7 +148,7 @@
 
     <button id="saveBtn" data-i18n="save">Spara kod</button>
     <button id="useTemplateBtn" data-i18n="use_template">Använd färdig kod</button>
-    <button id="viewProfileBtn" data-i18n="view_profile">Visa profil</button>
+    <button onclick="goToProfileView()" data-i18n="view_profile">Visa profil</button>
     <button id="editProfileBtn" class="hidden" data-i18n="edit_profile">Redigera profil</button>
 
     <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;" data-i18n="profile_saved">
@@ -164,5 +164,21 @@
   </div>
 
   <script type="module" src="scripts/profile-script.js"></script>
+
+  <!-- Nytt script för att visa sin profil -->
+  <script type="module">
+    import { auth } from './scripts/firebase-init.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    window.goToProfileView = function() {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = `profile-view.html?uid=${user.uid}`;
+        } else {
+          alert("Du är inte inloggad.");
+        }
+      });
+    };
+  </script>
 </body>
 </html>
