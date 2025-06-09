@@ -1,11 +1,11 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-i18n="login_page_title">Logga in – GhostGrid</title>
-  <link rel="stylesheet" href="style_updated.css">
+  <link rel="stylesheet" href="style_updated.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
       background-color: black;
@@ -16,6 +16,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      padding: 0 15px;
     }
 
     .login-container {
@@ -25,10 +26,12 @@
       border-radius: 10px;
       text-align: center;
       box-shadow: 0 0 20px #00ff00;
+      width: 100%;
+      max-width: 400px;
     }
 
     h1 {
-      font-size: 2.5em;
+      font-size: 2.2rem;
       margin-bottom: 30px;
       text-shadow: 0 0 5px white;
     }
@@ -38,6 +41,8 @@
       margin-top: 15px;
       margin-bottom: 5px;
       text-shadow: 0 0 3px white;
+      font-size: 0.95rem;
+      text-align: left;
     }
 
     input {
@@ -48,17 +53,19 @@
       border: 1px solid #00ff00;
       border-radius: 5px;
       font-family: 'Courier New', monospace;
+      font-size: 1rem;
     }
 
     button {
       margin-top: 20px;
       padding: 12px 25px;
-      font-size: 1em;
+      font-size: 1rem;
       color: black;
       background-color: #00ff00;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
@@ -70,7 +77,7 @@
       font-size: 0.9em;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
       flex-wrap: wrap;
     }
 
@@ -90,10 +97,35 @@
       background-color: #a64dff;
       box-shadow: 0 0 12px #ffffff;
     }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      .login-container {
+        padding: 25px;
+        box-shadow: 0 0 15px #00ff00;
+      }
+
+      label {
+        font-size: 0.85rem;
+      }
+
+      input,
+      button {
+        font-size: 0.95rem;
+      }
+
+      .extra-options {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- 🎵 Keystroke-ljud -->
   <audio id="keystrokeAudio" src="keystroke.mp3" autoplay muted></audio>
 
   <div class="login-container">
@@ -115,7 +147,6 @@
     </form>
   </div>
 
-  <!-- 🔒 Inloggning med Firebase -->
   <script type="module">
     import { auth } from "./scripts/firebase-init.js";
     import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
@@ -129,12 +160,11 @@
 
     document.getElementById("loginForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "profile.html";
       } catch (error) {
         alert("Fel: " + error.message);
@@ -143,6 +173,51 @@
   </script>
 
   <!-- 🌐 Språkhantering -->
-  <script src="language.js"></script>
+  <script>
+    const translations = {
+      sv: {
+        login_page_title: "Logga in – GhostGrid",
+        login_title: "Logga in på GhostGrid",
+        email: "E-postadress",
+        email_placeholder: "Ange din e-post",
+        password: "Lösenord",
+        password_placeholder: "Ange ditt lösenord",
+        login_button: "Logga in",
+        forgot_password: "Glömt ditt lösenord?",
+        create_account: "Skapa nytt konto"
+      },
+      en: {
+        login_page_title: "Login – GhostGrid",
+        login_title: "Log in to GhostGrid",
+        email: "Email address",
+        email_placeholder: "Enter your email",
+        password: "Password",
+        password_placeholder: "Enter your password",
+        login_button: "Log in",
+        forgot_password: "Forgot your password?",
+        create_account: "Create account"
+      }
+    };
+
+    function applyTranslations() {
+      const lang = localStorage.getItem("lang") || "sv";
+      const elements = document.querySelectorAll("[data-i18n]");
+
+      elements.forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          if (el.placeholder !== undefined && el.tagName === "INPUT") {
+            el.placeholder = translations[lang][`${key}_placeholder`] || translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+
+      document.title = translations[lang]["login_page_title"];
+    }
+
+    document.addEventListener("DOMContentLoaded", applyTranslations);
+  </script>
 </body>
 </html>
