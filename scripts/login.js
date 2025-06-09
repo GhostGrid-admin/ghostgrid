@@ -1,10 +1,16 @@
 // scripts/login.js
-import { auth } from "./firebase-init.js";
+import { auth, db } from "./firebase-init.js";
 import {
   signInWithEmailAndPassword,
   setPersistence,
-  browserLocalPersistence
+  browserLocalPersistence,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+import {
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // Funktion för att översätta sidan
 const translations = {
@@ -75,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Ljud vid sidladdning (frivillig)
   const audio = document.getElementById("keystrokeAudio");
   if (audio) {
     window.addEventListener("load", () => {
@@ -83,5 +88,22 @@ document.addEventListener("DOMContentLoaded", () => {
       audio.volume = 0.8;
       audio.play().catch(() => {});
     });
+  }
+});
+
+// Skapa användarprofil automatiskt i Firestore vid första inloggning
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        email: user.email,
+        displayName: user.displayName || "",
+        profileCode: "",
+        createdAt: new Date()
+      });
+    }
   }
 });
