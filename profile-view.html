@@ -3,8 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <title>Profilvisning – GhostGrid</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+    }
+    .profile-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .left-panel {
+      flex: 1;
+      min-width: 260px;
+      max-width: 320px;
+      text-align: center;
+    }
+    .left-panel img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 15px #00ff00;
+    }
+    #likeImageBtn {
+      margin-top: 10px;
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .album-gallery {
+      flex: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .album-gallery img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 1px solid #00ff00;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #profile-output {
+      width: 100%;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-top: 2px solid #00ff00;
+    }
     #likeInfo, #picLikeInfo {
       position: fixed;
       bottom: 70px;
@@ -16,10 +76,6 @@
       border-radius: 8px;
       max-width: 300px;
       display: none;
-    }
-    #likeInfo ul, #picLikeInfo ul {
-      margin: 0;
-      padding-left: 18px;
     }
     .like-counter {
       position: fixed;
@@ -35,22 +91,33 @@
       color: #ff00ff;
       font-weight: bold;
     }
+    @media (max-width: 768px) {
+      .profile-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
   </style>
 </head>
-<body style="margin:0; padding:0; background:black; color:white;">
-<div style="text-align:center; margin-top:40px;">
-  <img id="profile-pic-display" src="" alt="Profilbild" style="width:140px; height:140px; border-radius:50%; border:2px solid #00ff00; box-shadow:0 0 15px #00ff00;" />
-  <br />
-  <button id="likeImageBtn" style="margin-top:10px; background:#000; color:#00ff00; border:1px solid #00ff00; padding:8px 16px; border-radius:6px; cursor:pointer;">❤️ Gilla profilbild</button>
-  <div id="imageLikesInfo" style="margin-top:10px; color:white;"></div>
+<body>
+<div class="profile-container">
+  <div class="left-panel">
+    <img id="profile-pic-display" src="" alt="Profilbild">
+    <button id="likeImageBtn">❤️ Gilla profilbild</button>
+    <div class="pic-like-counter" id="picLikeCounter">0</div>
+  </div>
+  <div class="album-gallery" id="albumGallery"></div>
 </div>
 
-<div id="profile-output" style="width:100%; min-height:100vh; padding:20px;"></div>
+<div id="profile-output"></div>
+<div id="likeInfo"></div>
+<div id="picLikeInfo"></div>
+<div class="like-counter" id="likeCounter">0</div>
 
 <script type="module">
-  import { auth, db } from "./scripts/firebase-init.js";
+  import { auth, db } from './scripts/firebase-init.js';
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-  import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
   function getUidFromURL() {
     const params = new URLSearchParams(window.location.search);
@@ -58,11 +125,13 @@
   }
 
   const uid = getUidFromURL();
-  const container = document.getElementById("profile-output");
+  const profileOutput = document.getElementById("profile-output");
+  const profilePic = document.getElementById("profile-pic-display");
+  const albumGallery = document.getElementById("albumGallery");
+  const picLikeCounter = document.getElementById("picLikeCounter");
   const likeInfo = document.getElementById("likeInfo");
   const picLikeInfo = document.getElementById("picLikeInfo");
   const likeCounter = document.getElementById("likeCounter");
-  const picLikeCounter = document.getElementById("picLikeCounter");
 
   let currentUser;
 
@@ -100,10 +169,6 @@
     await showLikes(uid, field, infoBox, counterBox);
   }
 
-  if (!uid) {
-    container.innerHTML = "<p style='color:white;'>Ingen användarprofil specificerad.</p>";
-  }
-
   onAuthStateChanged(auth, async (user) => {
     if (!user) return (window.location.href = "login.html");
     currentUser = user;
@@ -111,16 +176,23 @@
     const docSnap = await getDoc(doc(db, "users", uid));
     if (docSnap.exists()) {
       const data = docSnap.data();
-
-      // ✅ Här visar vi profilbilden automatiskt
+      profileOutput.innerHTML = data.profileCode || "<p>Den här användaren har ingen profil ännu.</p>";
       if (data.currentProfileImage) {
-        document.getElementById("profile-pic-display").src = data.currentProfileImage;
+        profilePic.src = data.currentProfileImage;
       }
-
-      container.innerHTML = data.profileCode || "<p style='color:white;'>Den här användaren har ingen profil ännu.</p>";
-    } else {
-      container.innerHTML = "<p style='color:white;'>Användaren hittades inte.</p>";
     }
+
+    const imagesRef = collection(db, "users", uid, "profileImages");
+    const snapshot = await getDocs(imagesRef);
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      if (data.url) {
+        const img = document.createElement("img");
+        img.src = data.url;
+        img.title = "Klicka för att ta bort (kommer snart)";
+        albumGallery.appendChild(img);
+      }
+    });
 
     await showLikes(uid, "likes", likeInfo, likeCounter);
     await showLikes(uid, "picLikes", picLikeInfo, picLikeCounter);
@@ -128,12 +200,5 @@
 
   document.getElementById("likeImageBtn").addEventListener("click", () => toggleLike("picLikes", picLikeInfo, picLikeCounter));
 </script>
-
-<!-- Glöm inte dessa element -->
-<div id="likeInfo"></div>
-<div class="like-counter" id="likeCounter">0</div>
-<div id="picLikeInfo"></div>
-<div class="pic-like-counter" id="picLikeCounter">0</div>
-
 </body>
 </html>
