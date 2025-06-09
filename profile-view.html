@@ -49,6 +49,7 @@
       border-radius: 6px;
       background: #111;
       cursor: pointer;
+      position: relative;
     }
     .modal {
       position: fixed;
@@ -81,6 +82,34 @@
       font-size: 12px;
       cursor: pointer;
     }
+    .modal-controls button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-family: monospace;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .confirm-box {
+      background: #111;
+      border: 1px solid #00ff00;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .btn-yes {
+      background-color: #00ff00;
+      color: black;
+      border: none;
+    }
+    .btn-no {
+      background-color: #ff0033;
+      color: white;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -99,14 +128,22 @@
   <h2 id="albumName"></h2>
   <input type="file" id="uploadImage" accept="image/*">
   <div style="display: flex; flex-wrap: wrap;" id="albumImages"></div>
-  <button onclick="document.getElementById('albumModal').style.display='none'">Stäng</button>
+  <div class="modal-controls">
+    <button onclick="renameAlbum()">Byt namn</button>
+    <button onclick="confirmDeleteAlbum()">Ta bort album</button>
+    <button onclick="document.getElementById('albumModal').style.display='none'">Stäng</button>
+  </div>
+  <div id="confirmBox" class="confirm-box" style="display:none">
+    <span>Är du säker?</span>
+    <button class="btn-yes" onclick="deleteAlbumConfirmed()">Ja</button>
+    <button class="btn-no" onclick="document.getElementById('confirmBox').style.display='none'">Nej</button>
+  </div>
 </div>
 
 <script type="module">
 import { auth, db } from './scripts/firebase-init.js';
 import {
-  getDoc, doc, collection, getDocs, deleteDoc, addDoc,
-  updateDoc, arrayUnion, arrayRemove
+  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, arrayUnion, arrayRemove, setDoc
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import {
   onAuthStateChanged
@@ -118,6 +155,7 @@ const profileOutput = document.getElementById("profile-output");
 const albumGallery = document.getElementById("albumGallery");
 const picLikeCounter = document.getElementById("picLikeCounter");
 let currentUser;
+let currentAlbumId = "";
 
 onAuthStateChanged(auth, async user => {
   if (!user) return (window.location.href = "login.html");
@@ -143,6 +181,7 @@ onAuthStateChanged(auth, async user => {
 });
 
 async function openAlbum(albumId, albumName) {
+  currentAlbumId = albumId;
   const modal = document.getElementById("albumModal");
   document.getElementById("albumName").innerText = albumName;
   modal.style.display = "flex";
@@ -171,7 +210,6 @@ async function openAlbum(albumId, albumName) {
       };
       wrapper.appendChild(btn);
     }
-
     imageContainer.appendChild(wrapper);
   });
 
@@ -187,6 +225,26 @@ async function openAlbum(albumId, albumName) {
     };
     reader.readAsDataURL(file);
   };
+}
+
+window.renameAlbum = async function() {
+  const newName = prompt("Nytt namn på albumet:");
+  if (!newName) return;
+  await updateDoc(doc(db, "users", uid, "albums", currentAlbumId), { name: newName });
+  location.reload();
+}
+
+window.confirmDeleteAlbum = function() {
+  document.getElementById("confirmBox").style.display = "flex";
+}
+
+window.deleteAlbumConfirmed = async function() {
+  const imagesSnap = await getDocs(collection(db, "users", uid, "albums", currentAlbumId, "images"));
+  for (let img of imagesSnap.docs) {
+    await deleteDoc(img.ref);
+  }
+  await deleteDoc(doc(db, "users", uid, "albums", currentAlbumId));
+  location.reload();
 }
 </script>
 </body>
