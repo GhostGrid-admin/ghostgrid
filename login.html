@@ -6,6 +6,14 @@
   <title data-i18n="login_page_title">Logga in – GhostGrid</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
+    html {
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
     body {
       background-color: black;
       color: #00ff00;
@@ -13,10 +21,6 @@
       margin: 0;
       padding: 20px 15px;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
     }
 
     .login-container {
@@ -28,6 +32,7 @@
       box-shadow: 0 0 20px #00ff00;
       width: 100%;
       max-width: 400px;
+      margin: 40px auto;
     }
 
     h1 {
@@ -100,9 +105,6 @@
 
     @media (max-width: 768px) {
       body {
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: flex-start;
         padding-top: 40px;
       }
 
@@ -119,8 +121,7 @@
         font-size: 0.85rem;
       }
 
-      input,
-      button {
+      input, button {
         font-size: 0.95rem;
       }
 
@@ -140,10 +141,10 @@
 
     <form id="loginForm">
       <label for="email" data-i18n="email">E-postadress</label>
-      <input type="email" id="email" name="email" required placeholder="" data-i18n="email_placeholder">
+      <input type="email" id="email" name="email" required data-i18n="email_placeholder">
 
       <label for="password" data-i18n="password">Lösenord</label>
-      <input type="password" id="password" name="password" required placeholder="" data-i18n="password_placeholder">
+      <input type="password" id="password" name="password" required data-i18n="password_placeholder">
 
       <button type="submit" data-i18n="login_button">Logga in</button>
 
