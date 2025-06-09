@@ -234,3 +234,53 @@ button[type="submit"]:hover {
 .filter-options label:hover {
   background-color: rgba(192, 132, 252, 0.2);
 }
+/* === MOBILANPASSNING === */
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+    padding: 10px;
+    height: auto;
+  }
+
+  .login-container {
+    width: 100%;
+    max-width: 90vw;
+    padding: 20px;
+    box-shadow: 0 0 15px #00ff88;
+  }
+
+  .login-container h1 {
+    font-size: 20px;
+  }
+
+  form label {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  input,
+  button[type="submit"] {
+    font-size: 14px;
+  }
+
+  .extra-options {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .intro-text {
+    font-size: 1.6rem;
+    padding: 0 10px;
+  }
+
+  .language-selection {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
