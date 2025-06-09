@@ -34,7 +34,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   if (!user) return;
 
   const code = document.getElementById("custom-code").value;
-  await setDoc(doc(db, "users", user.uid), { profileCode: code }, { merge: true });
+  await setDoc(doc(db, "profiles", user.uid), { profileCode: code }, { merge: true });
 
   const notice = document.getElementById("saveNotice");
   notice.style.display = "block";
