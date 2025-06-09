@@ -161,12 +161,12 @@ onAuthStateChanged(auth, async user => {
   if (!user) return (window.location.href = "login.html");
   currentUser = user;
 
-  const userRef = doc(db, "users", uid);
-  const userSnap = await getDoc(userRef);
-  if (userSnap.exists()) {
-    const data = userSnap.data();
+  const profileRef = doc(db, "profiles", uid);
+  const profileSnap = await getDoc(profileRef);
+  if (profileSnap.exists()) {
+    const data = profileSnap.data();
     profileOutput.innerHTML = data.profileCode || "<p>Ingen profil.</p>";
-    if (data.currentProfileImage) profilePic.src = data.currentProfileImage;
+    if (data.profilePic) profilePic.src = data.profilePic;
   }
 
   const albumsRef = collection(db, "users", uid, "albums");
@@ -221,7 +221,7 @@ async function openAlbum(albumId, albumName) {
     reader.onloadend = async () => {
       const url = reader.result;
       await addDoc(collection(db, "users", uid, "albums", albumId, "images"), { url });
-      openAlbum(albumId, albumName); // refresh
+      openAlbum(albumId, albumName);
     };
     reader.readAsDataURL(file);
   };
