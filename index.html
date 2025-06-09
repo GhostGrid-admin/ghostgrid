@@ -100,11 +100,11 @@
       audio.volume = 0.8;
       audio.play().then(() => {
         setTimeout(() => {
-          localStorage.setItem("language", lang);
+          localStorage.setItem("lang", lang);
           window.location.href = "login.html";
         }, 800);
       }).catch(() => {
-        localStorage.setItem("language", lang);
+        localStorage.setItem("lang", lang);
         window.location.href = "login.html";
       });
     }
