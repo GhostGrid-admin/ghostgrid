@@ -1,56 +1,96 @@
-import { db, auth } from "./firebase-init.js";
-import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+// profile-script.js
+import { auth, db, storage } from "./firebase-init.js";
+import {
+  doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, addDoc
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import {
+  ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
-auth.onAuthStateChanged(async user => {
-  if (!user) return location.href = "login.html";
-
-  const email = user.email;
-  document.getElementById("profile-email").textContent = "E-post: " + email;
-  document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
-
-  const docRef = doc(db, "users", user.uid);
-  const snap = await getDoc(docRef);
-  if (snap.exists() && snap.data().profileCode) {
-    document.getElementById("custom-code").value = snap.data().profileCode;
-  }
-
-  const profileContent = document.getElementById("profileContent");
+document.addEventListener("DOMContentLoaded", () => {
+  const codeField = document.getElementById("custom-code");
+  const saveBtn = document.getElementById("saveBtn");
+  const viewBtn = document.getElementById("viewProfileBtn");
+  const editBtn = document.getElementById("editProfileBtn");
   const preview = document.getElementById("fullscreenPreview");
-
-  document.getElementById("viewProfileBtn").addEventListener("click", () => {
-    const html = document.getElementById("custom-code").value;
-    profileContent.innerHTML = html;
-    preview.classList.remove("hidden");
-    document.getElementById("editProfileBtn").classList.remove("hidden");
-  });
-
-  document.getElementById("editProfileBtn").addEventListener("click", () => {
-    preview.classList.add("hidden");
-  });
-});
-
-document.getElementById("saveBtn").addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const code = document.getElementById("custom-code").value;
-  await setDoc(doc(db, "profiles", user.uid), { profileCode: code }, { merge: true });
-
+  const profileContent = document.getElementById("profileContent");
+  const profilePicInput = document.getElementById("profile-pic");
   const notice = document.getElementById("saveNotice");
-  notice.style.display = "block";
-  setTimeout(() => notice.style.display = "none", 3000);
-});
 
-document.getElementById("useTemplateBtn").addEventListener("click", () => {
-  const example = `
-<div style="text-align:center; font-family:'Courier New', monospace; color:#00ff00; background-color:#000; padding:20px; border:2px solid #00ff00; border-radius:12px; box-shadow:0 0 20px #00ff00;">
-  <img src="https://i.imgur.com/NXbZDJz.png" style="width:100px; border-radius:50%; border:2px solid #00ff00;">
-  <h2>👤 CodeRebel</h2>
-  <p>🌌 Skapa din verklighet. Välkommen till GhostGrid.</p>
-</div>`;
-  document.getElementById("custom-code").value = example.trim();
-});
+  auth.onAuthStateChanged(async user => {
+    if (!user) return location.href = "login.html";
+    const uid = user.uid;
 
-document.getElementById("logoutLink").addEventListener("click", () => {
-  auth.signOut().then(() => location.href = "login.html");
+    const profileRef = doc(db, "profiles", uid);
+    const snap = await getDoc(profileRef);
+
+    if (snap.exists()) {
+      const data = snap.data();
+      codeField.value = data.profileCode || "";
+      document.getElementById("profile-email").textContent = "E-post: " + user.email;
+      document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
+    }
+
+    // Spara kod
+    saveBtn.addEventListener("click", async () => {
+      await setDoc(profileRef, { profileCode: codeField.value }, { merge: true });
+      notice.style.display = "block";
+      setTimeout(() => notice.style.display = "none", 3000);
+    });
+
+    // Visa profil
+    viewBtn.addEventListener("click", () => {
+      profileContent.innerHTML = codeField.value;
+      preview.classList.remove("hidden");
+      editBtn.classList.remove("hidden");
+    });
+
+    // Tillbaka till redigering
+    editBtn.addEventListener("click", () => {
+      preview.classList.add("hidden");
+    });
+
+    // Profilbild-uppdatering
+    profilePicInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const oldSnap = await getDoc(profileRef);
+      const oldPicUrl = oldSnap.data()?.profilePic;
+
+      if (oldPicUrl) {
+        const picHistoryRef = collection(db, `profiles/${uid}/pictures`);
+        await addDoc(picHistoryRef, {
+          url: oldPicUrl,
+          timestamp: new Date(),
+          likes: oldSnap.data().pictureLikes || []
+        });
+      }
+
+      const storageRef = ref(storage, `profile_pics/${uid}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(storageRef);
+
+      await setDoc(profileRef, {
+        profilePic: downloadUrl,
+        pictureLikes: []
+      }, { merge: true });
+    });
+
+    // Logga ut
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      auth.signOut().then(() => location.href = "login.html");
+    });
+
+    // Använd färdig mall
+    document.getElementById("useTemplateBtn").addEventListener("click", () => {
+      const template = `
+      <div style="text-align:center; color:#00ff00; font-family:'Courier New', monospace;">
+        <img src="${snap.data()?.profilePic || 'https://i.imgur.com/NXbZDJz.png'}" style="width:100px; border-radius:50%;">
+        <h2>👤 Användarnamn</h2>
+        <p>Välkommen till min profil!</p>
+      </div>`;
+      codeField.value = template.trim();
+    });
+  });
 });
