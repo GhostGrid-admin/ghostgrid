@@ -5,7 +5,7 @@
   <title>Profilvisning – GhostGrid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    #likeInfo {
+    #likeInfo, #picLikeInfo {
       position: fixed;
       bottom: 70px;
       right: 20px;
@@ -17,55 +17,95 @@
       max-width: 300px;
       display: none;
     }
-    #likeInfo ul {
+    #likeInfo ul, #picLikeInfo ul {
       margin: 0;
       padding-left: 18px;
+    }
+    .like-counter {
+      position: fixed;
+      bottom: 60px;
+      right: 90px;
+      color: #00ff00;
+      font-weight: bold;
+    }
+    .pic-like-counter {
+      position: fixed;
+      bottom: 100px;
+      right: 90px;
+      color: #ff00ff;
+      font-weight: bold;
     }
   </style>
 </head>
 <body style="margin:0; padding:0; background:black; color:white;">
   <div id="profile-output" style="width:100%; min-height:100vh;"></div>
   <button id="likeBtn" style="position:fixed; bottom:20px; right:20px; padding:10px 20px; font-size:16px;">❤️ Gilla</button>
+  <div class="like-counter" id="likeCounter">0</div>
   <div id="likeInfo"></div>
+
+  <button id="picLikeBtn" style="position:fixed; bottom:60px; right:20px; padding:10px 20px; font-size:16px;">🖼️❤️</button>
+  <div class="pic-like-counter" id="picLikeCounter">0</div>
+  <div id="picLikeInfo"></div>
 
   <script type="module">
     import { auth, db } from "./scripts/firebase-init.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
     function getUidFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get("uid");
     }
 
+    const uid = getUidFromURL();
     const container = document.getElementById("profile-output");
     const likeBtn = document.getElementById("likeBtn");
+    const picLikeBtn = document.getElementById("picLikeBtn");
     const likeInfo = document.getElementById("likeInfo");
-    const uid = getUidFromURL();
+    const picLikeInfo = document.getElementById("picLikeInfo");
+    const likeCounter = document.getElementById("likeCounter");
+    const picLikeCounter = document.getElementById("picLikeCounter");
 
     let currentUser;
 
-    async function showLikes(uid) {
+    async function showLikes(uid, field, infoBox, counterBox) {
       const userDoc = await getDoc(doc(db, "profiles", uid));
       const data = userDoc.data();
-      if (!data.likes || data.likes.length === 0) {
-        likeInfo.innerHTML = "<p>Inga gillningar ännu.</p>";
+      const likes = data[field] || [];
+      counterBox.textContent = likes.length;
+
+      if (likes.length === 0) {
+        infoBox.innerHTML = "<p>Inga gillningar ännu.</p>";
       } else {
         let list = "<ul>";
-        for (let likerUid of data.likes) {
+        for (let likerUid of likes) {
           const likerSnap = await getDoc(doc(db, "users", likerUid));
           const name = likerSnap.exists() ? (likerSnap.data().displayName || likerSnap.data().email) : "Okänd";
           list += `<li>${name}</li>`;
         }
         list += "</ul>";
-        likeInfo.innerHTML = `<strong>Gillad av:</strong> ${list}`;
+        infoBox.innerHTML = `<strong>Gillad av:</strong> ${list}`;
       }
-      likeInfo.style.display = "block";
+      infoBox.style.display = "block";
+    }
+
+    async function toggleLike(field, button, infoBox, counterBox) {
+      const profileRef = doc(db, "profiles", uid);
+      const userDoc = await getDoc(profileRef);
+      const likes = userDoc.data()[field] || [];
+      const hasLiked = likes.includes(currentUser.uid);
+
+      await updateDoc(profileRef, {
+        [field]: hasLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
+      });
+
+      await showLikes(uid, field, infoBox, counterBox);
     }
 
     if (!uid) {
       container.innerHTML = "<p style='color:white;'>Ingen användarprofil specificerad.</p>";
       likeBtn.style.display = "none";
+      picLikeBtn.style.display = "none";
     }
 
     onAuthStateChanged(auth, async (user) => {
@@ -79,18 +119,13 @@
       } else {
         container.innerHTML = "<p style='color:white;'>Användaren hittades inte.</p>";
       }
+
+      await showLikes(uid, "likes", likeInfo, likeCounter);
+      await showLikes(uid, "picLikes", picLikeInfo, picLikeCounter);
     });
 
-    likeBtn.addEventListener("click", async () => {
-      if (!currentUser) return alert("Du måste vara inloggad för att gilla profiler.");
-      if (!uid) return;
-
-      await updateDoc(doc(db, "profiles", uid), {
-        likes: arrayUnion(currentUser.uid)
-      });
-
-      await showLikes(uid);
-    });
+    likeBtn.addEventListener("click", () => toggleLike("likes", likeBtn, likeInfo, likeCounter));
+    picLikeBtn.addEventListener("click", () => toggleLike("picLikes", picLikeBtn, picLikeInfo, picLikeCounter));
   </script>
 </body>
 </html>
