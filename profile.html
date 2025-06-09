@@ -58,7 +58,7 @@
       box-shadow: 0 0 10px #ffffff;
     }
 
-    .profile-overview, .login-container {
+    .login-container {
       background: rgba(0, 0, 0, 0.7);
       padding: 30px;
       border: 2px solid #00ff00;
@@ -69,7 +69,7 @@
       width: 400px;
     }
 
-    textarea, input[type="text"], input[type="file"] {
+    textarea, input[type="file"] {
       width: 100%;
       padding: 10px;
       background-color: black;
@@ -92,26 +92,34 @@
 
     button:hover { background-color: #00cc00; }
 
-    .info-box {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #111;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      border-radius: 8px;
-      font-size: 0.9em;
-      text-align: left;
+    #fullscreenPreview {
+      position: fixed;
+      inset: 0;
+      background-color: black;
+      z-index: 9999;
+      color: white;
+      overflow: auto;
+      padding: 20px;
     }
 
-    @media (max-width: 768px) {
-      .nav-content a {
-        font-size: 1.2em;
-      }
+    #profileContent {
+      margin-top: 60px;
+    }
 
-      .profile-overview, .login-container {
-        padding: 20px;
-        width: 95%;
-      }
+    #exitPreviewBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #00ff00;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #exitPreviewBtn:hover {
+      background-color: #00cc00;
     }
   </style>
 </head>
@@ -127,86 +135,34 @@
     </div>
   </nav>
 
-  <!-- Välkomstvisning -->
-  <div class="profile-overview" id="overviewSection">
-    <h1 data-i18n="profile_welcome">Välkommen till din profil!</h1>
-    <p data-i18n="profile_intro">Gör din profil personlig med en bild och beskrivning.</p>
-    <button id="editProfileBtnOverview" data-i18n="profile_customize_btn">Gör din profil personlig</button>
-  </div>
-
-  <!-- Redigeringssektion -->
-  <div class="login-container hidden" id="editSection">
+  <div class="login-container">
     <h2 data-i18n="profile_edit">Redigera din profil</h2>
+    <p id="profile-email">E-post:</p>
+    <p id="profile-username">Användarnamn:</p>
 
     <label for="profile-pic" data-i18n="upload_image">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
 
     <label for="custom-code" data-i18n="custom_code">Profilkod (HTML/CSS):</label>
-    <textarea id="custom-code" rows="10" placeholder="&lt;div&gt;Din kod här&lt;/div&gt;"></textarea>
+    <textarea id="custom-code" rows="10"></textarea>
 
     <button id="saveBtn" data-i18n="save">Spara kod</button>
-    <button id="cancelEditBtn" data-i18n="cancel">Avbryt</button>
+    <button id="useTemplateBtn" data-i18n="use_template">Använd färdig kod</button>
+    <button id="viewProfileBtn" data-i18n="view_profile">Visa profil</button>
+    <button id="editProfileBtn" class="hidden" data-i18n="edit_profile">Redigera profil</button>
+
+    <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;" data-i18n="profile_saved">
+      ✅ Profil sparad!
+    </div>
+
+    <p style="margin-top: 20px;"><a href="#" id="logoutLink" data-i18n="logout">Logga ut</a></p>
   </div>
 
-  <script>
-    const lang = localStorage.getItem("lang") || "sv";
-    const translations = {
-      sv: {
-        profile_title: "Min Profil – GhostGrid",
-        profile_welcome: "Välkommen till din profil!",
-        profile_intro: "Gör din profil personlig med en bild och beskrivning.",
-        profile_customize_btn: "Gör din profil personlig",
-        profile_edit: "Redigera din profil",
-        upload_image: "Ladda upp profilbild:",
-        custom_code: "Profilkod (HTML/CSS):",
-        save: "Spara kod",
-        cancel: "Avbryt"
-      },
-      en: {
-        profile_title: "My Profile – GhostGrid",
-        profile_welcome: "Welcome to your profile!",
-        profile_intro: "Personalize your profile with an image and description.",
-        profile_customize_btn: "Customize your profile",
-        profile_edit: "Edit your profile",
-        upload_image: "Upload profile image:",
-        custom_code: "Profile code (HTML/CSS):",
-        save: "Save Code",
-        cancel: "Cancel"
-      }
-    };
+  <div id="fullscreenPreview" class="hidden">
+    <button id="exitPreviewBtn" data-i18n="edit_profile">Redigera profil</button>
+    <div id="profileContent"></div>
+  </div>
 
-    function applyTranslations() {
-      const t = translations[lang];
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (el.placeholder !== undefined && el.tagName === "TEXTAREA") {
-          el.placeholder = t[key] || el.placeholder;
-        } else {
-          el.textContent = t[key] || el.textContent;
-        }
-      });
-      document.title = t.profile_title;
-    }
-
-    applyTranslations();
-
-    const overview = document.getElementById("overviewSection");
-    const editor = document.getElementById("editSection");
-    const btnToEdit = document.getElementById("editProfileBtnOverview");
-    const cancelBtn = document.getElementById("cancelEditBtn");
-
-    btnToEdit.addEventListener("click", () => {
-      overview.classList.add("hidden");
-      editor.classList.remove("hidden");
-    });
-
-    cancelBtn.addEventListener("click", () => {
-      editor.classList.add("hidden");
-      overview.classList.remove("hidden");
-    });
-  </script>
-
-  <!-- Länkar in din Firebase + kodspar-logik -->
   <script type="module" src="scripts/profile-script.js"></script>
 </body>
 </html>
