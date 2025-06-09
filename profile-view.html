@@ -47,85 +47,93 @@
 
 <div id="profile-output" style="width:100%; min-height:100vh; padding:20px;"></div>
 
-  <script type="module">
-    import { auth, db } from "./scripts/firebase-init.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+<script type="module">
+  import { auth, db } from "./scripts/firebase-init.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    function getUidFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("uid");
-    }
+  function getUidFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("uid");
+  }
 
-    const uid = getUidFromURL();
-    const container = document.getElementById("profile-output");
-    const likeBtn = document.getElementById("likeBtn");
-    const picLikeBtn = document.getElementById("picLikeBtn");
-    const likeInfo = document.getElementById("likeInfo");
-    const picLikeInfo = document.getElementById("picLikeInfo");
-    const likeCounter = document.getElementById("likeCounter");
-    const picLikeCounter = document.getElementById("picLikeCounter");
+  const uid = getUidFromURL();
+  const container = document.getElementById("profile-output");
+  const likeInfo = document.getElementById("likeInfo");
+  const picLikeInfo = document.getElementById("picLikeInfo");
+  const likeCounter = document.getElementById("likeCounter");
+  const picLikeCounter = document.getElementById("picLikeCounter");
 
-    let currentUser;
+  let currentUser;
 
-    async function showLikes(uid, field, infoBox, counterBox) {
-      const userDoc = await getDoc(doc(db, "profiles", uid));
-      const data = userDoc.data();
-      const likes = data[field] || [];
-      counterBox.textContent = likes.length;
+  async function showLikes(uid, field, infoBox, counterBox) {
+    const userDoc = await getDoc(doc(db, "profiles", uid));
+    const data = userDoc.data();
+    const likes = data[field] || [];
+    counterBox.textContent = likes.length;
 
-      if (likes.length === 0) {
-        infoBox.innerHTML = "<p>Inga gillningar ännu.</p>";
-      } else {
-        let list = "<ul>";
-        for (let likerUid of likes) {
-          const likerSnap = await getDoc(doc(db, "users", likerUid));
-          const name = likerSnap.exists() ? (likerSnap.data().displayName || likerSnap.data().email) : "Okänd";
-          list += `<li>${name}</li>`;
-        }
-        list += "</ul>";
-        infoBox.innerHTML = `<strong>Gillad av:</strong> ${list}`;
+    if (likes.length === 0) {
+      infoBox.innerHTML = "<p>Inga gillningar ännu.</p>";
+    } else {
+      let list = "<ul>";
+      for (let likerUid of likes) {
+        const likerSnap = await getDoc(doc(db, "users", likerUid));
+        const name = likerSnap.exists() ? (likerSnap.data().displayName || likerSnap.data().email) : "Okänd";
+        list += `<li>${name}</li>`;
       }
-      infoBox.style.display = "block";
+      list += "</ul>";
+      infoBox.innerHTML = `<strong>Gillad av:</strong> ${list}`;
     }
+    infoBox.style.display = "block";
+  }
 
-    async function toggleLike(field, button, infoBox, counterBox) {
-      const profileRef = doc(db, "profiles", uid);
-      const userDoc = await getDoc(profileRef);
-      const likes = userDoc.data()[field] || [];
-      const hasLiked = likes.includes(currentUser.uid);
+  async function toggleLike(field, infoBox, counterBox) {
+    const profileRef = doc(db, "profiles", uid);
+    const userDoc = await getDoc(profileRef);
+    const likes = userDoc.data()[field] || [];
+    const hasLiked = likes.includes(currentUser.uid);
 
-      await updateDoc(profileRef, {
-        [field]: hasLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
-      });
-
-      await showLikes(uid, field, infoBox, counterBox);
-    }
-
-    if (!uid) {
-      container.innerHTML = "<p style='color:white;'>Ingen användarprofil specificerad.</p>";
-      likeBtn.style.display = "none";
-      picLikeBtn.style.display = "none";
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) return (window.location.href = "login.html");
-      currentUser = user;
-
-      const docSnap = await getDoc(doc(db, "users", uid));
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        container.innerHTML = data.profileCode || "<p style='color:white;'>Den här användaren har ingen profil ännu.</p>";
-      } else {
-        container.innerHTML = "<p style='color:white;'>Användaren hittades inte.</p>";
-      }
-
-      await showLikes(uid, "likes", likeInfo, likeCounter);
-      await showLikes(uid, "picLikes", picLikeInfo, picLikeCounter);
+    await updateDoc(profileRef, {
+      [field]: hasLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
     });
 
-    likeBtn.addEventListener("click", () => toggleLike("likes", likeBtn, likeInfo, likeCounter));
-    picLikeBtn.addEventListener("click", () => toggleLike("picLikes", picLikeBtn, picLikeInfo, picLikeCounter));
-  </script>
+    await showLikes(uid, field, infoBox, counterBox);
+  }
+
+  if (!uid) {
+    container.innerHTML = "<p style='color:white;'>Ingen användarprofil specificerad.</p>";
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return (window.location.href = "login.html");
+    currentUser = user;
+
+    const docSnap = await getDoc(doc(db, "users", uid));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+      // ✅ Här visar vi profilbilden automatiskt
+      if (data.currentProfileImage) {
+        document.getElementById("profile-pic-display").src = data.currentProfileImage;
+      }
+
+      container.innerHTML = data.profileCode || "<p style='color:white;'>Den här användaren har ingen profil ännu.</p>";
+    } else {
+      container.innerHTML = "<p style='color:white;'>Användaren hittades inte.</p>";
+    }
+
+    await showLikes(uid, "likes", likeInfo, likeCounter);
+    await showLikes(uid, "picLikes", picLikeInfo, picLikeCounter);
+  });
+
+  document.getElementById("likeImageBtn").addEventListener("click", () => toggleLike("picLikes", picLikeInfo, picLikeCounter));
+</script>
+
+<!-- Glöm inte dessa element -->
+<div id="likeInfo"></div>
+<div class="like-counter" id="likeCounter">0</div>
+<div id="picLikeInfo"></div>
+<div class="pic-like-counter" id="picLikeCounter">0</div>
+
 </body>
 </html>
