@@ -4,44 +4,93 @@
   <meta charset="UTF-8" />
   <title>Profilvisning – GhostGrid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script type="module">
-  import { auth, db } from "./scripts/firebase-init.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  <style>
+    #likeInfo {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      background: #111;
+      border: 1px solid #00ff00;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 300px;
+      display: none;
+    }
+    #likeInfo ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background:black; color:white;">
+  <div id="profile-output" style="width:100%; min-height:100vh;"></div>
+  <button id="likeBtn" style="position:fixed; bottom:20px; right:20px; padding:10px 20px; font-size:16px;">❤️ Gilla</button>
+  <div id="likeInfo"></div>
 
-  function getUidFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("uid");
-  }
+  <script type="module">
+    import { auth, db } from "./scripts/firebase-init.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  document.addEventListener("DOMContentLoaded", () => {
+    function getUidFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("uid");
+    }
+
     const container = document.getElementById("profile-output");
+    const likeBtn = document.getElementById("likeBtn");
+    const likeInfo = document.getElementById("likeInfo");
     const uid = getUidFromURL();
+
+    let currentUser;
+
+    async function showLikes(uid) {
+      const userDoc = await getDoc(doc(db, "profiles", uid));
+      const data = userDoc.data();
+      if (!data.likes || data.likes.length === 0) {
+        likeInfo.innerHTML = "<p>Inga gillningar ännu.</p>";
+      } else {
+        let list = "<ul>";
+        for (let likerUid of data.likes) {
+          const likerSnap = await getDoc(doc(db, "users", likerUid));
+          const name = likerSnap.exists() ? (likerSnap.data().displayName || likerSnap.data().email) : "Okänd";
+          list += `<li>${name}</li>`;
+        }
+        list += "</ul>";
+        likeInfo.innerHTML = `<strong>Gillad av:</strong> ${list}`;
+      }
+      likeInfo.style.display = "block";
+    }
 
     if (!uid) {
       container.innerHTML = "<p style='color:white;'>Ingen användarprofil specificerad.</p>";
-      return;
+      likeBtn.style.display = "none";
     }
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) return (window.location.href = "login.html");
+      currentUser = user;
 
       const docSnap = await getDoc(doc(db, "users", uid));
       if (docSnap.exists()) {
         const data = docSnap.data();
-        if (data.profileCode) {
-          container.innerHTML = data.profileCode;
-        } else {
-          container.innerHTML = "<p style='color:white;'>Den här användaren har ingen profil ännu.</p>";
-        }
+        container.innerHTML = data.profileCode || "<p style='color:white;'>Den här användaren har ingen profil ännu.</p>";
       } else {
         container.innerHTML = "<p style='color:white;'>Användaren hittades inte.</p>";
       }
     });
-  });
-</script>
-</head>
-<body style="margin:0; padding:0; background:black; color:white;">
-  <div id="profile-output" style="width:100%; min-height:100vh;"></div>
+
+    likeBtn.addEventListener("click", async () => {
+      if (!currentUser) return alert("Du måste vara inloggad för att gilla profiler.");
+      if (!uid) return;
+
+      await updateDoc(doc(db, "profiles", uid), {
+        likes: arrayUnion(currentUser.uid)
+      });
+
+      await showLikes(uid);
+    });
+  </script>
 </body>
 </html>
