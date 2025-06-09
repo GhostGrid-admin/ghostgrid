@@ -108,10 +108,13 @@ body {
       box-shadow: 0 0 12px #ffffff;
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding-top: 40px;
-      }
+@media (max-width: 768px) {
+  body {
+    padding-top: 0; /* ta bort extra padding */
+    overflow: auto; /* återställ scroll för mindre skärmar om behövs */
+    flex-direction: column;
+  }
+}
 
       .login-container {
         padding: 25px 20px;
