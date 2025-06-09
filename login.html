@@ -11,12 +11,13 @@
       background-color: black;
       color: #00ff00;
       font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 20px 15px;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      padding: 0 15px;
+      box-sizing: border-box;
     }
 
     .login-container {
@@ -99,13 +100,20 @@
     }
 
     @media (max-width: 768px) {
-      h1 {
-        font-size: 1.7rem;
+      body {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding-top: 40px;
       }
 
       .login-container {
-        padding: 25px;
+        padding: 25px 20px;
         box-shadow: 0 0 15px #00ff00;
+      }
+
+      h1 {
+        font-size: 1.6rem;
       }
 
       label {
@@ -172,7 +180,6 @@
     });
   </script>
 
-  <!-- 🌐 Språkhantering -->
   <script>
     const translations = {
       sv: {
@@ -202,7 +209,6 @@
     function applyTranslations() {
       const lang = localStorage.getItem("lang") || "sv";
       const elements = document.querySelectorAll("[data-i18n]");
-
       elements.forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (translations[lang][key]) {
@@ -213,7 +219,6 @@
           }
         }
       });
-
       document.title = translations[lang]["login_page_title"];
     }
 
