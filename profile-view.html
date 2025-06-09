@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <title>Profilvisning – GhostGrid</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profilvisning – GhostGrid</title>
   <style>
-    * { box-sizing: border-box; }
     body {
+      background: black;
+      color: #00ff00;
+      font-family: monospace;
       margin: 0;
       padding: 0;
-      background-color: black;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
     }
     .profile-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 1200px;
-      margin: auto;
       padding: 20px;
+      gap: 20px;
     }
     .left-panel {
       flex: 1;
@@ -34,15 +32,6 @@
       border: 2px solid #00ff00;
       box-shadow: 0 0 15px #00ff00;
     }
-    #likeImageBtn {
-      margin-top: 10px;
-      background: #000;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
     .album-gallery {
       flex: 2;
       display: flex;
@@ -50,52 +39,47 @@
       gap: 10px;
       justify-content: center;
     }
-    .album-gallery img {
+    .album-thumb {
       width: 100px;
       height: 100px;
-      object-fit: cover;
-      border: 1px solid #00ff00;
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 6px;
+      background: #111;
       cursor: pointer;
     }
-    #profile-output {
-      width: 100%;
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      border-top: 2px solid #00ff00;
-    }
-    #likeInfo, #picLikeInfo {
+    .modal {
       position: fixed;
-      bottom: 70px;
-      right: 20px;
-      background: #111;
-      border: 1px solid #00ff00;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
       color: white;
-      padding: 10px;
-      border-radius: 8px;
-      max-width: 300px;
       display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
     }
-    .like-counter {
-      position: fixed;
-      bottom: 60px;
-      right: 90px;
-      color: #00ff00;
-      font-weight: bold;
+    .modal img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 1px solid #00ff00;
+      margin: 10px;
+      border-radius: 6px;
+      position: relative;
     }
-    .pic-like-counter {
-      position: fixed;
-      bottom: 100px;
-      right: 90px;
-      color: #ff00ff;
-      font-weight: bold;
-    }
-    @media (max-width: 768px) {
-      .profile-container {
-        flex-direction: column;
-        align-items: center;
-      }
+    .delete-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: red;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -104,101 +88,106 @@
   <div class="left-panel">
     <img id="profile-pic-display" src="" alt="Profilbild">
     <button id="likeImageBtn">❤️ Gilla profilbild</button>
-    <div class="pic-like-counter" id="picLikeCounter">0</div>
+    <div id="picLikeCounter">0 ❤️</div>
   </div>
   <div class="album-gallery" id="albumGallery"></div>
 </div>
 
 <div id="profile-output"></div>
-<div id="likeInfo"></div>
-<div id="picLikeInfo"></div>
-<div class="like-counter" id="likeCounter">0</div>
+
+<div class="modal" id="albumModal">
+  <h2 id="albumName"></h2>
+  <input type="file" id="uploadImage" accept="image/*">
+  <div style="display: flex; flex-wrap: wrap;" id="albumImages"></div>
+  <button onclick="document.getElementById('albumModal').style.display='none'">Stäng</button>
+</div>
 
 <script type="module">
-  import { auth, db } from './scripts/firebase-init.js';
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-  import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { auth, db } from './scripts/firebase-init.js';
+import {
+  getDoc, doc, collection, getDocs, deleteDoc, addDoc,
+  updateDoc, arrayUnion, arrayRemove
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-  function getUidFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("uid");
+const uid = new URLSearchParams(window.location.search).get("uid");
+const profilePic = document.getElementById("profile-pic-display");
+const profileOutput = document.getElementById("profile-output");
+const albumGallery = document.getElementById("albumGallery");
+const picLikeCounter = document.getElementById("picLikeCounter");
+let currentUser;
+
+onAuthStateChanged(auth, async user => {
+  if (!user) return (window.location.href = "login.html");
+  currentUser = user;
+
+  const userRef = doc(db, "users", uid);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    profileOutput.innerHTML = data.profileCode || "<p>Ingen profil.</p>";
+    if (data.currentProfileImage) profilePic.src = data.currentProfileImage;
   }
 
-  const uid = getUidFromURL();
-  const profileOutput = document.getElementById("profile-output");
-  const profilePic = document.getElementById("profile-pic-display");
-  const albumGallery = document.getElementById("albumGallery");
-  const picLikeCounter = document.getElementById("picLikeCounter");
-  const likeInfo = document.getElementById("likeInfo");
-  const picLikeInfo = document.getElementById("picLikeInfo");
-  const likeCounter = document.getElementById("likeCounter");
+  const albumsRef = collection(db, "users", uid, "albums");
+  const albumsSnap = await getDocs(albumsRef);
+  albumsSnap.forEach(albumDoc => {
+    const album = document.createElement("div");
+    album.className = "album-thumb";
+    album.innerText = albumDoc.data().name;
+    album.onclick = () => openAlbum(albumDoc.id, albumDoc.data().name);
+    albumGallery.appendChild(album);
+  });
+});
 
-  let currentUser;
+async function openAlbum(albumId, albumName) {
+  const modal = document.getElementById("albumModal");
+  document.getElementById("albumName").innerText = albumName;
+  modal.style.display = "flex";
 
-  async function showLikes(uid, field, infoBox, counterBox) {
-    const userDoc = await getDoc(doc(db, "profiles", uid));
-    const data = userDoc.data();
-    const likes = data[field] || [];
-    counterBox.textContent = likes.length;
+  const imageContainer = document.getElementById("albumImages");
+  imageContainer.innerHTML = "";
+  const imgCol = collection(db, "users", uid, "albums", albumId, "images");
+  const imgSnap = await getDocs(imgCol);
+  imgSnap.forEach(imgDoc => {
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
 
-    if (likes.length === 0) {
-      infoBox.innerHTML = "<p>Inga gillningar ännu.</p>";
-    } else {
-      let list = "<ul>";
-      for (let likerUid of likes) {
-        const likerSnap = await getDoc(doc(db, "users", likerUid));
-        const name = likerSnap.exists() ? (likerSnap.data().displayName || likerSnap.data().email) : "Okänd";
-        list += `<li>${name}</li>`;
-      }
-      list += "</ul>";
-      infoBox.innerHTML = `<strong>Gillad av:</strong> ${list}`;
+    const img = document.createElement("img");
+    img.src = imgDoc.data().url;
+    wrapper.appendChild(img);
+
+    if (currentUser.uid === uid) {
+      const btn = document.createElement("button");
+      btn.className = "delete-btn";
+      btn.innerText = "X";
+      btn.onclick = async () => {
+        if (confirm("Ta bort bilden?")) {
+          await deleteDoc(doc(db, "users", uid, "albums", albumId, "images", imgDoc.id));
+          wrapper.remove();
+        }
+      };
+      wrapper.appendChild(btn);
     }
-    infoBox.style.display = "block";
-  }
 
-  async function toggleLike(field, infoBox, counterBox) {
-    const profileRef = doc(db, "profiles", uid);
-    const userDoc = await getDoc(profileRef);
-    const likes = userDoc.data()[field] || [];
-    const hasLiked = likes.includes(currentUser.uid);
-
-    await updateDoc(profileRef, {
-      [field]: hasLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid)
-    });
-
-    await showLikes(uid, field, infoBox, counterBox);
-  }
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) return (window.location.href = "login.html");
-    currentUser = user;
-
-    const docSnap = await getDoc(doc(db, "users", uid));
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      profileOutput.innerHTML = data.profileCode || "<p>Den här användaren har ingen profil ännu.</p>";
-      if (data.currentProfileImage) {
-        profilePic.src = data.currentProfileImage;
-      }
-    }
-
-    const imagesRef = collection(db, "users", uid, "profileImages");
-    const snapshot = await getDocs(imagesRef);
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      if (data.url) {
-        const img = document.createElement("img");
-        img.src = data.url;
-        img.title = "Klicka för att ta bort (kommer snart)";
-        albumGallery.appendChild(img);
-      }
-    });
-
-    await showLikes(uid, "likes", likeInfo, likeCounter);
-    await showLikes(uid, "picLikes", picLikeInfo, picLikeCounter);
+    imageContainer.appendChild(wrapper);
   });
 
-  document.getElementById("likeImageBtn").addEventListener("click", () => toggleLike("picLikes", picLikeInfo, picLikeCounter));
+  const uploader = document.getElementById("uploadImage");
+  uploader.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const url = reader.result;
+      await addDoc(collection(db, "users", uid, "albums", albumId, "images"), { url });
+      openAlbum(albumId, albumName); // refresh
+    };
+    reader.readAsDataURL(file);
+  };
+}
 </script>
 </body>
 </html>
