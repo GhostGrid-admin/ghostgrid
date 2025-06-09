@@ -4,43 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-i18n="login_page_title">Logga in – GhostGrid</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" href="favicon.ico" />
   <style>
-html, body {
-  overflow-y: auto;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 100%;
+    }
 
-body {
-  background-color: black;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto; /* tillåter bara vertikal scroll om det behövs */
-  overflow-x: hidden; /* förhindrar horisontell scroll */
-  padding: 0 15px;
-}
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px 15px;
+      overflow-x: hidden;
+    }
+
     .login-container {
       background: rgba(0, 0, 0, 0.7);
-      padding: 40px;
+      padding: 30px;
       border: 2px solid #00ff00;
       border-radius: 10px;
       text-align: center;
       box-shadow: 0 0 20px #00ff00;
       width: 100%;
       max-width: 400px;
-      margin: 40px auto;
     }
 
     h1 {
-      font-size: 2.2rem;
-      margin-bottom: 30px;
+      font-size: 2rem;
+      margin-bottom: 20px;
       text-shadow: 0 0 5px white;
     }
 
@@ -49,7 +53,7 @@ body {
       margin-top: 15px;
       margin-bottom: 5px;
       text-shadow: 0 0 3px white;
-      font-size: 0.95rem;
+      font-size: 1rem;
       text-align: left;
     }
 
@@ -60,7 +64,6 @@ body {
       color: #00ff00;
       border: 1px solid #00ff00;
       border-radius: 5px;
-      font-family: 'Courier New', monospace;
       font-size: 1rem;
     }
 
@@ -81,12 +84,13 @@ body {
     }
 
     .extra-options {
-      margin-top: 25px;
-      font-size: 0.9em;
+      margin-top: 20px;
       display: flex;
+      flex-direction: row;
       justify-content: center;
-      gap: 15px;
+      gap: 10px;
       flex-wrap: wrap;
+      font-size: 0.9em;
     }
 
     .purple-button {
@@ -106,35 +110,27 @@ body {
       box-shadow: 0 0 12px #ffffff;
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding-top: 0;
-        overflow: auto;
-        flex-direction: column;
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
       }
 
       .login-container {
-        padding: 25px 20px;
-        box-shadow: 0 0 15px #00ff00;
-      }
-
-      h1 {
-        font-size: 1.6rem;
-      }
-
-      label {
-        font-size: 0.85rem;
+        padding: 20px;
       }
 
       input,
       button {
-        font-size: 0.95rem;
+        font-size: 1rem;
+      }
+
+      label {
+        font-size: 0.9rem;
       }
 
       .extra-options {
         flex-direction: column;
         align-items: center;
-        gap: 10px;
       }
     }
   </style>
@@ -155,8 +151,8 @@ body {
       <button type="submit" data-i18n="login_button">Logga in</button>
 
       <div class="extra-options">
-        <a href="reset-password.html" class="purple-button" data-i18n="forgot_password">Glömt ditt lösenord?</a>
-        <a href="register.html" class="purple-button" data-i18n="create_account">Skapa nytt konto</a>
+        <a href="reset-password.html" class="purple-button" data-i18n="forgot_password">Glömt lösenord?</a>
+        <a href="register.html" class="purple-button" data-i18n="create_account">Skapa konto</a>
       </div>
     </form>
   </div>
