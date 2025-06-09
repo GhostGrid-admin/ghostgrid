@@ -39,7 +39,73 @@
       margin: 40px auto;
     }
 
-    /* ...resten av dina stilar... */
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 5px white;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-shadow: 0 0 3px white;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      color: black;
+      background-color: #00ff00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00cc00;
+    }
+
+    .extra-options {
+      margin-top: 25px;
+      font-size: 0.9em;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .purple-button {
+      background-color: #8000ff;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 0 8px #ffffff;
+      transition: 0.3s;
+    }
+
+    .purple-button:hover {
+      background-color: #a64dff;
+      box-shadow: 0 0 12px #ffffff;
+    }
 
     @media (max-width: 768px) {
       body {
@@ -63,57 +129,6 @@
 
       input,
       button {
-        font-size: 0.95rem;
-      }
-
-      .extra-options {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-    }
-  </style>
-</head>
-
-    .purple-button {
-      background-color: #8000ff;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      border: none;
-      box-shadow: 0 0 8px #ffffff;
-      transition: 0.3s;
-    }
-
-    .purple-button:hover {
-      background-color: #a64dff;
-      box-shadow: 0 0 12px #ffffff;
-    }
-
-@media (max-width: 768px) {
-  body {
-    padding-top: 0; /* ta bort extra padding */
-    overflow: auto; /* återställ scroll för mindre skärmar om behövs */
-    flex-direction: column;
-  }
-}
-
-      .login-container {
-        padding: 25px 20px;
-        box-shadow: 0 0 15px #00ff00;
-      }
-
-      h1 {
-        font-size: 1.6rem;
-      }
-
-      label {
-        font-size: 0.85rem;
-      }
-
-      input, button {
         font-size: 0.95rem;
       }
 
