@@ -116,43 +116,55 @@
 <div class="profile-container">
   <div class="left-panel">
     <img id="profile-pic-display" src="" alt="Profilbild">
+    <input type="file" id="uploadProfilePic" accept="image/*">
     <button id="likeImageBtn">❤️ Gilla profilbild</button>
     <div id="picLikeCounter">0 ❤️</div>
   </div>
   <div class="album-gallery" id="albumGallery"></div>
 </div>
 
-<!-- ✅ Profilkoden visas här -->
 <div id="profile-output" style="text-align:center; padding: 20px;"></div>
 
-<!-- Modal för album -->
 <div class="modal" id="albumModal">
   <h2 id="albumName"></h2>
   <input type="file" id="uploadImage" accept="image/*">
   <div style="display: flex; flex-wrap: wrap;" id="albumImages"></div>
   <div class="modal-controls">
-    <button onclick="renameAlbum()">Byt namn</button>
-    <button onclick="confirmDeleteAlbum()">Ta bort album</button>
-    <button onclick="document.getElementById('albumModal').style.display='none'">Stäng</button>
+    <button id="renameBtn"></button>
+    <button id="deleteBtn"></button>
+    <button onclick="document.getElementById('albumModal').style.display='none'">Stäng / Close</button>
   </div>
   <div id="confirmBox" class="confirm-box" style="display:none">
-    <span>Är du säker?</span>
-    <button class="btn-yes" onclick="deleteAlbumConfirmed()">Ja</button>
-    <button class="btn-no" onclick="document.getElementById('confirmBox').style.display='none'">Nej</button>
+    <span id="confirmText"></span>
+    <button class="btn-yes" onclick="deleteAlbumConfirmed()">Ja / Yes</button>
+    <button class="btn-no" onclick="document.getElementById('confirmBox').style.display='none'">Nej / No</button>
   </div>
 </div>
 
 <script type="module">
-import { auth, db } from './scripts/firebase-init.js';
+import { auth, db, storage } from './scripts/firebase-init.js';
 import {
-  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc
+  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
 const uid = new URLSearchParams(window.location.search).get("uid");
+const lang = document.documentElement.lang || 'sv';
+const texts = {
+  sv: { rename: "Byt namn", delete: "Ta bort album", confirm: "Är du säker?" },
+  en: { rename: "Rename", delete: "Delete album", confirm: "Are you sure?" }
+};
+const t = texts[lang] || texts.sv;
+
+document.getElementById("renameBtn").textContent = t.rename;
+document.getElementById("deleteBtn").textContent = t.delete;
+document.getElementById("confirmText").textContent = t.confirm;
+
 const profilePic = document.getElementById("profile-pic-display");
+const uploadProfilePic = document.getElementById("uploadProfilePic");
 const profileOutput = document.getElementById("profile-output");
 const albumGallery = document.getElementById("albumGallery");
 const picLikeCounter = document.getElementById("picLikeCounter");
@@ -162,22 +174,12 @@ let currentAlbumId = "";
 onAuthStateChanged(auth, async user => {
   if (!user) return (window.location.href = "login.html");
   currentUser = user;
-
   const profileRef = doc(db, "profiles", uid);
   const profileSnap = await getDoc(profileRef);
   if (profileSnap.exists()) {
     const data = profileSnap.data();
-
-    // 🔍 Debug
-    console.log("Profile data:", data);
-
-    // 🖼 Visa profilkod
-    profileOutput.innerHTML = data?.profileCode || "<p style='color:red;'>Ingen profilkod hittades.</p>";
-
-    // 🖼 Visa profilbild
-    if (data?.profilePic) {
-      profilePic.src = data.profilePic;
-    }
+    profileOutput.innerHTML = data?.profileCode || `<p style='color:red;'>Ingen profilkod hittades.</p>`;
+    if (data?.profilePic) profilePic.src = data.profilePic;
   }
 
   const albumsRef = collection(db, "users", uid, "albums");
@@ -189,6 +191,16 @@ onAuthStateChanged(auth, async user => {
     album.onclick = () => openAlbum(albumDoc.id, albumDoc.data().name);
     albumGallery.appendChild(album);
   });
+});
+
+uploadProfilePic.addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const storageRef = ref(storage, `profile_pics/${uid}/${file.name}`);
+  await uploadBytes(storageRef, file);
+  const downloadUrl = await getDownloadURL(storageRef);
+  await setDoc(doc(db, "profiles", uid), { profilePic: downloadUrl }, { merge: true });
+  profilePic.src = downloadUrl;
 });
 
 async function openAlbum(albumId, albumName) {
@@ -204,17 +216,15 @@ async function openAlbum(albumId, albumName) {
   imgSnap.forEach(imgDoc => {
     const wrapper = document.createElement("div");
     wrapper.style.position = "relative";
-
     const img = document.createElement("img");
     img.src = imgDoc.data().url;
     wrapper.appendChild(img);
-
     if (currentUser.uid === uid) {
       const btn = document.createElement("button");
       btn.className = "delete-btn";
       btn.innerText = "X";
       btn.onclick = async () => {
-        if (confirm("Ta bort bilden?")) {
+        if (confirm(t.confirm)) {
           await deleteDoc(doc(db, "users", uid, "albums", albumId, "images", imgDoc.id));
           wrapper.remove();
         }
@@ -238,25 +248,25 @@ async function openAlbum(albumId, albumName) {
   };
 }
 
-window.renameAlbum = async function() {
-  const newName = prompt("Nytt namn på albumet:");
+window.renameAlbum = async function () {
+  const newName = prompt(t.rename);
   if (!newName) return;
   await updateDoc(doc(db, "users", uid, "albums", currentAlbumId), { name: newName });
   location.reload();
-}
+};
 
-window.confirmDeleteAlbum = function() {
+window.confirmDeleteAlbum = function () {
   document.getElementById("confirmBox").style.display = "flex";
-}
+};
 
-window.deleteAlbumConfirmed = async function() {
+window.deleteAlbumConfirmed = async function () {
   const imagesSnap = await getDocs(collection(db, "users", uid, "albums", currentAlbumId, "images"));
   for (let img of imagesSnap.docs) {
     await deleteDoc(img.ref);
   }
   await deleteDoc(doc(db, "users", uid, "albums", currentAlbumId));
   location.reload();
-}
+};
 </script>
 </body>
 </html>
