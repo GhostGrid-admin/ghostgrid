@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Profiltest – GhostGrid</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    // 🔧 Din projektkonfiguration – GhostGrid
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzzG9_8-XWmYj5T6hKTY9Zdxy8SgeZYFE",
+      authDomain: "ghostgrid-cebe9.firebaseapp.com",
+      projectId: "ghostgrid-cebe9",
+      storageBucket: "ghostgrid-cebe9.appspot.com",
+      messagingSenderId: "403218278782",
+      appId: "1:403218278782:web:e47d439a8ad99abff88593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const uid = "Lpu306H6VgjU0WQbiHz"; // ✅ Användarens UID från din Firestore
+    const docRef = doc(db, "profiles", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      document.getElementById("profilePic").src = data.profilePic || "";
+      document.getElementById("profileCode").innerHTML = data.profileCode || "<i>Ingen profilkod</i>";
+    } else {
+      document.getElementById("profileCode").innerHTML = "<i>Dokumentet hittades inte</i>";
+    }
+  </script>
+</head>
+<body style="background:black; color:#00ff00; font-family:monospace; text-align:center;">
+  <h2>👤 Profiltest – GhostGrid</h2>
+  <img id="profilePic" src="" alt="Profilbild" style="width:140px; height:140px; border-radius:50%; border:2px solid #00ff00; box-shadow:0 0 15px #00ff00;">
+  <div id="profileCode" style="margin-top:20px;"></div>
+</body>
+</html>
