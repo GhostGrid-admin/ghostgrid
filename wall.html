@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -13,7 +13,7 @@
       margin: 0;
       padding-top: 100px;
       background-color: #0a0a0a;
-      color: #b8f6ff;
+      color: #e0ffff;
       font-family: 'Courier New', monospace;
     }
 
@@ -87,15 +87,15 @@
     }
 
     .wall-title {
-      font-size: 2.2em;
+      font-size: 2.5em;
       text-align: center;
-      color: #80ffcc;
+      color: #aaffee;
       margin-bottom: 30px;
-      text-shadow: 0 0 6px #ffffff;
+      text-shadow: 0 0 8px #ffffff;
     }
 
     .post {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.85);
       padding: 15px;
       border-radius: 8px;
       border-left: 4px solid #00ffcc;
@@ -135,7 +135,7 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .search-filter button {
@@ -152,10 +152,25 @@
       background-color: #a64dff;
     }
 
-    .login-warning {
-      color: #ff9999;
-      font-style: italic;
+    .filter-search {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .filter-search input[type="text"] {
+      padding: 8px;
+      width: 70%;
+      border-radius: 6px;
+      border: 1px solid #7b00ff;
+      background-color: #1a1a1a;
+      color: #ffffff;
+      font-size: 1em;
       margin-top: 10px;
+    }
+
+    .filter-search label {
+      margin: 0 10px;
+      font-size: 1em;
     }
   </style>
 </head>
@@ -169,13 +184,13 @@
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
       <div class="search-container">
-        <input type="text" placeholder="Sök..." id="searchInput" oninput="filterPosts()" />
+        <input type="text" placeholder="Sök på hela sidan..." id="searchInputGlobal" oninput="globalSearch()" />
       </div>
     </div>
   </nav>
 
   <div class="wall-container">
-    <h1 class="wall-title">Gemensamma Inlägg</h1>
+    <h1 class="wall-title" id="wallTitle">Gemensamma Inlägg</h1>
 
     <div class="search-filter">
       <button onclick="setFilter('all')">Alla</button>
@@ -185,10 +200,21 @@
       <button onclick="setFilter('video')">Klipp</button>
     </div>
 
+    <div class="filter-search">
+      <input type="text" id="localSearchInput" placeholder="Sök inlägg på väggen..." oninput="filterPosts()" />
+      <div>
+        <label><input type="checkbox" id="cbAll" checked onchange="filterPosts()"> Alla</label>
+        <label><input type="checkbox" id="cbText" onchange="filterPosts()"> Text</label>
+        <label><input type="checkbox" id="cbImage" onchange="filterPosts()"> Bilder</label>
+        <label><input type="checkbox" id="cbAudio" onchange="filterPosts()"> Ljud</label>
+        <label><input type="checkbox" id="cbVideo" onchange="filterPosts()"> Klipp</label>
+      </div>
+    </div>
+
     <div id="postsContainer"></div>
   </div>
 
-  <script src="wall-functionality.js"></script> <!-- Om du har denna -->
+  <script src="wall-functionality.js"></script>
   <script src="language.js"></script>
 </body>
 </html>
