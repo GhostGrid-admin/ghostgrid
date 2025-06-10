@@ -168,13 +168,13 @@ onAuthStateChanged(auth, async user => {
   if (profileSnap.exists()) {
     const data = profileSnap.data();
 
-    // ✅ Debug: Se vad som kommer från databasen
+    // 🔍 Debug
     console.log("Profile data:", data);
 
-    // ✅ Lägg in profilkoden dynamiskt
+    // 🖼 Visa profilkod
     profileOutput.innerHTML = data?.profileCode || "<p style='color:red;'>Ingen profilkod hittades.</p>";
 
-    // ✅ Visa profilbild
+    // 🖼 Visa profilbild
     if (data?.profilePic) {
       profilePic.src = data.profilePic;
     }
