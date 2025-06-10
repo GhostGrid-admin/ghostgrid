@@ -122,8 +122,10 @@
   <div class="album-gallery" id="albumGallery"></div>
 </div>
 
-<div id="profile-output"></div>
+<!-- ✅ Profilkoden visas här -->
+<div id="profile-output" style="text-align:center; padding: 20px;"></div>
 
+<!-- Modal för album -->
 <div class="modal" id="albumModal">
   <h2 id="albumName"></h2>
   <input type="file" id="uploadImage" accept="image/*">
@@ -143,7 +145,7 @@
 <script type="module">
 import { auth, db } from './scripts/firebase-init.js';
 import {
-  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, arrayUnion, arrayRemove, setDoc
+  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import {
   onAuthStateChanged
@@ -165,8 +167,17 @@ onAuthStateChanged(auth, async user => {
   const profileSnap = await getDoc(profileRef);
   if (profileSnap.exists()) {
     const data = profileSnap.data();
-    profileOutput.innerHTML = data.profileCode || "<p>Ingen profil.</p>";
-    if (data.profilePic) profilePic.src = data.profilePic;
+
+    // ✅ Debug: Se vad som kommer från databasen
+    console.log("Profile data:", data);
+
+    // ✅ Lägg in profilkoden dynamiskt
+    profileOutput.innerHTML = data?.profileCode || "<p style='color:red;'>Ingen profilkod hittades.</p>";
+
+    // ✅ Visa profilbild
+    if (data?.profilePic) {
+      profilePic.src = data.profilePic;
+    }
   }
 
   const albumsRef = collection(db, "users", uid, "albums");
