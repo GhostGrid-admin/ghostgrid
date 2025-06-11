@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>  
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -103,18 +103,6 @@
       background-color: #111;
     }
 
-    .search-container::before {
-      content: "🔍";
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2em;
-      pointer-events: none;
-      color: #00ffcc;
-      text-shadow: 0 0 5px #00ffcc;
-    }
-
     .forum-layout {
       display: flex;
       gap: 20px;
@@ -143,26 +131,37 @@
       padding: 30px;
     }
 
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
     .search-bar input {
       padding: 12px 20px;
       font-size: 1.2em;
       width: 100%;
+      max-width: 680px;
       border-radius: 10px;
       border: 2px solid #00ffcc;
       background-color: #111;
       color: #fff;
       text-align: center;
       box-shadow: 0 0 10px #7b00ff, 0 0 5px #00ffcc;
+      display: block;
+      margin: 0 auto;
+      box-sizing: border-box;
     }
 
     .forum-category {
       background-color: rgba(255, 255, 255, 0.05);
       padding: 15px;
-      margin-bottom: 15px;
+      margin: 0 auto 15px auto;
       border-left: 5px solid #00ffcc;
       border-radius: 10px;
       cursor: pointer;
       transition: transform 0.2s ease;
+      max-width: 680px;
     }
 
     .forum-category:hover {
@@ -180,73 +179,36 @@
       font-size: 0.95em;
       color: #bbbbbb;
     }
+
+    .new-category-form {
+      margin: 30px auto 0 auto;
+      padding: 20px;
+      border: 2px dashed #00ffcc;
+      border-radius: 10px;
+      background-color: rgba(255,255,255,0.03);
+      max-width: 680px;
+    }
+
+    .new-category-form input,
+    .new-category-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #00ffcc;
+      background-color: #111;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+    }
+
+    .new-category-form button {
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="nav-content">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-      <div class="search-container">
-        <input type="text" id="globalSearchInput" placeholder="Sök...">
-      </div>
-    </div>
-  </nav>
-
-  <div class="forum-container forum-layout">
-    <div class="forum-main">
-      <h1>GhostGrid Forum</h1>
-
-      <div class="search-bar">
-        <input type="text" placeholder="🔍 Sök trådar eller kategorier...">
-      </div>
-
-      <div class="forum-category" onclick="location.href='tech-heaven.html'">
-        <div class="category-title">Tech Heaven</div>
-        <div class="category-description">Diskutera hårdvara, mjukvara, internet och framtidens prylar.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='ai-framtiden.html'">
-        <div class="category-title">AI & Framtiden</div>
-        <div class="category-description">Allt om artificiell intelligens, robotik och framtidsscenarier.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='varlden-samhallet.html'">
-        <div class="category-title">Världen & Samhället</div>
-        <div class="category-description">Tankar kring politik, nyheter, klimat och samhällsfrågor.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='kod-projekt.html'">
-        <div class="category-title">Kod & Projekt</div>
-        <div class="category-description">Dela kod, be om hjälp eller visa upp dina projekt.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='tankar-kanslor.html'">
-        <div class="category-title">Tankar & Känslor</div>
-        <div class="category-description">För dig som vill prata fritt om livet, känslor eller vardagen.</div>
-      </div>
-    </div>
-
-    <div class="forum-sidebar">
-      <h3>Info</h3>
-      <p>Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt. </p>
-      <p>💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.</p>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        const query = this.value.trim();
-        if (query) {
-          window.location.href = search.html?q=${encodeURIComponent(query)};
-        }
-      }
-    });
-  </script>
-</body>
-</html>
