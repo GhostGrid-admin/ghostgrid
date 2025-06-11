@@ -103,18 +103,6 @@
       background-color: #111;
     }
 
-    .search-container::before {
-      content: "Sök";
-      position: absolute;
-      left: -45px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.4em;
-      pointer-events: none;
-      color: #00ffcc;
-      text-shadow: 0 0 6px #00ffcc;
-    }
-
     .forum-layout {
       display: flex;
       gap: 20px;
@@ -146,13 +134,16 @@
     .search-bar input {
       padding: 12px 20px;
       font-size: 1.2em;
-      width: 100%;
+      width: 90%;
+      max-width: 700px;
       border-radius: 10px;
       border: 2px solid #00ffcc;
       background-color: #111;
       color: #fff;
       text-align: center;
       box-shadow: 0 0 10px #7b00ff, 0 0 5px #00ffcc;
+      display: block;
+      margin: 0 auto 20px auto;
     }
 
     .forum-category {
