@@ -140,16 +140,17 @@
 .search-bar input {
   padding: 12px 20px;
   font-size: 1.2em;
-  width: 680px; /* exakt bredd som .forum-category */
-  box-sizing: border-box; /* viktig för att inkludera padding i total bredd */
+  width: 95%;              /* Tar upp nästan hela ytan */
+  max-width: 720px;        /* Lite bredare än kategori-boxarna */
   border-radius: 10px;
   border: 2px solid #00ffcc;
   background-color: #111;
   color: #fff;
   text-align: center;
   box-shadow: 0 0 10px #7b00ff, 0 0 5px #00ffcc;
-  margin: 0 auto; /* centrerar om display: block */
   display: block;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
     .forum-category {
