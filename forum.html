@@ -141,7 +141,7 @@
       padding: 12px 20px;
       font-size: 1.2em;
       width: 100%;
-      max-width: 680px;
+      max-width: 720px;
       border-radius: 10px;
       border: 2px solid #00ffcc;
       background-color: #111;
@@ -161,7 +161,7 @@
       border-radius: 10px;
       cursor: pointer;
       transition: transform 0.2s ease;
-      max-width: 680px;
+      max-width: 720px;
     }
 
     .forum-category:hover {
@@ -186,7 +186,7 @@
       border: 2px dashed #00ffcc;
       border-radius: 10px;
       background-color: rgba(255,255,255,0.03);
-      max-width: 680px;
+      max-width: 720px;
     }
 
     .new-category-form input,
@@ -212,78 +212,3 @@
     }
   </style>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="nav-content">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-      <div class="search-container">
-        <input type="text" id="globalSearchInput" placeholder="Sök...">
-      </div>
-    </div>
-  </nav>
-
-  <div class="forum-container forum-layout">
-    <div class="forum-main">
-      <h1>GhostGrid Forum</h1>
-
-      <div class="search-bar">
-        <input type="text" placeholder="🔍 Sök trådar eller kategorier...">
-      </div>
-
-      <div class="forum-category" onclick="location.href='tech-heaven.html'">
-        <div class="category-title">Tech Heaven</div>
-        <div class="category-description">Diskutera hårdvara, mjukvara, internet och framtidens prylar.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='ai-framtiden.html'">
-        <div class="category-title">AI & Framtiden</div>
-        <div class="category-description">Allt om artificiell intelligens, robotik och framtidsscenarier.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='varlden-samhallet.html'">
-        <div class="category-title">Världen & Samhället</div>
-        <div class="category-description">Tankar kring politik, nyheter, klimat och samhällsfrågor.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='kod-projekt.html'">
-        <div class="category-title">Kod & Projekt</div>
-        <div class="category-description">Dela kod, be om hjälp eller visa upp dina projekt.</div>
-      </div>
-
-      <div class="forum-category" onclick="location.href='tankar-kanslor.html'">
-        <div class="category-title">Tankar & Känslor</div>
-        <div class="category-description">För dig som vill prata fritt om livet, känslor eller vardagen.</div>
-      </div>
-
-      <div class="new-category-form">
-        <h3>Skapa ny kategori</h3>
-        <input type="text" id="newCategoryTitle" placeholder="Titel för ny kategori">
-        <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning av kategorin..."></textarea>
-        <button onclick="createNewCategory()">Lägg till kategori</button>
-      </div>
-    </div>
-
-    <div class="forum-sidebar">
-      <h3>Info</h3>
-      <p>Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt. </p>
-      <p>💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.</p>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        const query = this.value.trim();
-        if (query) {
-          window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-        }
-      }
-    });
-  </script>
-</body>
-</html>
