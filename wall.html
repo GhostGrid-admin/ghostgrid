@@ -50,6 +50,7 @@
       flex-wrap: wrap;
       gap: 25px;
       justify-content: center;
+      text-align: center;
     }
 
     .nav-content a {
@@ -171,6 +172,28 @@
     .filter-search label {
       margin: 0 10px;
       font-size: 1em;
+    }
+
+    @media (max-width: 768px) {
+      .nav-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-content a {
+        font-size: 1.1em;
+        padding: 5px 8px;
+        flex: 1 1 auto;
+        text-align: center;
+      }
+
+      .search-container input {
+        font-size: 1em;
+        width: 90%;
+        margin: 10px auto 0 auto;
+        display: block;
+      }
     }
   </style>
 </head>
