@@ -179,12 +179,37 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px 0;
-    max-width: 100%;
-    box-sizing: border-box;
+    align-items: center;
     text-align: center;
+    width: 100%;
+    max-width: 600px;
     margin: 0 auto;
+    gap: 15px 0;
   }
+
+  .nav-content a {
+    flex: 0 0 33.33%;
+    text-align: center;
+    font-size: 1.5em;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .search-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  .search-container input {
+    font-size: 1.4em;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+    display: block;
+  }
+}
 
   .nav-content a {
     flex: 0 0 33.33%;
