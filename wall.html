@@ -172,46 +172,9 @@
       margin: 0 10px;
       font-size: 1em;
     }
-
-    .hamburger {
-      display: none;
-      font-size: 1.8em;
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      color: #00ffcc;
-      z-index: 1100;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .nav-content {
-        display: none;
-        flex-direction: column;
-        background-color: #000;
-        padding: 10px;
-        border-top: 2px solid #00ffcc;
-        border-bottom: 2px solid #00ffcc;
-      }
-
-      .nav-content a {
-        font-size: 1.2em;
-        padding: 10px;
-        border-bottom: 1px solid #00ffcc;
-      }
-
-      .nav-content.show {
-        display: flex;
-      }
-
-      .hamburger {
-        display: block;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
   <nav class="navbar">
     <div class="nav-content">
       <a href="forum.html">Forum</a>
@@ -250,13 +213,6 @@
 
     <div id="postsContainer"></div>
   </div>
-
-  <script>
-    function toggleMenu() {
-      const nav = document.querySelector('.nav-content');
-      nav.classList.toggle('show');
-    }
-  </script>
 
   <script src="wall-functionality.js"></script>
   <script src="language.js"></script>
