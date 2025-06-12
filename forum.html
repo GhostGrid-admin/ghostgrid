@@ -100,12 +100,10 @@
     .forum-layout {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
     }
 
     .forum-main {
       flex: 1;
-      min-width: 300px;
     }
 
     .forum-sidebar {
@@ -217,58 +215,9 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
-    .hamburger {
-      display: none;
-      font-size: 1.8em;
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      color: #00ffcc;
-      z-index: 1100;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .forum-layout {
-        flex-direction: column;
-      }
-
-      .forum-sidebar {
-        width: 100%;
-        position: static;
-        margin-top: 20px;
-        border-left: none;
-        border-top: 2px solid #00ffcc;
-      }
-
-      .nav-content {
-        display: none;
-        flex-direction: column;
-        background-color: #000;
-        padding: 10px;
-        border-top: 2px solid #00ffcc;
-        border-bottom: 2px solid #00ffcc;
-      }
-
-      .nav-content a {
-        font-size: 1.2em;
-        padding: 10px;
-        border-bottom: 1px solid #00ffcc;
-      }
-
-      .nav-content.show {
-        display: flex;
-      }
-
-      .hamburger {
-        display: block;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
   <nav class="navbar">
     <div class="nav-content">
       <a href="forum.html">Forum</a>
@@ -291,7 +240,30 @@
         <input type="text" placeholder="🔍 Sök trådar eller kategorier...">
       </div>
 
-      <!-- Forumkategorier här -->
+      <div class="forum-category" onclick="location.href='tech-heaven.html'">
+        <div class="category-title">Tech Heaven</div>
+        <div class="category-description">Diskutera hårdvara, mjukvara, internet och framtidens prylar.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='ai-framtiden.html'">
+        <div class="category-title">AI & Framtiden</div>
+        <div class="category-description">Allt om artificiell intelligens, robotik och framtidsscenarier.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='varlden-samhallet.html'">
+        <div class="category-title">Världen & Samhället</div>
+        <div class="category-description">Tankar kring politik, nyheter, klimat och samhällsfrågor.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='kod-projekt.html'">
+        <div class="category-title">Kod & Projekt</div>
+        <div class="category-description">Dela kod, be om hjälp eller visa upp dina projekt.</div>
+      </div>
+
+      <div class="forum-category" onclick="location.href='tankar-kanslor.html'">
+        <div class="category-title">Tankar & Känslor</div>
+        <div class="category-description">För dig som vill prata fritt om livet, känslor eller vardagen.</div>
+      </div>
 
       <div class="new-category-form">
         <h3>Skapa ny kategori</h3>
@@ -309,16 +281,11 @@
   </div>
 
   <script>
-    function toggleMenu() {
-      const nav = document.querySelector('.nav-content');
-      nav.classList.toggle('show');
-    }
-
     document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const query = this.value.trim();
         if (query) {
-          window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+          window.location.href = search.html?q=${encodeURIComponent(query)};
         }
       }
     });
