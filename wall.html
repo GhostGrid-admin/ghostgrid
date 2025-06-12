@@ -175,14 +175,39 @@
     }
 
     @media (max-width: 768px) {
-      .nav-content {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 100%;
-        padding: 0 10px;
-        box-sizing: border-box;
-      }
+  .nav-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    gap: 10px;
+  }
+
+  .nav-content a {
+    font-size: 1.1em;
+    padding: 5px 6px;
+    flex: 1 1 30%;
+    max-width: 30%;
+    min-width: 90px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .search-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .search-container input {
+    font-size: 1em;
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+  }
+}
 
       .nav-content a {
         font-size: 1.1em;
@@ -245,4 +270,3 @@
   <script src="language.js"></script>
 </body>
 </html>
-
