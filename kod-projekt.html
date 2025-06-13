@@ -188,7 +188,8 @@
         thread_title: "Trådrubrik",
         thread_content: "Beskrivning...",
         submit_btn: "Skapa tråd",
-        login_required: "Du måste vara inloggad för att skapa en tråd."
+        login_required: "Du måste vara inloggad för att skapa en tråd.",
+        no_threads: "Det finns ännu inga trådar i denna kategori."
       },
       en: {
         page_title: "Code & Projects – GhostGrid",
@@ -203,12 +204,13 @@
         thread_title: "Thread title",
         thread_content: "Description...",
         submit_btn: "Create thread",
-        login_required: "You must be logged in to create a thread."
+        login_required: "You must be logged in to create a thread.",
+        no_threads: "There are no threads in this category yet."
       }
     };
 
+    const t = translations[lang];
     function translatePage() {
-      const t = translations[lang];
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (t[key]) el.textContent = t[key];
@@ -221,84 +223,99 @@
     }
     translatePage();
 
-    firebase.auth().onAuthStateChanged(user => {
+    document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("newThreadForm");
-      if (!user) {
-        form.style.display = "none";
-        const notice = document.createElement("p");
-        notice.style.color = "red";
-        notice.style.marginTop = "20px";
-        notice.textContent = translations[lang].login_required;
-        form.parentElement.appendChild(notice);
-        return;
-      }
+      const threadList = document.getElementById("thread-list");
 
-      form.style.display = "block";
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const title = document.getElementById("threadTitle").value;
-        const content = document.getElementById("threadContent").value;
-        const imageFile = document.getElementById("threadImage").files[0];
-
-        let imageUrl = "";
-        if (imageFile) {
-          const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
-          await storageRef.put(imageFile);
-          imageUrl = await storageRef.getDownloadURL();
+      firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          form.style.display = "none";
+          if (!document.getElementById("loginNotice")) {
+            const notice = document.createElement("p");
+            notice.id = "loginNotice";
+            notice.style.color = "red";
+            notice.style.marginTop = "20px";
+            notice.textContent = t.login_required;
+            form.parentElement.appendChild(notice);
+          }
+          return;
         }
 
-        await firebase.firestore().collection("forumThreads").add({
-          title,
-          content,
-          image: imageUrl,
-          created: Date.now(),
-          category: "Kod & Projekt",
-          user: user.email || user.uid
-        });
+        form.style.display = "block";
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = document.getElementById("threadTitle").value;
+          const content = document.getElementById("threadContent").value;
+          const imageFile = document.getElementById("threadImage").files[0];
 
-        form.reset();
-      });
-    });
+          let imageUrl = "";
+          if (imageFile) {
+            const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
+            await storageRef.put(imageFile);
+            imageUrl = await storageRef.getDownloadURL();
+          }
 
-    firebase.firestore().collection("forumThreads")
-      .where("category", "==", "Kod & Projekt")
-      .orderBy("created", "desc")
-      .onSnapshot(snapshot => {
-        const container = document.getElementById("thread-list");
-        container.innerHTML = "";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const div = document.createElement("div");
-          div.className = "thread-box";
-          div.innerHTML = `
-            <a href="thread.html?id=${doc.id}" style="color:#00ffcc;text-decoration:none;">
-              <h3>💻 ${data.title}</h3>
-            </a>
-            ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:10px;border-radius:8px;">` : ""}
-            ${data.content ? `<p>${data.content}</p>` : ""}
-            <div class="reactions">
-              <span title="Gillar">👍</span>
-              <span title="Ogillar">👎</span>
-              <span title="Stödjer / Älskar">❤️</span>
-              <span title="Krossat hjärta">💔</span>
-              <span title="Glad">😀</span>
-              <span title="Ledsen">😢</span>
-              <span title="Förvånad">😲</span>
-              <span title="Arg">😡</span>
-              <span title="Neutral">😐</span>
-            </div>
-          `;
-          container.appendChild(div);
+          await firebase.firestore().collection("forumThreads").add({
+            title,
+            content,
+            image: imageUrl,
+            created: Date.now(),
+            category: "Kod & Projekt",
+            user: user.email || user.uid
+          });
+
+          form.reset();
         });
       });
 
-    document.getElementById("searchInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        const query = this.value.trim();
-        if (query) {
-          window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+      firebase.firestore().collection("forumThreads")
+        .where("category", "==", "Kod & Projekt")
+        .orderBy("created", "desc")
+        .onSnapshot(snapshot => {
+          threadList.innerHTML = "";
+          if (snapshot.empty) {
+            const msg = document.createElement("p");
+            msg.textContent = t.no_threads;
+            msg.style.color = "#999";
+            msg.style.textAlign = "center";
+            threadList.appendChild(msg);
+            return;
+          }
+
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "thread-box";
+            div.innerHTML = `
+              <a href="thread.html?id=${doc.id}" style="color:#00ffcc;text-decoration:none;">
+                <h3>💻 ${data.title}</h3>
+              </a>
+              ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:10px;border-radius:8px;">` : ""}
+              ${data.content ? `<p>${data.content}</p>` : ""}
+              <div class="reactions">
+                <span title="Gillar">👍</span>
+                <span title="Ogillar">👎</span>
+                <span title="Stödjer / Älskar">❤️</span>
+                <span title="Krossat hjärta">💔</span>
+                <span title="Glad">😀</span>
+                <span title="Ledsen">😢</span>
+                <span title="Förvånad">😲</span>
+                <span title="Arg">😡</span>
+                <span title="Neutral">😐</span>
+              </div>
+            `;
+            threadList.appendChild(div);
+          });
+        });
+
+      document.getElementById("searchInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          const query = this.value.trim();
+          if (query) {
+            window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+          }
         }
-      }
+      });
     });
   </script>
 </body>
