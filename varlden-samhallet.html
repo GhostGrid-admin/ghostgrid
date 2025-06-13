@@ -185,10 +185,42 @@
 
       createBtn.style.display = "block";
       form.style.display = "none";
-    });
 
-    document.getElementById("create-btn").addEventListener("click", () => {
-      document.getElementById("formSection").style.display = "block";
+      // 🔁 Hämta trådar EFTER vi vet att användaren är inloggad
+      firebase.firestore().collection("forumThreads")
+        .where("category", "==", "Världen & Samhället")
+        .orderBy("created", "desc")
+        .onSnapshot(snapshot => {
+          const list = document.getElementById("thread-list");
+          list.innerHTML = "";
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "thread-box";
+
+            const userReaction = data.userReactions ? data.userReactions[currentUser?.uid] : null;
+            const reactionHTML = ["👍", "👎", "❤️", "💔", "😀", "😢", "😲", "😡", "😐"]
+              .map(emoji => {
+                const count = (data.reactions && data.reactions[emoji]) || 0;
+                const isActive = emoji === userReaction;
+                return `<span class="reaction ${isActive ? 'active' : ''}" onclick="handleReaction('${doc.id}', '${emoji}')">${emoji} ${count}</span>`;
+              }).join("");
+
+            const isCreator = currentUser && data.createdBy === currentUser.uid;
+            const isAdmin = currentUser && currentUser.email === "ghostgrid.info@gmail.com";
+            const deleteHTML = (isCreator || isAdmin)
+              ? `<span class="delete-thread" onclick="deleteThread('${doc.id}')">🗑️</span>`
+              : "";
+
+            div.innerHTML = `
+              <h3>${data.title} ${deleteHTML}</h3>
+              ${data.content ? `<p>${data.content}</p>` : ""}
+              ${data.image ? `<img src="${data.image}" alt="Thread Image">` : ""}
+              <div class="reactions">${reactionHTML}</div>
+            `;
+            list.appendChild(div);
+          });
+        });
     });
 
     function submitThread(event) {
@@ -260,41 +292,6 @@
       if (!confirm(t.confirmDelete)) return;
       firebase.firestore().collection("forumThreads").doc(threadId).delete();
     }
-
-    firebase.firestore().collection("forumThreads")
-      .where("category", "==", "Världen & Samhället")
-      .orderBy("created", "desc")
-      .onSnapshot(snapshot => {
-        const list = document.getElementById("thread-list");
-        list.innerHTML = "";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const div = document.createElement("div");
-          div.className = "thread-box";
-
-          const userReaction = data.userReactions ? data.userReactions[currentUser?.uid] : null;
-          const reactionHTML = ["👍", "👎", "❤️", "💔", "😀", "😢", "😲", "😡", "😐"]
-            .map(emoji => {
-              const count = (data.reactions && data.reactions[emoji]) || 0;
-              const isActive = emoji === userReaction;
-              return `<span class="reaction ${isActive ? 'active' : ''}" onclick="handleReaction('${doc.id}', '${emoji}')">${emoji} ${count}</span>`;
-            }).join("");
-
-          const isCreator = currentUser && data.createdBy === currentUser.uid;
-          const isAdmin = currentUser && currentUser.email === "ghostgrid.info@gmail.com";
-          const deleteHTML = (isCreator || isAdmin)
-            ? `<span class="delete-thread" onclick="deleteThread('${doc.id}')">🗑️</span>`
-            : "";
-
-          div.innerHTML = `
-            <h3>${data.title} ${deleteHTML}</h3>
-            ${data.content ? `<p>${data.content}</p>` : ""}
-            ${data.image ? `<img src="${data.image}" alt="Thread Image">` : ""}
-            <div class="reactions">${reactionHTML}</div>
-          `;
-          list.appendChild(div);
-        });
-      });
   </script>
 </body>
 </html>
