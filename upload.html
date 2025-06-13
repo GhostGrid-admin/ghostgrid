@@ -36,13 +36,19 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
     }
 
     .nav-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 12px;
+      max-width: 800px;
+      width: 100%;
+      justify-items: center;
+      align-items: center;
+      text-align: center;
     }
 
     .nav-content a {
@@ -61,9 +67,17 @@
       box-shadow: 0 0 10px #ffffff;
     }
 
+    .search-container {
+      grid-column: 1 / -1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
     .search-container input {
       padding: 8px 14px;
-      font-size: 1.4em;
+      font-size: 1.2em;
       font-family: 'Courier New', monospace;
       background-color: #111;
       border: 2px solid #00ffcc;
@@ -71,10 +85,8 @@
       color: #ffffff;
       box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
       text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
-    }
-
-    .search-container input::placeholder {
-      color: #bbbbbb;
+      width: 90%;
+      max-width: 500px;
     }
 
     .upload-box {
@@ -127,16 +139,23 @@
       margin-top: 10px;
     }
 
-    /* ✅ Responsiv meny: Rad på dator, kolumn på mobil */
-    @media (min-width: 769px) {
+    @media (min-width: 900px) {
       .nav-content {
-        flex-direction: row;
+        display: flex;
         justify-content: center;
+        flex-wrap: nowrap;
+        gap: 25px;
       }
 
       .search-container {
         margin-top: 0;
         margin-left: 20px;
+        width: auto;
+      }
+
+      .search-container input {
+        font-size: 1.2em;
+        width: 250px;
       }
     }
   </style>
