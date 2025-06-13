@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="page_title">Kod & Projekt – GhostGrid</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #00ffcc;
+      overflow-x: hidden;
+      padding-top: 100px;
+    }
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 60px;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle, #8800ff 0%, transparent 70%);
+    }
+    .glow-left { left: 0; }
+    .glow-right { right: 0; }
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+    .nav-content {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .search-container {
+      position: relative;
+    }
+    .search-container input {
+      padding: 10px 18px 10px 42px;
+      font-size: 1.4em;
+      background-color: #0c0c0c;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      border-radius: 14px;
+      outline: none;
+      box-shadow: inset 0 0 5px #00ffcc, 0 0 12px #7b00ff, 0 0 20px #00ffcc;
+      text-shadow: 0 0 3px #00ffcc;
+    }
+    .search-container::before {
+      content: "\1F50D";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      pointer-events: none;
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+    .forum-container {
+      background: rgba(0, 0, 0, 0.85);
+      margin: 80px auto;
+      padding: 30px;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #00ffcc;
+      animation: fadeIn 1.2s ease-in;
+    }
+    .title-wrapper { text-align: center; margin-bottom: 30px; }
+    .title-wrapper h1 { margin: 0; font-size: 2.2em; }
+    .thread-box {
+      border: 1px solid #00ffcc;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #111;
+    }
+    .reactions {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .reactions span {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .new-thread-form {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #111;
+      border: 1px solid #00ffcc;
+      border-radius: 10px;
+    }
+    .new-thread-form input,
+    .new-thread-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+    }
+    .new-thread-form button {
+      padding: 10px 20px;
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html" data-i18n="nav_forum">Forum</a>
+      <a href="store.html" data-i18n="nav_store">Store</a>
+      <a href="wall.html" data-i18n="nav_wall">Väggen</a>
+      <a href="upload.html" data-i18n="nav_upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="nav_profile">Profil</a>
+      <a href="friends.html" data-i18n="nav_friends">Vänner</a>
+      <div class="search-container">
+        <input type="text" id="searchInput" data-i18n-placeholder="nav_search" />
+      </div>
+    </div>
+  </nav>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="forum-container">
+    <div class="title-wrapper">
+      <h1 data-i18n="forum_title">💻 Kod & Projekt</h1>
+    </div>
+    <div id="thread-list"></div>
+    <form class="new-thread-form" id="newThreadForm">
+      <input type="text" id="threadTitle" data-i18n-placeholder="thread_title" placeholder="Trådrubrik" required />
+      <textarea id="threadContent" data-i18n-placeholder="thread_content" placeholder="Beskrivning..." rows="4"></textarea>
+      <input type="file" id="threadImage" accept="image/*">
+      <button type="submit" data-i18n="submit_btn">Skapa tråd</button>
+    </form>
+  </div>
+
+  <script>
+    const lang = localStorage.getItem("language") || "sv";
+    const translations = {
+      sv: {
+        page_title: "Kod & Projekt – GhostGrid",
+        nav_forum: "Forum",
+        nav_store: "Store",
+        nav_wall: "Väggen",
+        nav_upload: "Ladda upp",
+        nav_profile: "Profil",
+        nav_friends: "Vänner",
+        nav_search: "Sök...",
+        forum_title: "💻 Kod & Projekt",
+        thread_title: "Trådrubrik",
+        thread_content: "Beskrivning...",
+        submit_btn: "Skapa tråd"
+      },
+      en: {
+        page_title: "Code & Projects – GhostGrid",
+        nav_forum: "Forum",
+        nav_store: "Store",
+        nav_wall: "Wall",
+        nav_upload: "Upload",
+        nav_profile: "Profile",
+        nav_friends: "Friends",
+        nav_search: "Search...",
+        forum_title: "💻 Code & Projects",
+        thread_title: "Thread title",
+        thread_content: "Description...",
+        submit_btn: "Create thread"
+      }
+    };
+
+    function translatePage() {
+      const t = translations[lang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key]) el.textContent = t[key];
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (t[key]) el.placeholder = t[key];
+      });
+      if (t.page_title) document.title = t.page_title;
+    }
+    translatePage();
+
+    firebase.auth().onAuthStateChanged(user => {
+      const form = document.getElementById("newThreadForm");
+      if (!user) form.innerHTML = '<p style="color: red;">You must be logged in to create a thread.</p>';
+      else {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = document.getElementById("threadTitle").value;
+          const content = document.getElementById("threadContent").value;
+          const imageFile = document.getElementById("threadImage").files[0];
+
+          let imageUrl = "";
+          if (imageFile) {
+            const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
+            await storageRef.put(imageFile);
+            imageUrl = await storageRef.getDownloadURL();
+          }
+
+          await firebase.firestore().collection("forumThreads").add({
+            title,
+            content,
+            image: imageUrl,
+            created: Date.now(),
+            category: "Kod & Projekt",
+            user: user.email || user.uid
+          });
+
+          form.reset();
+        });
+      }
+    });
+
+    firebase.firestore().collection("forumThreads")
+      .where("category", "==", "Kod & Projekt")
+      .orderBy("created", "desc")
+      .onSnapshot(snapshot => {
+        const container = document.getElementById("thread-list");
+        container.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "thread-box";
+          div.innerHTML = `
+            <a href="thread.html?id=${doc.id}" style="color:#00ffcc;text-decoration:none;">
+              <h3>💻 ${data.title}</h3>
+            </a>
+            ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:10px;border-radius:8px;">` : ""}
+            ${data.content ? `<p>${data.content}</p>` : ""}
+            <div class="reactions">
+              <span title="Gillar">👍</span>
+              <span title="Ogillar">👎</span>
+              <span title="Stödjer / Älskar">❤️</span>
+              <span title="Krossat hjärta">💔</span>
+              <span title="Glad">😀</span>
+              <span title="Ledsen">😢</span>
+              <span title="Förvånad">😲</span>
+              <span title="Arg">😡</span>
+              <span title="Neutral">😐</span>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      });
+
+    document.getElementById("searchInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const query = this.value.trim();
+        if (query) {
+          window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
