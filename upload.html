@@ -89,6 +89,26 @@
       max-width: 500px;
     }
 
+    @media (min-width: 900px) {
+      .nav-content {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 25px;
+      }
+
+      .search-container {
+        margin-top: 0;
+        margin-left: 20px;
+        width: auto;
+      }
+
+      .search-container input {
+        font-size: 1.2em;
+        width: 250px;
+      }
+    }
+
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
@@ -137,26 +157,6 @@
 
     audio {
       margin-top: 10px;
-    }
-
-    @media (min-width: 900px) {
-      .nav-content {
-        display: flex;
-        justify-content: center;
-        flex-wrap: nowrap;
-        gap: 25px;
-      }
-
-      .search-container {
-        margin-top: 0;
-        margin-left: 20px;
-        width: auto;
-      }
-
-      .search-container input {
-        font-size: 1.2em;
-        width: 250px;
-      }
     }
   </style>
 </head>
