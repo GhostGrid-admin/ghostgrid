@@ -107,6 +107,19 @@
       margin-right: 10px;
       cursor: pointer;
     }
+    .reaction.active {
+      background-color: #00ffcc;
+      color: black;
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+    .delete-thread {
+      float: right;
+      cursor: pointer;
+      color: #ff4444;
+      font-size: 0.9em;
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +130,7 @@
     <h1 id="forum-title">Världen & Samhället</h1>
     <div id="thread-list"></div>
     <button class="create-thread-btn" id="create-btn" style="display:none;">➕ Skapa ny tråd</button>
-    <div class="create-thread-form" id="formSection" style="display:none;">
+    <div class="create-thread-form" id="formSection">
       <input type="text" id="threadTitle" placeholder="">
       <textarea id="threadContent" rows="5" placeholder=""></textarea>
       <input type="file" id="threadImage" accept="image/*">
@@ -126,6 +139,8 @@
   </div>
 
   <script>
+    let currentUser = null;
+
     const lang = localStorage.getItem("language") || "sv";
     const translations = {
       sv: {
@@ -134,7 +149,8 @@
         threadTitle: "Rubrik på tråden",
         threadContent: "Vad vill du diskutera?",
         submit: "Skicka",
-        login_required: "Du måste vara inloggad för att skapa trådar eller reagera."
+        login_required: "Du måste vara inloggad för att skapa trådar eller reagera.",
+        confirmDelete: "Vill du verkligen radera tråden?"
       },
       en: {
         title: "🌍 World & Society",
@@ -142,7 +158,8 @@
         threadTitle: "Thread title",
         threadContent: "What do you want to discuss?",
         submit: "Submit",
-        login_required: "You must be logged in to create threads or react."
+        login_required: "You must be logged in to create threads or react.",
+        confirmDelete: "Are you sure you want to delete this thread?"
       }
     };
 
@@ -153,10 +170,26 @@
     document.getElementById("threadContent").placeholder = t.threadContent;
     document.getElementById("submit-btn").innerText = t.submit;
 
-    function toggleForm() {
+    firebase.auth().onAuthStateChanged(user => {
+      currentUser = user;
+      const createBtn = document.getElementById("create-btn");
       const form = document.getElementById("formSection");
-      form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
-    }
+
+      if (!user) {
+        const msg = document.createElement("p");
+        msg.style.color = "red";
+        msg.textContent = t.login_required;
+        document.querySelector(".forum-container").appendChild(msg);
+        return;
+      }
+
+      createBtn.style.display = "block";
+      form.style.display = "none";
+    });
+
+    document.getElementById("create-btn").addEventListener("click", () => {
+      document.getElementById("formSection").style.display = "block";
+    });
 
     function submitThread(event) {
       event.preventDefault();
@@ -184,25 +217,49 @@
         content,
         image: imageUrl,
         created: Date.now(),
-        category: "Världen & Samhället"
+        category: "Världen & Samhället",
+        createdBy: currentUser.uid,
+        reactions: {},
+        userReactions: {}
       });
     }
 
-    firebase.auth().onAuthStateChanged(user => {
-      const createBtn = document.getElementById("create-btn");
-      const form = document.getElementById("formSection");
-
-      if (!user) {
-        const msg = document.createElement("p");
-        msg.style.color = "red";
-        msg.textContent = t.login_required;
-        document.querySelector(".forum-container").appendChild(msg);
+    function handleReaction(threadId, emoji) {
+      if (!currentUser) {
+        alert(t.login_required);
         return;
       }
 
-      createBtn.style.display = "block";
-      form.style.display = "none";
-    });
+      const uid = currentUser.uid;
+      const threadRef = firebase.firestore().collection("forumThreads").doc(threadId);
+
+      threadRef.get().then(doc => {
+        const data = doc.data();
+        const userReactions = data.userReactions || {};
+        const previousReaction = userReactions[uid];
+        const updates = {};
+
+        if (previousReaction === emoji) {
+          updates[`reactions.${emoji}`] = firebase.firestore.FieldValue.increment(-1);
+          updates[`userReactions.${uid}`] = firebase.firestore.FieldValue.delete();
+        } else if (previousReaction) {
+          updates[`reactions.${previousReaction}`] = firebase.firestore.FieldValue.increment(-1);
+          updates[`reactions.${emoji}`] = firebase.firestore.FieldValue.increment(1);
+          updates[`userReactions.${uid}`] = emoji;
+        } else {
+          updates[`reactions.${emoji}`] = firebase.firestore.FieldValue.increment(1);
+          updates[`userReactions.${uid}`] = emoji;
+        }
+
+        threadRef.update(updates);
+      });
+    }
+
+    function deleteThread(threadId) {
+      if (!currentUser) return;
+      if (!confirm(t.confirmDelete)) return;
+      firebase.firestore().collection("forumThreads").doc(threadId).delete();
+    }
 
     firebase.firestore().collection("forumThreads")
       .where("category", "==", "Världen & Samhället")
@@ -214,21 +271,26 @@
           const data = doc.data();
           const div = document.createElement("div");
           div.className = "thread-box";
+
+          const userReaction = data.userReactions ? data.userReactions[currentUser?.uid] : null;
+          const reactionHTML = ["👍", "👎", "❤️", "💔", "😀", "😢", "😲", "😡", "😐"]
+            .map(emoji => {
+              const count = (data.reactions && data.reactions[emoji]) || 0;
+              const isActive = emoji === userReaction;
+              return `<span class="reaction ${isActive ? 'active' : ''}" onclick="handleReaction('${doc.id}', '${emoji}')">${emoji} ${count}</span>`;
+            }).join("");
+
+          const isCreator = currentUser && data.createdBy === currentUser.uid;
+          const isAdmin = currentUser && currentUser.email === "ghostgrid.info@gmail.com";
+          const deleteHTML = (isCreator || isAdmin)
+            ? `<span class="delete-thread" onclick="deleteThread('${doc.id}')">🗑️</span>`
+            : "";
+
           div.innerHTML = `
-            <h3>${data.title}</h3>
+            <h3>${data.title} ${deleteHTML}</h3>
             ${data.content ? `<p>${data.content}</p>` : ""}
             ${data.image ? `<img src="${data.image}" alt="Thread Image">` : ""}
-            <div class="reactions">
-              <span class="reaction">👍</span>
-              <span class="reaction">👎</span>
-              <span class="reaction">❤️</span>
-              <span class="reaction">💔</span>
-              <span class="reaction">😀</span>
-              <span class="reaction">😢</span>
-              <span class="reaction">😲</span>
-              <span class="reaction">😡</span>
-              <span class="reaction">😐</span>
-            </div>
+            <div class="reactions">${reactionHTML}</div>
           `;
           list.appendChild(div);
         });
