@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kod & Projekt – GhostGrid</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -18,45 +18,71 @@
       background-color: #000;
       color: #00ffcc;
       overflow-x: hidden;
+      padding-top: 100px;
     }
-
-    .glow-left, .glow-right {
-      position: fixed;
-      top: 0;
-      width: 60px;
-      height: 100%;
-      z-index: -1;
-      background: radial-gradient(circle, #8800ff 0%, transparent 70%);
-    }
-    .glow-left { left: 0; }
-    .glow-right { right: 0; }
 
     .forum-container {
-      background: rgba(0, 0, 0, 0.85);
-      margin: 80px auto;
-      padding: 30px;
       max-width: 900px;
+      margin: auto;
+      padding: 30px;
       border-radius: 12px;
+      background: rgba(0, 0, 0, 0.85);
       box-shadow: 0 0 25px #00ffcc;
-      animation: fadeIn 1.2s ease-in;
     }
 
-    .title-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 30px;
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 10px;
     }
 
-    .title-wrapper h1 {
-      margin: 0;
-      font-size: 2.2em;
+    #guest-warning {
+      text-align: center;
+      color: red;
+      margin-bottom: 20px;
+    }
+
+    .thread-box {
+      border: 1px solid #00ffcc;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #111;
+    }
+
+    .reactions span {
+      margin-right: 10px;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    .comments {
+      margin-top: 10px;
+    }
+
+    .comments textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      background: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 6px;
+    }
+
+    .comments button {
+      margin-top: 6px;
+      padding: 8px 20px;
+      background: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
     .create-thread-btn {
-      margin-top: 30px;
-      display: block;
+      margin: 20px 0;
       width: 100%;
       padding: 14px;
       background-color: #00ffcc;
@@ -64,85 +90,95 @@
       font-weight: bold;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
       font-size: 1em;
+      cursor: pointer;
     }
 
     .create-thread-form {
       display: none;
-      margin-top: 30px;
-      padding: 20px;
       background: #111;
-      border: 1px solid #00ffcc;
+      padding: 20px;
       border-radius: 8px;
+      border: 1px solid #00ffcc;
     }
 
     .create-thread-form input,
     .create-thread-form textarea {
       width: 100%;
-      margin-bottom: 10px;
       padding: 10px;
+      margin-bottom: 10px;
       background: #000;
       color: #00ffcc;
       border: 1px solid #00ffcc;
       border-radius: 6px;
     }
 
-    .create-thread-form input[type="file"] {
-      padding: 0;
-    }
-
     .create-thread-form button {
       width: 100%;
       padding: 12px;
       background: #00ffcc;
-      color: black;
+      color: #000;
       font-weight: bold;
       border: none;
       border-radius: 8px;
       cursor: pointer;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
   </style>
 </head>
 <body>
-  <div class="glow-left"></div>
-  <div class="glow-right"></div>
-
   <div class="forum-container">
-    <div class="title-wrapper">
-      <h1 id="forum-title">Kod & Projekt</h1>
-    </div>
+    <h1 id="forum-title">💻 Kod & Projekt</h1>
+    <p id="guest-warning" style="display:none;">💡 Du måste vara inloggad för att kommentera eller reagera.</p>
 
     <div id="thread-list"></div>
+    <button id="create-btn" class="create-thread-btn" style="display:none;" onclick="toggleForm()">➕ Skapa ny tråd</button>
 
-    <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
-
-    <div class="create-thread-form" id="formSection">
-      <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
-      <textarea id="threadContent" rows="5" placeholder="Vad vill du diskutera?"></textarea>
+    <div id="formSection" class="create-thread-form">
+      <input type="text" id="threadTitle" placeholder="Rubrik på tråden" />
+      <textarea id="threadContent" placeholder="Vad vill du diskutera?" rows="4"></textarea>
       <input type="file" id="threadImage" accept="image/*">
-      <button id="submit-btn" onclick="submitThread()">Skicka</button>
+      <button onclick="submitThread()">Skicka</button>
     </div>
   </div>
 
   <script>
+    const lang = localStorage.getItem("language") || "sv";
+    const translations = {
+      sv: {
+        title: "💻 Kod & Projekt",
+        createButton: "➕ Skapa ny tråd",
+        threadTitle: "Rubrik på tråden",
+        threadContent: "Vad vill du diskutera?",
+        submit: "Skicka",
+        login_required: "Du måste vara inloggad för att kommentera eller reagera."
+      },
+      en: {
+        title: "💻 Code & Projects",
+        createButton: "➕ Create new thread",
+        threadTitle: "Thread title",
+        threadContent: "What do you want to discuss?",
+        submit: "Submit",
+        login_required: "You must be logged in to comment or react."
+      }
+    };
+    const t = translations[lang];
+    document.getElementById("forum-title").innerText = t.title;
+    document.getElementById("create-btn").innerText = t.createButton;
+    document.getElementById("threadTitle").placeholder = t.threadTitle;
+    document.getElementById("threadContent").placeholder = t.threadContent;
+    document.getElementById("guest-warning").innerText = t.login_required;
+
     function toggleForm() {
       const form = document.getElementById("formSection");
-      form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
+      form.style.display = form.style.display === "block" ? "none" : "block";
     }
 
     function submitThread() {
       const title = document.getElementById("threadTitle").value;
       const content = document.getElementById("threadContent").value;
       const imageFile = document.getElementById("threadImage").files[0];
-
       const user = firebase.auth().currentUser;
-      if (!user) return alert("Du måste vara inloggad för att skapa en tråd.");
+      if (!user) return alert(t.login_required);
 
       let imageUrl = "";
       if (imageFile) {
@@ -150,23 +186,35 @@
         storageRef.put(imageFile).then(snapshot => {
           snapshot.ref.getDownloadURL().then(url => {
             imageUrl = url;
-            saveThread(title, content, imageUrl);
+            saveThread(title, content, imageUrl, user);
           });
         });
       } else {
-        saveThread(title, content, imageUrl);
+        saveThread(title, content, imageUrl, user);
       }
     }
 
-    function saveThread(title, content, imageUrl) {
+    function saveThread(title, content, imageUrl, user) {
       firebase.firestore().collection("forumThreads").add({
         title,
         content,
         image: imageUrl,
         created: Date.now(),
-        category: "Kod & Projekt"
+        category: "Kod & Projekt",
+        user: user.email || user.uid,
+        comments: [],
+        userReactions: {}
       });
+      document.getElementById("formSection").reset();
     }
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("create-btn").style.display = "block";
+      } else {
+        document.getElementById("guest-warning").style.display = "block";
+      }
+    });
 
     firebase.firestore().collection("forumThreads")
       .where("category", "==", "Kod & Projekt")
@@ -176,26 +224,58 @@
         list.innerHTML = "";
         snapshot.forEach(doc => {
           const data = doc.data();
+          const id = doc.id;
           const div = document.createElement("div");
           div.className = "thread-box";
+
+          const reactions = ["👍", "👎", "❤️", "💔", "😀", "😢", "😲", "😡", "😐"]
+            .map(icon => `<span class="react" data-id="${id}" data-icon="${icon}">${icon}</span>`)
+            .join(" ");
+
+          const comments = (data.comments || []).map(c => `<p>💬 ${c.user}: ${c.text}</p>`).join("");
+
           div.innerHTML = `
             <h3>${data.title}</h3>
             ${data.content ? `<p>${data.content}</p>` : ""}
-            ${data.image ? `<img src="${data.image}" alt="Thread Image">` : ""}
+            ${data.image ? `<img src="${data.image}" style="max-width:100%; border-radius:8px;">` : ""}
+            <div class="reactions">${reactions}</div>
+            <div class="comments">
+              <h4>Kommentarer:</h4>
+              <div id="comments-${id}">${comments}</div>
+              <textarea id="comment-${id}" placeholder="Skriv en kommentar..."></textarea>
+              <button onclick="submitComment('${id}')">Kommentera</button>
+            </div>
           `;
           list.appendChild(div);
         });
       });
 
-    firebase.auth().onAuthStateChanged(user => {
-      const createBtn = document.getElementById("create-btn");
-      const form = document.getElementById("formSection");
-      if (!user) {
-        createBtn.style.display = "none";
-        form.style.display = "none";
-      } else {
-        createBtn.style.display = "block";
-        form.style.display = "none";
+    async function submitComment(threadId) {
+      const textarea = document.getElementById(`comment-${threadId}`);
+      const comment = textarea.value.trim();
+      if (!comment) return;
+      const user = firebase.auth().currentUser;
+      if (!user) return alert(t.login_required);
+
+      await firebase.firestore().collection("forumThreads").doc(threadId).update({
+        comments: firebase.firestore.FieldValue.arrayUnion({
+          user: user.email || user.uid,
+          text: comment,
+          created: Date.now()
+        })
+      });
+      textarea.value = "";
+    }
+
+    document.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("react")) {
+        const icon = e.target.dataset.icon;
+        const id = e.target.dataset.id;
+        const user = firebase.auth().currentUser;
+        if (!user) return alert(t.login_required);
+        await firebase.firestore().collection("forumThreads").doc(id).update({
+          [`userReactions.${user.uid}`]: icon
+        });
       }
     });
   </script>
