@@ -30,7 +30,7 @@
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
-      padding: 12px 40px;
+      padding: 12px 0;
       position: fixed;
       width: 100%;
       top: 0;
@@ -40,12 +40,17 @@
       justify-content: center;
     }
 
+    .navbar-inner {
+      width: 100%;
+      max-width: 850px;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
     .nav-content {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 12px;
-      max-width: 800px;
-      width: 100%;
       justify-items: center;
       align-items: center;
       text-align: center;
@@ -163,15 +168,17 @@
 <body>
 
   <nav class="navbar">
-    <div class="nav-content">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-      <div class="search-container">
-        <input type="text" placeholder="Sök..." id="searchInput" />
+    <div class="navbar-inner">
+      <div class="nav-content">
+        <a href="forum.html">Forum</a>
+        <a href="store.html">Store</a>
+        <a href="wall.html">Väggen</a>
+        <a href="upload.html">Ladda upp</a>
+        <a href="profile.html">Profil</a>
+        <a href="friends.html">Vänner</a>
+        <div class="search-container">
+          <input type="text" placeholder="Sök..." id="searchInput" />
+        </div>
       </div>
     </div>
   </nav>
@@ -209,7 +216,6 @@
 
   <script src="theme-toggle.js"></script>
   <script src="language.js"></script>
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const searchInput = document.getElementById("searchInput");
@@ -226,9 +232,6 @@
       }
     });
   </script>
-
-</body>
-</html>
 
 </body>
 </html>
