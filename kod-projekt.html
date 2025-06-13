@@ -187,7 +187,8 @@
         forum_title: "💻 Kod & Projekt",
         thread_title: "Trådrubrik",
         thread_content: "Beskrivning...",
-        submit_btn: "Skapa tråd"
+        submit_btn: "Skapa tråd",
+        login_required: "Du måste vara inloggad för att skapa en tråd."
       },
       en: {
         page_title: "Code & Projects – GhostGrid",
@@ -201,7 +202,8 @@
         forum_title: "💻 Code & Projects",
         thread_title: "Thread title",
         thread_content: "Description...",
-        submit_btn: "Create thread"
+        submit_btn: "Create thread",
+        login_required: "You must be logged in to create a thread."
       }
     };
 
@@ -221,33 +223,41 @@
 
     firebase.auth().onAuthStateChanged(user => {
       const form = document.getElementById("newThreadForm");
-      if (!user) form.innerHTML = '<p style="color: red;">You must be logged in to create a thread.</p>';
-      else {
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const title = document.getElementById("threadTitle").value;
-          const content = document.getElementById("threadContent").value;
-          const imageFile = document.getElementById("threadImage").files[0];
-
-          let imageUrl = "";
-          if (imageFile) {
-            const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
-            await storageRef.put(imageFile);
-            imageUrl = await storageRef.getDownloadURL();
-          }
-
-          await firebase.firestore().collection("forumThreads").add({
-            title,
-            content,
-            image: imageUrl,
-            created: Date.now(),
-            category: "Kod & Projekt",
-            user: user.email || user.uid
-          });
-
-          form.reset();
-        });
+      if (!user) {
+        form.style.display = "none";
+        const notice = document.createElement("p");
+        notice.style.color = "red";
+        notice.style.marginTop = "20px";
+        notice.textContent = translations[lang].login_required;
+        form.parentElement.appendChild(notice);
+        return;
       }
+
+      form.style.display = "block";
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = document.getElementById("threadTitle").value;
+        const content = document.getElementById("threadContent").value;
+        const imageFile = document.getElementById("threadImage").files[0];
+
+        let imageUrl = "";
+        if (imageFile) {
+          const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
+          await storageRef.put(imageFile);
+          imageUrl = await storageRef.getDownloadURL();
+        }
+
+        await firebase.firestore().collection("forumThreads").add({
+          title,
+          content,
+          image: imageUrl,
+          created: Date.now(),
+          category: "Kod & Projekt",
+          user: user.email || user.uid
+        });
+
+        form.reset();
+      });
     });
 
     firebase.firestore().collection("forumThreads")
