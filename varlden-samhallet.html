@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Världen & Samhället – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <style>
     body {
       margin: 0;
@@ -14,7 +19,6 @@
       color: #00ffcc;
       overflow-x: hidden;
     }
-
     .glow-left, .glow-right {
       position: fixed;
       top: 0;
@@ -25,7 +29,6 @@
     }
     .glow-left { left: 0; }
     .glow-right { right: 0; }
-
     .forum-container {
       background: rgba(0, 0, 0, 0.85);
       margin: 80px auto;
@@ -35,13 +38,11 @@
       box-shadow: 0 0 25px #00ffcc;
       animation: fadeIn 1.2s ease-in;
     }
-
     h1 {
       text-align: center;
       font-size: 2.2em;
       margin-bottom: 30px;
     }
-
     .create-thread-btn {
       margin-top: 30px;
       display: block;
@@ -55,7 +56,6 @@
       cursor: pointer;
       font-size: 1em;
     }
-
     .create-thread-form {
       display: none;
       margin-top: 30px;
@@ -64,7 +64,6 @@
       border: 1px solid #00ffcc;
       border-radius: 8px;
     }
-
     .create-thread-form input,
     .create-thread-form textarea {
       width: 100%;
@@ -75,11 +74,9 @@
       border: 1px solid #00ffcc;
       border-radius: 6px;
     }
-
     .create-thread-form input[type="file"] {
       padding: 0;
     }
-
     .create-thread-form button {
       width: 100%;
       padding: 12px;
@@ -90,10 +87,25 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+    .thread-box {
+      border: 1px solid #00ffcc;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #111;
+    }
+    .thread-box img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .reactions {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .reactions span {
+      margin-right: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -103,36 +115,34 @@
 
   <div class="forum-container">
     <h1 id="forum-title">Världen & Samhället</h1>
-
     <div id="thread-list"></div>
-
-    <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
-
-    <div class="create-thread-form" id="formSection">
+    <button class="create-thread-btn" id="create-btn" style="display:none;">➕ Skapa ny tråd</button>
+    <div class="create-thread-form" id="formSection" style="display:none;">
       <input type="text" id="threadTitle" placeholder="">
       <textarea id="threadContent" rows="5" placeholder=""></textarea>
       <input type="file" id="threadImage" accept="image/*">
-      <button id="submit-btn" onclick="submitThread()">Skicka</button>
+      <button id="submit-btn" onclick="submitThread(event)">Skicka</button>
     </div>
   </div>
 
   <script>
     const lang = localStorage.getItem("language") || "sv";
-
     const translations = {
       sv: {
         title: "🌍 Världen & Samhället",
         createButton: "➕ Skapa ny tråd",
         threadTitle: "Rubrik på tråden",
         threadContent: "Vad vill du diskutera?",
-        submit: "Skicka"
+        submit: "Skicka",
+        login_required: "Du måste vara inloggad för att skapa trådar eller reagera."
       },
       en: {
         title: "🌍 World & Society",
         createButton: "➕ Create new thread",
         threadTitle: "Thread title",
         threadContent: "What do you want to discuss?",
-        submit: "Submit"
+        submit: "Submit",
+        login_required: "You must be logged in to create threads or react."
       }
     };
 
@@ -148,9 +158,81 @@
       form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
     }
 
-    function submitThread() {
-      alert(t.submit + " – (Firebase-kod läggs in här)");
+    function submitThread(event) {
+      event.preventDefault();
+      const title = document.getElementById("threadTitle").value;
+      const content = document.getElementById("threadContent").value;
+      const imageFile = document.getElementById("threadImage").files[0];
+
+      let imageUrl = "";
+      if (imageFile) {
+        const storageRef = firebase.storage().ref("threadImages/" + Date.now() + "_" + imageFile.name);
+        storageRef.put(imageFile).then(snapshot => {
+          snapshot.ref.getDownloadURL().then(url => {
+            imageUrl = url;
+            saveThread(title, content, imageUrl);
+          });
+        });
+      } else {
+        saveThread(title, content, imageUrl);
+      }
     }
+
+    function saveThread(title, content, imageUrl) {
+      firebase.firestore().collection("forumThreads").add({
+        title,
+        content,
+        image: imageUrl,
+        created: Date.now(),
+        category: "Världen & Samhället"
+      });
+    }
+
+    firebase.auth().onAuthStateChanged(user => {
+      const createBtn = document.getElementById("create-btn");
+      const form = document.getElementById("formSection");
+
+      if (!user) {
+        const msg = document.createElement("p");
+        msg.style.color = "red";
+        msg.textContent = t.login_required;
+        document.querySelector(".forum-container").appendChild(msg);
+        return;
+      }
+
+      createBtn.style.display = "block";
+      form.style.display = "none";
+    });
+
+    firebase.firestore().collection("forumThreads")
+      .where("category", "==", "Världen & Samhället")
+      .orderBy("created", "desc")
+      .onSnapshot(snapshot => {
+        const list = document.getElementById("thread-list");
+        list.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "thread-box";
+          div.innerHTML = `
+            <h3>${data.title}</h3>
+            ${data.content ? `<p>${data.content}</p>` : ""}
+            ${data.image ? `<img src="${data.image}" alt="Thread Image">` : ""}
+            <div class="reactions">
+              <span class="reaction">👍</span>
+              <span class="reaction">👎</span>
+              <span class="reaction">❤️</span>
+              <span class="reaction">💔</span>
+              <span class="reaction">😀</span>
+              <span class="reaction">😢</span>
+              <span class="reaction">😲</span>
+              <span class="reaction">😡</span>
+              <span class="reaction">😐</span>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      });
   </script>
 </body>
 </html>
