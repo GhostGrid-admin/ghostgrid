@@ -97,35 +97,20 @@
     }
     .title-wrapper { text-align: center; margin-bottom: 30px; }
     .title-wrapper h1 { margin: 0; font-size: 2.2em; }
-    .create-thread-btn, .create-thread-form button {
-      margin-top: 30px;
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background-color: #00ffcc;
-      color: black;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1em;
-    }
-    .create-thread-form {
-      display: none;
-      margin-top: 30px;
+    .thread-box {
+      border: 1px solid #00ffcc;
       padding: 20px;
-      background: #111;
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #111;
     }
-    .create-thread-form input, .create-thread-form textarea {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      background: #000;
-      color: #00ffcc;
-      border: 1px solid #00ffcc;
-      border-radius: 6px;
+    .reactions {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .reactions span {
+      margin-right: 10px;
+      cursor: pointer;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -154,13 +139,6 @@
       <h1 data-i18n="forum_title">AI & Framtiden</h1>
     </div>
     <div id="thread-list"></div>
-    <button class="create-thread-btn" id="create-btn" onclick="toggleForm()" data-i18n="create_thread_btn">➕ Skapa ny tråd</button>
-    <div class="create-thread-form" id="formSection">
-      <input type="text" id="threadTitle" data-i18n-placeholder="thread_title" placeholder="">
-      <textarea id="threadContent" rows="5" data-i18n-placeholder="thread_content" placeholder=""></textarea>
-      <input type="file" id="threadImage" accept="image/*">
-      <button onclick="submitThread()" data-i18n="submit_btn">Skicka</button>
-    </div>
   </div>
   <script>
     const lang = localStorage.getItem("language") || "sv";
@@ -174,12 +152,7 @@
         nav_profile: "Profil",
         nav_friends: "Vänner",
         nav_search: "Sök...",
-        forum_title: "🧠 AI & Framtiden",
-        create_thread_btn: "➕ Skapa ny tråd",
-        close_form_btn: "➖ Stäng formulär",
-        thread_title: "Rubrik på tråden",
-        thread_content: "Vad vill du diskutera?",
-        submit_btn: "Skicka"
+        forum_title: "🧐 AI & Framtiden"
       },
       en: {
         page_title: "AI & The Future – GhostGrid",
@@ -190,14 +163,10 @@
         nav_profile: "Profile",
         nav_friends: "Friends",
         nav_search: "Search...",
-        forum_title: "🧠 AI & The Future",
-        create_thread_btn: "➕ Create new thread",
-        close_form_btn: "➖ Close form",
-        thread_title: "Thread title",
-        thread_content: "What do you want to discuss?",
-        submit_btn: "Submit"
+        forum_title: "🧐 AI & The Future"
       }
     };
+
     function translatePage() {
       const t = translations[lang];
       document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -210,19 +179,39 @@
       });
       if (t.page_title) document.title = t.page_title;
     }
+
     translatePage();
-    function toggleForm() {
-      const form = document.getElementById("formSection");
-      const btn = document.getElementById("create-btn");
-      const isClosed = form.style.display === "none" || form.style.display === "";
-      form.style.display = isClosed ? "block" : "none";
-      btn.textContent = isClosed
-        ? translations[lang].close_form_btn
-        : translations[lang].create_thread_btn;
-    }
-    function submitThread() {
-      alert(translations[lang].submit_btn + " – (Firebase-kod läggs in här)");
-    }
+
+    firebase.firestore().collection("forumThreads")
+      .where("category", "==", "AI & Framtiden")
+      .orderBy("created", "desc")
+      .onSnapshot(snapshot => {
+        const container = document.getElementById("thread-list");
+        container.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "thread-box";
+          div.innerHTML = `
+            <a href="thread.html?id=${doc.id}" style="color:#00ffcc;text-decoration:none;">
+              <h3>${data.title}</h3>
+            </a>
+            <div class="reactions">
+              <span title="Gillar">👍</span>
+              <span title="Ogillar">👎</span>
+              <span title="Stödjer / Älskar">❤️</span>
+              <span title="Krossat hjärta">💔</span>
+              <span title="Glad">😀</span>
+              <span title="Ledsen">😢</span>
+              <span title="Förvånad">😲</span>
+              <span title="Arg">😡</span>
+              <span title="Neutral">😐</span>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      });
+
     document.getElementById("searchInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const query = this.value.trim();
