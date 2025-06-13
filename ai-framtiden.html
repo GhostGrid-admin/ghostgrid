@@ -112,6 +112,23 @@
       margin-right: 10px;
       cursor: pointer;
     }
+    .new-thread-button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 30px;
+      font-size: 1.2em;
+      background-color: #00ffcc;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .new-thread-button:hover {
+      background-color: #00dddd;
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -136,9 +153,10 @@
   <div class="glow-right"></div>
   <div class="forum-container">
     <div class="title-wrapper">
-      <h1 data-i18n="forum_title">AI & Framtiden</h1>
+      <h1 data-i18n="forum_title">🤖 AI & Framtiden</h1>
     </div>
     <div id="thread-list"></div>
+    <a class="new-thread-button" href="#" onclick="alert('Skapa ny tråd funktion kommer snart!')">➕ Skapa ny tråd</a>
   </div>
   <script>
     const lang = localStorage.getItem("language") || "sv";
@@ -152,7 +170,7 @@
         nav_profile: "Profil",
         nav_friends: "Vänner",
         nav_search: "Sök...",
-        forum_title: "🧐 AI & Framtiden"
+        forum_title: "🤖 AI & Framtiden"
       },
       en: {
         page_title: "AI & The Future – GhostGrid",
@@ -163,7 +181,7 @@
         nav_profile: "Profile",
         nav_friends: "Friends",
         nav_search: "Search...",
-        forum_title: "🧐 AI & The Future"
+        forum_title: "🤖 AI & The Future"
       }
     };
 
@@ -194,7 +212,7 @@
           div.className = "thread-box";
           div.innerHTML = `
             <a href="thread.html?id=${doc.id}" style="color:#00ffcc;text-decoration:none;">
-              <h3>${data.title}</h3>
+              <h3>🤖 ${data.title}</h3>
             </a>
             <div class="reactions">
               <span title="Gillar">👍</span>
