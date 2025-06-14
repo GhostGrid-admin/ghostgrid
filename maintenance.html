@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <title>GhostGrid – Underhåll</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    img.logo {
+      width: 140px;
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 10px #00ff00);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px #00ff00;
+    }
+
+    p {
+      font-size: 1.2em;
+      max-width: 600px;
+    }
+
+    #text {
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: .15em solid #00ff00;
+      animation: typing 2.8s steps(36, end), blink-caret .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 36ch }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #00ff00 }
+    }
+  </style>
+</head>
+<body>
+  <audio id="keystrokeAudio" autoplay>
+    <source src="keystroke.mp3" type="audio/mpeg" />
+  </audio>
+
+  <img src="ghostgrid-logo.png" alt="GhostGrid" class="logo" />
+  <h1 id="text">System under development...</h1>
+  <p>Vi arbetar bakom kulisserna för att optimera din digitala verklighet. Plattformen är snart tillbaka.</p>
+
+  <script>
+    const audio = document.getElementById("keystrokeAudio");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  </script>
+</body>
+</html>
+📦 Filer som
