@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Heaven – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <style>
     body {
       margin: 0;
@@ -14,7 +17,6 @@
       color: #00ffcc;
       overflow-x: hidden;
     }
-
     .glow-left, .glow-right {
       position: fixed;
       top: 0;
@@ -25,7 +27,6 @@
     }
     .glow-left { left: 0; }
     .glow-right { right: 0; }
-
     .forum-container {
       background: rgba(0, 0, 0, 0.85);
       margin: 80px auto;
@@ -35,7 +36,6 @@
       box-shadow: 0 0 25px #00ffcc;
       animation: fadeIn 1.2s ease-in;
     }
-
     .title-wrapper {
       display: flex;
       align-items: center;
@@ -43,17 +43,14 @@
       gap: 15px;
       margin-bottom: 30px;
     }
-
     .title-wrapper img {
       height: 60px;
       border-radius: 6px;
     }
-
     .title-wrapper h1 {
       margin: 0;
       font-size: 2.2em;
     }
-
     .create-thread-btn {
       margin-top: 30px;
       display: block;
@@ -67,7 +64,6 @@
       cursor: pointer;
       font-size: 1em;
     }
-
     .create-thread-form {
       display: none;
       margin-top: 30px;
@@ -76,7 +72,6 @@
       border: 1px solid #00ffcc;
       border-radius: 8px;
     }
-
     .create-thread-form input,
     .create-thread-form textarea {
       width: 100%;
@@ -87,11 +82,9 @@
       border: 1px solid #00ffcc;
       border-radius: 6px;
     }
-
     .create-thread-form input[type="file"] {
       padding: 0;
     }
-
     .create-thread-form button {
       width: 100%;
       padding: 12px;
@@ -102,7 +95,52 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
+    .thread {
+      background: #111;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+    .reactions span {
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 1.4em;
+      transition: transform 0.2s;
+    }
+    .reactions span:hover {
+      transform: scale(1.2);
+    }
+    .reaction-count {
+      font-size: 0.9em;
+      margin-left: 5px;
+    }
+    .comment-section {
+      margin-top: 20px;
+    }
+    .comment {
+      padding: 8px;
+      background: #222;
+      margin-bottom: 6px;
+      border-radius: 5px;
+    }
+    .comment-form textarea {
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 5px;
+    }
+    .comment-form button {
+      margin-top: 8px;
+      padding: 8px;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(20px);}
       to {opacity: 1; transform: translateY(0);}
@@ -112,21 +150,24 @@
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-
   <div class="forum-container">
-    <!-- Titel + bild -->
     <div class="title-wrapper">
       <img src="bilder/tech-heaven.png" alt="Tech Heaven">
       <h1 id="forum-title">Tech Heaven</h1>
     </div>
-
-    <!-- Trådlista -->
-    <div id="thread-list"></div>
-
-    <!-- Skapa ny tråd-knapp -->
+    <div id="thread-list">
+      <div class="thread" id="thread-1">
+        <h3>Exempelrubrik</h3>
+        <p>Detta är ett exempelinlägg. Reagera nedan:</p>
+        <div class="reactions" id="reactions-thread-1"></div>
+        <div class="comment-section" id="comments-thread-1"></div>
+        <div class="comment-form">
+          <textarea id="commentInput-thread-1" rows="2" placeholder="Skriv en kommentar..."></textarea>
+          <button onclick="submitComment('thread-1')">Kommentera</button>
+        </div>
+      </div>
+    </div>
     <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
-
-    <!-- Formulär -->
     <div class="create-thread-form" id="formSection">
       <input type="text" id="threadTitle" placeholder="">
       <textarea id="threadContent" rows="5" placeholder=""></textarea>
@@ -134,42 +175,120 @@
       <button id="submit-btn" onclick="submitThread()">Skicka</button>
     </div>
   </div>
-
   <script>
     const lang = localStorage.getItem("language") || "sv";
-
     const translations = {
       sv: {
         title: "💻 Tech Heaven",
         createButton: "➕ Skapa ny tråd",
         threadTitle: "Rubrik på tråden",
         threadContent: "Vad vill du diskutera?",
-        submit: "Skicka"
+        submit: "Skicka",
+        loginRequired: "Du måste vara inloggad för att reagera.",
+        commentPlaceholder: "Skriv en kommentar...",
+        commentSubmit: "Kommentera"
       },
       en: {
         title: "💻 Tech Heaven",
         createButton: "➕ Create new thread",
         threadTitle: "Thread title",
         threadContent: "What do you want to discuss?",
-        submit: "Submit"
+        submit: "Submit",
+        loginRequired: "You must be logged in to react.",
+        commentPlaceholder: "Write a comment...",
+        commentSubmit: "Comment"
       }
     };
-
     const t = translations[lang];
     document.getElementById("forum-title").innerText = t.title;
     document.getElementById("create-btn").innerText = t.createButton;
     document.getElementById("threadTitle").placeholder = t.threadTitle;
     document.getElementById("threadContent").placeholder = t.threadContent;
     document.getElementById("submit-btn").innerText = t.submit;
+    document.getElementById("commentInput-thread-1").placeholder = t.commentPlaceholder;
+    document.querySelector(".comment-form button").innerText = t.commentSubmit;
 
-    function toggleForm() {
-      const form = document.getElementById("formSection");
-      form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
+    const emojis = ["👍", "👎", "😊", "😢", "😡", "😭", "😲", "😳"];
+    const emojiLabels = ["like", "dislike", "happy", "sad", "angry", "crying", "wow", "shy"];
+
+    function renderReactions(threadId) {
+      const container = document.getElementById(`reactions-${threadId}`);
+      container.innerHTML = "";
+      emojis.forEach((emoji, index) => {
+        const label = emojiLabels[index];
+        firebase.firestore().collection("threads").doc(threadId).collection("reactions")
+          .where("type", "==", label).get().then(snapshot => {
+            const count = snapshot.size;
+            const span = document.createElement("span");
+            span.innerHTML = `${emoji} <span class='reaction-count'>${count}</span>`;
+            span.onclick = () => react(threadId, label);
+            container.appendChild(span);
+          });
+      });
     }
 
-    function submitThread() {
-      alert(t.submit + " – (Firebase-kod läggs in här)");
+    function react(threadId, type) {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        alert(t.loginRequired);
+        return;
+      }
+      const ref = firebase.firestore().collection("threads").doc(threadId).collection("reactions").doc(user.uid);
+      ref.get().then(doc => {
+        if (doc.exists && doc.data().type === type) {
+          ref.delete();
+        } else {
+          ref.set({ type, timestamp: Date.now() });
+        }
+        renderReactions(threadId);
+      });
     }
+
+    function submitComment(threadId) {
+      const user = firebase.auth().currentUser;
+      if (!user) return alert(t.loginRequired);
+      const content = document.getElementById(`commentInput-${threadId}`).value;
+      if (!content) return;
+      firebase.firestore().collection("threads").doc(threadId).collection("comments").add({
+        content,
+        user: user.email,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById(`commentInput-${threadId}`).value = "";
+        loadComments(threadId);
+      });
+    }
+
+    function loadComments(threadId) {
+      const container = document.getElementById(`comments-${threadId}`);
+      container.innerHTML = "";
+      firebase.firestore().collection("threads").doc(threadId).collection("comments").orderBy("timestamp")
+        .get().then(snapshot => {
+          snapshot.forEach(doc => {
+            const div = document.createElement("div");
+            div.className = "comment";
+            div.innerText = `${doc.data().user}: ${doc.data().content}`;
+            container.appendChild(div);
+          });
+        });
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC-Kj-o10TChymlMHgmeoycEHKOyFlx3q8",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.appspot.com",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
+      measurementId: "G-B0WCKJCNT9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        renderReactions("thread-1");
+        loadComments("thread-1");
+      }
+    });
   </script>
 </body>
 </html>
