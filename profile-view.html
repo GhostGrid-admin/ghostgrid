@@ -110,163 +110,185 @@
       color: white;
       border: none;
     }
+    /* NYTT: Redigera-profil-knappen, uppe till höger */
+    #editProfileBtn {
+      position: fixed;
+      top: 25px;
+      right: 30px;
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.05em;
+      font-family: monospace;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 3000;
+      box-shadow: 0 0 10px #00ff00;
+      transition: background 0.2s;
+    }
+    #editProfileBtn:hover {
+      background: #00cc00;
+    }
   </style>
 </head>
 <body>
-<div class="profile-container">
-  <div class="left-panel">
-    <img id="profile-pic-display" src="" alt="Profilbild">
-    <input type="file" id="uploadProfilePic" accept="image/*">
-    <button id="likeImageBtn">❤️ Gilla profilbild</button>
-    <div id="picLikeCounter">0 ❤️</div>
+  <button id="editProfileBtn" onclick="window.location.href='profile.html'">Redigera profil</button>
+  <div class="profile-container">
+    <div class="left-panel">
+      <img id="profile-pic-display" src="" alt="Profilbild">
+      <input type="file" id="uploadProfilePic" accept="image/*">
+      <button id="likeImageBtn">❤️ Gilla profilbild</button>
+      <div id="picLikeCounter">0 ❤️</div>
+    </div>
+    <div class="album-gallery" id="albumGallery"></div>
   </div>
-  <div class="album-gallery" id="albumGallery"></div>
-</div>
 
-<div id="profile-output" style="text-align:center; padding: 20px;"></div>
+  <div id="profile-output" style="text-align:center; padding: 20px;"></div>
 
-<div class="modal" id="albumModal">
-  <h2 id="albumName"></h2>
-  <input type="file" id="uploadImage" accept="image/*">
-  <div style="display: flex; flex-wrap: wrap;" id="albumImages"></div>
-  <div class="modal-controls">
-    <button id="renameBtn"></button>
-    <button id="deleteBtn"></button>
-    <button onclick="document.getElementById('albumModal').style.display='none'">Stäng / Close</button>
+  <div class="modal" id="albumModal">
+    <h2 id="albumName"></h2>
+    <input type="file" id="uploadImage" accept="image/*">
+    <div style="display: flex; flex-wrap: wrap;" id="albumImages"></div>
+    <div class="modal-controls">
+      <button id="renameBtn"></button>
+      <button id="deleteBtn"></button>
+      <button onclick="document.getElementById('albumModal').style.display='none'">Stäng / Close</button>
+    </div>
+    <div id="confirmBox" class="confirm-box" style="display:none">
+      <span id="confirmText"></span>
+      <button class="btn-yes" onclick="deleteAlbumConfirmed()">Ja / Yes</button>
+      <button class="btn-no" onclick="document.getElementById('confirmBox').style.display='none'">Nej / No</button>
+    </div>
   </div>
-  <div id="confirmBox" class="confirm-box" style="display:none">
-    <span id="confirmText"></span>
-    <button class="btn-yes" onclick="deleteAlbumConfirmed()">Ja / Yes</button>
-    <button class="btn-no" onclick="document.getElementById('confirmBox').style.display='none'">Nej / No</button>
-  </div>
-</div>
 
-<script type="module">
-import { auth, db, storage } from './scripts/firebase-init.js';
-import {
-  getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, setDoc
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-import {
-  ref, uploadBytes, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  <script type="module">
+    import { auth, db, storage } from './scripts/firebase-init.js';
+    import {
+      getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, setDoc
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import {
+      ref, uploadBytes, getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-const uid = new URLSearchParams(window.location.search).get("uid");
-const lang = document.documentElement.lang || 'sv';
-const texts = {
-  sv: { rename: "Byt namn", delete: "Ta bort album", confirm: "Är du säker?" },
-  en: { rename: "Rename", delete: "Delete album", confirm: "Are you sure?" }
-};
-const t = texts[lang] || texts.sv;
-
-document.getElementById("renameBtn").textContent = t.rename;
-document.getElementById("deleteBtn").textContent = t.delete;
-document.getElementById("confirmText").textContent = t.confirm;
-
-const profilePic = document.getElementById("profile-pic-display");
-const uploadProfilePic = document.getElementById("uploadProfilePic");
-const profileOutput = document.getElementById("profile-output");
-const albumGallery = document.getElementById("albumGallery");
-const picLikeCounter = document.getElementById("picLikeCounter");
-let currentUser;
-let currentAlbumId = "";
-
-onAuthStateChanged(auth, async user => {
-  if (!user) return (window.location.href = "login.html");
-  currentUser = user;
-  const profileRef = doc(db, "profiles", uid);
-  const profileSnap = await getDoc(profileRef);
-  if (profileSnap.exists()) {
-    const data = profileSnap.data();
-    profileOutput.innerHTML = data?.profileCode || `<p style='color:red;'>Ingen profilkod hittades.</p>`;
-    if (data?.profilePic) profilePic.src = data.profilePic;
-  }
-
-  const albumsRef = collection(db, "users", uid, "albums");
-  const albumsSnap = await getDocs(albumsRef);
-  albumsSnap.forEach(albumDoc => {
-    const album = document.createElement("div");
-    album.className = "album-thumb";
-    album.innerText = albumDoc.data().name;
-    album.onclick = () => openAlbum(albumDoc.id, albumDoc.data().name);
-    albumGallery.appendChild(album);
-  });
-});
-
-uploadProfilePic.addEventListener("change", async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const storageRef = ref(storage, `profile_pics/${uid}/${file.name}`);
-  await uploadBytes(storageRef, file);
-  const downloadUrl = await getDownloadURL(storageRef);
-  await setDoc(doc(db, "profiles", uid), { profilePic: downloadUrl }, { merge: true });
-  profilePic.src = downloadUrl;
-});
-
-async function openAlbum(albumId, albumName) {
-  currentAlbumId = albumId;
-  const modal = document.getElementById("albumModal");
-  document.getElementById("albumName").innerText = albumName;
-  modal.style.display = "flex";
-
-  const imageContainer = document.getElementById("albumImages");
-  imageContainer.innerHTML = "";
-  const imgCol = collection(db, "users", uid, "albums", albumId, "images");
-  const imgSnap = await getDocs(imgCol);
-  imgSnap.forEach(imgDoc => {
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "relative";
-    const img = document.createElement("img");
-    img.src = imgDoc.data().url;
-    wrapper.appendChild(img);
-    if (currentUser.uid === uid) {
-      const btn = document.createElement("button");
-      btn.className = "delete-btn";
-      btn.innerText = "X";
-      btn.onclick = async () => {
-        if (confirm(t.confirm)) {
-          await deleteDoc(doc(db, "users", uid, "albums", albumId, "images", imgDoc.id));
-          wrapper.remove();
-        }
-      };
-      wrapper.appendChild(btn);
-    }
-    imageContainer.appendChild(wrapper);
-  });
-
-  const uploader = document.getElementById("uploadImage");
-  uploader.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const url = reader.result;
-      await addDoc(collection(db, "users", uid, "albums", albumId, "images"), { url });
-      openAlbum(albumId, albumName);
+    const uid = new URLSearchParams(window.location.search).get("uid");
+    const lang = document.documentElement.lang || 'sv';
+    const texts = {
+      sv: { rename: "Byt namn", delete: "Ta bort album", confirm: "Är du säker?" },
+      en: { rename: "Rename", delete: "Delete album", confirm: "Are you sure?" }
     };
-    reader.readAsDataURL(file);
-  };
-}
+    const t = texts[lang] || texts.sv;
 
-window.renameAlbum = async function () {
-  const newName = prompt(t.rename);
-  if (!newName) return;
-  await updateDoc(doc(db, "users", uid, "albums", currentAlbumId), { name: newName });
-  location.reload();
-};
+    document.getElementById("renameBtn").textContent = t.rename;
+    document.getElementById("deleteBtn").textContent = t.delete;
+    document.getElementById("confirmText").textContent = t.confirm;
 
-window.confirmDeleteAlbum = function () {
-  document.getElementById("confirmBox").style.display = "flex";
-};
+    const profilePic = document.getElementById("profile-pic-display");
+    const uploadProfilePic = document.getElementById("uploadProfilePic");
+    const profileOutput = document.getElementById("profile-output");
+    const albumGallery = document.getElementById("albumGallery");
+    const picLikeCounter = document.getElementById("picLikeCounter");
+    let currentUser;
+    let currentAlbumId = "";
 
-window.deleteAlbumConfirmed = async function () {
-  const imagesSnap = await getDocs(collection(db, "users", uid, "albums", currentAlbumId, "images"));
-  for (let img of imagesSnap.docs) {
-    await deleteDoc(img.ref);
-  }
-  await deleteDoc(doc(db, "users", uid, "albums", currentAlbumId));
-  location.reload();
-};
-</script>
+    onAuthStateChanged(auth, async user => {
+      if (!user) return (window.location.href = "login.html");
+      currentUser = user;
+      const profileRef = doc(db, "profiles", uid);
+      const profileSnap = await getDoc(profileRef);
+      if (profileSnap.exists()) {
+        const data = profileSnap.data();
+        profileOutput.innerHTML = data?.profileCode || `<p style='color:red;'>Ingen profilkod hittades.</p>`;
+        if (data?.profilePic) profilePic.src = data.profilePic;
+      }
+
+      const albumsRef = collection(db, "users", uid, "albums");
+      const albumsSnap = await getDocs(albumsRef);
+      albumsSnap.forEach(albumDoc => {
+        const album = document.createElement("div");
+        album.className = "album-thumb";
+        album.innerText = albumDoc.data().name;
+        album.onclick = () => openAlbum(albumDoc.id, albumDoc.data().name);
+        albumGallery.appendChild(album);
+      });
+    });
+
+    uploadProfilePic.addEventListener("change", async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const storageRef = ref(storage, `profile_pics/${uid}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(storageRef);
+      await setDoc(doc(db, "profiles", uid), { profilePic: downloadUrl }, { merge: true });
+      profilePic.src = downloadUrl;
+    });
+
+    async function openAlbum(albumId, albumName) {
+      currentAlbumId = albumId;
+      const modal = document.getElementById("albumModal");
+      document.getElementById("albumName").innerText = albumName;
+      modal.style.display = "flex";
+
+      const imageContainer = document.getElementById("albumImages");
+      imageContainer.innerHTML = "";
+      const imgCol = collection(db, "users", uid, "albums", albumId, "images");
+      const imgSnap = await getDocs(imgCol);
+      imgSnap.forEach(imgDoc => {
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        const img = document.createElement("img");
+        img.src = imgDoc.data().url;
+        wrapper.appendChild(img);
+        if (currentUser.uid === uid) {
+          const btn = document.createElement("button");
+          btn.className = "delete-btn";
+          btn.innerText = "X";
+          btn.onclick = async () => {
+            if (confirm(t.confirm)) {
+              await deleteDoc(doc(db, "users", uid, "albums", albumId, "images", imgDoc.id));
+              wrapper.remove();
+            }
+          };
+          wrapper.appendChild(btn);
+        }
+        imageContainer.appendChild(wrapper);
+      });
+
+      const uploader = document.getElementById("uploadImage");
+      uploader.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const url = reader.result;
+          await addDoc(collection(db, "users", uid, "albums", albumId, "images"), { url });
+          openAlbum(albumId, albumName);
+        };
+        reader.readAsDataURL(file);
+      };
+    }
+
+    window.renameAlbum = async function () {
+      const newName = prompt(t.rename);
+      if (!newName) return;
+      await updateDoc(doc(db, "users", uid, "albums", currentAlbumId), { name: newName });
+      location.reload();
+    };
+
+    window.confirmDeleteAlbum = function () {
+      document.getElementById("confirmBox").style.display = "flex";
+    };
+
+    window.deleteAlbumConfirmed = async function () {
+      const imagesSnap = await getDocs(collection(db, "users", uid, "albums", currentAlbumId, "images"));
+      for (let img of imagesSnap.docs) {
+        await deleteDoc(img.ref);
+      }
+      await deleteDoc(doc(db, "users", uid, "albums", currentAlbumId));
+      location.reload();
+    };
+  </script>
 </body>
 </html>
