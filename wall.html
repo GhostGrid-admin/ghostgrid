@@ -250,7 +250,134 @@
     <div id="postsContainer"></div>
   </div>
 
-  <script src="wall-functionality.js"></script>
+  <script type="module">
+import { db } from './scripts/firebase-init.js';
+import {
+  collection, getDocs, query, orderBy
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+// Element
+const postsContainer = document.getElementById("postsContainer");
+const searchInput = document.getElementById("localSearchInput");
+const cbAll = document.getElementById("cbAll");
+const cbText = document.getElementById("cbText");
+const cbImage = document.getElementById("cbImage");
+const cbAudio = document.getElementById("cbAudio");
+const cbVideo = document.getElementById("cbVideo");
+
+let allPosts = [];
+let filterType = "all";
+
+// Ladda ALLA inlägg från Firestore
+async function loadPosts() {
+  postsContainer.innerHTML = "<p style='text-align:center'>Laddar inlägg...</p>";
+  const wallRef = collection(db, "wall");
+  const q = query(wallRef, orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+  allPosts = [];
+  snapshot.forEach(doc => {
+    const post = doc.data();
+    post.id = doc.id;
+    allPosts.push(post);
+  });
+  renderPosts();
+}
+
+function setFilter(type) {
+  filterType = type;
+  // Checkboxar följer filter-knappar
+  cbAll.checked = (type === 'all');
+  cbText.checked = (type === 'text');
+  cbImage.checked = (type === 'image');
+  cbAudio.checked = (type === 'audio');
+  cbVideo.checked = (type === 'video');
+  renderPosts();
+}
+
+window.setFilter = setFilter;
+
+// Funktion för filtrering via checkrutor/sök
+window.filterPosts = function () {
+  renderPosts();
+};
+
+function renderPosts() {
+  let posts = [...allPosts];
+
+  // Typ-filter
+  if (!cbAll.checked) {
+    posts = posts.filter(p =>
+      (cbText.checked && p.type === "text") ||
+      (cbImage.checked && p.type === "image") ||
+      (cbAudio.checked && p.type === "audio") ||
+      (cbVideo.checked && p.type === "video")
+    );
+  }
+
+  // Sökfilter
+  const query = (searchInput.value || "").toLowerCase();
+  if (query) {
+    posts = posts.filter(p =>
+      (p.text && p.text.toLowerCase().includes(query)) ||
+      (p.type && p.type.toLowerCase().includes(query))
+    );
+  }
+
+  if (!posts.length) {
+    postsContainer.innerHTML = "<p style='text-align:center;'>Inga inlägg hittades.</p>";
+    return;
+  }
+
+  postsContainer.innerHTML = posts.map(renderPost).join("");
+}
+
+function renderPost(post) {
+  let html = `<div class="post">`;
+  if (post.type === "text" && post.text) {
+    html += `<strong>📝 Text:</strong><br>${escapeHTML(post.text)}`;
+  }
+  if (post.type === "image" && post.imageUrl) {
+    html += `<strong>🖼️ Bild:</strong><br><img src="${post.imageUrl}" style="max-width:90%;border-radius:8px;margin:10px 0;">`;
+  }
+  if (post.type === "audio" && post.audioUrl) {
+    html += `<strong>🎵 Ljud:</strong><br><audio controls src="${post.audioUrl}"></audio>`;
+  }
+  if (post.type === "video" && post.videoUrl) {
+    html += `<strong>🎬 Klipp:</strong><br><video controls style="max-width:90%;border-radius:8px;margin:10px 0;" src="${post.videoUrl}"></video>`;
+  }
+  if (post.type === "mic" && post.micAudioUrl) {
+    html += `<strong>🎤 Röst:</strong><br><audio controls src="${post.micAudioUrl}"></audio>`;
+  }
+  // Kombinerat inlägg
+  if (post.type === "combo") {
+    if (post.text) html += `<strong>📝 Text:</strong><br>${escapeHTML(post.text)}<br>`;
+    if (post.imageUrl) html += `<strong>🖼️ Bild:</strong><br><img src="${post.imageUrl}" style="max-width:90%;border-radius:8px;margin:10px 0;"><br>`;
+    if (post.videoUrl) html += `<strong>🎬 Klipp:</strong><br><video controls style="max-width:90%;border-radius:8px;margin:10px 0;" src="${post.videoUrl}"></video><br>`;
+    if (post.audioUrl) html += `<strong>🎵 Ljud:</strong><br><audio controls src="${post.audioUrl}"></audio><br>`;
+  }
+  if (post.temporary) {
+    html += `<div style="font-size:0.9em;color:#ffb300;margin-top:8px;">⏳ Tillfälligt (24h)</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function escapeHTML(str) {
+  if (!str) return "";
+  return str.replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+}
+
+// Filtrering via checkrutor
+[cbAll, cbText, cbImage, cbAudio, cbVideo].forEach(cb => {
+  cb.addEventListener("change", filterPosts);
+});
+// Sökning via inmatning
+searchInput.addEventListener("input", filterPosts);
+
+loadPosts();
+</script>
   <script src="language.js"></script>
 </body>
 </html>
