@@ -1,3 +1,179 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostGrid – Ladda upp</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding-top: 100px;
+      background-color: #0a0a0a;
+      color: #b8f6ff;
+      font-family: 'Courier New', monospace;
+    }
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 15px;
+      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
+      z-index: 0;
+    }
+    body::before { left: 0; }
+    body::after { right: 0; }
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+    }
+    .navbar-inner {
+      width: 100%;
+      max-width: 850px;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .nav-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      justify-items: center;
+      align-items: center;
+      text-align: center;
+    }
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.4em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .search-container {
+      grid-column: 1 / -1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.2em;
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      color: #ffffff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+      width: 90%;
+      max-width: 500px;
+    }
+    @media (min-width: 900px) {
+      .nav-content {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 25px;
+      }
+      .search-container {
+        margin-top: 0;
+        margin-left: 20px;
+        width: auto;
+      }
+      .search-container input {
+        font-size: 1.2em;
+        width: 250px;
+      }
+    }
+
+    .upload-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 25px;
+      margin: auto;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 15px #66ffcc;
+    }
+    .upload-box h1 {
+      text-align: center;
+      color: #80ffcc;
+      text-shadow: 0 0 4px #ffffff;
+    }
+    .upload-switcher {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .switch-btn {
+      background: #111;
+      color: #80ffcc;
+      border: 1px solid #66ffcc;
+      border-radius: 5px;
+      padding: 6px 16px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.18s;
+      font-family: 'Courier New', monospace;
+    }
+    .switch-btn.active,
+    .switch-btn:hover {
+      background: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ffcc;
+    }
+
+    textarea, input[type="file"], button[type="submit"], label {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #b8f6ff;
+      background-color: #111;
+      border: 1px solid #66ffcc;
+      padding: 0.6rem;
+      border-radius: 6px;
+    }
+    button[type="submit"] {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #00ccaa;
+    }
+    #spinner {
+      display: none;
+      width: 50px;
+      margin: 10px auto;
+    }
+    audio { margin-top: 10px; }
+    .upload-section { display: none; }
+    .upload-section.active { display: block; }
+  </style>
+</head>
 <body>
   <nav class="navbar">
     <div class="navbar-inner">
@@ -14,53 +190,51 @@
       </div>
     </div>
   </nav>
-
   <div class="upload-box">
     <h1>Ladda upp innehåll</h1>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
 
-    <!-- STEG 1: Välj vad du vill ladda upp -->
-    <div id="content-type-select" style="display:flex; gap:12px; justify-content:center; margin-bottom:18px;">
-      <button type="button" class="type-btn active" data-type="text">📝 Text</button>
-      <button type="button" class="type-btn" data-type="image">🖼️ Bild</button>
-      <button type="button" class="type-btn" data-type="video">🎬 Klipp</button>
-      <button type="button" class="type-btn" data-type="audio">🎵 Ljud</button>
-      <button type="button" class="type-btn" data-type="mic">🎤 Röst</button>
-      <button type="button" class="type-btn" data-type="combo">🔀 Kombinera</button>
+    <div class="upload-switcher">
+      <button class="switch-btn active" data-section="text">📝 Inlägg</button>
+      <button class="switch-btn" data-section="image">🖼️ Bild</button>
+      <button class="switch-btn" data-section="video">🎬 Klipp</button>
+      <button class="switch-btn" data-section="audio">🎵 Ljud</button>
+      <button class="switch-btn" data-section="mic">🎤 Röst</button>
+      <button class="switch-btn" data-section="combo">🔀 Kombinera</button>
     </div>
 
     <form id="uploadForm">
       <!-- TEXT -->
-      <div class="upload-section" data-section="text">
+      <div class="upload-section active" data-section="text">
         <label for="text">Skriv ett inlägg:</label>
         <textarea id="text" placeholder="Vad vill du dela med dig av?"></textarea>
       </div>
       <!-- BILD -->
-      <div class="upload-section" data-section="image" style="display:none;">
+      <div class="upload-section" data-section="image">
         <label for="image">Ladda upp en bild:</label>
         <input type="file" id="image" accept="image/*" />
       </div>
       <!-- VIDEO -->
-      <div class="upload-section" data-section="video" style="display:none;">
+      <div class="upload-section" data-section="video">
         <label for="video">Ladda upp ett klipp:</label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
       </div>
       <!-- AUDIO -->
-      <div class="upload-section" data-section="audio" style="display:none;">
+      <div class="upload-section" data-section="audio">
         <label for="audio">Ladda upp ljudfil:</label>
         <input type="file" id="audio" accept="audio/*" />
       </div>
       <!-- RÖSTINSPELNING -->
-      <div class="upload-section" data-section="mic" style="display:none;">
+      <div class="upload-section" data-section="mic">
         <label>Mikrofoninspelning:</label>
         <button type="button" id="recordButton">🎤 Starta inspelning</button>
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
       </div>
       <!-- KOMBINERA -->
-      <div class="upload-section" data-section="combo" style="display:none;">
-        <label for="comboText">Skriv ett inlägg:</label>
-        <textarea id="comboText" placeholder="Text till kombinerat inlägg..."></textarea>
+      <div class="upload-section" data-section="combo">
+        <label for="comboText">Text till inlägget (valfritt):</label>
+        <textarea id="comboText" placeholder="Skriv något till din uppladdning..."></textarea>
         <label for="comboImage">Bild (valfritt):</label>
         <input type="file" id="comboImage" accept="image/*" />
         <label for="comboVideo">Klipp (valfritt):</label>
@@ -68,31 +242,49 @@
         <label for="comboAudio">Ljudfil (valfritt):</label>
         <input type="file" id="comboAudio" accept="audio/*" />
       </div>
-      <!-- TILLFÄLLIGT -->
       <label style="margin-top:18px;">
         <input type="checkbox" id="temporary" />
         Gör detta till ett tillfälligt inlägg (försvinner om 24h)
       </label>
-
       <button type="submit" style="margin-top:18px;">Ladda upp</button>
     </form>
   </div>
-
+  <script src="theme-toggle.js"></script>
+  <script src="language.js"></script>
   <script>
-    // Växla sektioner när man klickar på typknapparna
-    document.querySelectorAll(".type-btn").forEach(btn => {
-      btn.addEventListener("click", e => {
-        document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const type = btn.dataset.type;
-        document.querySelectorAll(".upload-section").forEach(section => {
-          section.style.display = section.dataset.section === type ? "block" : "none";
-          // Kombinera = visa allt
-          if (type === "combo") section.style.display = "block";
+    // Växla mellan sektionerna
+    document.querySelectorAll('.switch-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const section = this.getAttribute('data-section');
+        document.querySelectorAll('.upload-section').forEach(sec => {
+          sec.classList.remove('active');
+          if (section === 'combo') {
+            // Visa bara kombinations-sektionen
+            if (sec.getAttribute('data-section') === 'combo') sec.classList.add('active');
+          } else {
+            if (sec.getAttribute('data-section') === section) sec.classList.add('active');
+          }
         });
       });
     });
-    // Start med endast text-sektion
-    document.querySelector(".type-btn[data-type='text']").click();
+
+    // Sök-fält
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query.length >= 2) {
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            }
+          }
+        });
+      }
+    });
   </script>
 </body>
+</html>
