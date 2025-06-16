@@ -7,12 +7,45 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      margin: 0;
-      padding-top: 85px;
-      background-color: #0a0a0a;
+      background: #0a0a0a;
       color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
+      margin: 0;
+      padding-top: 85px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    /* Neon-glow från sidorna */
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 105px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow:
+        0 0 60px 30px #d900ffbb,
+        0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow:
+        0 0 60px 30px #d900ffbb,
+        0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
+    }
+    @media (max-width: 900px) {
+      .glow-left, .glow-right { width: 60px; }
+    }
+    @media (max-width: 500px) {
+      .glow-left, .glow-right { width: 30px; }
     }
     nav.navbar {
       background-color: #000;
@@ -52,23 +85,28 @@
       box-shadow: 0 0 10px #ffffff;
     }
     .search-container {
-      width: 100%;
+      width: 210px;
       display: flex;
       justify-content: center;
-      margin-left: 10px;
+      margin-left: 12px;
     }
     .search-container input {
       padding: 8px 14px;
-      font-size: 1.1em;
-      font-family: 'Courier New', monospace;
+      font-size: 1.05em;
       background-color: #111;
       border: 2px solid #00ffcc;
       border-radius: 8px;
-      color: #ffffff;
+      color: #fff;
       box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
       text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
-      width: 90%;
-      max-width: 250px;
+      width: 100%;
+      max-width: 230px;
+    }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-content { font-size: 1em; gap: 7px; }
+      .search-container input { width: 99vw; max-width: 99vw;}
     }
     .upload-box {
       border: 2px solid #66ffcc;
@@ -82,11 +120,23 @@
       z-index: 2;
       min-width: 0;
     }
-    .upload-box h1 {
+    .upload-title {
+      font-size: 2.6em;
       text-align: center;
-      color: #80ffcc;
-      text-shadow: 0 0 4px #ffffff;
-      margin-bottom: 18px;
+      color: #f5f5f5;
+      margin: 16px 0 28px 0;
+      text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 600px) {
+      .upload-title { font-size: 1.6em; }
+      .upload-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
     }
     .upload-switcher {
       display: flex;
@@ -144,30 +194,11 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-    @media (max-width: 600px) {
-      nav.navbar {
-        transition: top 0.3s;
-      }
-      nav.navbar.hide-navbar {
-        top: -70px;
-      }
-      .nav-content { font-size: 1em; gap: 7px; }
-      .upload-box {
-        padding: 14px 2vw 12px 2vw;
-        max-width: 99vw;
-        margin: 18px 0 18px 0;
-        border-radius: 10px;
-      }
-      .upload-box h1 { font-size: 1.1em; }
-      .switch-btn { font-size: 0.97em; }
-      .search-container input { width: 98vw; max-width: 98vw;}
-    }
-    @media (max-width: 390px) {
-      .upload-box { padding: 8px 0 8px 0; }
-    }
   </style>
 </head>
 <body>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
   <nav class="navbar">
     <div class="nav-content">
       <a href="forum.html">Forum</a>
@@ -177,12 +208,12 @@
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
       <div class="search-container">
-        <input type="text" placeholder="Sök..." id="searchInput" />
+        <input type="text" placeholder="Sök på hela sidan..." id="searchInput" />
       </div>
     </div>
   </nav>
   <div class="upload-box">
-    <h1>Ladda upp innehåll</h1>
+    <div class="upload-title">Ladda upp innehåll</div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
     <div class="upload-switcher">
       <button class="switch-btn active" data-section="text">📝 Inlägg</button>
@@ -361,6 +392,9 @@
           return alert(`Videoklippet är för stort! Maxstorlek: 30 MB.`);
         }
         if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Ljudfilen är för stor
+                  if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
           spinner.style.display = "none";
           return alert(`Ljudfilen är för stor! Maxstorlek: 5 MB.`);
         }
