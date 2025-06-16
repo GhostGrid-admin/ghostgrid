@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Heaven – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script type="module" src="scripts/firebase-init.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <style>
@@ -161,21 +161,7 @@
     </div>
   </div>
 
-  <!-- Firebase config for ghostgrid-cebe9 -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDUem8OciTynoSujYyZSQqsExocoZeJu0Y",
-      authDomain: "ghostgrid-cebe9.firebaseapp.com",
-      projectId: "ghostgrid-cebe9",
-      storageBucket: "ghostgrid-cebe9.appspot.com",
-      messagingSenderId: "346259562017",
-      appId: "1:346259562017:web:cf0166021bb45d72768d60",
-      measurementId: "G-4BFC1G32H7"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
-
-  <!-- Huvudlogik -->
+  <!-- Laddar trådlogik -->
   <script src="scripts/thread-core.js" defer></script>
 </body>
 </html>
