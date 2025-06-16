@@ -6,7 +6,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/11.8.1/firebase
 import { getStorage } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDUem8OciTynoSujYyZSQqsExocoZeJu0Y",
+  apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
   authDomain: "ghostgrid-cebe9.firebaseapp.com",
   projectId: "ghostgrid-cebe9",
   storageBucket: "ghostgrid-cebe9.appspot.com",
