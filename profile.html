@@ -180,5 +180,69 @@
       });
     };
   </script>
-</body>
+<script>
+  // Temakoder för förhandsvisning/ifyllning
+  const themeTemplates = {
+    "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#cc0066; font-family: 'Pacifico', cursive; font-size:2.6em;">🍦 50-talets Stjärna</h1>
+      <img src="https://i.imgur.com/1vQRZyD.png" alt="50-tal" style="border-radius:50%;width:110px; margin:15px 0;">
+      <p style="font-family: 'Courier New', monospace; color:#333;">Sockersöt, klassisk och med rock'n'roll i hjärtat!</p>
+    </div>`,
+    "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#ff8800; font-family: 'Dancing Script', cursive; font-size:2.5em;">✌️ 60-talets Frihetsdröm</h1>
+      <p style="color:#333;">Flower power, fred & musik!</p>
+      <img src="https://i.imgur.com/ITtC7Ds.png" alt="60-tal" style="width:110px; border-radius:50%;">
+    </div>`,
+    "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#bb8800; font-family: 'Permanent Marker', cursive; font-size:2.5em;">🌼 70-tals Groove</h1>
+      <p style="color:#884400;">Disco, peace & flower power!</p>
+      <img src="https://i.imgur.com/NnRjq9e.png" alt="70-tal" style="width:100px; border-radius:50%;">
+    </div>`,
+    "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#ff44ee; font-family:'Monoton', cursive; font-size:2.3em;">🕹️ 80-tals Neon</h1>
+      <p style="color:#0033aa;">Synthwave, pastell & axelvaddar!</p>
+      <img src="https://i.imgur.com/sFGyzUg.png" alt="80-tal" style="width:100px; border-radius:50%;">
+    </div>`,
+    "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#0055bb; font-family:'Comic Sans MS', cursive;">📟 90-tals Kid</h1>
+      <p style="color:#333;">Gameboy, färgsprak & pogs!</p>
+      <img src="https://i.imgur.com/8qXsodV.png" alt="90-tal" style="width:100px; border-radius:50%;">
+    </div>`,
+    "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#ff22dd; font-family:'Orbitron', sans-serif;">💾 Y2K Millennium</h1>
+      <p style="color:#444;">Tech, metallic & bling bling!</p>
+      <img src="https://i.imgur.com/vQzfaLg.png" alt="Y2K" style="width:100px; border-radius:50%;">
+    </div>`,
+    "raggare": `<div style="background:#fafafa; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#222;">🚗 Raggare</h1>
+      <p style="color:#ba2222;">Volvo Amazon, brylcreem & rockabilly!</p>
+      <img src="https://i.imgur.com/IeLr7n7.png" alt="Raggare" style="width:100px; border-radius:50%;">
+    </div>`,
+    "rock": `<div style="background:#111; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#bb0000;">🤘 Rock Legend</h1>
+      <p style="font-style:italic;">Gör världen till din scen!</p>
+      <img src="https://i.imgur.com/n6YnqYB.png" alt="Rock" style="width:90px; border-radius:50%;">
+    </div>`,
+    "punk": `<div style="background:#ffe357; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#e00; font-family:Impact;">☠️ Punk</h1>
+      <p style="font-weight:bold; color:#000;">Frihet, nitar & revolt!</p>
+      <img src="https://i.imgur.com/NWQWwTR.png" alt="Punk" style="width:90px; border-radius:50%;">
+    </div>`,
+    "cyberpunk": `<div style="background:#0f0027; border-radius:20px; padding:24px; text-align:center;">
+      <h1 style="color:#0ff;">👾 Cyberpunk</h1>
+      <p>Neon, hacking & dystopier.</p>
+      <img src="https://i.imgur.com/8Tg9OqC.png" alt="Cyberpunk" style="width:90px; border-radius:50%;">
+    </div>`,
+    "romantik": `<div style="background:#fff0f6; border-radius:20px; padding:24px; text-align:center; color:#b8004b;">
+      <h1>💕 Romantisk själ</h1>
+      <p>Kärlek, poesi & varma känslor.</p>
+      <img src="https://i.imgur.com/oCBcIpC.png" alt="Romantik" style="width:90px; border-radius:50%;">
+    </div>`
+  };
+
+  // När temat byts i listan, lägg in rätt kod i custom-code
+  document.getElementById('theme').addEventListener('change', function(e) {
+    document.getElementById('custom-code').value = themeTemplates[e.target.value] || '';
+  });
+</script></body>
 </html>
