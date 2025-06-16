@@ -12,6 +12,8 @@
       background-color: #0a0a0a;
       color: #b8f6ff;
       font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
     body::before, body::after {
       content: '';
@@ -24,7 +26,6 @@
     }
     body::before { left: 0; }
     body::after { right: 0; }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -102,26 +103,27 @@
         width: 250px;
       }
     }
-
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
-      padding: 25px;
-      margin: auto;
-      max-width: 600px;
-      background-color: rgba(0, 0, 0, 0.85);
+      padding: 25px 16px;
+      margin: 30px auto 30px auto;
+      max-width: 440px;
+      min-width: 0;
+      background-color: rgba(0, 0, 0, 0.87);
       box-shadow: 0 0 15px #66ffcc;
     }
     .upload-box h1 {
       text-align: center;
       color: #80ffcc;
       text-shadow: 0 0 4px #ffffff;
+      margin-bottom: 18px;
     }
     .upload-switcher {
       display: flex;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
     .switch-btn {
@@ -129,7 +131,7 @@
       color: #80ffcc;
       border: 1px solid #66ffcc;
       border-radius: 5px;
-      padding: 6px 16px;
+      padding: 6px 14px;
       font-size: 1em;
       cursor: pointer;
       transition: 0.18s;
@@ -142,7 +144,6 @@
       font-weight: bold;
       box-shadow: 0 0 8px #00ffcc;
     }
-
     textarea, input[type="file"], button[type="submit"], label {
       display: block;
       width: 100%;
@@ -154,7 +155,9 @@
       border: 1px solid #66ffcc;
       padding: 0.6rem;
       border-radius: 6px;
+      box-sizing: border-box;
     }
+    label {margin-bottom: -0.7rem;}
     button[type="submit"] {
       background-color: #00ffcc;
       color: #000;
@@ -172,6 +175,14 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
+    @media (max-width: 520px) {
+      .upload-box {
+        padding: 13px 2vw;
+        max-width: 98vw;
+      }
+      nav.navbar {padding: 6px 0;}
+      .nav-content a {font-size: 1.1em;}
+    }
   </style>
 </head>
 <body>
@@ -193,7 +204,6 @@
   <div class="upload-box">
     <h1>Ladda upp innehåll</h1>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
-
     <div class="upload-switcher">
       <button class="switch-btn active" data-section="text">📝 Inlägg</button>
       <button class="switch-btn" data-section="image">🖼️ Bild</button>
@@ -202,31 +212,30 @@
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
       <button class="switch-btn" data-section="combo">🔀 Kombinera</button>
     </div>
-
     <form id="uploadForm">
       <!-- TEXT -->
       <div class="upload-section active" data-section="text">
         <label for="text">Skriv ett inlägg:</label>
-        <textarea id="text" placeholder="Vad vill du dela med dig av?"></textarea>
+        <textarea id="text" placeholder="Vad vill du dela med dig av?" maxlength="1500"></textarea>
       </div>
       <!-- BILD -->
       <div class="upload-section" data-section="image">
-        <label for="image">Ladda upp en bild:</label>
+        <label for="image">Ladda upp en bild (max 5 MB):</label>
         <input type="file" id="image" accept="image/*" />
       </div>
       <!-- VIDEO -->
       <div class="upload-section" data-section="video">
-        <label for="video">Ladda upp ett klipp:</label>
+        <label for="video">Ladda upp ett klipp (max 30 MB):</label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
       </div>
       <!-- AUDIO -->
       <div class="upload-section" data-section="audio">
-        <label for="audio">Ladda upp ljudfil:</label>
+        <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
         <input type="file" id="audio" accept="audio/*" />
       </div>
       <!-- RÖSTINSPELNING -->
       <div class="upload-section" data-section="mic">
-        <label>Mikrofoninspelning:</label>
+        <label>Mikrofoninspelning (max 2 MB):</label>
         <button type="button" id="recordButton">🎤 Starta inspelning</button>
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
@@ -235,11 +244,11 @@
       <div class="upload-section" data-section="combo">
         <label for="comboText">Text till inlägget (valfritt):</label>
         <textarea id="comboText" placeholder="Skriv något till din uppladdning..."></textarea>
-        <label for="comboImage">Bild (valfritt):</label>
+        <label for="comboImage">Bild (max 5 MB, valfritt):</label>
         <input type="file" id="comboImage" accept="image/*" />
-        <label for="comboVideo">Klipp (valfritt):</label>
+        <label for="comboVideo">Klipp (max 30 MB, valfritt):</label>
         <input type="file" id="comboVideo" accept="video/mp4,video/webm,video/ogg" />
-        <label for="comboAudio">Ljudfil (valfritt):</label>
+        <label for="comboAudio">Ljudfil (max 5 MB, valfritt):</label>
         <input type="file" id="comboAudio" accept="audio/*" />
       </div>
       <label style="margin-top:18px;">
@@ -261,7 +270,6 @@
         document.querySelectorAll('.upload-section').forEach(sec => {
           sec.classList.remove('active');
           if (section === 'combo') {
-            // Visa bara kombinations-sektionen
             if (sec.getAttribute('data-section') === 'combo') sec.classList.add('active');
           } else {
             if (sec.getAttribute('data-section') === section) sec.classList.add('active');
@@ -269,7 +277,6 @@
         });
       });
     });
-
     // Sök-fält
     document.addEventListener("DOMContentLoaded", () => {
       const searchInput = document.getElementById("searchInput");
@@ -286,107 +293,136 @@
       }
     });
   </script>
-<script type="module">
-import { auth, db, storage } from "./scripts/firebase-init.js";
-import {
-  collection, addDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-import {
-  ref, uploadBytes, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+  <script type="module">
+    import { auth, db, storage } from "./scripts/firebase-init.js";
+    import {
+      collection, addDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import {
+      ref, uploadBytes, getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+    const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
+    const MAX_AUDIO_SIZE = 5 * 1024 * 1024;
+    const MAX_MIC_SIZE = 2 * 1024 * 1024;
 
-const uploadForm = document.getElementById("uploadForm");
-const spinner = document.getElementById("spinner");
+    const uploadForm = document.getElementById("uploadForm");
+    const spinner = document.getElementById("spinner");
 
-uploadForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  spinner.style.display = "block";
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      spinner.style.display = "block";
+      const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
+      let postData = {
+        createdAt: serverTimestamp(),
+        user: auth.currentUser ? auth.currentUser.uid : "guest",
+        type: activeSection,
+        temporary: document.getElementById("temporary").checked,
+      };
+      let filesToUpload = [];
 
-  // Hämta aktiv sektion
-  const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
+      if (activeSection === "text") {
+        postData.text = document.getElementById("text").value;
+      }
+      if (activeSection === "image") {
+        const img = document.getElementById("image").files[0];
+        if (img && img.size > MAX_IMAGE_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Bilden är för stor! Maxstorlek: 5 MB.`);
+        }
+        filesToUpload.push({ file: img, key: "imageUrl" });
+      }
+      if (activeSection === "video") {
+        const vid = document.getElementById("video").files[0];
+        if (vid && vid.size > MAX_VIDEO_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Videoklippet är för stort! Maxstorlek: 30 MB.`);
+        }
+        filesToUpload.push({ file: vid, key: "videoUrl" });
+      }
+      if (activeSection === "audio") {
+        const aud = document.getElementById("audio").files[0];
+        if (aud && aud.size > MAX_AUDIO_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Ljudfilen är för stor! Maxstorlek: 5 MB.`);
+        }
+        filesToUpload.push({ file: aud, key: "audioUrl" });
+      }
+      if (activeSection === "mic") {
+        const micBlob = window.lastRecordedAudioBlob;
+        if (micBlob && micBlob.size > MAX_MIC_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Röstinspelningen är för stor! Maxstorlek: 2 MB.`);
+        }
+        if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
+      }
+      if (activeSection === "combo") {
+        postData.text = document.getElementById("comboText").value;
+        const comboImage = document.getElementById("comboImage").files[0];
+        const comboVideo = document.getElementById("comboVideo").files[0];
+        const comboAudio = document.getElementById("comboAudio").files[0];
+        if (comboImage && comboImage.size > MAX_IMAGE_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Bilden är för stor! Maxstorlek: 5 MB.`);
+        }
+        if (comboVideo && comboVideo.size > MAX_VIDEO_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Videoklippet är för stort! Maxstorlek: 30 MB.`);
+        }
+        if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
+          spinner.style.display = "none";
+          return alert(`Ljudfilen är för stor! Maxstorlek: 5 MB.`);
+        }
+        if (comboImage) filesToUpload.push({ file: comboImage, key: "imageUrl" });
+        if (comboVideo) filesToUpload.push({ file: comboVideo, key: "videoUrl" });
+        if (comboAudio) filesToUpload.push({ file: comboAudio, key: "audioUrl" });
+      }
 
-  let postData = {
-    createdAt: serverTimestamp(),
-    user: auth.currentUser ? auth.currentUser.uid : "guest",
-    type: activeSection,
-    temporary: document.getElementById("temporary").checked,
-  };
-  let filesToUpload = [];
+      // Ladda upp filer (om det finns)
+      for (let upload of filesToUpload) {
+        if (!upload.file) continue;
+        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
+        await uploadBytes(storageRef, upload.file);
+        const url = await getDownloadURL(storageRef);
+        postData[upload.key] = url;
+      }
 
-  if (activeSection === "text") {
-    postData.text = document.getElementById("text").value;
-  }
-  if (activeSection === "image") {
-    filesToUpload.push({ file: document.getElementById("image").files[0], key: "imageUrl" });
-  }
-  if (activeSection === "video") {
-    filesToUpload.push({ file: document.getElementById("video").files[0], key: "videoUrl" });
-  }
-  if (activeSection === "audio") {
-    filesToUpload.push({ file: document.getElementById("audio").files[0], key: "audioUrl" });
-  }
-  if (activeSection === "mic") {
-    const micBlob = window.lastRecordedAudioBlob;
-    if (micBlob) {
-      filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
+      // Spara posten på "väggen"
+      await addDoc(collection(db, "wall"), postData);
+
+      spinner.style.display = "none";
+      alert("✅ Inlägget har laddats upp!");
+      uploadForm.reset();
+      window.location.href = "wall.html";
+    });
+
+    // --- Röstinspelning ---
+    let mediaRecorder, audioChunks = [];
+    const recordBtn = document.getElementById("recordButton");
+    const stopBtn = document.getElementById("stopButton");
+    const audioPreview = document.getElementById("audioPreview");
+    if (recordBtn && stopBtn && audioPreview) {
+      recordBtn.onclick = async function () {
+        audioChunks = [];
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        recordBtn.disabled = true;
+        stopBtn.disabled = false;
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+          window.lastRecordedAudioBlob = audioBlob; // För uploaden!
+          audioPreview.src = URL.createObjectURL(audioBlob);
+          recordBtn.disabled = false;
+          stopBtn.disabled = true;
+        };
+      };
+      stopBtn.onclick = function () {
+        mediaRecorder && mediaRecorder.stop();
+      };
     }
-  }
-  if (activeSection === "combo") {
-    postData.text = document.getElementById("comboText").value;
-    if (document.getElementById("comboImage").files[0])
-      filesToUpload.push({ file: document.getElementById("comboImage").files[0], key: "imageUrl" });
-    if (document.getElementById("comboVideo").files[0])
-      filesToUpload.push({ file: document.getElementById("comboVideo").files[0], key: "videoUrl" });
-    if (document.getElementById("comboAudio").files[0])
-      filesToUpload.push({ file: document.getElementById("comboAudio").files[0], key: "audioUrl" });
-  }
-
-  // Ladda upp filer (om det finns)
-  for (let upload of filesToUpload) {
-    if (!upload.file) continue;
-    const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
-    await uploadBytes(storageRef, upload.file);
-    const url = await getDownloadURL(storageRef);
-    postData[upload.key] = url;
-  }
-
-  // Spara posten på "väggen"
-  await addDoc(collection(db, "wall"), postData);
-
-  spinner.style.display = "none";
-  alert("✅ Inlägget har laddats upp!");
-  uploadForm.reset();
-
-  // Skicka användaren till väggen (wall.html) automatiskt:
-  window.location.href = "wall.html";
-});
-
-// --- Röstinspelning (samma logik som du haft innan) ---
-let mediaRecorder, audioChunks = [];
-const recordBtn = document.getElementById("recordButton");
-const stopBtn = document.getElementById("stopButton");
-const audioPreview = document.getElementById("audioPreview");
-if (recordBtn && stopBtn && audioPreview) {
-  recordBtn.onclick = async function () {
-    audioChunks = [];
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
-    recordBtn.disabled = true;
-    stopBtn.disabled = false;
-
-    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-    mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      window.lastRecordedAudioBlob = audioBlob; // För uploaden!
-      audioPreview.src = URL.createObjectURL(audioBlob);
-      recordBtn.disabled = false;
-      stopBtn.disabled = true;
-    };
-  };
-  stopBtn.onclick = function () {
-    mediaRecorder && mediaRecorder.stop();
-  };
-}
-</script></body>
+  </script>
+</body>
 </html>
