@@ -19,29 +19,56 @@
     /* SIDBANNERS */
     .side-banner {
       position: fixed;
-      top: 85px; /* Nedanför navbaren */
+      top: 87px;
       bottom: 0;
-      width: 80px;
-      z-index: 1001;
+      width: 136px;
       display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
-      justify-content: center;
-      background: rgba(44,0,100,0.15);
-      box-shadow: 0 0 32px #7b00ff55;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 120px;
+      height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+      min-height: 200px;
     }
     .side-banner.left  { left: 0; }
     .side-banner.right { right: 0; }
-    .side-banner img {
-      width: 76px;
-      max-width: 90%;
-      height: 88vh;
-      object-fit: contain;
-      display: block;
-      border-radius: 10px;
-      box-shadow: 0 0 30px #a84cff99;
-      background: #130c28;
-      margin: 0 auto;
+
+    @media (max-width: 1100px) {
+      .side-banner { display: none; }
+      .wall-container { max-width: 99vw; }
+    }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-content { font-size: 1em; gap: 7px; }
+      .wall-container { padding: 3vw; }
+      .wall-title { font-size: 1.2em; }
+      .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
+      .filter-search input[type="text"] { width: 98vw; }
     }
     nav.navbar {
       background-color: #000;
@@ -230,30 +257,24 @@
       cursor: pointer;
       margin-top: 6px;
     }
-    /* Mobilvänligt */
-    @media (max-width: 1100px) {
-      .side-banner { display: none; }
-      .wall-container { max-width: 99vw; }
-    }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .nav-content { font-size: 1em; gap: 7px; }
-      .wall-container { padding: 3vw; }
-      .wall-title { font-size: 1.2em; }
-      .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
-      .filter-search input[type="text"] { width: 98vw; }
-    }
   </style>
 </head>
 <body>
-  <!-- Vänster banner -->
+  <!-- Vänster sidbanner -->
   <div class="side-banner left">
-    <a href="#" target="_blank"><img id="bannerLeft" src="https://dummyimage.com/80x900/7b00ff/fff&text=Reklam+1" alt="Reklam vänster"></a>
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
+    </div>
   </div>
-  <!-- Höger banner -->
+  <!-- Höger sidbanner -->
   <div class="side-banner right">
-    <a href="#" target="_blank"><img id="bannerRight" src="https://dummyimage.com/80x900/7b00ff/fff&text=Reklam+1" alt="Reklam höger"></a>
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
   </div>
   <!-- NAVBAR -->
   <nav class="navbar">
@@ -462,38 +483,32 @@
   </script>
   <!-- SIDBANNERS – Rotera var 6:e sekund -->
   <script>
-    // Bannern-data (byt ut bilder och länkar när du vill)
     const banners = [
       {
-        src: "https://dummyimage.com/80x900/7b00ff/fff&text=Reklam+1",
-        alt: "Reklam Banner 1",
-        url: "#"
+        left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
+        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
       },
       {
-        src: "https://dummyimage.com/80x900/00ffcc/222&text=Annons+Ledig",
-        alt: "Annons Ledig",
-        url: "#"
-      },
-      {
-        src: "https://dummyimage.com/80x900/222/fff&text=Tips:+Bli+medlem+idag!",
-        alt: "Bli medlem",
-        url: "register.html"
+        left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
+        right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
       }
     ];
     let bannerIndex = 0;
+    function updateBanners() {
+      const left = banners[bannerIndex].left;
+      const right = banners[bannerIndex].right;
+      document.getElementById('leftBannerImg').src = left.src;
+      document.getElementById('leftBannerImg').alt = left.alt;
+      document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src;
+      document.getElementById('rightBannerImg').alt = right.alt;
+      document.getElementById('rightBannerLink').href = right.url;
+    }
+    updateBanners();
     setInterval(() => {
       bannerIndex = (bannerIndex + 1) % banners.length;
-      // Vänster
-      const imgL = document.getElementById("bannerLeft");
-      imgL.src = banners[bannerIndex].src;
-      imgL.alt = banners[bannerIndex].alt;
-      imgL.parentNode.href = banners[bannerIndex].url;
-      // Höger
-      const imgR = document.getElementById("bannerRight");
-      imgR.src = banners[bannerIndex].src;
-      imgR.alt = banners[bannerIndex].alt;
-      imgR.parentNode.href = banners[bannerIndex].url;
-    }, 6000); // 6 sekunder
+      updateBanners();
+    }, 6000);
   </script>
   <!-- --- NAVBAR SCROLL-HIDE FÖR MOBIL --- -->
   <script>
