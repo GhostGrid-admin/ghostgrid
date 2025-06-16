@@ -26,6 +26,7 @@
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       justify-content: center;
+      transition: top 0.3s;
     }
     .nav-content {
       display: flex;
@@ -199,7 +200,14 @@
       cursor: pointer;
       margin-top: 6px;
     }
+    /* ---- Mobil: navbar och global sök försvinner vid scroll ner ---- */
     @media (max-width: 600px) {
+      nav.navbar {
+        transition: top 0.3s;
+      }
+      nav.navbar.hide-navbar {
+        top: -70px;
+      }
       .nav-content { font-size: 1em; gap: 7px; }
       .wall-container { padding: 3vw; }
       .wall-title { font-size: 1.2em; }
@@ -242,7 +250,7 @@
   <script type="module">
     import { auth, db } from './scripts/firebase-init.js';
     import {
-      collection, query, orderBy, onSnapshot, doc, getDoc, addDoc, updateDoc, deleteDoc
+      collection, query, orderBy, onSnapshot, doc, getDocs, setDoc, addDoc, updateDoc, deleteDoc
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     
     // REACTIONS: Emojis & texter
@@ -312,7 +320,6 @@
       if (!currentUser) { alert("Du måste vara inloggad för att reagera."); return; }
       const ref = doc(db, "wall", postId, "reactions", currentUser.uid);
       await updateDoc(ref, { type: key }, { merge: true }).catch(async() => {
-        // if doc doesn't exist, create
         await setDoc(ref, { type: key });
       });
     };
@@ -327,7 +334,6 @@
       const content = input.value.trim();
       if (!content) return;
       if (!currentUser) { alert("Du måste vara inloggad för att kommentera."); return; }
-      // Begränsa till 200 ord
       if (content.split(/\s+/).length > 200) { alert("Max 200 ord!"); return; }
       await addDoc(collection(db, "wall", postId, "comments"), {
         content, user: currentUser.uid, createdAt: new Date()
@@ -380,8 +386,6 @@
         }
 
         for (const post of postsArr) {
-          // Hämta reaktioner
-          let reactionsSnap = await getDoc(collection(db, "wall", post.id, "reactions"));
           let reactionsDocs = await getDocs(collection(db, "wall", post.id, "reactions"));
           let reactionCounts = {}, userReaction = null;
           reactionsDocs.forEach(rDoc => {
@@ -390,7 +394,6 @@
             reactionCounts[r] = (reactionCounts[r] || 0) + 1;
           });
 
-          // Hämta kommentarer
           let commentsDocs = await getDocs(collection(db, "wall", post.id, "comments"));
           let comments = [];
           commentsDocs.forEach(cDoc => {
@@ -408,13 +411,28 @@
     }
     listenToWall();
 
-    // Mobilanpassad global sök
     document.getElementById("searchInputGlobal").addEventListener("keydown", e => {
       if (e.key === "Enter") {
         const q = e.target.value.trim();
         if (q.length > 1) window.location.href = "search.html?q=" + encodeURIComponent(q);
       }
     });
+  </script>
+
+  <!-- --- NAVBAR SCROLL-HIDE FOR MOBIL --- -->
+  <script>
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
   </script>
 </body>
 </html>
