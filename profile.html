@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -18,9 +18,7 @@
       min-height: 100vh;
       padding-top: 100px;
     }
-
     .hidden { display: none !important; }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -33,7 +31,6 @@
       display: flex;
       justify-content: center;
     }
-
     .nav-content {
       display: flex;
       align-items: center;
@@ -41,7 +38,6 @@
       gap: 25px;
       justify-content: center;
     }
-
     .nav-content a {
       color: white;
       text-decoration: none;
@@ -51,13 +47,11 @@
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
     }
-
     .nav-content a:hover {
       background-color: #00ffcc;
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-
     .login-container {
       background: rgba(0, 0, 0, 0.7);
       padding: 30px;
@@ -68,7 +62,6 @@
       max-width: 90%;
       width: 400px;
     }
-
     textarea, input[type="file"] {
       width: 100%;
       padding: 10px;
@@ -78,7 +71,6 @@
       border-radius: 5px;
       font-family: 'Courier New', monospace;
     }
-
     button {
       margin-top: 15px;
       padding: 12px 20px;
@@ -89,9 +81,7 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
     button:hover { background-color: #00cc00; }
-
     #fullscreenPreview {
       position: fixed;
       inset: 0;
@@ -101,11 +91,9 @@
       overflow: auto;
       padding: 20px;
     }
-
     #profileContent {
       margin-top: 60px;
     }
-
     #exitPreviewBtn {
       position: fixed;
       top: 20px;
@@ -117,9 +105,30 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
     #exitPreviewBtn:hover {
       background-color: #00cc00;
+    }
+    .theme-buttons {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .theme-btn {
+      background: #111;
+      color: #0ff;
+      border: 1px solid #0ff;
+      border-radius: 5px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: 0.2s;
+    }
+    .theme-btn:hover {
+      background: #00ffcc;
+      color: #000;
     }
   </style>
 </head>
@@ -146,8 +155,16 @@
     <label for="custom-code" data-i18n="custom_code">Profilkod (HTML/CSS):</label>
     <textarea id="custom-code" rows="10"></textarea>
 
+    <div class="theme-buttons">
+      <button class="theme-btn" onclick="selectTheme('rock')">Rock</button>
+      <button class="theme-btn" onclick="selectTheme('emo')">Emo</button>
+      <button class="theme-btn" onclick="selectTheme('cyberpunk')">Cyberpunk</button>
+      <button class="theme-btn" onclick="selectTheme('y2k')">Y2K</button>
+      <button class="theme-btn" onclick="selectTheme('romantik')">Romantik</button>
+      <!-- Fler teman kan läggas till -->
+    </div>
+
     <button id="saveBtn" data-i18n="save">Spara kod</button>
-    <button id="useTemplateBtn" data-i18n="use_template">Använd färdig kod</button>
     <button onclick="goToProfileView()" data-i18n="view_profile">Visa profil</button>
     <button id="editProfileBtn" class="hidden" data-i18n="edit_profile">Redigera profil</button>
 
@@ -164,12 +181,9 @@
   </div>
 
   <script type="module" src="scripts/profile-script.js"></script>
-
-  <!-- Nytt script för att visa sin profil -->
   <script type="module">
     import { auth } from './scripts/firebase-init.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-
     window.goToProfileView = function() {
       onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -179,6 +193,23 @@
         }
       });
     };
+  </script>
+
+  <!-- Temaväljare – kopplas till profile-script.js -->
+  <script>
+    window.selectTheme = function(theme) {
+      const templates = {
+        rock: `<div style="text-align:center;"><h1 style='color:#b90000;'>🤘 Rock Legend</h1><p style="font-style:italic;">Welcome to my rockstar page!</p></div>`,
+        emo: `<div style="text-align:center;"><h1 style='color:#800080;'>🖤 Emo Kid</h1><p style="font-style:italic;">I'm fine, just coding...</p></div>`,
+        cyberpunk: `<div style="background:#1a0044;padding:20px;border-radius:10px;text-align:center;"><h1 style='color:#0ff;'>👾 Cyberpunk</h1><p>Digital freedom is my game.</p></div>`,
+        y2k: `<div style="background:#1111bb;padding:22px;border-radius:8px;text-align:center;"><h1 style="color:#fe5aff;">🛸 Y2K Vibe</h1><p>Glitter, tech, och retro web!<p></div>`,
+        romantik: `<div style="background:#fff0f6;padding:22px;border-radius:12px;text-align:center;color:#b8004b;"><h1>💕 Romantisk själ</h1><p>Här börjar kärlekens kod...</p></div>`
+      };
+      document.getElementById('custom-code').value = templates[theme] || '';
+    };
+    document.getElementById("custom-code").addEventListener("input", function() {
+      // Kan användas för förhandsvisning om du vill
+    });
   </script>
 </body>
 </html>
