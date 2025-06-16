@@ -8,24 +8,12 @@
   <style>
     body {
       margin: 0;
-      padding-top: 100px;
+      padding-top: 85px;
       background-color: #0a0a0a;
-      color: #b8f6ff;
+      color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
-      box-sizing: border-box;
     }
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 15px;
-      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
-      z-index: 0;
-    }
-    body::before { left: 0; }
-    body::after { right: 0; }
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -37,26 +25,23 @@
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       justify-content: center;
-    }
-    .navbar-inner {
-      width: 100%;
-      max-width: 850px;
-      padding: 0 20px;
-      box-sizing: border-box;
+      transition: top 0.3s;
     }
     .nav-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      justify-items: center;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 900px;
+      width: 100%;
       align-items: center;
       text-align: center;
     }
     .nav-content a {
       color: white;
       text-decoration: none;
-      font-size: 1.4em;
-      padding: 6px 10px;
+      font-size: 1.2em;
+      padding: 7px 10px;
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
@@ -67,51 +52,35 @@
       box-shadow: 0 0 10px #ffffff;
     }
     .search-container {
-      grid-column: 1 / -1;
       width: 100%;
       display: flex;
       justify-content: center;
-      margin-top: 10px;
+      margin-left: 10px;
     }
     .search-container input {
       padding: 8px 14px;
-      font-size: 1.2em;
+      font-size: 1.1em;
       font-family: 'Courier New', monospace;
       background-color: #111;
       border: 2px solid #00ffcc;
-      border-radius: 10px;
+      border-radius: 8px;
       color: #ffffff;
-      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
-      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
+      box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
+      text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
       width: 90%;
-      max-width: 500px;
-    }
-    @media (min-width: 900px) {
-      .nav-content {
-        display: flex;
-        justify-content: center;
-        flex-wrap: nowrap;
-        gap: 25px;
-      }
-      .search-container {
-        margin-top: 0;
-        margin-left: 20px;
-        width: auto;
-      }
-      .search-container input {
-        font-size: 1.2em;
-        width: 250px;
-      }
+      max-width: 250px;
     }
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
-      padding: 25px 16px;
-      margin: 30px auto 30px auto;
+      padding: 30px 20px 22px 20px;
+      margin: 36px auto 32px auto;
       max-width: 440px;
+      background-color: rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 15px #00ffcc33;
+      position: relative;
+      z-index: 2;
       min-width: 0;
-      background-color: rgba(0, 0, 0, 0.87);
-      box-shadow: 0 0 15px #66ffcc;
     }
     .upload-box h1 {
       text-align: center;
@@ -123,7 +92,7 @@
       display: flex;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       flex-wrap: wrap;
     }
     .switch-btn {
@@ -175,29 +144,40 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-    @media (max-width: 520px) {
-      .upload-box {
-        padding: 13px 2vw;
-        max-width: 98vw;
+    @media (max-width: 600px) {
+      nav.navbar {
+        transition: top 0.3s;
       }
-      nav.navbar {padding: 6px 0;}
-      .nav-content a {font-size: 1.1em;}
+      nav.navbar.hide-navbar {
+        top: -70px;
+      }
+      .nav-content { font-size: 1em; gap: 7px; }
+      .upload-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
+      .upload-box h1 { font-size: 1.1em; }
+      .switch-btn { font-size: 0.97em; }
+      .search-container input { width: 98vw; max-width: 98vw;}
+    }
+    @media (max-width: 390px) {
+      .upload-box { padding: 8px 0 8px 0; }
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <div class="navbar-inner">
-      <div class="nav-content">
-        <a href="forum.html">Forum</a>
-        <a href="store.html">Store</a>
-        <a href="wall.html">Väggen</a>
-        <a href="upload.html">Ladda upp</a>
-        <a href="profile.html">Profil</a>
-        <a href="friends.html">Vänner</a>
-        <div class="search-container">
-          <input type="text" placeholder="Sök..." id="searchInput" />
-        </div>
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="Sök..." id="searchInput" />
       </div>
     </div>
   </nav>
@@ -258,8 +238,6 @@
       <button type="submit" style="margin-top:18px;">Ladda upp</button>
     </form>
   </div>
-  <script src="theme-toggle.js"></script>
-  <script src="language.js"></script>
   <script>
     // Växla mellan sektionerna
     document.querySelectorAll('.switch-btn').forEach(btn => {
@@ -292,6 +270,19 @@
         });
       }
     });
+    // Navbar hide vid scroll på mobil
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
