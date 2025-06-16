@@ -110,26 +110,23 @@
       color: white;
       border: none;
     }
-    /* NYTT: Redigera-profil-knappen, uppe till höger */
     #editProfileBtn {
+      display: none;
       position: fixed;
-      top: 25px;
-      right: 30px;
-      background: #00ff00;
-      color: #000;
+      top: 20px;
+      right: 20px;
+      background-color: #00ff00;
+      color: black;
       border: none;
-      padding: 12px 25px;
-      font-size: 1.05em;
-      font-family: monospace;
-      font-weight: bold;
-      border-radius: 8px;
+      border-radius: 7px;
+      padding: 12px 24px;
+      font-size: 1em;
       cursor: pointer;
-      z-index: 3000;
-      box-shadow: 0 0 10px #00ff00;
-      transition: background 0.2s;
+      z-index: 1010;
+      font-family: inherit;
     }
     #editProfileBtn:hover {
-      background: #00cc00;
+      background-color: #00cc00;
     }
   </style>
 </head>
@@ -138,8 +135,6 @@
   <div class="profile-container">
     <div class="left-panel">
       <img id="profile-pic-display" src="" alt="Profilbild">
-      <input type="file" id="uploadProfilePic" accept="image/*">
-      <button id="likeImageBtn">❤️ Gilla profilbild</button>
       <div id="picLikeCounter">0 ❤️</div>
     </div>
     <div class="album-gallery" id="albumGallery"></div>
@@ -186,7 +181,6 @@
     document.getElementById("confirmText").textContent = t.confirm;
 
     const profilePic = document.getElementById("profile-pic-display");
-    const uploadProfilePic = document.getElementById("uploadProfilePic");
     const profileOutput = document.getElementById("profile-output");
     const albumGallery = document.getElementById("albumGallery");
     const picLikeCounter = document.getElementById("picLikeCounter");
@@ -196,6 +190,12 @@
     onAuthStateChanged(auth, async user => {
       if (!user) return (window.location.href = "login.html");
       currentUser = user;
+
+      // Visa knappen endast om användaren tittar på sin egen profil
+      if (user.uid === uid) {
+        document.getElementById("editProfileBtn").style.display = "block";
+      }
+
       const profileRef = doc(db, "profiles", uid);
       const profileSnap = await getDoc(profileRef);
       if (profileSnap.exists()) {
@@ -213,16 +213,6 @@
         album.onclick = () => openAlbum(albumDoc.id, albumDoc.data().name);
         albumGallery.appendChild(album);
       });
-    });
-
-    uploadProfilePic.addEventListener("change", async e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const storageRef = ref(storage, `profile_pics/${uid}/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadUrl = await getDownloadURL(storageRef);
-      await setDoc(doc(db, "profiles", uid), { profilePic: downloadUrl }, { merge: true });
-      profilePic.src = downloadUrl;
     });
 
     async function openAlbum(albumId, albumName) {
