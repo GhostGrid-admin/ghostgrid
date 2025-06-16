@@ -13,10 +13,10 @@
       min-height: 100vh;
       margin: 0;
       padding-top: 85px;
+      padding-bottom: 110px; /* Utrymme för banner! */
       position: relative;
       overflow-x: hidden;
     }
-    /* Neon-glow från sidorna */
     .glow-left, .glow-right {
       position: fixed;
       top: 0;
@@ -194,6 +194,39 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
+    /* ----- Banner längst ner ----- */
+    .ad-footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      min-height: 68px;
+      background: linear-gradient(90deg,#a044ff 0%,#6a11cb 100%);
+      box-shadow: 0 0 28px #8800ff55, 0 0 90px #0ff3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      padding: 0;
+    }
+    .ad-banner {
+      width: 100vw;
+      max-width: 100vw;
+      min-height: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .ad-banner img, .ad-banner div, .ad-banner span {
+      width: 100%;
+      height: auto;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .ad-footer { min-height: 55px; }
+      .ad-banner span, .ad-banner img { font-size: 1.3rem; }
+    }
   </style>
 </head>
 <body>
@@ -393,9 +426,6 @@
         }
         if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
           spinner.style.display = "none";
-          return alert(`Ljudfilen är för stor
-                  if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
-          spinner.style.display = "none";
           return alert(`Ljudfilen är för stor! Maxstorlek: 5 MB.`);
         }
         if (comboImage) filesToUpload.push({ file: comboImage, key: "imageUrl" });
@@ -449,11 +479,10 @@
       };
     }
   </script>
-<footer class="ad-footer">
-  <div class="ad-banner">
-    <img src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner" alt="Reklam" style="max-width:100%;height:auto;">
-  </div>
-</footer>
+  <footer class="ad-footer">
+    <div class="ad-banner">
+      <img src="https://dummyimage.com/1200x88/7b00ff/fff&text=Reklam+Banner" alt="Reklam" style="max-width:100%;height:auto;">
+    </div>
+  </footer>
 </body>
-</html></body>
 </html>
