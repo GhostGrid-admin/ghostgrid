@@ -1,7 +1,7 @@
-// profile-script.js
+// scripts/profile-script.js
 import { auth, db, storage } from "./firebase-init.js";
 import {
-  doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, addDoc
+  doc, getDoc, setDoc, collection, addDoc
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import {
   ref, uploadBytes, getDownloadURL
@@ -10,12 +10,13 @@ import {
 document.addEventListener("DOMContentLoaded", () => {
   const codeField = document.getElementById("custom-code");
   const saveBtn = document.getElementById("saveBtn");
-  const viewBtn = document.getElementById("viewProfileBtn");
+  const viewBtn = document.querySelector("button[data-i18n='view_profile']");
   const editBtn = document.getElementById("editProfileBtn");
   const preview = document.getElementById("fullscreenPreview");
   const profileContent = document.getElementById("profileContent");
   const profilePicInput = document.getElementById("profile-pic");
   const notice = document.getElementById("saveNotice");
+  const useTemplateBtn = document.getElementById("useTemplateBtn");
 
   auth.onAuthStateChanged(async user => {
     if (!user) return location.href = "login.html";
@@ -83,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Använd färdig mall
-    document.getElementById("useTemplateBtn").addEventListener("click", () => {
+    useTemplateBtn.addEventListener("click", () => {
       const template = `
       <div style="text-align:center; color:#00ff00; font-family:'Courier New', monospace;">
         <img src="${snap.data()?.profilePic || 'https://i.imgur.com/NXbZDJz.png'}" style="width:100px; border-radius:50%;">
