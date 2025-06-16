@@ -13,6 +13,7 @@
       color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
+      box-sizing: border-box;
     }
     nav.navbar {
       background-color: #000;
@@ -161,23 +162,57 @@
       font-size: 1.15em;
       letter-spacing: 1px;
     }
-    /* Mobilanpassning + navbar hide */
+
+    /* BOTTENBANNER */
+    .ad-footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      min-height: 80px;
+      background: linear-gradient(90deg, #7b00ff 0%, #00ffcc 100%);
+      box-shadow: 0 0 28px #8800ff55, 0 0 90px #0ff3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 4000;
+      padding: 0;
+      border-top: 2px solid #00ffcc;
+    }
+    .ad-banner {
+      width: 100vw;
+      max-width: 100vw;
+      min-height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .ad-banner img, .ad-banner div, .ad-banner span {
+      width: 100vw;
+      height: 80px;
+      max-height: 80px;
+      object-fit: cover;
+      text-align: center;
+      border-radius: 0;
+      background: transparent;
+    }
     @media (max-width: 900px) {
       .forum-container { flex-direction: column; gap: 0; }
       .forum-sidebar { width: 98%; max-width: 98vw; border-left: none; border-top: 2px solid #00ffcc; margin-top: 25px; }
       .new-category-form { max-width: 98vw;}
+      .ad-footer, .ad-banner { min-height: 60px; }
+      .ad-banner img { height: 60px; min-height: 60px; }
     }
     @media (max-width: 600px) {
-      nav.navbar {
-        transition: top 0.3s;
-      }
-      nav.navbar.hide-navbar {
-        top: -70px;
-      }
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
       .forum-container { padding: 3vw; }
       .forum-title { font-size: 1.2em; }
       .forum-category { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
       .search-bar input { width: 98vw; }
+      .ad-footer, .ad-banner { min-height: 44px; }
+      .ad-banner img { height: 44px; min-height: 44px; }
     }
   </style>
 </head>
@@ -199,11 +234,9 @@
   <div class="forum-container">
     <div class="forum-main">
       <h1 class="forum-title">Forum</h1>
-
       <div class="search-bar">
         <input type="text" id="forumSearchInput" placeholder="Sök forumtrådar eller kategorier...">
       </div>
-
       <div class="forum-category" onclick="location.href='tech-heaven.html'">
         <div class="category-title">Tech Heaven</div>
         <div class="category-description">Diskutera hårdvara, mjukvara, internet och framtidens prylar.</div>
@@ -224,7 +257,6 @@
         <div class="category-title">Tankar & Känslor</div>
         <div class="category-description">För dig som vill prata fritt om livet, känslor eller vardagen.</div>
       </div>
-
       <div class="new-category-form">
         <h3>Skapa ny kategori</h3>
         <input type="text" id="newCategoryTitle" placeholder="Titel för ny kategori">
@@ -239,6 +271,13 @@
     </div>
   </div>
 
+  <footer class="ad-footer">
+    <div class="ad-banner">
+      <a href="#" target="_blank">
+        <img id="bannerImage" src="https://dummyimage.com/1600x90/7b00ff/fff&text=Reklam+Banner+1" alt="Reklam" />
+      </a>
+    </div>
+  </footer>
   <script>
     // Globala sökfältet, hela sidan
     document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
@@ -274,46 +313,33 @@
     function createNewCategory() {
       alert('Den här funktionen är inte aktiverad än!');
     }
-  </script>
-<footer class="ad-footer">
-  <div class="ad-banner">
-    <img src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner" alt="Reklam" style="max-width:100%;height:auto;">
-  </div>
-</footer><footer class="ad-footer">
-  <div class="ad-banner">
-    <a href="#" target="_blank">
-      <img id="bannerImage" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner+1" alt="Reklam" style="max-width:100%;height:auto;">
-    </a>
-  </div>
-</footer>
-<script>
-  // Lista med banners (byt ut src, alt och länk till egna)
-  const banners = [
-    {
-      src: "https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner+1",
-      alt: "Reklam Banner 1",
-      url: "#"
-    },
-    {
-      src: "https://dummyimage.com/728x90/00ffcc/222&text=Annonsplats+Ledig",
-      alt: "Annons Ledig",
-      url: "#"
-    },
-    {
-      src: "https://dummyimage.com/728x90/222/fff&text=Tips:+Bli+medlem+idag!",
-      alt: "Bli medlem",
-      url: "register.html"
-    }
-  ];
 
-  let bannerIndex = 0;
-  setInterval(() => {
-    bannerIndex = (bannerIndex + 1) % banners.length;
-    const img = document.getElementById('bannerImage');
-    img.src = banners[bannerIndex].src;
-    img.alt = banners[bannerIndex].alt;
-    img.parentElement.href = banners[bannerIndex].url;
-  }, 6000); // Byt banner var 6:e sekund
-</script>
+    // Bannerrullare längst ner
+    const banners = [
+      {
+        src: "https://dummyimage.com/1600x90/7b00ff/fff&text=Reklam+Banner+1",
+        alt: "Reklam Banner 1",
+        url: "#"
+      },
+      {
+        src: "https://dummyimage.com/1600x90/00ffcc/222&text=Annonsplats+Ledig",
+        alt: "Annons Ledig",
+        url: "#"
+      },
+      {
+        src: "https://dummyimage.com/1600x90/222/fff&text=Tips:+Bli+medlem+idag!",
+        alt: "Bli medlem",
+        url: "register.html"
+      }
+    ];
+    let bannerIndex = 0;
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      const img = document.getElementById('bannerImage');
+      img.src = banners[bannerIndex].src;
+      img.alt = banners[bannerIndex].alt;
+      img.parentElement.href = banners[bannerIndex].url;
+    }, 6000); // Byt banner var 6:e sekund
+  </script>
 </body>
 </html>
