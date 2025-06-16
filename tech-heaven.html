@@ -82,6 +82,9 @@
       border: 1px solid #00ffcc;
       border-radius: 6px;
     }
+    .create-thread-form input[type="file"] {
+      padding: 0;
+    }
     .create-thread-form button {
       width: 100%;
       padding: 12px;
@@ -90,6 +93,52 @@
       font-weight: bold;
       border: none;
       border-radius: 8px;
+      cursor: pointer;
+    }
+    .thread {
+      background: #111;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+    .reactions span {
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 1.4em;
+      transition: transform 0.2s;
+    }
+    .reactions span:hover {
+      transform: scale(1.2);
+    }
+    .reaction-count {
+      font-size: 0.9em;
+      margin-left: 5px;
+    }
+    .comment-section {
+      margin-top: 20px;
+    }
+    .comment {
+      padding: 8px;
+      background: #222;
+      margin-bottom: 6px;
+      border-radius: 5px;
+    }
+    .comment-form textarea {
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      border-radius: 5px;
+    }
+    .comment-form button {
+      margin-top: 8px;
+      padding: 8px;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
     @keyframes fadeIn {
@@ -109,11 +158,13 @@
     <div id="thread-list"></div>
     <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
     <div class="create-thread-form" id="formSection">
-      <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
-      <textarea id="threadContent" rows="6" placeholder="Skriv vad du vill prata om..."></textarea>
+      <input type="text" id="threadTitle" placeholder="">
+      <textarea id="threadContent" rows="5" placeholder=""></textarea>
+      <input type="file" id="threadImage" accept="image/*">
       <button id="submit-btn" onclick="submitThread()">Skicka</button>
     </div>
   </div>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyC-Kj-o10TChymlMHgmeoycEHKOyFlx3q8",
@@ -125,32 +176,6 @@
       measurementId: "G-B0WCKJCNT9"
     };
     firebase.initializeApp(firebaseConfig);
-
-    function toggleForm() {
-      const form = document.getElementById("formSection");
-      form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
-    }
-
-    function submitThread() {
-      const title = document.getElementById("threadTitle").value.trim();
-      const content = document.getElementById("threadContent").value.trim();
-      const user = firebase.auth().currentUser;
-      if (!user) return alert("Du måste vara inloggad för att posta.");
-      if (!title || !content) return alert("Fyll i både rubrik och innehåll.");
-
-      firebase.firestore().collection("threads").add({
-        title,
-        content,
-        user: user.email,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById("threadTitle").value = "";
-        document.getElementById("threadContent").value = "";
-        alert("Tråden skapades!");
-        toggleForm();
-        // Ladda om trådar om du har en loadThreads-funktion
-      });
-    }
   </script>
   <script src="scripts/thread-core.js" defer></script>
 </body>
