@@ -1,3 +1,5 @@
+// scripts/thread-core.js
+
 const lang = localStorage.getItem("language") || "sv";
 const translations = {
   sv: {
@@ -29,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("threadTitle")) document.getElementById("threadTitle").placeholder = t.threadTitle;
   if (document.getElementById("threadContent")) document.getElementById("threadContent").placeholder = t.threadContent;
   if (document.getElementById("submit-btn")) document.getElementById("submit-btn").innerText = t.submit;
-
   loadThreads();
 });
 
@@ -42,33 +43,29 @@ function toggleForm() {
 }
 
 function submitThread() {
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      alert(t.loginRequired);
-      return;
-    }
+  const user = firebase.auth().currentUser;
+  if (!user) return alert(t.loginRequired);
 
-    const title = document.getElementById("threadTitle").value.trim();
-    const content = document.getElementById("threadContent").value.trim();
-    if (!title || !content) {
-      alert("Fyll i både rubrik och innehåll.");
-      return;
-    }
+  const title = document.getElementById("threadTitle").value.trim();
+  const content = document.getElementById("threadContent").value.trim();
+  if (!title || !content) {
+    alert("Fyll i både rubrik och innehåll.");
+    return;
+  }
 
-    firebase.firestore().collection("threads").add({
-      title,
-      content,
-      user: user.email,
-      timestamp: Date.now()
-    }).then(() => {
-      document.getElementById("threadTitle").value = "";
-      document.getElementById("threadContent").value = "";
-      document.getElementById("formSection").style.display = "none";
-      loadThreads();
-    }).catch(error => {
-      console.error("Fel vid trådskapande:", error);
-      alert("Kunde inte skapa tråden. Försök igen.");
-    });
+  firebase.firestore().collection("threads").add({
+    title,
+    content,
+    user: user.email,
+    timestamp: Date.now()
+  }).then(() => {
+    document.getElementById("threadTitle").value = "";
+    document.getElementById("threadContent").value = "";
+    document.getElementById("formSection").style.display = "none";
+    loadThreads();
+  }).catch(error => {
+    console.error("Fel vid trådskapande:", error);
+    alert("Kunde inte skapa tråden. Försök igen.");
   });
 }
 
@@ -131,20 +128,19 @@ function react(threadId, type) {
 }
 
 function submitComment(threadId) {
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) return alert(t.loginRequired);
-    const textarea = document.getElementById(`commentInput-${threadId}`);
-    if (!textarea) return;
-    const content = textarea.value.trim();
-    if (!content || content.length > 200) return;
-    firebase.firestore().collection("threads").doc(threadId).collection("comments").add({
-      content,
-      user: user.email,
-      timestamp: Date.now()
-    }).then(() => {
-      textarea.value = "";
-      loadComments(threadId);
-    });
+  const user = firebase.auth().currentUser;
+  if (!user) return alert(t.loginRequired);
+  const textarea = document.getElementById(`commentInput-${threadId}`);
+  if (!textarea) return;
+  const content = textarea.value.trim();
+  if (!content || content.length > 200) return;
+  firebase.firestore().collection("threads").doc(threadId).collection("comments").add({
+    content,
+    user: user.email,
+    timestamp: Date.now()
+  }).then(() => {
+    textarea.value = "";
+    loadComments(threadId);
   });
 }
 
