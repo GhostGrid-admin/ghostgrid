@@ -1,14 +1,14 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Heaven – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="scripts/firebase-init.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Bara ETT script som laddar din forumlogik som modul! -->
+  <script type="module" src="scripts/thread-core.js"></script>
   <style>
+    /* Om du vill ha inline, annars använd style.css */
     body {
       margin: 0;
       padding: 0;
@@ -153,15 +153,12 @@
       <h1 id="forum-title">Tech Heaven</h1>
     </div>
     <div id="thread-list"></div>
-    <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
+    <button class="create-thread-btn" id="create-btn">➕ Skapa ny tråd</button>
     <div class="create-thread-form" id="formSection">
       <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
       <textarea id="threadContent" rows="5" placeholder="Vad vill du diskutera?"></textarea>
-      <button id="submit-btn" onclick="submitThread()">Skicka</button>
+      <button id="submit-btn">Skicka</button>
     </div>
   </div>
-
-  <!-- Laddar trådlogik -->
-  <script src="scripts/thread-core.js" defer></script>
 </body>
 </html>
