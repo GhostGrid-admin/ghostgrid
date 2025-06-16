@@ -1,37 +1,36 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 0 0 90px 0; /* Gör plats för banner/footer */
   background: #000;
   background-size: 400px;
   animation: moveBackground 60s linear infinite;
   color: #0f0;
   font-family: 'Courier New', Courier, monospace;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
+/* KEYFRAMES */
 @keyframes moveBackground {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 1000px;
-  }
+  0% { background-position: 0 0; }
+  100% { background-position: 0 1000px; }
+}
+@keyframes blink {
+  50% { opacity: 0.5; }
 }
 
+/* Intro container centrering (för intro/login) */
 .intro-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  width: 100vw;
   text-align: center;
 }
-
 .intro-text {
   font-size: 2.5rem;
   line-height: 1.4;
@@ -39,18 +38,11 @@ body {
   white-space: pre-line;
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0.5;
-  }
-}
-
 .language-selection {
   margin-top: 40px;
   display: flex;
   gap: 20px;
 }
-
 .language-selection button {
   background: transparent;
   border: 2px solid #0f0;
@@ -60,10 +52,21 @@ body {
   font-size: 1rem;
   transition: 0.3s ease;
 }
-
 .language-selection button:hover {
   background-color: #0f0;
   color: #000;
+}
+
+/* LOGIN / REGISTER STILAR */
+body.login-screen {
+  background-color: #000;
+  color: #00ff88;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 .login-container {
   background: rgba(0, 0, 0, 0.8);
@@ -73,13 +76,14 @@ body {
   box-shadow: 0 0 25px #0f0;
   text-align: center;
   width: 300px;
+  max-width: 400px;
+  margin: 0 auto;
 }
-
 .login-container h1 {
   font-size: 24px;
   margin-bottom: 20px;
+  color: #00ff88;
 }
-
 .login-container input {
   background: #111;
   border: 1px solid #0f0;
@@ -90,7 +94,6 @@ body {
   border-radius: 4px;
   font-size: 14px;
 }
-
 .login-container button {
   background: #0f0;
   color: #000;
@@ -103,51 +106,24 @@ body {
   margin-top: 10px;
   transition: background 0.3s ease;
 }
-
 .login-container button:hover {
   background: #0c0;
 }
-
 .login-container a {
   color: #0f0;
   font-size: 13px;
   text-decoration: none;
 }
-
 .login-container a:hover {
   text-decoration: underline;
 }
-/* ========================
-   LOGIN / REGISTER STILAR
-======================== */
 
-body.login-screen {
-  background-color: #000;
-  color: #00ff88;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-
-.login-container {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px #00ff88;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-
+/* --- Mer login/register (nyans) --- */
 .login-container h1 {
   margin-bottom: 20px;
   font-size: 28px;
   color: #00ff88;
 }
-
 form label {
   display: block;
   margin-top: 15px;
@@ -155,7 +131,6 @@ form label {
   font-size: 14px;
   color: #00ff88;
 }
-
 form input {
   width: 100%;
   padding: 10px;
@@ -166,13 +141,11 @@ form input {
   color: #fff;
   font-size: 16px;
 }
-
 form input:focus {
   outline: none;
   border-color: #00ffaa;
   box-shadow: 0 0 8px #00ffaa;
 }
-
 button[type="submit"] {
   margin-top: 25px;
   width: 100%;
@@ -186,25 +159,20 @@ button[type="submit"] {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
 button[type="submit"]:hover {
   background-color: #00cc66;
 }
-
 .extra-options {
   margin-top: 20px;
   font-size: 14px;
 }
-
 .extra-options a {
   color: #00ffaa;
   text-decoration: none;
 }
-
 .extra-options a:hover {
   text-decoration: underline;
 }
-
 
 /* === FILTRERINGSSTILAR === */
 .filter-options {
@@ -214,7 +182,6 @@ button[type="submit"]:hover {
   margin-bottom: 20px;
   font-size: 14px;
 }
-
 .filter-options label {
   display: flex;
   align-items: center;
@@ -226,59 +193,79 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: background 0.2s;
 }
-
 .filter-options input[type="checkbox"] {
   margin-right: 6px;
 }
-
 .filter-options label:hover {
   background-color: rgba(192, 132, 252, 0.2);
 }
+
+/* === REKLAMBANNER I BOTTEN === */
+.ad-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  min-height: 66px;
+  background: #191429;
+  box-shadow: 0 0 28px #8800ff55, 0 0 90px #0ff3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 0;
+}
+.ad-banner {
+  width: 100vw;
+  max-width: 800px;
+  min-height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+@media (max-width: 700px) {
+  .ad-banner { max-width: 99vw; min-height: 32px; }
+  .ad-footer { min-height: 40px; }
+}
+
 /* === MOBILANPASSNING === */
 @media (max-width: 768px) {
   body {
-    overflow: auto;
-    padding: 10px;
-    height: auto;
+    overflow-x: hidden;
+    padding: 10px 0 90px 0;
+    min-height: 100vh;
   }
-
   .login-container {
     width: 100%;
     max-width: 90vw;
     padding: 20px;
     box-shadow: 0 0 15px #00ff88;
   }
-
   .login-container h1 {
     font-size: 20px;
   }
-
   form label {
     font-size: 13px;
     text-align: center;
   }
-
   input,
   button[type="submit"] {
     font-size: 14px;
   }
-
   .extra-options {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
-
   .intro-text {
     font-size: 1.6rem;
     padding: 0 10px;
   }
-
   .language-selection {
     flex-direction: column;
     gap: 12px;
   }
-
   .filter-options {
     flex-direction: column;
     align-items: stretch;
