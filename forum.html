@@ -279,5 +279,41 @@
   <div class="ad-banner">
     <img src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner" alt="Reklam" style="max-width:100%;height:auto;">
   </div>
-</footer></body>
+</footer><footer class="ad-footer">
+  <div class="ad-banner">
+    <a href="#" target="_blank">
+      <img id="bannerImage" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner+1" alt="Reklam" style="max-width:100%;height:auto;">
+    </a>
+  </div>
+</footer>
+<script>
+  // Lista med banners (byt ut src, alt och länk till egna)
+  const banners = [
+    {
+      src: "https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+Banner+1",
+      alt: "Reklam Banner 1",
+      url: "#"
+    },
+    {
+      src: "https://dummyimage.com/728x90/00ffcc/222&text=Annonsplats+Ledig",
+      alt: "Annons Ledig",
+      url: "#"
+    },
+    {
+      src: "https://dummyimage.com/728x90/222/fff&text=Tips:+Bli+medlem+idag!",
+      alt: "Bli medlem",
+      url: "register.html"
+    }
+  ];
+
+  let bannerIndex = 0;
+  setInterval(() => {
+    bannerIndex = (bannerIndex + 1) % banners.length;
+    const img = document.getElementById('bannerImage');
+    img.src = banners[bannerIndex].src;
+    img.alt = banners[bannerIndex].alt;
+    img.parentElement.href = banners[bannerIndex].url;
+  }, 6000); // Byt banner var 6:e sekund
+</script>
+</body>
 </html>
