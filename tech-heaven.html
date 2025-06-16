@@ -155,8 +155,8 @@
     <div id="thread-list"></div>
     <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
     <div class="create-thread-form" id="formSection">
-      <input type="text" id="threadTitle" placeholder="">
-      <textarea id="threadContent" rows="5" placeholder=""></textarea>
+      <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
+      <textarea id="threadContent" rows="5" placeholder="Vad vill du diskutera?"></textarea>
       <button id="submit-btn" onclick="submitThread()">Skicka</button>
     </div>
   </div>
@@ -172,6 +172,13 @@
       measurementId: "G-B0WCKJCNT9"
     };
     firebase.initializeApp(firebaseConfig);
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        console.warn("Ingen användare inloggad");
+      } else {
+        console.log("Inloggad som:", user.email);
+      }
+    });
   </script>
   <script>
     function toggleForm() {
