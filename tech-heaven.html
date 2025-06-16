@@ -176,103 +176,6 @@
     </div>
   </div>
   <script>
-    const lang = localStorage.getItem("language") || "sv";
-    const translations = {
-      sv: {
-        title: "💻 Tech Heaven",
-        createButton: "➕ Skapa ny tråd",
-        threadTitle: "Rubrik på tråden",
-        threadContent: "Vad vill du diskutera?",
-        submit: "Skicka",
-        loginRequired: "Du måste vara inloggad för att reagera.",
-        commentPlaceholder: "Skriv en kommentar...",
-        commentSubmit: "Kommentera"
-      },
-      en: {
-        title: "💻 Tech Heaven",
-        createButton: "➕ Create new thread",
-        threadTitle: "Thread title",
-        threadContent: "What do you want to discuss?",
-        submit: "Submit",
-        loginRequired: "You must be logged in to react.",
-        commentPlaceholder: "Write a comment...",
-        commentSubmit: "Comment"
-      }
-    };
-    const t = translations[lang];
-    document.getElementById("forum-title").innerText = t.title;
-    document.getElementById("create-btn").innerText = t.createButton;
-    document.getElementById("threadTitle").placeholder = t.threadTitle;
-    document.getElementById("threadContent").placeholder = t.threadContent;
-    document.getElementById("submit-btn").innerText = t.submit;
-    document.getElementById("commentInput-thread-1").placeholder = t.commentPlaceholder;
-    document.querySelector(".comment-form button").innerText = t.commentSubmit;
-
-    const emojis = ["👍", "👎", "😊", "😢", "😡", "😭", "😲", "😳"];
-    const emojiLabels = ["like", "dislike", "happy", "sad", "angry", "crying", "wow", "shy"];
-
-    function renderReactions(threadId) {
-      const container = document.getElementById(`reactions-${threadId}`);
-      container.innerHTML = "";
-      emojis.forEach((emoji, index) => {
-        const label = emojiLabels[index];
-        firebase.firestore().collection("threads").doc(threadId).collection("reactions")
-          .where("type", "==", label).get().then(snapshot => {
-            const count = snapshot.size;
-            const span = document.createElement("span");
-            span.innerHTML = `${emoji} <span class='reaction-count'>${count}</span>`;
-            span.onclick = () => react(threadId, label);
-            container.appendChild(span);
-          });
-      });
-    }
-
-    function react(threadId, type) {
-      const user = firebase.auth().currentUser;
-      if (!user) {
-        alert(t.loginRequired);
-        return;
-      }
-      const ref = firebase.firestore().collection("threads").doc(threadId).collection("reactions").doc(user.uid);
-      ref.get().then(doc => {
-        if (doc.exists && doc.data().type === type) {
-          ref.delete();
-        } else {
-          ref.set({ type, timestamp: Date.now() });
-        }
-        renderReactions(threadId);
-      });
-    }
-
-    function submitComment(threadId) {
-      const user = firebase.auth().currentUser;
-      if (!user) return alert(t.loginRequired);
-      const content = document.getElementById(`commentInput-${threadId}`).value;
-      if (!content) return;
-      firebase.firestore().collection("threads").doc(threadId).collection("comments").add({
-        content,
-        user: user.email,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById(`commentInput-${threadId}`).value = "";
-        loadComments(threadId);
-      });
-    }
-
-    function loadComments(threadId) {
-      const container = document.getElementById(`comments-${threadId}`);
-      container.innerHTML = "";
-      firebase.firestore().collection("threads").doc(threadId).collection("comments").orderBy("timestamp")
-        .get().then(snapshot => {
-          snapshot.forEach(doc => {
-            const div = document.createElement("div");
-            div.className = "comment";
-            div.innerText = `${doc.data().user}: ${doc.data().content}`;
-            container.appendChild(div);
-          });
-        });
-    }
-
     const firebaseConfig = {
       apiKey: "AIzaSyC-Kj-o10TChymlMHgmeoycEHKOyFlx3q8",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -290,5 +193,6 @@
       }
     });
   </script>
+  <script src="scripts/thread-core.js" defer></script>
 </body>
 </html>
