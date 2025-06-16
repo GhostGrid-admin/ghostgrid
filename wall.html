@@ -6,38 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Väggen – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="theme-handler.js" defer></script>
-  <script src="search-handler.js" defer></script>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding-top: 100px;
+      padding-top: 85px;
       background-color: #0a0a0a;
       color: #e0ffff;
       font-family: 'Courier New', monospace;
+      min-height: 100vh;
     }
-
-    body::before,
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 15px;
-      background: radial-gradient(circle, #7b00ff 0%, transparent 80%);
-      z-index: 0;
-    }
-
-    body::before { left: 0; }
-    body::after { right: 0; }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
-      padding: 12px 40px;
+      padding: 12px 0;
       position: fixed;
       width: 100%;
       top: 0;
@@ -46,167 +27,184 @@
       display: flex;
       justify-content: center;
     }
-
     .nav-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      max-width: 800px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 900px;
       width: 100%;
-      justify-items: center;
       align-items: center;
       text-align: center;
     }
-
     .nav-content a {
       color: white;
       text-decoration: none;
-      font-size: 1.4em;
-      padding: 6px 10px;
+      font-size: 1.2em;
+      padding: 7px 10px;
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
     }
-
     .nav-content a:hover {
       background-color: #00ffcc;
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-
-    .search-container {
-      grid-column: 1 / -1;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    .search-container input {
-      padding: 8px 14px;
-      font-size: 1.2em;
-      font-family: 'Courier New', monospace;
-      background-color: #111;
-      border: 2px solid #00ffcc;
-      border-radius: 10px;
-      color: #ffffff;
-      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
-      text-shadow: 0 0 5px #7b00ff, 0 0 3px #00ffcc;
-      width: 90%;
-      max-width: 500px;
-    }
-
     .wall-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 10px;
+      width: 100%;
     }
-
     .wall-title {
-      font-size: 2.5em;
+      font-size: 2em;
       text-align: center;
       color: #aaffee;
-      margin-bottom: 30px;
+      margin: 10px 0 22px 0;
       text-shadow: 0 0 8px #ffffff;
     }
-
-    .post {
-      background-color: rgba(0, 0, 0, 0.85);
-      padding: 15px;
-      border-radius: 8px;
-      border-left: 4px solid #00ffcc;
-      margin-bottom: 20px;
-    }
-
-    .post strong {
-      color: #ccffff;
-    }
-
-    .reactions button, .comments button {
-      margin-right: 5px;
-      background-color: #7b00b3;
-      border: none;
-      padding: 5px 10px;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .reactions button:hover, .comments button:hover {
-      background-color: #a64dff;
-    }
-
-    .comments input[type="text"] {
-      width: 100%;
-      margin-top: 8px;
-      padding: 6px;
-      border-radius: 5px;
-      border: 1px solid #555;
-      background-color: #1a1a2d;
-      color: white;
-    }
-
-    .search-filter {
+    .search-filter, .filter-search {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       margin-bottom: 10px;
+      font-size: 1em;
     }
-
-    .search-filter button {
+    .search-filter button, .filter-search label {
       background-color: #8000ff;
       border: none;
-      padding: 6px 14px;
+      padding: 7px 14px;
       color: white;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 0.95em;
+      font-size: 0.99em;
     }
-
-    .search-filter button:hover {
-      background-color: #a64dff;
+    .search-filter button.active {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
     }
-
-    .filter-search {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
     .filter-search input[type="text"] {
       padding: 8px;
-      width: 70%;
+      width: 72vw;
+      max-width: 370px;
       border-radius: 6px;
       border: 1px solid #7b00ff;
       background-color: #1a1a1a;
-      color: #ffffff;
+      color: #fff;
       font-size: 1em;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .post {
+      background-color: rgba(0, 0, 0, 0.88);
+      padding: 15px 12px 8px 12px;
+      border-radius: 10px;
+      border-left: 4px solid #00ffcc;
+      margin-bottom: 20px;
+      word-break: break-word;
+      box-shadow: 0 0 10px #4ef2ff11;
+    }
+    .post strong {
+      color: #ccffff;
+      font-size: 1.08em;
+    }
+    .post .post-media {
+      margin-top: 8px;
+      margin-bottom: 4px;
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #0ff7;
+    }
+    .reactions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 7px 0 0 0;
+      align-items: center;
+    }
+    .reactions button {
+      font-size: 1.25em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin: 0;
+      transition: background 0.17s;
+    }
+    .reactions button.selected, .reactions button:hover {
+      background: #00ffcc44;
+      color: #000;
+      font-weight: bold;
+    }
+    .reaction-count {
+      font-size: 0.92em;
+      margin-left: 3px;
+      margin-right: 10px;
+      color: #ccc;
+    }
+    .comments {
       margin-top: 10px;
+      background: #141626;
+      border-radius: 7px;
+      padding: 7px;
     }
-
-    .filter-search label {
-      margin: 0 10px;
+    .comment {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .comment-content {
+      background: #21243a;
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px 10px;
       font-size: 1em;
+      flex: 1;
     }
-
-    @media (min-width: 900px) {
-      .nav-content {
-        display: flex;
-        justify-content: center;
-        flex-wrap: nowrap;
-        gap: 25px;
-      }
-
-      .search-container {
-        margin-top: 0;
-        margin-left: 20px;
-        width: auto;
-      }
-
-      .search-container input {
-        font-size: 1.2em;
-        width: 250px;
-      }
+    .delete-comment-btn {
+      background: #d62e6e;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 0 6px;
+      font-size: 0.95em;
+      margin-left: 4px;
+      margin-top: 2px;
+    }
+    .comments input[type="text"] {
+      width: 90%;
+      padding: 7px;
+      border-radius: 5px;
+      border: 1px solid #00ffcc;
+      background-color: #191929;
+      color: white;
+      font-size: 1em;
+      margin-right: 8px;
+      margin-top: 7px;
+      margin-bottom: 2px;
+    }
+    .comments button.add-comment-btn {
+      background: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    @media (max-width: 600px) {
+      .nav-content { font-size: 1em; gap: 7px; }
+      .wall-container { padding: 3vw; }
+      .wall-title { font-size: 1.2em; }
+      .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
+      .filter-search input[type="text"] { width: 98vw; }
     }
   </style>
 </head>
@@ -220,164 +218,203 @@
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
       <div class="search-container">
-        <input type="text" placeholder="Sök på hela sidan..." id="searchInputGlobal" oninput="globalSearch()" />
+        <input type="text" placeholder="Sök på hela sidan..." id="searchInputGlobal" />
       </div>
     </div>
   </nav>
 
   <div class="wall-container">
     <h1 class="wall-title" id="wallTitle">Gemensamma Inlägg</h1>
-
     <div class="search-filter">
-      <button onclick="setFilter('all')">Alla</button>
+      <button onclick="setFilter('all')" class="active">Alla</button>
       <button onclick="setFilter('text')">Text</button>
-      <button onclick="setFilter('image')">Bilder</button>
+      <button onclick="setFilter('image')">Bild</button>
       <button onclick="setFilter('audio')">Ljud</button>
       <button onclick="setFilter('video')">Klipp</button>
+      <button onclick="setFilter('combo')">Kombinerat</button>
     </div>
-
     <div class="filter-search">
       <input type="text" id="localSearchInput" placeholder="Sök inlägg på väggen..." oninput="filterPosts()" />
-      <div>
-        <label><input type="checkbox" id="cbAll" checked onchange="filterPosts()"> Alla</label>
-        <label><input type="checkbox" id="cbText" onchange="filterPosts()"> Text</label>
-        <label><input type="checkbox" id="cbImage" onchange="filterPosts()"> Bilder</label>
-        <label><input type="checkbox" id="cbAudio" onchange="filterPosts()"> Ljud</label>
-        <label><input type="checkbox" id="cbVideo" onchange="filterPosts()"> Klipp</label>
-      </div>
     </div>
-
     <div id="postsContainer"></div>
   </div>
 
   <script type="module">
-import { db } from './scripts/firebase-init.js';
-import {
-  collection, getDocs, query, orderBy
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { auth, db } from './scripts/firebase-init.js';
+    import {
+      collection, query, orderBy, onSnapshot, doc, getDoc, addDoc, updateDoc, deleteDoc
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    
+    // REACTIONS: Emojis & texter
+    const reactionsList = [
+      { key: "heart", emoji: "❤️" },
+      { key: "broken_heart", emoji: "💔" },
+      { key: "happy", emoji: "😊" },
+      { key: "sad", emoji: "😢" },
+      { key: "laugh", emoji: "😂" },
+      { key: "cry", emoji: "😭" },
+      { key: "embarrassed", emoji: "😳" },
+      { key: "surprised", emoji: "😲" },
+      { key: "angel", emoji: "😇" }
+    ];
+    
+    let currentUser = null;
+    auth.onAuthStateChanged(user => { currentUser = user; });
 
-// Element
-const postsContainer = document.getElementById("postsContainer");
-const searchInput = document.getElementById("localSearchInput");
-const cbAll = document.getElementById("cbAll");
-const cbText = document.getElementById("cbText");
-const cbImage = document.getElementById("cbImage");
-const cbAudio = document.getElementById("cbAudio");
-const cbVideo = document.getElementById("cbVideo");
+    // FILTER
+    let currentTypeFilter = 'all', currentSearch = '';
+    function setFilter(type) {
+      currentTypeFilter = type;
+      document.querySelectorAll('.search-filter button').forEach(btn =>
+        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(type) || (type === 'all' && btn.textContent.toLowerCase() === 'alla'))
+      );
+      filterPosts();
+    }
+    window.setFilter = setFilter;
 
-let allPosts = [];
-let filterType = "all";
+    function filterPosts() {
+      const search = document.getElementById("localSearchInput").value.toLowerCase();
+      currentSearch = search;
+      document.querySelectorAll('.post').forEach(postEl => {
+        const text = postEl.innerText.toLowerCase();
+        const type = postEl.dataset.type;
+        const showType = (currentTypeFilter === 'all' || type === currentTypeFilter);
+        const showSearch = !search || text.includes(search);
+        postEl.style.display = (showType && showSearch) ? '' : 'none';
+      });
+    }
 
-// Ladda ALLA inlägg från Firestore
-async function loadPosts() {
-  postsContainer.innerHTML = "<p style='text-align:center'>Laddar inlägg...</p>";
-  const wallRef = collection(db, "wall");
-  const q = query(wallRef, orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  allPosts = [];
-  snapshot.forEach(doc => {
-    const post = doc.data();
-    post.id = doc.id;
-    allPosts.push(post);
-  });
-  renderPosts();
-}
+    // LADDA IN ALLA INLÄGG
+    function renderMedia(post) {
+      let html = "";
+      if (post.imageUrl) html += `<img class="post-media" src="${post.imageUrl}" alt="Bild" />`;
+      if (post.videoUrl) html += `<video class="post-media" src="${post.videoUrl}" controls></video>`;
+      if (post.audioUrl) html += `<audio class="post-media" src="${post.audioUrl}" controls></audio>`;
+      if (post.micAudioUrl) html += `<audio class="post-media" src="${post.micAudioUrl}" controls></audio>`;
+      return html;
+    }
 
-function setFilter(type) {
-  filterType = type;
-  // Checkboxar följer filter-knappar
-  cbAll.checked = (type === 'all');
-  cbText.checked = (type === 'text');
-  cbImage.checked = (type === 'image');
-  cbAudio.checked = (type === 'audio');
-  cbVideo.checked = (type === 'video');
-  renderPosts();
-}
+    function renderReactions(post, postId, userReaction, counts) {
+      return `
+        <div class="reactions">
+          ${reactionsList.map(r => `
+            <button
+              ${userReaction === r.key ? 'class="selected"' : ''}
+              onclick="window.setReaction('${postId}','${r.key}')"
+              title="Reagera med ${r.emoji}"
+              >${r.emoji} <span class="reaction-count">${counts[r.key] || ''}</span></button>
+          `).join("")}
+          ${userReaction ? `<button onclick="window.removeReaction('${postId}')">❌ Ta bort reaktion</button>` : ""}
+        </div>`;
+    }
 
-window.setFilter = setFilter;
+    window.setReaction = async (postId, key) => {
+      if (!currentUser) { alert("Du måste vara inloggad för att reagera."); return; }
+      const ref = doc(db, "wall", postId, "reactions", currentUser.uid);
+      await updateDoc(ref, { type: key }, { merge: true }).catch(async() => {
+        // if doc doesn't exist, create
+        await setDoc(ref, { type: key });
+      });
+    };
+    window.removeReaction = async (postId) => {
+      if (!currentUser) return;
+      await deleteDoc(doc(db, "wall", postId, "reactions", currentUser.uid));
+    };
 
-// Funktion för filtrering via checkrutor/sök
-window.filterPosts = function () {
-  renderPosts();
-};
+    // KOMMENTARER
+    window.addComment = async (postId, inputId) => {
+      const input = document.getElementById(inputId);
+      const content = input.value.trim();
+      if (!content) return;
+      if (!currentUser) { alert("Du måste vara inloggad för att kommentera."); return; }
+      // Begränsa till 200 ord
+      if (content.split(/\s+/).length > 200) { alert("Max 200 ord!"); return; }
+      await addDoc(collection(db, "wall", postId, "comments"), {
+        content, user: currentUser.uid, createdAt: new Date()
+      });
+      input.value = "";
+    };
+    window.deleteComment = async (postId, commentId) => {
+      if (!currentUser) return;
+      await deleteDoc(doc(db, "wall", postId, "comments", commentId));
+    };
 
-function renderPosts() {
-  let posts = [...allPosts];
+    // Rendera väggen
+    function renderPost(post, postId, userReaction, reactionCounts, comments, userId) {
+      return `
+        <div class="post" data-type="${post.type}">
+          <div>
+            <strong>${post.text ? post.text : ''}</strong>
+            ${renderMedia(post)}
+          </div>
+          ${renderReactions(post, postId, userReaction, reactionCounts)}
+          <div class="comments">
+            <div>
+              ${comments.map(c =>
+                `<div class="comment"><div class="comment-content">${c.content}</div>
+                  ${currentUser && c.user === currentUser.uid
+                    ? `<button class="delete-comment-btn" title="Ta bort" onclick="window.deleteComment('${postId}','${c.id}')">🗑️</button>` : ''}
+                 </div>`
+              ).join("")}
+            </div>
+            ${currentUser ? `
+              <input type="text" placeholder="Kommentera..." id="comment-input-${postId}" maxlength="1000" />
+              <button class="add-comment-btn" onclick="window.addComment('${postId}','comment-input-${postId}')">Kommentera</button>
+            ` : '<div style="color:#f44;font-size:0.96em;">Logga in för att kommentera</div>'}
+          </div>
+        </div>
+      `;
+    }
 
-  // Typ-filter
-  if (!cbAll.checked) {
-    posts = posts.filter(p =>
-      (cbText.checked && p.type === "text") ||
-      (cbImage.checked && p.type === "image") ||
-      (cbAudio.checked && p.type === "audio") ||
-      (cbVideo.checked && p.type === "video")
-    );
-  }
+    function listenToWall() {
+      const postsContainer = document.getElementById("postsContainer");
+      const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
+      onSnapshot(q, async snapshot => {
+        postsContainer.innerHTML = "Laddar...";
+        let html = "";
+        let postsArr = [];
+        for (const docSnap of snapshot.docs) {
+          const post = docSnap.data();
+          post.id = docSnap.id;
+          postsArr.push(post);
+        }
 
-  // Sökfilter
-  const query = (searchInput.value || "").toLowerCase();
-  if (query) {
-    posts = posts.filter(p =>
-      (p.text && p.text.toLowerCase().includes(query)) ||
-      (p.type && p.type.toLowerCase().includes(query))
-    );
-  }
+        for (const post of postsArr) {
+          // Hämta reaktioner
+          let reactionsSnap = await getDoc(collection(db, "wall", post.id, "reactions"));
+          let reactionsDocs = await getDocs(collection(db, "wall", post.id, "reactions"));
+          let reactionCounts = {}, userReaction = null;
+          reactionsDocs.forEach(rDoc => {
+            const r = rDoc.data().type;
+            if (rDoc.id === (currentUser && currentUser.uid)) userReaction = r;
+            reactionCounts[r] = (reactionCounts[r] || 0) + 1;
+          });
 
-  if (!posts.length) {
-    postsContainer.innerHTML = "<p style='text-align:center;'>Inga inlägg hittades.</p>";
-    return;
-  }
+          // Hämta kommentarer
+          let commentsDocs = await getDocs(collection(db, "wall", post.id, "comments"));
+          let comments = [];
+          commentsDocs.forEach(cDoc => {
+            let c = cDoc.data();
+            c.id = cDoc.id;
+            comments.push(c);
+          });
+          comments.sort((a, b) => a.createdAt && b.createdAt ? a.createdAt.seconds - b.createdAt.seconds : 0);
 
-  postsContainer.innerHTML = posts.map(renderPost).join("");
-}
+          html += renderPost(post, post.id, userReaction, reactionCounts, comments, post.user);
+        }
+        postsContainer.innerHTML = html || '<div style="text-align:center;color:#99d">Inga inlägg ännu!</div>';
+        filterPosts();
+      });
+    }
+    listenToWall();
 
-function renderPost(post) {
-  let html = `<div class="post">`;
-  if (post.type === "text" && post.text) {
-    html += `<strong>📝 Text:</strong><br>${escapeHTML(post.text)}`;
-  }
-  if (post.type === "image" && post.imageUrl) {
-    html += `<strong>🖼️ Bild:</strong><br><img src="${post.imageUrl}" style="max-width:90%;border-radius:8px;margin:10px 0;">`;
-  }
-  if (post.type === "audio" && post.audioUrl) {
-    html += `<strong>🎵 Ljud:</strong><br><audio controls src="${post.audioUrl}"></audio>`;
-  }
-  if (post.type === "video" && post.videoUrl) {
-    html += `<strong>🎬 Klipp:</strong><br><video controls style="max-width:90%;border-radius:8px;margin:10px 0;" src="${post.videoUrl}"></video>`;
-  }
-  if (post.type === "mic" && post.micAudioUrl) {
-    html += `<strong>🎤 Röst:</strong><br><audio controls src="${post.micAudioUrl}"></audio>`;
-  }
-  // Kombinerat inlägg
-  if (post.type === "combo") {
-    if (post.text) html += `<strong>📝 Text:</strong><br>${escapeHTML(post.text)}<br>`;
-    if (post.imageUrl) html += `<strong>🖼️ Bild:</strong><br><img src="${post.imageUrl}" style="max-width:90%;border-radius:8px;margin:10px 0;"><br>`;
-    if (post.videoUrl) html += `<strong>🎬 Klipp:</strong><br><video controls style="max-width:90%;border-radius:8px;margin:10px 0;" src="${post.videoUrl}"></video><br>`;
-    if (post.audioUrl) html += `<strong>🎵 Ljud:</strong><br><audio controls src="${post.audioUrl}"></audio><br>`;
-  }
-  if (post.temporary) {
-    html += `<div style="font-size:0.9em;color:#ffb300;margin-top:8px;">⏳ Tillfälligt (24h)</div>`;
-  }
-  html += `</div>`;
-  return html;
-}
-
-function escapeHTML(str) {
-  if (!str) return "";
-  return str.replace(/[&<>"']/g, m => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[m]));
-}
-
-// Filtrering via checkrutor
-[cbAll, cbText, cbImage, cbAudio, cbVideo].forEach(cb => {
-  cb.addEventListener("change", filterPosts);
-});
-// Sökning via inmatning
-searchInput.addEventListener("input", filterPosts);
-
-loadPosts();
-</script>
-  <script src="language.js"></script>
+    // Mobilanpassad global sök
+    document.getElementById("searchInputGlobal").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        const q = e.target.value.trim();
+        if (q.length > 1) window.location.href = "search.html?q=" + encodeURIComponent(q);
+      }
+    });
+  </script>
 </body>
 </html>
