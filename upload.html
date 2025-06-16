@@ -286,5 +286,107 @@
       }
     });
   </script>
-</body>
+<script type="module">
+import { auth, db, storage } from "./scripts/firebase-init.js";
+import {
+  collection, addDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import {
+  ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+
+const uploadForm = document.getElementById("uploadForm");
+const spinner = document.getElementById("spinner");
+
+uploadForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  spinner.style.display = "block";
+
+  // Hämta aktiv sektion
+  const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
+
+  let postData = {
+    createdAt: serverTimestamp(),
+    user: auth.currentUser ? auth.currentUser.uid : "guest",
+    type: activeSection,
+    temporary: document.getElementById("temporary").checked,
+  };
+  let filesToUpload = [];
+
+  if (activeSection === "text") {
+    postData.text = document.getElementById("text").value;
+  }
+  if (activeSection === "image") {
+    filesToUpload.push({ file: document.getElementById("image").files[0], key: "imageUrl" });
+  }
+  if (activeSection === "video") {
+    filesToUpload.push({ file: document.getElementById("video").files[0], key: "videoUrl" });
+  }
+  if (activeSection === "audio") {
+    filesToUpload.push({ file: document.getElementById("audio").files[0], key: "audioUrl" });
+  }
+  if (activeSection === "mic") {
+    const micBlob = window.lastRecordedAudioBlob;
+    if (micBlob) {
+      filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
+    }
+  }
+  if (activeSection === "combo") {
+    postData.text = document.getElementById("comboText").value;
+    if (document.getElementById("comboImage").files[0])
+      filesToUpload.push({ file: document.getElementById("comboImage").files[0], key: "imageUrl" });
+    if (document.getElementById("comboVideo").files[0])
+      filesToUpload.push({ file: document.getElementById("comboVideo").files[0], key: "videoUrl" });
+    if (document.getElementById("comboAudio").files[0])
+      filesToUpload.push({ file: document.getElementById("comboAudio").files[0], key: "audioUrl" });
+  }
+
+  // Ladda upp filer (om det finns)
+  for (let upload of filesToUpload) {
+    if (!upload.file) continue;
+    const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
+    await uploadBytes(storageRef, upload.file);
+    const url = await getDownloadURL(storageRef);
+    postData[upload.key] = url;
+  }
+
+  // Spara posten på "väggen"
+  await addDoc(collection(db, "wall"), postData);
+
+  spinner.style.display = "none";
+  alert("✅ Inlägget har laddats upp!");
+  uploadForm.reset();
+
+  // Skicka användaren till väggen (wall.html) automatiskt:
+  window.location.href = "wall.html";
+});
+
+// --- Röstinspelning (samma logik som du haft innan) ---
+let mediaRecorder, audioChunks = [];
+const recordBtn = document.getElementById("recordButton");
+const stopBtn = document.getElementById("stopButton");
+const audioPreview = document.getElementById("audioPreview");
+if (recordBtn && stopBtn && audioPreview) {
+  recordBtn.onclick = async function () {
+    audioChunks = [];
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+    recordBtn.disabled = true;
+    stopBtn.disabled = false;
+
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+      window.lastRecordedAudioBlob = audioBlob; // För uploaden!
+      audioPreview.src = URL.createObjectURL(audioBlob);
+      recordBtn.disabled = false;
+      stopBtn.disabled = true;
+    };
+  };
+  stopBtn.onclick = function () {
+    mediaRecorder && mediaRecorder.stop();
+  };
+}
+</script></body>
 </html>
