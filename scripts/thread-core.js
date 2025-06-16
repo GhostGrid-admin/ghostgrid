@@ -1,5 +1,26 @@
 // scripts/thread-core.js
 
+// 1. Hämta auth och db från vår init‑modul
+import { auth, db } from "./firebase-init.js";
+
+// 2. Importera Modular‑Firestore‑funktioner
+import {
+  collection,
+  query,
+  orderBy,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+// 3. Importera auth‑hjälp
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+// 4. Språkstöd
 const lang = localStorage.getItem("language") || "sv";
 const translations = {
   sv: {
@@ -25,136 +46,145 @@ const translations = {
 };
 const t = translations[lang];
 
+// 5. Emojis
+const emojis      = ["👍","👎","❤️","💔","😂","😢","😡","😮","😇","😳"];
+const emojiLabels = ["like","dislike","love","broken","laugh","cry","angry","wow","angel","shy"];
+
+// 6. När DOM är klar
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("forum-title")) document.getElementById("forum-title").innerText = t.title;
-  if (document.getElementById("create-btn")) document.getElementById("create-btn").innerText = t.createButton;
-  if (document.getElementById("threadTitle")) document.getElementById("threadTitle").placeholder = t.threadTitle;
-  if (document.getElementById("threadContent")) document.getElementById("threadContent").placeholder = t.threadContent;
-  if (document.getElementById("submit-btn")) document.getElementById("submit-btn").innerText = t.submit;
+  // Sätt UI‑texter
+  document.getElementById("forum-title").innerText     = t.title;
+  document.getElementById("create-btn").innerText      = t.createButton;
+  document.getElementById("threadTitle").placeholder   = t.threadTitle;
+  document.getElementById("threadContent").placeholder = t.threadContent;
+  document.getElementById("submit-btn").innerText      = t.submit;
+
+  // Ladda in trådar
   loadThreads();
 });
 
-const emojis = ["👍", "👎", "❤️", "💔", "😂", "😢", "😡", "😮", "😇", "😳"];
-const emojiLabels = ["like", "dislike", "love", "broken", "laugh", "cry", "angry", "wow", "angel", "shy"];
-
-function toggleForm() {
-  const form = document.getElementById("formSection");
-  form.style.display = form.style.display === "none" ? "block" : "none";
+// 7. Visa/dölj formulär
+export function toggleForm() {
+  const f = document.getElementById("formSection");
+  f.style.display = f.style.display === "block" ? "none" : "block";
 }
 
-function submitThread() {
-  const user = firebase.auth().currentUser;
+// 8. Skapa ny tråd
+export async function submitThread() {
+  const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
 
-  const title = document.getElementById("threadTitle").value.trim();
+  const title   = document.getElementById("threadTitle").value.trim();
   const content = document.getElementById("threadContent").value.trim();
   if (!title || !content) {
-    alert("Fyll i både rubrik och innehåll.");
-    return;
+    return alert("Fyll i både rubrik och innehåll.");
   }
 
-  firebase.firestore().collection("threads").add({
-    title,
-    content,
-    user: user.email,
-    timestamp: Date.now()
-  }).then(() => {
-    document.getElementById("threadTitle").value = "";
+  try {
+    await addDoc(collection(db, "threads"), {
+      title, content, user: user.email, timestamp: Date.now()
+    });
+    document.getElementById("threadTitle").value   = "";
     document.getElementById("threadContent").value = "";
-    document.getElementById("formSection").style.display = "none";
+    toggleForm();
     loadThreads();
-  }).catch(error => {
-    console.error("Fel vid trådskapande:", error);
-    alert("Kunde inte skapa tråden. Försök igen.");
-  });
+  } catch (e) {
+    console.error("Skapande misslyckades:", e);
+    alert("Kunde inte skapa tråden, försök igen.");
+  }
 }
 
-function loadThreads() {
+// 9. Ladda och rendera trådar
+async function loadThreads() {
   const container = document.getElementById("thread-list");
   container.innerHTML = "";
-  firebase.firestore().collection("threads").orderBy("timestamp", "desc").get().then(snapshot => {
-    snapshot.forEach(doc => {
-      const thread = doc.data();
-      const id = doc.id;
-      const div = document.createElement("div");
-      div.className = "thread";
-      div.id = `thread-${id}`;
-      div.innerHTML = `
-        <h3>${thread.title}</h3>
-        <p>${thread.content}</p>
-        <div class="reactions" id="reactions-${id}"></div>
-        <div class="comment-section" id="comments-${id}"></div>
-        <div class="comment-form">
-          <textarea id="commentInput-${id}" rows="2" placeholder="${t.commentPlaceholder}"></textarea>
-          <button onclick="submitComment('${id}')">${t.commentSubmit}</button>
-        </div>
-      `;
-      container.appendChild(div);
-      renderReactions(id);
-      loadComments(id);
-    });
+
+  const q    = query(collection(db, "threads"), orderBy("timestamp", "desc"));
+  const snap = await getDocs(q);
+
+  snap.forEach(d => {
+    const data = d.data(), id = d.id;
+    const div = document.createElement("div");
+    div.className = "thread";
+    div.id        = `thread-${id}`;
+    div.innerHTML = `
+      <h3>${data.title}</h3>
+      <p>${data.content}</p>
+      <div class="reactions" id="reactions-${id}"></div>
+      <div class="comment-section" id="comments-${id}"></div>
+      <div class="comment-form">
+        <textarea id="commentInput-${id}" rows="2" placeholder="${t.commentPlaceholder}"></textarea>
+        <button onclick="submitComment('${id}')">${t.commentSubmit}</button>
+      </div>
+    `;
+    container.appendChild(div);
+    renderReactions(id);
+    loadComments(id);
   });
 }
 
-function renderReactions(threadId) {
+// 10. Räkna och visa reaktioner
+async function renderReactions(threadId) {
   const container = document.getElementById(`reactions-${threadId}`);
-  if (!container) return;
   container.innerHTML = "";
-  emojis.forEach((emoji, index) => {
-    const label = emojiLabels[index];
-    firebase.firestore().collection("threads").doc(threadId).collection("reactions")
-      .where("type", "==", label).get().then(snapshot => {
-        const count = snapshot.size;
-        const span = document.createElement("span");
-        span.innerHTML = `${emoji} <span class='reaction-count'>${count}</span>`;
-        span.onclick = () => react(threadId, label);
-        container.appendChild(span);
-      });
-  });
+
+  for (let i = 0; i < emojis.length; i++) {
+    const label = emojiLabels[i];
+    const q     = query(
+      collection(db, "threads", threadId, "reactions"),
+      where("type", "==", label)
+    );
+    const snap  = await getDocs(q);
+    const span  = document.createElement("span");
+    span.innerHTML = `${emojis[i]} <span class="reaction-count">${snap.size}</span>`;
+    span.onclick  = () => react(threadId, label);
+    container.appendChild(span);
+  }
 }
 
-function react(threadId, type) {
-  const user = firebase.auth().currentUser;
+// 11. Ge användare en reaktion
+async function react(threadId, type) {
+  const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
-  const ref = firebase.firestore().collection("threads").doc(threadId).collection("reactions").doc(user.uid);
-  ref.get().then(doc => {
-    if (doc.exists && doc.data().type === type) {
-      ref.delete();
-    } else {
-      ref.set({ type, timestamp: Date.now() });
-    }
-    renderReactions(threadId);
-  });
+
+  const ref     = doc(db, "threads", threadId, "reactions", user.uid);
+  const docSnap = await getDoc(ref);
+
+  if (docSnap.exists() && docSnap.data().type === type) {
+    await deleteDoc(ref);
+  } else {
+    await setDoc(ref, { type, timestamp: Date.now() });
+  }
+  renderReactions(threadId);
 }
 
-function submitComment(threadId) {
-  const user = firebase.auth().currentUser;
+// 12. Kommentera
+export async function submitComment(threadId) {
+  const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
-  const textarea = document.getElementById(`commentInput-${threadId}`);
-  if (!textarea) return;
-  const content = textarea.value.trim();
-  if (!content || content.length > 200) return;
-  firebase.firestore().collection("threads").doc(threadId).collection("comments").add({
-    content,
-    user: user.email,
-    timestamp: Date.now()
-  }).then(() => {
-    textarea.value = "";
-    loadComments(threadId);
+
+  const ta   = document.getElementById(`commentInput-${threadId}`);
+  const txt  = ta.value.trim();
+  if (!txt || txt.length > 200) return;
+
+  await addDoc(collection(db, "threads", threadId, "comments"), {
+    content: txt, user: user.email, timestamp: Date.now()
   });
+  ta.value = "";
+  loadComments(threadId);
 }
 
-function loadComments(threadId) {
+// 13. Visa kommentarer
+async function loadComments(threadId) {
   const container = document.getElementById(`comments-${threadId}`);
-  if (!container) return;
   container.innerHTML = "";
-  firebase.firestore().collection("threads").doc(threadId).collection("comments")
-    .orderBy("timestamp").get().then(snapshot => {
-      snapshot.forEach(doc => {
-        const div = document.createElement("div");
-        div.className = "comment";
-        div.innerText = `${doc.data().user}: ${doc.data().content}`;
-        container.appendChild(div);
-      });
-    });
+
+  const q    = query(collection(db, "threads", threadId, "comments"), orderBy("timestamp"));
+  const snap = await getDocs(q);
+  snap.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "comment";
+    div.innerText = `${d.data().user}: ${d.data().content}`;
+    container.appendChild(div);
+  });
 }
