@@ -33,10 +33,65 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("submit-btn")) document.getElementById("submit-btn").innerText = t.submit;
   if (document.querySelector(".comment-form textarea")) document.querySelector(".comment-form textarea").placeholder = t.commentPlaceholder;
   if (document.querySelector(".comment-form button")) document.querySelector(".comment-form button").innerText = t.commentSubmit;
+
+  // Ladda alla trådar
+  loadThreads();
 });
 
 const emojis = ["👍", "👎", "❤️", "💔", "😂", "😢", "😡", "😮", "😇", "😳"];
 const emojiLabels = ["like", "dislike", "love", "broken", "laugh", "cry", "angry", "wow", "angel", "shy"];
+
+function toggleForm() {
+  const form = document.getElementById("formSection");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function submitThread() {
+  const user = firebase.auth().currentUser;
+  if (!user) return alert(t.loginRequired);
+
+  const title = document.getElementById("threadTitle").value.trim();
+  const content = document.getElementById("threadContent").value.trim();
+  if (!title || !content) return;
+
+  firebase.firestore().collection("threads").add({
+    title,
+    content,
+    user: user.email,
+    timestamp: Date.now()
+  }).then(() => {
+    document.getElementById("threadTitle").value = "";
+    document.getElementById("threadContent").value = "";
+    loadThreads();
+  });
+}
+
+function loadThreads() {
+  const container = document.getElementById("thread-list");
+  container.innerHTML = "";
+  firebase.firestore().collection("threads").orderBy("timestamp", "desc").get().then(snapshot => {
+    snapshot.forEach(doc => {
+      const thread = doc.data();
+      const id = doc.id;
+      const div = document.createElement("div");
+      div.className = "thread";
+      div.id = `thread-${id}`;
+      div.innerHTML = `
+        <h3>${thread.title}</h3>
+        <p>${thread.content}</p>
+        <div class="reactions" id="reactions-${id}"></div>
+        <div class="comment-section" id="comments-${id}"></div>
+        <div class="comment-form">
+          <textarea id="commentInput-${id}" rows="2" placeholder="${t.commentPlaceholder}"></textarea>
+          <button onclick="submitComment('${id}')">${t.commentSubmit}</button>
+        </div>
+      `;
+      container.appendChild(div);
+      renderReactions(id);
+      loadComments(id);
+    });
+  });
+}
 
 function renderReactions(threadId) {
   const container = document.getElementById(`reactions-${threadId}`);
