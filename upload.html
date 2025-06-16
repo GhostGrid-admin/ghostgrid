@@ -13,10 +13,10 @@
       min-height: 100vh;
       margin: 0;
       padding-top: 85px;
-      padding-bottom: 110px; /* Utrymme för banner! */
       position: relative;
       overflow-x: hidden;
     }
+    /* Glow från sidorna */
     .glow-left, .glow-right {
       position: fixed;
       top: 0;
@@ -28,25 +28,64 @@
     .glow-left {
       left: 0;
       background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
     .glow-right {
       right: 0;
       background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
-    @media (max-width: 900px) {
-      .glow-left, .glow-right { width: 60px; }
+    /* ------- SIDOBANNERS ------- */
+    .side-banner {
+      position: fixed;
+      top: 87px; /* precis under navbar/streck */
+      bottom: 0;
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
     }
-    @media (max-width: 500px) {
-      .glow-left, .glow-right { width: 30px; }
+    .side-banner .banner-inner {
+      width: 92px;
+      height: 480px;
+      margin: 0 auto;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      pointer-events: auto;
+      /* Gör att man kan klicka på länkar i bannern */
     }
+    .side-banner img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+    }
+    .side-banner.left { left: 0; }
+    .side-banner.right { right: 0; }
+
+    /* Mobilanpassning */
+    @media (max-width: 1100px) {
+      .side-banner, .glow-left, .glow-right { width: 50px; }
+      .side-banner .banner-inner { width: 44px; height: 280px; }
+      .side-banner img { height: 280px; }
+    }
+    @media (max-width: 700px) {
+      .side-banner { display: none; } /* Döljer banners på små skärmar */
+    }
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -194,44 +233,27 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-    /* ----- Banner längst ner ----- */
-    .ad-footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100vw;
-      min-height: 68px;
-      background: linear-gradient(90deg,#a044ff 0%,#6a11cb 100%);
-      box-shadow: 0 0 28px #8800ff55, 0 0 90px #0ff3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-      padding: 0;
-    }
-    .ad-banner {
-      width: 100vw;
-      max-width: 100vw;
-      min-height: 44px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 auto;
-    }
-    .ad-banner img, .ad-banner div, .ad-banner span {
-      width: 100%;
-      height: auto;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      .ad-footer { min-height: 55px; }
-      .ad-banner span, .ad-banner img { font-size: 1.3rem; }
-    }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
+  <!-- Vänster sidbanner -->
+  <div class="side-banner left">
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/92x480/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <!-- Höger sidbanner -->
+  <div class="side-banner right">
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/92x480/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
+  </div>
   <nav class="navbar">
     <div class="nav-content">
       <a href="forum.html">Forum</a>
@@ -303,6 +325,35 @@
     </form>
   </div>
   <script>
+    // SIDBANNER ROTATION (vänster och höger)
+    const banners = [
+      {
+        left: { src: "https://dummyimage.com/92x480/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
+        right: { src: "https://dummyimage.com/92x480/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+      },
+      {
+        left: { src: "https://dummyimage.com/92x480/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
+        right: { src: "https://dummyimage.com/92x480/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
+      }
+      // Lägg till fler banners om du vill!
+    ];
+    let bannerIndex = 0;
+    function updateBanners() {
+      const left = banners[bannerIndex].left;
+      const right = banners[bannerIndex].right;
+      document.getElementById('leftBannerImg').src = left.src;
+      document.getElementById('leftBannerImg').alt = left.alt;
+      document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src;
+      document.getElementById('rightBannerImg').alt = right.alt;
+      document.getElementById('rightBannerLink').href = right.url;
+    }
+    updateBanners();
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
+
     // Växla mellan sektionerna
     document.querySelectorAll('.switch-btn').forEach(btn => {
       btn.addEventListener('click', function () {
@@ -348,6 +399,7 @@
       });
     }
   </script>
+  <!-- Ditt befintliga Firebase upload-script kvar här -->
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
@@ -479,10 +531,5 @@
       };
     }
   </script>
-  <footer class="ad-footer">
-    <div class="ad-banner">
-      <img src="https://dummyimage.com/1200x88/7b00ff/fff&text=Reklam+Banner" alt="Reklam" style="max-width:100%;height:auto;">
-    </div>
-  </footer>
 </body>
 </html>
