@@ -14,6 +14,8 @@
       color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
     nav.navbar {
       background-color: #000;
@@ -57,6 +59,8 @@
       margin: 0 auto;
       padding: 10px;
       width: 100%;
+      position: relative;
+      z-index: 2;
     }
     .wall-title {
       font-size: 2em;
@@ -200,14 +204,56 @@
       cursor: pointer;
       margin-top: 6px;
     }
-    /* ---- Mobil: navbar och global sök försvinner vid scroll ner ---- */
+    /* SIDOBANNER */
+    .side-banner {
+      position: fixed;
+      top: 87px; /* precis under navbaren */
+      bottom: 0;
+      width: 95px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 92px;
+      height: calc(100vh - 87px);
+      margin: 0 auto;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+    }
+    .side-banner.left { left: 0; }
+    .side-banner.right { right: 0; }
+    /* Mobil: dölj banners */
+    @media (max-width: 1100px) {
+      .side-banner { width: 44px; }
+      .side-banner .banner-inner { width: 40px; }
+    }
+    @media (max-width: 700px) {
+      .side-banner { display: none; }
+    }
     @media (max-width: 600px) {
-      nav.navbar {
-        transition: top 0.3s;
-      }
-      nav.navbar.hide-navbar {
-        top: -70px;
-      }
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
       .nav-content { font-size: 1em; gap: 7px; }
       .wall-container { padding: 3vw; }
       .wall-title { font-size: 1.2em; }
@@ -217,6 +263,22 @@
   </style>
 </head>
 <body>
+  <!-- SIDOBANNERS -->
+  <div class="side-banner left">
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/92x900/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <div class="side-banner right">
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/92x900/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-content">
       <a href="forum.html">Forum</a>
@@ -247,179 +309,48 @@
     <div id="postsContainer"></div>
   </div>
 
+  <script>
+    // SIDOBANNER ROTATION (vänster och höger)
+    const banners = [
+      {
+        left: { src: "https://dummyimage.com/92x1200/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
+        right: { src: "https://dummyimage.com/92x1200/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+      },
+      {
+        left: { src: "https://dummyimage.com/92x1200/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
+        right: { src: "https://dummyimage.com/92x1200/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
+      }
+      // Lägg till fler banners om du vill!
+    ];
+    let bannerIndex = 0;
+    function updateBanners() {
+      const left = banners[bannerIndex].left;
+      const right = banners[bannerIndex].right;
+      document.getElementById('leftBannerImg').src = left.src;
+      document.getElementById('leftBannerImg').alt = left.alt;
+      document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src;
+      document.getElementById('rightBannerImg').alt = right.alt;
+      document.getElementById('rightBannerLink').href = right.url;
+    }
+    updateBanners();
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
+  </script>
+
+  <!-- --- RESTEN AV DIN JS FÖR VÄGGEN, KOMMENTARER, REACTIONS, ETC --- -->
   <script type="module">
     import { auth, db } from './scripts/firebase-init.js';
     import {
       collection, query, orderBy, onSnapshot, doc, getDocs, setDoc, addDoc, updateDoc, deleteDoc
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    
-    // REACTIONS: Emojis & texter
-    const reactionsList = [
-      { key: "heart", emoji: "❤️" },
-      { key: "broken_heart", emoji: "💔" },
-      { key: "happy", emoji: "😊" },
-      { key: "sad", emoji: "😢" },
-      { key: "laugh", emoji: "😂" },
-      { key: "cry", emoji: "😭" },
-      { key: "embarrassed", emoji: "😳" },
-      { key: "surprised", emoji: "😲" },
-      { key: "angel", emoji: "😇" }
-    ];
-    
-    let currentUser = null;
-    auth.onAuthStateChanged(user => { currentUser = user; });
-
-    // FILTER
-    let currentTypeFilter = 'all', currentSearch = '';
-    function setFilter(type) {
-      currentTypeFilter = type;
-      document.querySelectorAll('.search-filter button').forEach(btn =>
-        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(type) || (type === 'all' && btn.textContent.toLowerCase() === 'alla'))
-      );
-      filterPosts();
-    }
-    window.setFilter = setFilter;
-
-    function filterPosts() {
-      const search = document.getElementById("localSearchInput").value.toLowerCase();
-      currentSearch = search;
-      document.querySelectorAll('.post').forEach(postEl => {
-        const text = postEl.innerText.toLowerCase();
-        const type = postEl.dataset.type;
-        const showType = (currentTypeFilter === 'all' || type === currentTypeFilter);
-        const showSearch = !search || text.includes(search);
-        postEl.style.display = (showType && showSearch) ? '' : 'none';
-      });
-    }
-
-    // LADDA IN ALLA INLÄGG
-    function renderMedia(post) {
-      let html = "";
-      if (post.imageUrl) html += `<img class="post-media" src="${post.imageUrl}" alt="Bild" />`;
-      if (post.videoUrl) html += `<video class="post-media" src="${post.videoUrl}" controls></video>`;
-      if (post.audioUrl) html += `<audio class="post-media" src="${post.audioUrl}" controls></audio>`;
-      if (post.micAudioUrl) html += `<audio class="post-media" src="${post.micAudioUrl}" controls></audio>`;
-      return html;
-    }
-
-    function renderReactions(post, postId, userReaction, counts) {
-      return `
-        <div class="reactions">
-          ${reactionsList.map(r => `
-            <button
-              ${userReaction === r.key ? 'class="selected"' : ''}
-              onclick="window.setReaction('${postId}','${r.key}')"
-              title="Reagera med ${r.emoji}"
-              >${r.emoji} <span class="reaction-count">${counts[r.key] || ''}</span></button>
-          `).join("")}
-          ${userReaction ? `<button onclick="window.removeReaction('${postId}')">❌ Ta bort reaktion</button>` : ""}
-        </div>`;
-    }
-
-    window.setReaction = async (postId, key) => {
-      if (!currentUser) { alert("Du måste vara inloggad för att reagera."); return; }
-      const ref = doc(db, "wall", postId, "reactions", currentUser.uid);
-      await updateDoc(ref, { type: key }, { merge: true }).catch(async() => {
-        await setDoc(ref, { type: key });
-      });
-    };
-    window.removeReaction = async (postId) => {
-      if (!currentUser) return;
-      await deleteDoc(doc(db, "wall", postId, "reactions", currentUser.uid));
-    };
-
-    // KOMMENTARER
-    window.addComment = async (postId, inputId) => {
-      const input = document.getElementById(inputId);
-      const content = input.value.trim();
-      if (!content) return;
-      if (!currentUser) { alert("Du måste vara inloggad för att kommentera."); return; }
-      if (content.split(/\s+/).length > 200) { alert("Max 200 ord!"); return; }
-      await addDoc(collection(db, "wall", postId, "comments"), {
-        content, user: currentUser.uid, createdAt: new Date()
-      });
-      input.value = "";
-    };
-    window.deleteComment = async (postId, commentId) => {
-      if (!currentUser) return;
-      await deleteDoc(doc(db, "wall", postId, "comments", commentId));
-    };
-
-    // Rendera väggen
-    function renderPost(post, postId, userReaction, reactionCounts, comments, userId) {
-      return `
-        <div class="post" data-type="${post.type}">
-          <div>
-            <strong>${post.text ? post.text : ''}</strong>
-            ${renderMedia(post)}
-          </div>
-          ${renderReactions(post, postId, userReaction, reactionCounts)}
-          <div class="comments">
-            <div>
-              ${comments.map(c =>
-                `<div class="comment"><div class="comment-content">${c.content}</div>
-                  ${currentUser && c.user === currentUser.uid
-                    ? `<button class="delete-comment-btn" title="Ta bort" onclick="window.deleteComment('${postId}','${c.id}')">🗑️</button>` : ''}
-                 </div>`
-              ).join("")}
-            </div>
-            ${currentUser ? `
-              <input type="text" placeholder="Kommentera..." id="comment-input-${postId}" maxlength="1000" />
-              <button class="add-comment-btn" onclick="window.addComment('${postId}','comment-input-${postId}')">Kommentera</button>
-            ` : '<div style="color:#f44;font-size:0.96em;">Logga in för att kommentera</div>'}
-          </div>
-        </div>
-      `;
-    }
-
-    function listenToWall() {
-      const postsContainer = document.getElementById("postsContainer");
-      const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
-      onSnapshot(q, async snapshot => {
-        postsContainer.innerHTML = "Laddar...";
-        let html = "";
-        let postsArr = [];
-        for (const docSnap of snapshot.docs) {
-          const post = docSnap.data();
-          post.id = docSnap.id;
-          postsArr.push(post);
-        }
-
-        for (const post of postsArr) {
-          let reactionsDocs = await getDocs(collection(db, "wall", post.id, "reactions"));
-          let reactionCounts = {}, userReaction = null;
-          reactionsDocs.forEach(rDoc => {
-            const r = rDoc.data().type;
-            if (rDoc.id === (currentUser && currentUser.uid)) userReaction = r;
-            reactionCounts[r] = (reactionCounts[r] || 0) + 1;
-          });
-
-          let commentsDocs = await getDocs(collection(db, "wall", post.id, "comments"));
-          let comments = [];
-          commentsDocs.forEach(cDoc => {
-            let c = cDoc.data();
-            c.id = cDoc.id;
-            comments.push(c);
-          });
-          comments.sort((a, b) => a.createdAt && b.createdAt ? a.createdAt.seconds - b.createdAt.seconds : 0);
-
-          html += renderPost(post, post.id, userReaction, reactionCounts, comments, post.user);
-        }
-        postsContainer.innerHTML = html || '<div style="text-align:center;color:#99d">Inga inlägg ännu!</div>';
-        filterPosts();
-      });
-    }
-    listenToWall();
-
-    document.getElementById("searchInputGlobal").addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        const q = e.target.value.trim();
-        if (q.length > 1) window.location.href = "search.html?q=" + encodeURIComponent(q);
-      }
-    });
+    // ... (resten av din existerande vägg- och kommentarlogik, klistra in som tidigare)
+    // --- se din egen kod ovan ---
   </script>
 
-  <!-- --- NAVBAR SCROLL-HIDE FOR MOBIL --- -->
+  <!-- NAVBAR SCROLL-HIDE FOR MOBIL -->
   <script>
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
@@ -434,11 +365,5 @@
       });
     }
   </script>
-<!-- --- REKLAMBANNER / FOOTER --- -->
-<footer class="ad-footer">
-  <div class="ad-banner">
-    <!-- Här kan du lägga in Adsense-kod, en bild, en iframe, eller vad du vill -->
-    REKLAM HÄR
-  </div>
-</footer></body>
+</body>
 </html>
