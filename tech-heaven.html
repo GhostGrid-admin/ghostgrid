@@ -153,7 +153,11 @@
       <h1 id="forum-title">Tech Heaven</h1>
     </div>
     <div id="thread-list"></div>
+
+    <!-- Knapp för att visa/gömma formuläret -->
     <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
+
+    <!-- Formulär för att skapa ny tråd -->
     <div class="create-thread-form" id="formSection">
       <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
       <textarea id="threadContent" rows="5" placeholder="Vad vill du diskutera?"></textarea>
@@ -161,6 +165,7 @@
     </div>
   </div>
 
+  <!-- Firebase & språkstöd -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyC-Kj-o10TChymlMHgmeoycEHKOyFlx3q8",
@@ -180,12 +185,16 @@
       }
     });
   </script>
+
+  <!-- Formtoggle-script -->
   <script>
     function toggleForm() {
       const form = document.getElementById("formSection");
       form.style.display = form.style.display === "block" ? "none" : "block";
     }
   </script>
+
+  <!-- Trådlogik -->
   <script src="scripts/thread-core.js" defer></script>
 </body>
 </html>
