@@ -153,11 +153,7 @@
       <h1 id="forum-title">Tech Heaven</h1>
     </div>
     <div id="thread-list"></div>
-
-    <!-- Knapp för att visa/gömma formuläret -->
     <button class="create-thread-btn" id="create-btn" onclick="toggleForm()">➕ Skapa ny tråd</button>
-
-    <!-- Formulär för att skapa ny tråd -->
     <div class="create-thread-form" id="formSection">
       <input type="text" id="threadTitle" placeholder="Rubrik på tråden">
       <textarea id="threadContent" rows="5" placeholder="Vad vill du diskutera?"></textarea>
@@ -165,36 +161,21 @@
     </div>
   </div>
 
-  <!-- Firebase & språkstöd -->
+  <!-- Firebase config for ghostgrid-cebe9 -->
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyC-Kj-o10TChymlMHgmeoycEHKOyFlx3q8",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.appspot.com",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968",
-      measurementId: "G-B0WCKJCNT9"
+      apiKey: "AIzaSyDUem8OciTynoSujYyZSQqsExocoZeJu0Y",
+      authDomain: "ghostgrid-cebe9.firebaseapp.com",
+      projectId: "ghostgrid-cebe9",
+      storageBucket: "ghostgrid-cebe9.appspot.com",
+      messagingSenderId: "346259562017",
+      appId: "1:346259562017:web:cf0166021bb45d72768d60",
+      measurementId: "G-4BFC1G32H7"
     };
     firebase.initializeApp(firebaseConfig);
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        console.warn("Ingen användare inloggad");
-      } else {
-        console.log("Inloggad som:", user.email);
-      }
-    });
   </script>
 
-  <!-- Formtoggle-script -->
-  <script>
-    function toggleForm() {
-      const form = document.getElementById("formSection");
-      form.style.display = form.style.display === "block" ? "none" : "block";
-    }
-  </script>
-
-  <!-- Trådlogik -->
+  <!-- Huvudlogik -->
   <script src="scripts/thread-core.js" defer></script>
 </body>
 </html>
