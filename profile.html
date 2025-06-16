@@ -62,7 +62,7 @@
       max-width: 90%;
       width: 400px;
     }
-    textarea, input[type="file"] {
+    textarea, input[type="file"], select {
       width: 100%;
       padding: 10px;
       background-color: black;
@@ -70,6 +70,7 @@
       border: 1px solid #00ff00;
       border-radius: 5px;
       font-family: 'Courier New', monospace;
+      margin-bottom: 14px;
     }
     button {
       margin-top: 15px;
@@ -108,28 +109,6 @@
     #exitPreviewBtn:hover {
       background-color: #00cc00;
     }
-    .theme-buttons {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    .theme-btn {
-      background: #111;
-      color: #0ff;
-      border: 1px solid #0ff;
-      border-radius: 5px;
-      padding: 8px 16px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: 0.2s;
-    }
-    .theme-btn:hover {
-      background: #00ffcc;
-      color: #000;
-    }
   </style>
 </head>
 <body>
@@ -152,17 +131,24 @@
     <label for="profile-pic" data-i18n="upload_image">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
 
+    <!-- Temaväljare här -->
+    <label for="theme">Välj profiltema:</label>
+    <select id="theme">
+      <option value="50s">50-tal</option>
+      <option value="60s">60-tal</option>
+      <option value="70s">70-tal</option>
+      <option value="80s">80-tal</option>
+      <option value="90s">90-tal</option>
+      <option value="y2k">Y2K</option>
+      <option value="raggare">Raggare</option>
+      <option value="rock">Rock</option>
+      <option value="punk">Punk</option>
+      <option value="cyberpunk">Cyberpunk</option>
+      <option value="romantik">Romantik</option>
+    </select>
+
     <label for="custom-code" data-i18n="custom_code">Profilkod (HTML/CSS):</label>
     <textarea id="custom-code" rows="10"></textarea>
-
-    <div class="theme-buttons">
-      <button class="theme-btn" onclick="selectTheme('rock')">Rock</button>
-      <button class="theme-btn" onclick="selectTheme('emo')">Emo</button>
-      <button class="theme-btn" onclick="selectTheme('cyberpunk')">Cyberpunk</button>
-      <button class="theme-btn" onclick="selectTheme('y2k')">Y2K</button>
-      <button class="theme-btn" onclick="selectTheme('romantik')">Romantik</button>
-      <!-- Fler teman kan läggas till -->
-    </div>
 
     <button id="saveBtn" data-i18n="save">Spara kod</button>
     <button onclick="goToProfileView()" data-i18n="view_profile">Visa profil</button>
@@ -193,23 +179,6 @@
         }
       });
     };
-  </script>
-
-  <!-- Temaväljare – kopplas till profile-script.js -->
-  <script>
-    window.selectTheme = function(theme) {
-      const templates = {
-        rock: `<div style="text-align:center;"><h1 style='color:#b90000;'>🤘 Rock Legend</h1><p style="font-style:italic;">Welcome to my rockstar page!</p></div>`,
-        emo: `<div style="text-align:center;"><h1 style='color:#800080;'>🖤 Emo Kid</h1><p style="font-style:italic;">I'm fine, just coding...</p></div>`,
-        cyberpunk: `<div style="background:#1a0044;padding:20px;border-radius:10px;text-align:center;"><h1 style='color:#0ff;'>👾 Cyberpunk</h1><p>Digital freedom is my game.</p></div>`,
-        y2k: `<div style="background:#1111bb;padding:22px;border-radius:8px;text-align:center;"><h1 style="color:#fe5aff;">🛸 Y2K Vibe</h1><p>Glitter, tech, och retro web!<p></div>`,
-        romantik: `<div style="background:#fff0f6;padding:22px;border-radius:12px;text-align:center;color:#b8004b;"><h1>💕 Romantisk själ</h1><p>Här börjar kärlekens kod...</p></div>`
-      };
-      document.getElementById('custom-code').value = templates[theme] || '';
-    };
-    document.getElementById("custom-code").addEventListener("input", function() {
-      // Kan användas för förhandsvisning om du vill
-    });
   </script>
 </body>
 </html>
