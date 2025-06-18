@@ -6,11 +6,45 @@
   <title>Profilvisning – GhostGrid</title>
   <style>
     body {
-      background: black;
+      background: #000;
       color: #00ff00;
       font-family: monospace;
       margin: 0;
       padding: 0;
+      padding-top: 74px !important;
+    }
+    nav.navbar {
+      background: #000;
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 2000;
+      border-bottom: 4px solid #ad30fa;
+      box-shadow: 0 0 20px #ad30fa;
+      display: flex;
+      justify-content: center;
+    }
+    .nav-content {
+      display: flex;
+      gap: 40px;
+      padding: 14px 0 12px 0;
+    }
+    .nav-content a {
+      color: #e0ffff;
+      text-decoration: none;
+      font-size: 1.35em;
+      font-family: monospace;
+      padding: 5px 22px;
+      border-radius: 7px;
+      margin: 0 5px;
+      background: transparent;
+      transition: background 0.18s, color 0.18s, box-shadow 0.22s;
+      text-shadow: 0 0 8px #ad30fa, 0 0 3px #fff;
+    }
+    .nav-content a:hover, .nav-content a.active {
+      background: #ad30fa;
+      color: #000;
+      box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
     }
     .profile-container {
       display: flex;
@@ -25,7 +59,7 @@
     }
     .profile-main-content {
       flex: 1 1 340px;
-      max-width: 660px;
+      max-width: 700px;
       min-width: 260px;
       width: 100%;
       margin: 0 auto 0 0;
@@ -78,6 +112,8 @@
       font-size: 1.1em;
       color: #00ffcc;
       transition: box-shadow .2s;
+      word-break: break-word;
+      text-align: center;
     }
     .album-thumb:hover {
       box-shadow: 0 0 12px #00ffcc;
@@ -167,6 +203,16 @@
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+    </div>
+  </nav>
   <button id="editProfileBtn" onclick="window.location.href='profile.html'">Redigera profil</button>
   <div class="profile-container">
     <div class="profile-main-content">
