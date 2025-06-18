@@ -136,83 +136,230 @@
       font-size: 1.15em;
       letter-spacing: 1px;
     }
+    /* --- AI-assistenter --- */
     .ai-section {
       margin: 28px 0 0 0;
-      padding: 16px 8px 10px 8px;
-      border-radius: 10px;
+      padding: 14px 10px 14px 10px;
+      border-radius: 14px;
       background: linear-gradient(90deg, #151a23 80%, #201d29 100%);
       box-shadow: 0 0 18px #00ffcc44;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 4px;
     }
     .ai-icons-row {
       display: flex;
       justify-content: center;
-      align-items: flex-end;
-      gap: 36px;
+      align-items: center;
+      gap: 32px;
       margin-bottom: 10px;
-      margin-top: 2px;
+      margin-top: 6px;
     }
     .ai-avatar {
       text-align: center;
       flex: 1 1 0;
+      cursor: pointer;
+      transition: transform 0.13s;
     }
     .ai-label {
       font-weight: bold;
       color: #00ffcc;
       letter-spacing: 1px;
-      font-size: 1.08em;
-      margin-top: 4px;
+      font-size: 1.07em;
+      margin-top: 5px;
     }
     .ai-desc {
       color: #b8ffee;
       font-size: 0.99em;
       margin: 0 0 3px 0;
+      text-align: center;
     }
-    .reactions-bar {
+    /* --- Reklambanners --- */
+    .ad-footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
       display: flex;
-      gap: 12px;
+      flex-direction: row;
+      justify-content: center;
       align-items: center;
-      margin: 4px 0 0 0;
-    }
-    .reaction-btn {
+      z-index: 2000;
       background: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+      min-height: 0;
       border: none;
-      font-size: 1.25em;
-      cursor: pointer;
-      padding: 0 2px;
-      opacity: 0.75;
-      transition: transform 0.13s, opacity 0.18s;
     }
-    .reaction-btn.selected {
+    .ad-footer.visible {
       opacity: 1;
-      font-weight: bold;
-      text-shadow: 0 0 8px #fff, 0 0 10px #bb00ff66;
-      transform: scale(1.18);
+      pointer-events: auto;
+      min-height: 90px;
     }
-    .reaction-count {
-      font-size: 0.9em;
-      color: #cbeeff;
-      margin-left: 3px;
+    .ad-banner {
+      width: 50vw;
+      max-width: 750px;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      margin: 0 2vw;
     }
-    .delete-btn {
-      background: #101620;
-      border: 1px solid #ff0033;
-      color: #ff0033;
-      border-radius: 4px;
-      font-size: 0.98em;
-      padding: 2px 12px;
-      margin-left: 18px;
-      cursor: pointer;
-      transition: background 0.17s, color 0.17s;
+    .ad-banner img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 0 18px #7b00ff99;
+      background: #11002a;
     }
-    .delete-btn:hover {
-      background: #ff0033;
-      color: #fff;
+    @media (max-width: 900px) {
+      .forum-container { flex-direction: column; gap: 0; }
+      .forum-sidebar { width: 98%; max-width: 98vw; border-left: none; border-top: 2px solid #00ffcc; margin-top: 25px; }
+      .new-category-form { max-width: 98vw;}
+      .ai-section { margin-top: 18px;}
+      .ad-footer { flex-direction: column; min-height: 120px;}
+      .ad-banner { width: 95vw; max-width: 99vw; height: 80px;}
+      .ad-banner img { height: 80px;}
     }
-    /* Popup dialog för radering */
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .forum-container { padding: 3vw; }
+      .forum-title { font-size: 1.2em; }
+      .new-category-form { padding: 9px 2vw 8px 2vw;}
+      .ai-section { padding: 8px 2vw 10px 2vw;}
+      .ad-footer { min-height: 60px;}
+      .ad-banner img { height: 55px;}
+    }
+  </style>
+  <!-- FIREBASE SETUP -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.firebasestorage.app",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
+      measurementId: "G-B0WCKJCNT9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="forum.html">Forum</a>
+      <a href="store.html">Store</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" id="globalSearchInput" placeholder="Sök på hela sidan...">
+      </div>
+    </div>
+  </nav>
+
+  <div class="forum-container">
+    <div class="forum-main">
+      <h1 class="forum-title" id="forumTitle">Forum</h1>
+      <div class="search-bar">
+        <input type="text" id="forumSearchInput" placeholder="Sök forumtrådar eller kategorier...">
+      </div>
+      <div id="categoriesContainer"></div>
+      <div class="new-category-form">
+        <h3 id="createCatTitle">Skapa ny kategori</h3>
+        <input type="text" id="newCategoryTitle" placeholder="Titel">
+        <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning..."></textarea>
+        <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
+      </div>
+    </div>
+    <div class="forum-sidebar">
+      <h3>Info</h3>
+      <p id="welcomeText">Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt.</p>
+      <p id="tipsText">💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.</p>
+      <div class="ai-section">
+        <div style="text-align:center; color:#bbfffa; font-weight:bold; margin-bottom:8px; font-size:1.07em;">
+          <span id="aiIntro">Träffa våra AI-assistenter</span>
+        </div>
+        <div class="ai-icons-row">
+          <div class="ai-avatar">
+            <a href="ghost.html" style="text-decoration:none; color:inherit;">
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+                <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
+                <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
+                <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
+                <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
+                <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
+              </svg>
+              <div class="ai-label">Ghost</div>
+            </a>
+            <div class="ai-desc" id="ghostDesc">
+              Din tekniska guide och informatör.<br>
+              <span style="color:#00ffcc;">Klicka för att chatta med Ghost!</span>
+            </div>
+          </div>
+          <div class="ai-avatar">
+            <a href="glow.html" style="text-decoration:none; color:inherit;">
+              <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
+                <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
+                <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
+                <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
+                <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
+                <g>
+                  <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
+                  <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
+                  <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
+                  <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
+                  <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
+                  <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
+                </g>
+              </svg>
+              <div class="ai-label">Glow</div>
+            </a>
+            <div class="ai-desc" id="glowDesc">
+              Din positiva och stöttande vän.<br>
+              <span style="color:#ffe700;">Klicka för att chatta med Glow!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup för bekräftelse vid radering -->
+  <div id="deletePopup" class="popup-bg" style="display:none;">
+    <div class="popup-dialog">
+      <div id="deletePopupText" style="font-size:1.11em; margin-bottom:8px;"></div>
+      <button id="popupYesBtn">Ja / Yes</button>
+      <button id="popupNoBtn" class="no-btn">Nej / No</button>
+    </div>
+  </div>
+
+  <footer class="ad-footer" id="adFooter">
+    <div class="ad-banner">
+      <a href="#" target="_blank">
+        <img id="bannerImageLeft" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1" alt="Reklam vänster" />
+      </a>
+    </div>
+    <div class="ad-banner">
+      <a href="#" target="_blank">
+        <img id="bannerImageRight" src="https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2" alt="Reklam höger" />
+      </a>
+    </div>
+  </footer>
+
+  <style>
     .popup-bg {
       position: fixed;
       left: 0; top: 0; width: 100vw; height: 100vh;
@@ -250,152 +397,27 @@
       box-shadow: none;
       border: 1px solid #aaa;
     }
-    @media (max-width: 900px) {
-      .forum-container { flex-direction: column; gap: 0; }
-      .forum-sidebar { width: 98%; max-width: 98vw; border-left: none; border-top: 2px solid #00ffcc; margin-top: 25px; }
-      .new-category-form { max-width: 98vw;}
-    }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .forum-container { padding: 3vw; }
-      .forum-title { font-size: 1.2em; }
-      .new-category-form { padding: 9px 2vw 8px 2vw;}
-    }
   </style>
 
-  <!-- FIREBASE SETUP -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script>
-    // BYT UT TILL DIN EGEN FIREBASE-KONFIG:
-    const firebaseConfig = {
-      apiKey: "DIN_API_KEY",
-      authDomain: "DINA-VALUES.firebaseapp.com",
-      projectId: "DINA-VALUES",
-      storageBucket: "DINA-VALUES.appspot.com",
-      messagingSenderId: "DINA-VALUES",
-      appId: "DINA-VALUES"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-  </script>
-</head>
-<body>
-  <nav class="navbar">
-    <div class="nav-content">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-      <div class="search-container">
-        <input type="text" id="globalSearchInput" placeholder="Sök på hela sidan...">
-      </div>
-    </div>
-  </nav>
-
-  <div class="forum-container">
-    <div class="forum-main">
-      <h1 class="forum-title" id="forumTitle">Forum</h1>
-      <div class="search-bar">
-        <input type="text" id="forumSearchInput" placeholder="Sök forumtrådar eller kategorier...">
-      </div>
-      <div id="categoriesContainer"></div>
-      <div class="new-category-form">
-        <h3 id="createCatTitle">Skapa ny kategori</h3>
-        <input type="text" id="newCategoryTitle" placeholder="Titel på svenska">
-        <input type="text" id="newCategoryTitleEn" placeholder="Title in English">
-        <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning på svenska..."></textarea>
-        <textarea id="newCategoryDescriptionEn" rows="3" placeholder="Description in English..."></textarea>
-        <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
-      </div>
-    </div>
-    <div class="forum-sidebar">
-      <h3>Info</h3>
-      <p id="welcomeText">Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt.</p>
-      <p id="tipsText">💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.</p>
-      <div class="ai-section">
-        <div style="text-align:center; color:#bbfffa; font-weight:bold; margin-bottom:8px; font-size:1.07em;">
-          <span id="aiIntro">Träffa våra AI-assistenter</span>
-        </div>
-        <div class="ai-icons-row">
-          <div class="ai-avatar">
-            <!-- Ghost (hacker/huva) -->
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-              <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
-              <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
-              <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
-              <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
-              <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
-            </svg>
-            <div class="ai-label">Ghost</div>
-            <div class="ai-desc" id="ghostDesc">
-              Din tekniska guide och informatör.<br>
-              Svarar på frågor om funktioner och navigation på sidan.<br>
-              <span style="color:#00ffcc;">Anonym, kunnig & säker.</span>
-            </div>
-          </div>
-          <div class="ai-avatar">
-            <!-- Glow – sprakande glad figur -->
-            <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
-              <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
-              <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
-              <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
-              <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
-              <!-- Sprak/gnistor -->
-              <g>
-                <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
-                <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
-                <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
-                <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
-                <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
-                <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
-              </g>
-            </svg>
-            <div class="ai-label">Glow</div>
-            <div class="ai-desc" id="glowDesc">
-              Din positiva och stöttande vän.<br>
-              Finns här för att peppa, motivera och ge emotionellt stöd.<br>
-              <span style="color:#ffe700;">Sprider värme & energi!</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!-- Popup för bekräftelse vid radering -->
-  <div id="deletePopup" class="popup-bg" style="display:none;">
-    <div class="popup-dialog">
-      <div id="deletePopupText" style="font-size:1.11em; margin-bottom:8px;"></div>
-      <button id="popupYesBtn">Ja / Yes</button>
-      <button id="popupNoBtn" class="no-btn">Nej / No</button>
-    </div>
-  </div>
-
-  <script>
-    // ----- SPRÅKSTÖD -----
+    // --- Språkstöd ---
     const translations = {
       sv: {
         forumTitle: "Forum",
         createCatTitle: "Skapa ny kategori",
-        newCatPlaceholder: "Titel på svenska",
-        newCatPlaceholderEn: "Title in English",
-        newDescPlaceholder: "Beskrivning på svenska...",
-        newDescPlaceholderEn: "Description in English...",
+        newCatPlaceholder: "Titel",
+        newDescPlaceholder: "Beskrivning...",
         addCatBtn: "Lägg till kategori",
         welcomeText: "Välkommen till GhostGrid Forum. Här hittar du olika kategorier för att dela tankar, frågor och projekt.",
         tipsText: "💬 Tips: Använd globala sökfunktionen för att hitta trådar över hela plattformen.",
         aiIntro: "Träffa våra AI-assistenter",
-        ghostDesc: "Din tekniska guide och informatör.<br> Svarar på frågor om funktioner och navigation på sidan.<br><span style='color:#00ffcc;'>Anonym, kunnig & säker.</span>",
-        glowDesc: "Din positiva och stöttande vän.<br> Finns här för att peppa, motivera och ge emotionellt stöd.<br><span style='color:#ffe700;'>Sprider värme & energi!</span>",
+        ghostDesc: "Din tekniska guide och informatör.<br><span style='color:#00ffcc;'>Klicka för att chatta med Ghost!</span>",
+        glowDesc: "Din positiva och stöttande vän.<br><span style='color:#ffe700;'>Klicka för att chatta med Glow!</span>",
         deleteQuestion: "Är du säker på att du vill ta bort denna kategori?",
         yes: "Ja",
         no: "Nej",
         onlyOwnDelete: "Du kan bara ta bort dina egna kategorier!",
-        fillAllFields: "Fyll i alla fält (båda språk)!",
+        fillAllFields: "Fyll i alla fält!",
         addSuccess: "Ny kategori tillagd!",
         errorGeneric: "Ett fel uppstod. Försök igen.",
         needLogin: "Du måste vara inloggad för att skapa, reagera eller ta bort."
@@ -403,21 +425,19 @@
       en: {
         forumTitle: "Forum",
         createCatTitle: "Create New Category",
-        newCatPlaceholder: "Title in Swedish",
-        newCatPlaceholderEn: "Title in English",
-        newDescPlaceholder: "Description in Swedish...",
-        newDescPlaceholderEn: "Description in English...",
+        newCatPlaceholder: "Title",
+        newDescPlaceholder: "Description...",
         addCatBtn: "Add Category",
         welcomeText: "Welcome to GhostGrid Forum. Here you find different categories to share thoughts, questions, and projects.",
         tipsText: "💬 Tip: Use the global search to find threads across the platform.",
         aiIntro: "Meet our AI assistants",
-        ghostDesc: "Your technical guide and information source.<br> Answers questions about features and site navigation.<br><span style='color:#00ffcc;'>Anonymous, skilled & safe.</span>",
-        glowDesc: "Your positive and supportive friend.<br> Here to cheer, motivate and provide emotional support.<br><span style='color:#ffe700;'>Spreads warmth & energy!</span>",
+        ghostDesc: "Your technical guide and information source.<br><span style='color:#00ffcc;'>Click to chat with Ghost!</span>",
+        glowDesc: "Your positive and supportive friend.<br><span style='color:#ffe700;'>Click to chat with Glow!</span>",
         deleteQuestion: "Are you sure you want to delete this category?",
         yes: "Yes",
         no: "No",
         onlyOwnDelete: "You can only delete your own categories!",
-        fillAllFields: "Fill in all fields (both languages)!",
+        fillAllFields: "Fill in all fields!",
         addSuccess: "New category added!",
         errorGeneric: "An error occurred. Please try again.",
         needLogin: "You need to be logged in to create, react, or delete."
@@ -430,9 +450,7 @@
       document.getElementById("forumTitle").textContent = translations[lang].forumTitle;
       document.getElementById("createCatTitle").textContent = translations[lang].createCatTitle;
       document.getElementById("newCategoryTitle").placeholder = translations[lang].newCatPlaceholder;
-      document.getElementById("newCategoryTitleEn").placeholder = translations[lang].newCatPlaceholderEn;
       document.getElementById("newCategoryDescription").placeholder = translations[lang].newDescPlaceholder;
-      document.getElementById("newCategoryDescriptionEn").placeholder = translations[lang].newDescPlaceholderEn;
       document.getElementById("addCatBtn").textContent = translations[lang].addCatBtn;
       document.getElementById("welcomeText").textContent = translations[lang].welcomeText;
       document.getElementById("tipsText").textContent = translations[lang].tipsText;
@@ -442,7 +460,7 @@
     }
     updateLangUI();
 
-    // ----- REAKTIONS-EMOJIS -----
+    // --- Emoji-reaktioner ---
     const REACTIONS = [
       { emoji: "👍", key: "thumbsup" },
       { emoji: "👎", key: "thumbsdown" },
@@ -459,13 +477,12 @@
 
     let currentUser = null;
 
-    // Hämta inloggad användare
     auth.onAuthStateChanged(user => {
       currentUser = user;
       loadCategories();
     });
 
-    // Ladda alla kategorier och rendera dem
+    // --- Ladda och rendera kategorier ---
     async function loadCategories() {
       const container = document.getElementById("categoriesContainer");
       container.innerHTML = "";
@@ -475,17 +492,15 @@
         const id = doc.id;
         const reactions = data.reactions || {};
         const counts = {};
-        // Räkna antal per reaktion
         for (const uid in reactions) {
           const reaction = reactions[uid];
           counts[reaction] = (counts[reaction] || 0) + 1;
         }
-        // Skapa kategori-ruta
         const div = document.createElement("div");
         div.className = "forum-category";
         div.innerHTML = `
-          <div class="category-title">${lang === "en" ? data.title_en : data.title_sv}</div>
-          <div class="category-description">${lang === "en" ? data.description_en : data.description_sv}</div>
+          <div class="category-title">${data.title}</div>
+          <div class="category-description">${data.description}</div>
           <div class="reactions-bar">
             ${REACTIONS.map(r => `
               <button class="reaction-btn${reactions[currentUser?.uid] === r.key ? " selected" : ""}" 
@@ -500,7 +515,6 @@
         `;
         container.appendChild(div);
       });
-      // Lägg till event listeners på alla reaktionsknappar
       document.querySelectorAll(".reaction-btn").forEach(btn => {
         btn.onclick = async function() {
           if (!currentUser) return alert(translations[lang].needLogin);
@@ -511,7 +525,6 @@
           const data = snap.data();
           let reactions = data.reactions || {};
           if (reactions[currentUser.uid] === reaction) {
-            // Samma reaktion => ta bort
             delete reactions[currentUser.uid];
           } else {
             reactions[currentUser.uid] = reaction;
@@ -520,7 +533,6 @@
           loadCategories();
         };
       });
-      // Delete knappar
       document.querySelectorAll(".delete-btn").forEach(btn => {
         btn.onclick = function() {
           showDeletePopup(btn.getAttribute("data-cat"));
@@ -528,42 +540,36 @@
       });
     }
 
-    // Skapa ny kategori
+    // --- Skapa ny kategori ---
     async function createNewCategory() {
       if (!currentUser) {
         alert(translations[lang].needLogin);
         return;
       }
-      const titleSv = document.getElementById("newCategoryTitle").value.trim();
-      const titleEn = document.getElementById("newCategoryTitleEn").value.trim();
-      const descSv = document.getElementById("newCategoryDescription").value.trim();
-      const descEn = document.getElementById("newCategoryDescriptionEn").value.trim();
-      if (!titleSv || !titleEn || !descSv || !descEn) {
+      const title = document.getElementById("newCategoryTitle").value.trim();
+      const desc = document.getElementById("newCategoryDescription").value.trim();
+      if (!title || !desc) {
         alert(translations[lang].fillAllFields);
         return;
       }
       try {
         await db.collection("forumCategories").add({
-          title_sv: titleSv,
-          title_en: titleEn,
-          description_sv: descSv,
-          description_en: descEn,
+          title,
+          description: desc,
           creatorUid: currentUser.uid,
           timestamp: new Date(),
           reactions: {}
         });
         alert(translations[lang].addSuccess);
         document.getElementById("newCategoryTitle").value = "";
-        document.getElementById("newCategoryTitleEn").value = "";
         document.getElementById("newCategoryDescription").value = "";
-        document.getElementById("newCategoryDescriptionEn").value = "";
         loadCategories();
       } catch (e) {
         alert(translations[lang].errorGeneric);
       }
     }
 
-    // ------- DELETE POPUP -------
+    // --- Popup för borttagning ---
     let deleteCatId = null;
     function showDeletePopup(catId) {
       deleteCatId = catId;
@@ -583,7 +589,7 @@
       deleteCatId = null;
     };
 
-    // ------- Sökfunktion (lokal på sidan) -------
+    // --- Sökfunktion (lokal på sidan) ---
     document.getElementById("forumSearchInput").addEventListener("input", function() {
       const val = this.value.toLowerCase();
       document.querySelectorAll('.forum-category').forEach(cat => {
@@ -592,7 +598,7 @@
       });
     });
 
-    // ------ Global sökning -------
+    // --- Global sökning ---
     document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const query = this.value.trim();
@@ -602,7 +608,7 @@
       }
     });
 
-    // ------ Gör så att navbar göms vid scroll på mobil ------
+    // --- Navbar göms vid scroll på mobil ---
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
@@ -616,7 +622,7 @@
       });
     }
 
-    // Byt språk dynamiskt om localStorage.language ändras (om du vill ha live-byte)
+    // --- Byt språk om localStorage.language ändras ---
     window.addEventListener('storage', function(e){
       if(e.key === 'language') {
         lang = localStorage.language === "en" ? "en" : "sv";
@@ -625,8 +631,44 @@
       }
     });
 
-    // Ladda kategorier direkt (om ingen användare loggat in än)
+    // --- Ladda kategorier direkt om ej inloggad ---
     if (!currentUser) loadCategories();
+
+    // --- BANNER ROTATION + VISAS ENDAST VID BOTTEN ---
+    const bannersLeft = [
+      { src: "https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1", alt: "Reklam vänster 1", url: "#" },
+      { src: "https://dummyimage.com/728x90/ff0099/fff&text=Annonsplats+Ledig", alt: "Annons vänster", url: "#" },
+      { src: "https://dummyimage.com/728x90/222/fff&text=Tips:+Bli+medlem+idag!", alt: "Bli medlem vänster", url: "register.html" }
+    ];
+    const bannersRight = [
+      { src: "https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2", alt: "Reklam höger 1", url: "#" },
+      { src: "https://dummyimage.com/728x90/222299/fff&text=Din+Annons+Här", alt: "Annons höger", url: "#" },
+      { src: "https://dummyimage.com/728x90/222/fff&text=Mer+Info", alt: "Mer info höger", url: "#" }
+    ];
+    let bannerIndex = 0;
+    function rotateBanners() {
+      const left = bannersLeft[bannerIndex % bannersLeft.length];
+      document.getElementById('bannerImageLeft').src = left.src;
+      document.getElementById('bannerImageLeft').alt = left.alt;
+      document.getElementById('bannerImageLeft').parentElement.href = left.url;
+      const right = bannersRight[bannerIndex % bannersRight.length];
+      document.getElementById('bannerImageRight').src = right.src;
+      document.getElementById('bannerImageRight').alt = right.alt;
+      document.getElementById('bannerImageRight').parentElement.href = right.url;
+      bannerIndex++;
+    }
+    rotateBanners();
+    setInterval(rotateBanners, 6000);
+
+    // Visa banners när man når botten
+    window.addEventListener("scroll", function() {
+      const adFooter = document.getElementById("adFooter");
+      if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
+        adFooter.classList.add("visible");
+      } else {
+        adFooter.classList.remove("visible");
+      }
+    });
   </script>
 </body>
 </html>
