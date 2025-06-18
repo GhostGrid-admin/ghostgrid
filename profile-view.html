@@ -16,28 +16,53 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 20px;
-      gap: 20px;
+      align-items: flex-start;
+      padding: 24px 0 0 0;
+      gap: 30px;
+      width: 100vw;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
-    .left-panel {
-      flex: 1;
+    .profile-main-content {
+      flex: 1 1 340px;
+      max-width: 660px;
       min-width: 260px;
-      max-width: 320px;
+      width: 100%;
+      margin: 0 auto 0 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    #profile-nickname-view {
+      font-family: 'Courier New', monospace;
+      font-size: 2.1em;
+      margin: 35px 0 10px 0;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ffcc, 0 0 6px #bb00ff;
+      letter-spacing: 1px;
+      word-break: break-all;
       text-align: center;
     }
-    .left-panel img {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      border: 2px solid #00ff00;
-      box-shadow: 0 0 15px #00ff00;
+    #profile-output {
+      width: 100%;
+      min-height: 340px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: none;
+      box-sizing: border-box;
+      padding: 0 5vw 30px 5vw;
     }
     .album-gallery {
-      flex: 2;
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
     }
     .album-thumb {
       width: 100px;
@@ -46,10 +71,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #111;
       cursor: pointer;
       position: relative;
+      font-size: 1.1em;
+      color: #00ffcc;
+      transition: box-shadow .2s;
+    }
+    .album-thumb:hover {
+      box-shadow: 0 0 12px #00ffcc;
+      background: #161a20;
     }
     .modal {
       position: fixed;
@@ -128,20 +160,22 @@
     #editProfileBtn:hover {
       background-color: #00cc00;
     }
+    @media (max-width: 850px) {
+      .profile-main-content { max-width: 97vw; min-width: 90vw; }
+      #profile-output { padding: 0 2vw 20px 2vw; }
+    }
   </style>
 </head>
 <body>
   <button id="editProfileBtn" onclick="window.location.href='profile.html'">Redigera profil</button>
   <div class="profile-container">
-    <div class="left-panel">
-      <img id="profile-pic-display" src="" alt="Profilbild">
-      <div id="picLikeCounter">0 ❤️</div>
+    <div class="profile-main-content">
+      <h2 id="profile-nickname-view"></h2>
+      <div id="profile-output"></div>
+      <div class="album-gallery" id="albumGallery"></div>
     </div>
-    <div class="album-gallery" id="albumGallery"></div>
   </div>
-
-  <div id="profile-output" style="text-align:center; padding: 20px;"></div>
-
+  <!-- Album Modal -->
   <div class="modal" id="albumModal">
     <h2 id="albumName"></h2>
     <input type="file" id="uploadImage" accept="image/*">
@@ -159,13 +193,10 @@
   </div>
 
   <script type="module">
-    import { auth, db, storage } from './scripts/firebase-init.js';
+    import { auth, db } from './scripts/firebase-init.js';
     import {
-      getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc, setDoc
+      getDoc, doc, collection, getDocs, deleteDoc, addDoc, updateDoc
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import {
-      ref, uploadBytes, getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
     const uid = new URLSearchParams(window.location.search).get("uid");
@@ -180,10 +211,8 @@
     document.getElementById("deleteBtn").textContent = t.delete;
     document.getElementById("confirmText").textContent = t.confirm;
 
-    const profilePic = document.getElementById("profile-pic-display");
     const profileOutput = document.getElementById("profile-output");
     const albumGallery = document.getElementById("albumGallery");
-    const picLikeCounter = document.getElementById("picLikeCounter");
     let currentUser;
     let currentAlbumId = "";
 
@@ -191,21 +220,27 @@
       if (!user) return (window.location.href = "login.html");
       currentUser = user;
 
-      // Visa knappen endast om användaren tittar på sin egen profil
+      // Redigera-knapp bara på egen profil
       if (user.uid === uid) {
         document.getElementById("editProfileBtn").style.display = "block";
       }
 
+      // PROFILDATA
       const profileRef = doc(db, "profiles", uid);
       const profileSnap = await getDoc(profileRef);
       if (profileSnap.exists()) {
         const data = profileSnap.data();
+        document.getElementById("profile-nickname-view").innerText = data?.nickname || "Ingen smeknamn satt";
         profileOutput.innerHTML = data?.profileCode || `<p style='color:red;'>Ingen profilkod hittades.</p>`;
-        if (data?.profilePic) profilePic.src = data.profilePic;
+      } else {
+        document.getElementById("profile-nickname-view").innerText = "Ingen profil hittades";
+        profileOutput.innerHTML = "<p style='color:red;'>Den här användaren har ingen profil ännu.</p>";
       }
 
+      // ALBUM (precis som innan)
       const albumsRef = collection(db, "users", uid, "albums");
       const albumsSnap = await getDocs(albumsRef);
+      albumGallery.innerHTML = "";
       albumsSnap.forEach(albumDoc => {
         const album = document.createElement("div");
         album.className = "album-thumb";
@@ -215,6 +250,7 @@
       });
     });
 
+    // Album modal
     async function openAlbum(albumId, albumName) {
       currentAlbumId = albumId;
       const modal = document.getElementById("albumModal");
