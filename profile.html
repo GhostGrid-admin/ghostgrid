@@ -12,21 +12,105 @@
       font-family: 'Courier New', monospace;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
-      padding-top: 100px;
+      padding-top: 74px !important;
+    }
+    nav.navbar {
+      background: #000;
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 2000;
+      border-bottom: 4px solid #ad30fa;
+      box-shadow: 0 0 20px #ad30fa;
+      display: flex;
+      justify-content: center;
+    }
+    .nav-content {
+      display: flex;
+      gap: 40px;
+      padding: 14px 0 12px 0;
+    }
+    .nav-content a {
+      color: #e0ffff;
+      text-decoration: none;
+      font-size: 1.35em;
+      font-family: monospace;
+      padding: 5px 22px;
+      border-radius: 7px;
+      margin: 0 5px;
+      background: transparent;
+      transition: background 0.18s, color 0.18s, box-shadow 0.22s;
+      text-shadow: 0 0 8px #ad30fa, 0 0 3px #fff;
+    }
+    .nav-content a:hover, .nav-content a.active {
+      background: #ad30fa;
+      color: #000;
+      box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
     }
     .hidden { display: none !important; }
-    nav.navbar { /* ...din kod... */ }
-    .nav-content { /* ...din kod... */ }
-    .login-container { /* ...din kod... */ }
-    textarea, input[type="file"], select { /* ...din kod... */ }
-    button { /* ...din kod... */ }
-    #fullscreenPreview { /* ...din kod... */ }
-    #profileContent { margin-top: 60px; }
-    #exitPreviewBtn { /* ...din kod... */ }
+    .login-container {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px #00ff00;
+      max-width: 420px;
+      margin: 48px auto 0 auto;
+    }
+    textarea, input[type="file"], select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 14px;
+    }
+    button {
+      margin-top: 13px;
+      padding: 12px 20px;
+      font-size: 1em;
+      color: black;
+      background-color: #00ff00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #00cc00; }
+    #fullscreenPreview {
+      position: fixed;
+      inset: 0;
+      background-color: black;
+      z-index: 9999;
+      color: white;
+      overflow: auto;
+      padding: 20px;
+    }
+    #profileContent {
+      margin-top: 60px;
+      width: 100%;
+      min-height: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    #exitPreviewBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #00ff00;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #exitPreviewBtn:hover {
+      background-color: #00cc00;
+    }
     .profile-img {
       display: block;
       margin: 0 auto 14px auto;
@@ -36,6 +120,17 @@
       object-fit: cover;
       border: 3px solid #00ff00;
       box-shadow: 0 0 10px #00ffcc, 0 0 12px #bb00ff;
+    }
+    .smeknamn-row {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      text-align: left;
+    }
+    .smeknamn-row label { font-size: 1.1em; color: #00ffcc; }
+    @media (max-width: 600px) {
+      .login-container { max-width: 98vw; }
     }
   </style>
 </head>
@@ -54,28 +149,27 @@
   <div class="login-container">
     <h2 data-i18n="profile_edit">Redigera din profil</h2>
     <p id="profile-email">E-post:</p>
-    <p id="profile-username">Användarnamn:</p>
-
+    <div class="smeknamn-row">
+      <label for="nickname">Smeknamn/användarnamn:</label>
+      <input type="text" id="nickname" maxlength="24" placeholder="Välj ditt smeknamn">
+    </div>
     <label for="profile-pic" data-i18n="upload_image">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
 
     <label for="theme">Välj profiltema:</label>
     <select id="theme">
       <option value="blank">Eget tema (Blank)</option>
-      <!-- ÅRTAL -->
       <option value="50s">50-tal</option>
       <option value="60s">60-tal</option>
       <option value="70s">70-tal</option>
       <option value="80s">80-tal</option>
       <option value="90s">90-tal</option>
       <option value="y2k">Y2K</option>
-      <!-- MUSIKGENRER -->
       <option value="rock">Rock</option>
       <option value="punk">Punk</option>
       <option value="cyberpunk">Cyberpunk</option>
       <option value="hiphop">Hip-Hop</option>
       <option value="pop">Pop</option>
-      <!-- LIVSSTILAR -->
       <option value="raggare">Raggare</option>
       <option value="romantik">Romantik</option>
       <option value="hippie">Hippie</option>
@@ -85,13 +179,10 @@
     <textarea id="custom-code" rows="10"></textarea>
 
     <button id="saveBtn" data-i18n="save">Spara kod</button>
-    <button onclick="goToProfileView()" data-i18n="view_profile">Visa profil</button>
-    <button id="editProfileBtn" class="hidden" data-i18n="edit_profile">Redigera profil</button>
-
+    <button id="viewProfileBtn" data-i18n="view_profile">Visa profil</button>
     <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;" data-i18n="profile_saved">
       ✅ Profil sparad!
     </div>
-
     <p style="margin-top: 20px;"><a href="#" id="logoutLink" data-i18n="logout">Logga ut</a></p>
   </div>
 
@@ -109,18 +200,18 @@
     let profilePicUrl = "";
     let currentUser = null;
 
-    // Visa användarnamn och e-post direkt vid inloggning
+    // Visa användarnamn, e-post och profilinfo direkt vid inloggning
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
         document.getElementById('profile-email').innerText = "E-post: " + (user.email || "");
-        document.getElementById('profile-username').innerText = "Användarnamn: " + (user.displayName || user.email.split('@')[0]);
-        // Hämta profil-data från Firestore
+        // Ladda befintlig profil från Firestore
         const snap = await getDoc(doc(db, "profiles", user.uid));
         if (snap.exists()) {
           const data = snap.data();
           document.getElementById('custom-code').value = data.profileCode || '';
           document.getElementById('theme').value = data.theme || 'blank';
+          document.getElementById('nickname').value = data.nickname || '';
           profilePicUrl = data.profilePicUrl || '';
         }
       }
@@ -130,7 +221,7 @@
     document.getElementById('profile-pic').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 4 * 1024 * 1024) { // 4 MB max (ändra om du vill)
+      if (file.size > 4 * 1024 * 1024) { // 4 MB max
         alert("Profilbilden får max vara 4 MB.");
         return;
       }
@@ -148,7 +239,6 @@
   <h2>Här kan du skriva din egen profilkod!</h2>
   <p>Allt är tillåtet – HTML, CSS, text och bild.</p>
 </div>`,
-      // Årtal
       "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; text-align:center;">
         <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
         <h1 style="color:#cc0066; font-family: 'Pacifico', cursive; font-size:2.6em;">🍦 50-talets Stjärna</h1>
@@ -179,7 +269,6 @@
         <h1 style="color:#ff22dd; font-family:'Orbitron', sans-serif;">💾 Y2K Millennium</h1>
         <p style="color:#444;">Tech, metallic & bling bling!</p>
       </div>`,
-      // Musikgenrer
       "rock": `<div style="background:#111; border-radius:20px; padding:24px; text-align:center;">
         <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
         <h1 style="color:#bb0000;">🤘 Rock Legend</h1>
@@ -205,7 +294,6 @@
         <h1 style="color:#d600ff; font-family:'Arial Black',sans-serif;">🎶 Popstjärna</h1>
         <p style="color:#222;">Glitter, energi & catchiga hits!</p>
       </div>`,
-      // Livsstilar
       "raggare": `<div style="background:#fafafa; border-radius:20px; padding:24px; text-align:center;">
         <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
         <h1 style="color:#222;">🚗 Raggare</h1>
@@ -223,7 +311,7 @@
       </div>`
     };
 
-    // Ändra kod i textarea vid val av tema
+    // Byt kod i textarea när temat ändras
     document.getElementById('theme').addEventListener('change', function(e) {
       const theme = e.target.value;
       if (themeTemplates[theme]) {
@@ -233,16 +321,18 @@
       }
     });
 
-    // Spara profil (kod, tema, profilbild)
+    // Spara profil (smeknamn, kod, tema, profilbild)
     document.getElementById('saveBtn').addEventListener('click', async () => {
       if (!currentUser) return alert("Du är inte inloggad.");
+      const nickname = document.getElementById('nickname').value.trim();
+      if (!nickname) return alert("Du måste ange ett smeknamn.");
       const theme = document.getElementById('theme').value;
       let profileCode = document.getElementById('custom-code').value;
-      // Om användaren valt ett tema och inte blank: sätt bildlänken automatiskt i koden
       if (theme !== "blank" && themeTemplates[theme]) {
         profileCode = themeTemplates[theme].replace(/\$\{profilePicUrl\}/g, profilePicUrl);
       }
       await setDoc(doc(db, "profiles", currentUser.uid), {
+        nickname,
         theme,
         profileCode,
         profilePicUrl
@@ -251,13 +341,10 @@
       setTimeout(() => document.getElementById('saveNotice').style.display = "none", 2000);
     });
 
-    // Visa profil i helskärmsläge
-    window.goToProfileView = function() {
-      document.getElementById('fullscreenPreview').classList.remove('hidden');
-      document.getElementById('profileContent').innerHTML = document.getElementById('custom-code').value;
-    };
-    document.getElementById('exitPreviewBtn').onclick = function() {
-      document.getElementById('fullscreenPreview').classList.add('hidden');
+    // Visa profil på view-sidan (extern, helsida)
+    document.getElementById('viewProfileBtn').onclick = function() {
+      if (!currentUser) return alert("Du är inte inloggad.");
+      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
     };
 
     // Logga ut
