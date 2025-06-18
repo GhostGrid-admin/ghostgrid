@@ -89,26 +89,29 @@
       text-align: center;
     }
     .new-category-form {
-      margin: 32px 0 0 0;
-      padding: 18px 10px 12px 10px;
-      border: 2px dashed #00ffcc;
-      border-radius: 10px;
-      background-color: rgba(255,255,255,0.02);
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .new-category-form input,
-    .new-category-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      border: 1px solid #00ffcc;
-      background-color: #111;
-      color: #00ffcc;
-      font-family: 'Courier New', monospace;
-    }
+  margin: 32px 0 0 0;
+  padding: 18px 10px 12px 10px;
+  border: 2px dashed #00ffcc;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.02);
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.new-category-form input,
+.new-category-form textarea {
+  width: 94%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #00ffcc;
+  background-color: #111;
+  color: #00ffcc;
+  font-family: 'Courier New', monospace;
+  box-sizing: border-box;
+  padding: 10px;
+}
     .new-category-form button {
       background-color: #00ffcc;
       color: #000;
@@ -277,12 +280,12 @@
         <input type="text" id="forumSearchInput" placeholder="Sök forumtrådar eller kategorier...">
       </div>
       <div id="categoriesContainer"></div>
-      <div class="new-category-form">
-        <h3 id="createCatTitle">Skapa ny kategori</h3>
-        <input type="text" id="newCategoryTitle" placeholder="Titel">
-        <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning..."></textarea>
-        <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
-      </div>
+<div class="new-category-form">
+  <h3 id="createCatTitle">Skapa ny kategori</h3>
+  <input type="text" id="newCategoryTitle" placeholder="Titel">
+  <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning..."></textarea>
+  <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
+</div>
     </div>
     <div class="forum-sidebar">
       <h3>Info</h3>
