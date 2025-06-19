@@ -89,7 +89,6 @@
       .side-banner { display: none; }
     }
 
-    /* ----- Navbar & hamburgermeny ------ */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -145,7 +144,6 @@
       width: 100%;
       max-width: 230px;
     }
-    /* Hamburgermeny-knapp */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -200,8 +198,6 @@
         border-radius: 10px;
       }
     }
-
-    /* ------ Upload UI ------- */
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
@@ -280,7 +276,6 @@
     .upload-section { display: none; }
     .upload-section.active { display: block; }
 
-    /* --- BOTTNREKLAM --- */
     .ad-footer {
       position: fixed;
       left: 0; right: 0;
@@ -366,7 +361,7 @@
       </div>
     </div>
   </nav>
-  <div class="upload-box">
+  <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
     <div class="upload-switcher">
@@ -459,7 +454,6 @@
     hamburgerBtn.addEventListener('click', function() {
       navMenu.classList.toggle('show');
     });
-    // Stäng menyn när man klickar länk
     navMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navMenu.classList.remove('show');
@@ -506,24 +500,20 @@
         lastScrollY = window.scrollY;
       });
     }
-
-    // --- BOTTNREKLAM --- //
+    // --- BOTTNREKLAM ---
     let lastBannerScroll = window.scrollY;
     window.addEventListener("scroll", function () {
       const adFooter = document.getElementById("adFooter");
       if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
         adFooter.classList.add("visible");
       } else if (window.scrollY > lastBannerScroll) {
-        // scrollar NER, visa
         adFooter.classList.add("visible");
       } else {
-        // scrollar UPP, göm
         adFooter.classList.remove("visible");
       }
       lastBannerScroll = window.scrollY;
     });
   </script>
-  <!-- Firebase upload-scriptet (oförändrat) -->
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
@@ -532,6 +522,8 @@
     import {
       ref, uploadBytes, getDownloadURL
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
     const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
     const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
     const MAX_AUDIO_SIZE = 5 * 1024 * 1024;
@@ -539,14 +531,31 @@
 
     const uploadForm = document.getElementById("uploadForm");
     const spinner = document.getElementById("spinner");
+    const uploadBox = document.getElementById("uploadBox");
+
+    // Dölj uppladdningsformulär om inte inloggad
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        uploadBox.innerHTML = `
+          <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
+            Du måste vara inloggad för att ladda upp innehåll.<br><br>
+            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
+          </div>
+        `;
+      }
+    });
 
     uploadForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!auth.currentUser) {
+        alert("Du måste vara inloggad för att ladda upp.");
+        return;
+      }
       spinner.style.display = "block";
-      const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
+      const activeSection = document.querySelector('.switch-btn.active').getAttribute('data-section');
       let postData = {
         createdAt: serverTimestamp(),
-        user: auth.currentUser ? auth.currentUser.uid : "guest",
+        user: auth.currentUser.uid,
         type: activeSection,
         temporary: document.getElementById("temporary").checked,
       };
