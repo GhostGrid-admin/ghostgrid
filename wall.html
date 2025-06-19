@@ -40,6 +40,7 @@
         0 0 180px 60px #00ffe0aa,
         0 0 320px 90px #9400ff66;
     }
+
     .side-banner {
       position: fixed;
       top: 87px;
@@ -87,6 +88,7 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -142,11 +144,59 @@
       width: 100%;
       max-width: 230px;
     }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    @media (max-width: 700px) {
+      .nav-content {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        left: 0; right: 0;
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+      }
+      .nav-content.show {
+        display: flex;
+      }
+      .nav-content a {
+        padding: 18px 10px;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+      }
+      .search-container { margin: 10px auto 0 auto; width: 90vw; }
+      .search-container input { width: 100%; max-width: 100vw;}
+      .hamburger { display: flex; }
+    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
-      .nav-content { font-size: 1em; gap: 7px; }
-      .search-container input { width: 99vw; max-width: 99vw;}
+      .upload-title { font-size: 1.6em; }
+      .upload-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
     }
     .upload-box {
       border: 2px solid #66ffcc;
@@ -168,15 +218,6 @@
       text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
       font-weight: bold;
       letter-spacing: 0.04em;
-    }
-    @media (max-width: 600px) {
-      .upload-title { font-size: 1.6em; }
-      .upload-box {
-        padding: 14px 2vw 12px 2vw;
-        max-width: 99vw;
-        margin: 18px 0 18px 0;
-        border-radius: 10px;
-      }
     }
     .upload-switcher {
       display: flex;
@@ -234,9 +275,55 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-    .post { background:#191933; margin-bottom:18px; padding:18px 12px 12px 12px; border-radius:9px; border-left:4px solid #00ffcc; box-shadow:0 0 10px #4ef2ff18; }
-    .delete-post-btn { background:#d62e6e; border:none; color:white; border-radius:7px; padding:3px 15px; font-size:1em; margin-top:11px; margin-bottom:2px; cursor:pointer; float:right; }
-    .delete-post-btn:hover { background:#a50044; }
+
+    .ad-footer {
+      position: fixed;
+      left: 0; right: 0;
+      bottom: 0;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+      min-height: 0;
+      z-index: 2100;
+      border: none;
+    }
+    .ad-footer.visible {
+      opacity: 1;
+      pointer-events: auto;
+      min-height: 90px;
+    }
+    .ad-banner {
+      width: 50vw;
+      max-width: 750px;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      margin: 0 2vw;
+    }
+    .ad-banner img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 0 18px #7b00ff99;
+      background: #11002a;
+    }
+    @media (max-width: 900px) {
+      .ad-footer { flex-direction: column; min-height: 120px;}
+      .ad-banner { width: 95vw; max-width: 99vw; height: 80px;}
+      .ad-banner img { height: 80px;}
+    }
+    @media (max-width: 600px) {
+      .ad-footer { min-height: 60px;}
+      .ad-banner img { height: 55px;}
+    }
   </style>
 </head>
 <body>
@@ -259,7 +346,10 @@
     </div>
   </div>
   <nav class="navbar">
-    <div class="nav-content">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-content" id="navMenu">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
@@ -271,7 +361,7 @@
       </div>
     </div>
   </nav>
-  <div class="upload-box">
+  <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
     <div class="upload-switcher">
@@ -280,7 +370,6 @@
       <button class="switch-btn" data-section="video">🎬 Klipp</button>
       <button class="switch-btn" data-section="audio">🎵 Ljud</button>
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
-      <button class="switch-btn" data-section="combo">🔀 Kombinera</button>
     </div>
     <form id="uploadForm">
       <!-- TEXT -->
@@ -310,17 +399,6 @@
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
       </div>
-      <!-- KOMBINERA -->
-      <div class="upload-section" data-section="combo">
-        <label for="comboText">Text till inlägget (valfritt):</label>
-        <textarea id="comboText" placeholder="Skriv något till din uppladdning..."></textarea>
-        <label for="comboImage">Bild (max 5 MB, valfritt):</label>
-        <input type="file" id="comboImage" accept="image/*" />
-        <label for="comboVideo">Klipp (max 30 MB, valfritt):</label>
-        <input type="file" id="comboVideo" accept="video/mp4,video/webm,video/ogg" />
-        <label for="comboAudio">Ljudfil (max 5 MB, valfritt):</label>
-        <input type="file" id="comboAudio" accept="audio/*" />
-      </div>
       <label style="margin-top:18px;">
         <input type="checkbox" id="temporary" />
         Gör detta till ett tillfälligt inlägg (försvinner om 24h)
@@ -328,9 +406,19 @@
       <button type="submit" style="margin-top:18px;">Ladda upp</button>
     </form>
   </div>
-
-  <div id="myWall" style="max-width:700px;margin:50px auto 25px auto"></div>
-
+  <!-- BOTTENREKLAM -->
+  <footer class="ad-footer" id="adFooter">
+    <div class="ad-banner">
+      <a href="#" target="_blank">
+        <img id="bannerImageLeft" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1" alt="Reklam vänster" />
+      </a>
+    </div>
+    <div class="ad-banner">
+      <a href="#" target="_blank">
+        <img id="bannerImageRight" src="https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2" alt="Reklam höger" />
+      </a>
+    </div>
+  </footer>
   <script>
     // SIDBANNER ROTATION (vänster och höger)
     const banners = [
@@ -360,6 +448,18 @@
       updateBanners();
     }, 6000);
 
+    // --- Hamburgermeny logik ---
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    hamburgerBtn.addEventListener('click', function() {
+      navMenu.classList.toggle('show');
+    });
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('show');
+      });
+    });
+
     // Växla mellan sektionerna
     document.querySelectorAll('.switch-btn').forEach(btn => {
       btn.addEventListener('click', function () {
@@ -368,11 +468,7 @@
         const section = this.getAttribute('data-section');
         document.querySelectorAll('.upload-section').forEach(sec => {
           sec.classList.remove('active');
-          if (section === 'combo') {
-            if (sec.getAttribute('data-section') === 'combo') sec.classList.add('active');
-          } else {
-            if (sec.getAttribute('data-section') === section) sec.classList.add('active');
-          }
+          if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
       });
     });
@@ -385,7 +481,7 @@
             e.preventDefault();
             const query = searchInput.value.trim();
             if (query.length >= 2) {
-              window.location.href = "search.html?q=" + encodeURIComponent(query);
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
             }
           }
         });
@@ -404,15 +500,29 @@
         lastScrollY = window.scrollY;
       });
     }
+    // --- BOTTNREKLAM ---
+    let lastBannerScroll = window.scrollY;
+    window.addEventListener("scroll", function () {
+      const adFooter = document.getElementById("adFooter");
+      if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
+        adFooter.classList.add("visible");
+      } else if (window.scrollY > lastBannerScroll) {
+        adFooter.classList.add("visible");
+      } else {
+        adFooter.classList.remove("visible");
+      }
+      lastBannerScroll = window.scrollY;
+    });
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
-      collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, deleteDoc
+      collection, addDoc, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import {
       ref, uploadBytes, getDownloadURL
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
     const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
     const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
@@ -421,14 +531,31 @@
 
     const uploadForm = document.getElementById("uploadForm");
     const spinner = document.getElementById("spinner");
+    const uploadBox = document.getElementById("uploadBox");
+
+    // Dölj uppladdningsformulär om inte inloggad
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        uploadBox.innerHTML = `
+          <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
+            Du måste vara inloggad för att ladda upp innehåll.<br><br>
+            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
+          </div>
+        `;
+      }
+    });
 
     uploadForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!auth.currentUser) {
+        alert("Du måste vara inloggad för att ladda upp.");
+        return;
+      }
       spinner.style.display = "block";
-      const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
+      const activeSection = document.querySelector('.switch-btn.active').getAttribute('data-section');
       let postData = {
         createdAt: serverTimestamp(),
-        user: auth.currentUser ? auth.currentUser.uid : "guest",
+        user: auth.currentUser.uid,
         type: activeSection,
         temporary: document.getElementById("temporary").checked,
       };
@@ -441,7 +568,7 @@
         const img = document.getElementById("image").files[0];
         if (img && img.size > MAX_IMAGE_SIZE) {
           spinner.style.display = "none";
-          return alert("Bilden är för stor! Maxstorlek: 5 MB.");
+          return alert(`Bilden är för stor! Maxstorlek: 5 MB.`);
         }
         filesToUpload.push({ file: img, key: "imageUrl" });
       }
@@ -449,7 +576,7 @@
         const vid = document.getElementById("video").files[0];
         if (vid && vid.size > MAX_VIDEO_SIZE) {
           spinner.style.display = "none";
-          return alert("Videoklippet är för stort! Maxstorlek: 30 MB.");
+          return alert(`Videoklippet är för stort! Maxstorlek: 30 MB.`);
         }
         filesToUpload.push({ file: vid, key: "videoUrl" });
       }
@@ -457,7 +584,7 @@
         const aud = document.getElementById("audio").files[0];
         if (aud && aud.size > MAX_AUDIO_SIZE) {
           spinner.style.display = "none";
-          return alert("Ljudfilen är för stor! Maxstorlek: 5 MB.");
+          return alert(`Ljudfilen är för stor! Maxstorlek: 5 MB.`);
         }
         filesToUpload.push({ file: aud, key: "audioUrl" });
       }
@@ -465,30 +592,9 @@
         const micBlob = window.lastRecordedAudioBlob;
         if (micBlob && micBlob.size > MAX_MIC_SIZE) {
           spinner.style.display = "none";
-          return alert("Röstinspelningen är för stor! Maxstorlek: 2 MB.");
+          return alert(`Röstinspelningen är för stor! Maxstorlek: 2 MB.`);
         }
         if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
-      }
-      if (activeSection === "combo") {
-        postData.text = document.getElementById("comboText").value;
-        const comboImage = document.getElementById("comboImage").files[0];
-        const comboVideo = document.getElementById("comboVideo").files[0];
-        const comboAudio = document.getElementById("comboAudio").files[0];
-        if (comboImage && comboImage.size > MAX_IMAGE_SIZE) {
-          spinner.style.display = "none";
-          return alert("Bilden är för stor! Maxstorlek: 5 MB.");
-        }
-        if (comboVideo && comboVideo.size > MAX_VIDEO_SIZE) {
-          spinner.style.display = "none";
-          return alert("Videoklippet är för stort! Maxstorlek: 30 MB.");
-        }
-        if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
-          spinner.style.display = "none";
-          return alert("Ljudfilen är för stor! Maxstorlek: 5 MB.");
-        }
-        if (comboImage) filesToUpload.push({ file: comboImage, key: "imageUrl" });
-        if (comboVideo) filesToUpload.push({ file: comboVideo, key: "videoUrl" });
-        if (comboAudio) filesToUpload.push({ file: comboAudio, key: "audioUrl" });
       }
 
       // Ladda upp filer (om det finns)
@@ -526,7 +632,7 @@
         mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-          window.lastRecordedAudioBlob = audioBlob; // För uploaden!
+          window.lastRecordedAudioBlob = audioBlob;
           audioPreview.src = URL.createObjectURL(audioBlob);
           recordBtn.disabled = false;
           stopBtn.disabled = true;
@@ -535,91 +641,6 @@
       stopBtn.onclick = function () {
         mediaRecorder && mediaRecorder.stop();
       };
-    }
-
-    // ---- WALL: Visa inlägg, inbädda klipp/länkar, radera egna ----
-    function embedMedia(text = "") {
-      if (!text) return "";
-      // YouTube
-      if (text.match(/(?:youtube\.com|youtu\.be)/)) {
-        let vid = text.match(/(?:youtube\.com.*[?&]v=|youtu\.be\/)([\w\-]+)/);
-        if (vid && vid[1]) {
-          return `<iframe width="360" height="215" style="max-width:97%" src="https://www.youtube.com/embed/${vid[1]}" frameborder="0" allowfullscreen></iframe>`;
-        }
-      }
-      // TikTok
-      if (text.match(/tiktok\.com/)) {
-        return `<blockquote class="tiktok-embed" cite="${text}" data-video-id="" style="max-width:325px;min-width:220px;">
-          <a href="${text}">TikTok</a>
-        </blockquote>
-        <script async src="https://www.tiktok.com/embed.js"></script>`;
-      }
-      // Spotify
-      if (text.match(/open\.spotify\.com/)) {
-        return `<iframe src="https://open.spotify.com/embed${text.split('spotify.com')[1]}"
-          width="320" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="max-width:99%"></iframe>`;
-      }
-      // SoundCloud
-      if (text.match(/soundcloud\.com/)) {
-        return `<iframe width="100%" height="120" scrolling="no" frameborder="no" allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=${encodeURIComponent(text)}&color=%2300ffcc"></iframe>`;
-      }
-      // Länk till bild (om någon klistrar in direkt)
-      if (text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
-        return `<img src="${text}" alt="Bild" style="max-width:99%;border-radius:8px;margin-top:6px;" />`;
-      }
-      // Annan länk
-      if (text.match(/^https?:\/\//)) {
-        return `<a href="${text}" target="_blank" rel="noopener">${text}</a>`;
-      }
-      // Vanlig text
-      return text;
-    }
-
-    function renderPostSimple(post, postId, isMine) {
-      // Om textfältet innehåller länkar – tillåt radbrytning och bädda in klipp
-      let show = post.text
-        ? `<div>${post.text.split(/\s+/).map(embedMedia).join('<br>')}</div>`
-        : "";
-      if (post.imageUrl) show += `<img src="${post.imageUrl}" alt="Bild" style="max-width:99%;border-radius:8px;margin-top:8px;">`;
-      if (post.videoUrl) show += `<video src="${post.videoUrl}" controls style="max-width:99%;border-radius:8px;margin-top:8px;"></video>`;
-      if (post.audioUrl) show += `<audio src="${post.audioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
-      if (post.micAudioUrl) show += `<audio src="${post.micAudioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
-      return `
-        <div class="post">
-          ${show}
-          ${isMine ? `<button class="delete-post-btn" onclick="window.deleteWallPost('${postId}')">🗑️ Ta bort</button>` : ""}
-        </div>
-      `;
-    }
-
-    window.deleteWallPost = async function(postId) {
-      if (!confirm("Vill du ta bort detta inlägg?")) return;
-      await deleteDoc(doc(db, "wall", postId));
-    };
-
-    // Lyssna på väggen (visa alla inlägg)
-    let currentUserUid = null;
-    auth.onAuthStateChanged((user) => {
-      currentUserUid = user ? user.uid : null;
-      showWall();
-    });
-
-    function showWall() {
-      const wallDiv = document.getElementById("myWall");
-      if (!wallDiv) return;
-      wallDiv.innerHTML = "Laddar inlägg...";
-      const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
-      onSnapshot(q, (snapshot) => {
-        let html = "";
-        snapshot.forEach(docSnap => {
-          const post = docSnap.data();
-          const postId = docSnap.id;
-          const isMine = post.user === currentUserUid;
-          html += renderPostSimple(post, postId, isMine);
-        });
-        wallDiv.innerHTML = html || "<div style='color:#aaa;text-align:center'>Inga inlägg ännu!</div>";
-      });
     }
   </script>
 </body>
