@@ -89,29 +89,29 @@
       text-align: center;
     }
     .new-category-form {
-  margin: 32px 0 0 0;
-  padding: 18px 10px 12px 10px;
-  border: 2px dashed #00ffcc;
-  border-radius: 10px;
-  background-color: rgba(255,255,255,0.02);
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.new-category-form input,
-.new-category-form textarea {
-  width: 94%;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border: 1px solid #00ffcc;
-  background-color: #111;
-  color: #00ffcc;
-  font-family: 'Courier New', monospace;
-  box-sizing: border-box;
-  padding: 10px;
-}
+      margin: 32px 0 0 0;
+      padding: 18px 10px 12px 10px;
+      border: 2px dashed #00ffcc;
+      border-radius: 10px;
+      background-color: rgba(255,255,255,0.02);
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .new-category-form input,
+    .new-category-form textarea {
+      width: 94%;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #00ffcc;
+      background-color: #111;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      box-sizing: border-box;
+      padding: 10px;
+    }
     .new-category-form button {
       background-color: #00ffcc;
       color: #000;
@@ -178,7 +178,6 @@
       margin: 0 0 3px 0;
       text-align: center;
     }
-    /* --- Reklambanners --- */
     .ad-footer {
       position: fixed;
       left: 0;
@@ -238,6 +237,35 @@
       .ad-footer { min-height: 60px;}
       .ad-banner img { height: 55px;}
     }
+    /* --- Hamburger meny CSS --- */
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.3em;
+      position: absolute;
+      right: 18px;
+      top: 8px;
+      cursor: pointer;
+      z-index: 3000;
+    }
+    @media (max-width: 900px) {
+      .nav-content {
+        flex-direction: column;
+        background: #170b1aee;
+        position: absolute;
+        left: 0; top: 54px;
+        width: 100vw;
+        gap: 14px;
+        padding: 18px 0 10px 0;
+        display: none;
+        z-index: 2050;
+        box-shadow: 0 8px 24px #ad30fa90;
+      }
+      .nav-content.active { display: flex; }
+      #menuBtn { display: block; }
+    }
   </style>
   <!-- FIREBASE SETUP -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -260,7 +288,8 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="nav-content">
+    <button id="menuBtn" aria-label="Meny">&#9776;</button>
+    <div class="nav-content" id="navLinks">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
@@ -280,12 +309,12 @@
         <input type="text" id="forumSearchInput" placeholder="Sök forumtrådar eller kategorier...">
       </div>
       <div id="categoriesContainer"></div>
-<div class="new-category-form">
-  <h3 id="createCatTitle">Skapa ny kategori</h3>
-  <input type="text" id="newCategoryTitle" placeholder="Titel">
-  <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning..."></textarea>
-  <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
-</div>
+      <div class="new-category-form">
+        <h3 id="createCatTitle">Skapa ny kategori</h3>
+        <input type="text" id="newCategoryTitle" placeholder="Titel">
+        <textarea id="newCategoryDescription" rows="3" placeholder="Beskrivning..."></textarea>
+        <button onclick="createNewCategory()" id="addCatBtn">Lägg till kategori</button>
+      </div>
     </div>
     <div class="forum-sidebar">
       <h3>Info</h3>
@@ -402,6 +431,17 @@
     }
   </style>
 
+  <!-- Hamburgermeny JS (lägger till/byter meny på mobil) -->
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+    menuBtn.onclick = () => navLinks.classList.toggle("active");
+    document.querySelectorAll('.nav-content a').forEach(a =>
+      a.onclick = () => navLinks.classList.remove("active")
+    );
+  </script>
+
+  <!-- Ditt JS (ORÖRT) -->
   <script>
     // --- Språkstöd ---
     const translations = {
