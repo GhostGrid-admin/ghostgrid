@@ -234,7 +234,6 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-    /* Wall post extra style */
     .post { background:#191933; margin-bottom:18px; padding:18px 12px 12px 12px; border-radius:9px; border-left:4px solid #00ffcc; box-shadow:0 0 10px #4ef2ff18; }
     .delete-post-btn { background:#d62e6e; border:none; color:white; border-radius:7px; padding:3px 15px; font-size:1em; margin-top:11px; margin-bottom:2px; cursor:pointer; float:right; }
     .delete-post-btn:hover { background:#a50044; }
@@ -329,8 +328,7 @@
       <button type="submit" style="margin-top:18px;">Ladda upp</button>
     </form>
   </div>
-  
-  <!-- WALL-LISTNING, visa alla inlägg + radera egna -->
+
   <div id="myWall" style="max-width:700px;margin:50px auto 25px auto"></div>
 
   <script>
@@ -407,8 +405,6 @@
       });
     }
   </script>
-
-  <!-- Firebase upload-scriptet + WALL-LOGIK -->
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
@@ -541,7 +537,7 @@
       };
     }
 
-    // ------- INBÄDDNING AV KLIPP & LÄNKAR ---------
+    // ---- WALL: Visa inlägg, inbädda klipp/länkar, radera egna ----
     function embedMedia(text = "") {
       if (!text) return "";
       // YouTube
@@ -580,19 +576,15 @@
       return text;
     }
 
-    // ---------- WALL-RENDER FUNKTION ----------
     function renderPostSimple(post, postId, isMine) {
       // Om textfältet innehåller länkar – tillåt radbrytning och bädda in klipp
       let show = post.text
         ? `<div>${post.text.split(/\s+/).map(embedMedia).join('<br>')}</div>`
         : "";
-
-      // Om någon har laddat upp bild/video/ljud via upload
       if (post.imageUrl) show += `<img src="${post.imageUrl}" alt="Bild" style="max-width:99%;border-radius:8px;margin-top:8px;">`;
       if (post.videoUrl) show += `<video src="${post.videoUrl}" controls style="max-width:99%;border-radius:8px;margin-top:8px;"></video>`;
       if (post.audioUrl) show += `<audio src="${post.audioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
       if (post.micAudioUrl) show += `<audio src="${post.micAudioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
-
       return `
         <div class="post">
           ${show}
