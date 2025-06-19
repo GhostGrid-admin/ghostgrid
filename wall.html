@@ -1,9 +1,9 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GhostGrid – Ladda upp</title>
+  <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
@@ -40,8 +40,6 @@
         0 0 180px 60px #00ffe0aa,
         0 0 320px 90px #9400ff66;
     }
-
-    /* --- SIDOBANNERS SOM TÄCKER HELA SIDAN --- */
     .side-banner {
       position: fixed;
       top: 87px;
@@ -81,15 +79,13 @@
     }
     .side-banner.left { left: 0; }
     .side-banner.right { right: 0; }
-
     @media (max-width: 1100px) {
       .side-banner, .glow-left, .glow-right { width: 65px; }
       .side-banner .banner-inner { width: 57px; }
     }
     @media (max-width: 700px) {
-      .side-banner { display: none; } /* Döljer banners på små skärmar */
+      .side-banner { display: none; }
     }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -145,104 +141,196 @@
       width: 100%;
       max-width: 230px;
     }
+    .wall-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 12px;
+      background: rgba(6, 10, 16, 0.88);
+      border-radius: 18px;
+      box-shadow: 0 0 22px #00ffe033;
+      position: relative;
+      z-index: 2;
+      min-width: 0;
+      margin-top: 52px;
+    }
+    .wall-title {
+      font-size: 2.3em;
+      text-align: center;
+      color: #aaffee;
+      margin: 10px 0 22px 0;
+      text-shadow: 0 0 8px #ffffff;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+    .search-filter, .filter-search {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+    .search-filter button, .filter-search label {
+      background-color: #8000ff;
+      border: none;
+      padding: 7px 14px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.99em;
+    }
+    .search-filter button.active {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
+    }
+    .filter-search input[type="text"] {
+      padding: 8px;
+      width: 72vw;
+      max-width: 370px;
+      border-radius: 6px;
+      border: 1px solid #7b00ff;
+      background-color: #1a1a1a;
+      color: #fff;
+      font-size: 1em;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .post {
+      background-color: rgba(0, 0, 0, 0.88);
+      padding: 15px 12px 8px 12px;
+      border-radius: 12px;
+      border-left: 4px solid #00ffcc;
+      margin-bottom: 22px;
+      word-break: break-word;
+      box-shadow: 0 0 10px #4ef2ff11;
+      position: relative;
+    }
+    .post strong {
+      color: #ccffff;
+      font-size: 1.13em;
+    }
+    .post .post-media {
+      margin-top: 8px;
+      margin-bottom: 4px;
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #0ff7;
+    }
+    .delete-post-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: #d62e6e;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.15em;
+      padding: 2px 10px 2px 10px;
+      z-index: 3;
+      opacity: 0.87;
+      transition: 0.2s;
+    }
+    .delete-post-btn:hover { background: #a50044; opacity: 1; }
+    .reactions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 7px 0 0 0;
+      align-items: center;
+    }
+    .reactions button {
+      font-size: 1.2em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin: 0;
+      transition: background 0.17s;
+    }
+    .reactions button.selected, .reactions button:hover {
+      background: #00ffcc44;
+      color: #000;
+      font-weight: bold;
+    }
+    .reaction-count {
+      font-size: 0.93em;
+      margin-left: 3px;
+      margin-right: 8px;
+      color: #ccc;
+    }
+    .comments {
+      margin-top: 10px;
+      background: #141626;
+      border-radius: 7px;
+      padding: 7px;
+    }
+    .comment {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .comment-content {
+      background: #21243a;
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 1em;
+      flex: 1;
+    }
+    .delete-comment-btn {
+      background: #d62e6e;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 0 6px;
+      font-size: 0.92em;
+      margin-left: 4px;
+      margin-top: 2px;
+    }
+    .comments input[type="text"] {
+      width: 90%;
+      padding: 7px;
+      border-radius: 5px;
+      border: 1px solid #00ffcc;
+      background-color: #191929;
+      color: white;
+      font-size: 1em;
+      margin-right: 8px;
+      margin-top: 7px;
+      margin-bottom: 2px;
+    }
+    .comments button.add-comment-btn {
+      background: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 6px;
+      font-size: 1em;
+    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
       .nav-content { font-size: 1em; gap: 7px; }
       .search-container input { width: 99vw; max-width: 99vw;}
+      .wall-container { padding: 3vw; margin-top:30px;}
+      .wall-title { font-size: 1.15em; }
+      .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
+      .filter-search input[type="text"] { width: 98vw; }
     }
-    .upload-box {
-      border: 2px solid #66ffcc;
-      border-radius: 12px;
-      padding: 30px 20px 22px 20px;
-      margin: 36px auto 32px auto;
-      max-width: 440px;
-      background-color: rgba(0, 0, 0, 0.88);
-      box-shadow: 0 0 15px #00ffcc33;
-      position: relative;
-      z-index: 2;
-      min-width: 0;
-    }
-    .upload-title {
-      font-size: 2.6em;
-      text-align: center;
-      color: #f5f5f5;
-      margin: 16px 0 28px 0;
-      text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
-      font-weight: bold;
-      letter-spacing: 0.04em;
-    }
-    @media (max-width: 600px) {
-      .upload-title { font-size: 1.6em; }
-      .upload-box {
-        padding: 14px 2vw 12px 2vw;
-        max-width: 99vw;
-        margin: 18px 0 18px 0;
-        border-radius: 10px;
-      }
-    }
-    .upload-switcher {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
-    }
-    .switch-btn {
-      background: #111;
-      color: #80ffcc;
-      border: 1px solid #66ffcc;
-      border-radius: 5px;
-      padding: 6px 14px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.18s;
-      font-family: 'Courier New', monospace;
-    }
-    .switch-btn.active,
-    .switch-btn:hover {
-      background: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      box-shadow: 0 0 8px #00ffcc;
-    }
-    textarea, input[type="file"], button[type="submit"], label {
-      display: block;
-      width: 100%;
-      margin-top: 1rem;
-      font-family: inherit;
-      font-size: 1rem;
-      color: #b8f6ff;
-      background-color: #111;
-      border: 1px solid #66ffcc;
-      padding: 0.6rem;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    label {margin-bottom: -0.7rem;}
-    button[type="submit"] {
-      background-color: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button[type="submit"]:hover {
-      background-color: #00ccaa;
-    }
-    #spinner {
-      display: none;
-      width: 50px;
-      margin: 10px auto;
-    }
-    audio { margin-top: 10px; }
-    .upload-section { display: none; }
-    .upload-section.active { display: block; }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <!-- Vänster sidbanner -->
+  <!-- SIDBANNERS -->
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
@@ -250,7 +338,6 @@
       </a>
     </div>
   </div>
-  <!-- Höger sidbanner -->
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
@@ -260,76 +347,34 @@
   </div>
   <nav class="navbar">
     <div class="nav-content">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
+      <a href="forum.html" data-t="forum">Forum</a>
+      <a href="store.html" data-t="store">Store</a>
+      <a href="wall.html" data-t="wall">Väggen</a>
+      <a href="upload.html" data-t="upload">Ladda upp</a>
+      <a href="profile.html" data-t="profile">Profil</a>
+      <a href="friends.html" data-t="friends">Vänner</a>
       <div class="search-container">
-        <input type="text" placeholder="Sök på hela sidan..." id="searchInput" />
+        <input type="text" id="searchInputGlobal" data-tph="searchSite" />
       </div>
     </div>
   </nav>
-  <div class="upload-box">
-    <div class="upload-title">Ladda upp innehåll</div>
-    <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
-    <div class="upload-switcher">
-      <button class="switch-btn active" data-section="text">📝 Inlägg</button>
-      <button class="switch-btn" data-section="image">🖼️ Bild</button>
-      <button class="switch-btn" data-section="video">🎬 Klipp</button>
-      <button class="switch-btn" data-section="audio">🎵 Ljud</button>
-      <button class="switch-btn" data-section="mic">🎤 Röst</button>
-      <button class="switch-btn" data-section="combo">🔀 Kombinera</button>
+  <div class="wall-container">
+    <h1 class="wall-title" id="wallTitle" data-t="wallTitle">Gemensamma Inlägg</h1>
+    <div class="search-filter">
+      <button onclick="setFilter('all')" class="active" data-t="all">Alla</button>
+      <button onclick="setFilter('text')" data-t="text">Text</button>
+      <button onclick="setFilter('image')" data-t="image">Bild</button>
+      <button onclick="setFilter('audio')" data-t="audio">Ljud</button>
+      <button onclick="setFilter('video')" data-t="video">Klipp</button>
+      <button onclick="setFilter('combo')" data-t="combo">Kombinerat</button>
     </div>
-    <form id="uploadForm">
-      <!-- TEXT -->
-      <div class="upload-section active" data-section="text">
-        <label for="text">Skriv ett inlägg:</label>
-        <textarea id="text" placeholder="Vad vill du dela med dig av?" maxlength="1500"></textarea>
-      </div>
-      <!-- BILD -->
-      <div class="upload-section" data-section="image">
-        <label for="image">Ladda upp en bild (max 5 MB):</label>
-        <input type="file" id="image" accept="image/*" />
-      </div>
-      <!-- VIDEO -->
-      <div class="upload-section" data-section="video">
-        <label for="video">Ladda upp ett klipp (max 30 MB):</label>
-        <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
-      </div>
-      <!-- AUDIO -->
-      <div class="upload-section" data-section="audio">
-        <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
-        <input type="file" id="audio" accept="audio/*" />
-      </div>
-      <!-- RÖSTINSPELNING -->
-      <div class="upload-section" data-section="mic">
-        <label>Mikrofoninspelning (max 2 MB):</label>
-        <button type="button" id="recordButton">🎤 Starta inspelning</button>
-        <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
-        <audio id="audioPreview" controls></audio>
-      </div>
-      <!-- KOMBINERA -->
-      <div class="upload-section" data-section="combo">
-        <label for="comboText">Text till inlägget (valfritt):</label>
-        <textarea id="comboText" placeholder="Skriv något till din uppladdning..."></textarea>
-        <label for="comboImage">Bild (max 5 MB, valfritt):</label>
-        <input type="file" id="comboImage" accept="image/*" />
-        <label for="comboVideo">Klipp (max 30 MB, valfritt):</label>
-        <input type="file" id="comboVideo" accept="video/mp4,video/webm,video/ogg" />
-        <label for="comboAudio">Ljudfil (max 5 MB, valfritt):</label>
-        <input type="file" id="comboAudio" accept="audio/*" />
-      </div>
-      <label style="margin-top:18px;">
-        <input type="checkbox" id="temporary" />
-        Gör detta till ett tillfälligt inlägg (försvinner om 24h)
-      </label>
-      <button type="submit" style="margin-top:18px;">Ladda upp</button>
-    </form>
+    <div class="filter-search">
+      <input type="text" id="localSearchInput" data-tph="searchWall" oninput="filterPosts()" />
+    </div>
+    <div id="postsContainer"></div>
   </div>
   <script>
-    // SIDBANNER ROTATION (vänster och höger)
+    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -357,37 +402,22 @@
       updateBanners();
     }, 6000);
 
-    // Växla mellan sektionerna
-    document.querySelectorAll('.switch-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const section = this.getAttribute('data-section');
-        document.querySelectorAll('.upload-section').forEach(sec => {
-          sec.classList.remove('active');
-          if (section === 'combo') {
-            if (sec.getAttribute('data-section') === 'combo') sec.classList.add('active');
-          } else {
-            if (sec.getAttribute('data-section') === section) sec.classList.add('active');
-          }
-        });
-      });
-    });
     // Sök-fält
     document.addEventListener("DOMContentLoaded", () => {
-      const searchInput = document.getElementById("searchInput");
+      const searchInput = document.getElementById("searchInputGlobal");
       if (searchInput) {
         searchInput.addEventListener("keydown", (e) => {
           if (e.key === "Enter") {
             e.preventDefault();
             const query = searchInput.value.trim();
             if (query.length >= 2) {
-              window.location.href = search.html?q=${encodeURIComponent(query)};
+              window.location.href = "search.html?q=" + encodeURIComponent(query);
             }
           }
         });
       }
     });
+
     // Navbar hide vid scroll på mobil
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
@@ -402,137 +432,256 @@
       });
     }
   </script>
-  <!-- Firebase upload-scriptet -->
   <script type="module">
-    import { auth, db, storage } from "./scripts/firebase-init.js";
-    import {
-      collection, addDoc, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import {
-      ref, uploadBytes, getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-    const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
-    const MAX_AUDIO_SIZE = 5 * 1024 * 1024;
-    const MAX_MIC_SIZE = 2 * 1024 * 1024;
-
-    const uploadForm = document.getElementById("uploadForm");
-    const spinner = document.getElementById("spinner");
-
-    uploadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      spinner.style.display = "block";
-      const activeSection = document.querySelector('.upload-section.active').getAttribute('data-section');
-      let postData = {
-        createdAt: serverTimestamp(),
-        user: auth.currentUser ? auth.currentUser.uid : "guest",
-        type: activeSection,
-        temporary: document.getElementById("temporary").checked,
-      };
-      let filesToUpload = [];
-
-      if (activeSection === "text") {
-        postData.text = document.getElementById("text").value;
+    // --- SPRÅKSTÖD ---
+    const lang = localStorage.getItem('language') || 'sv';
+    const texts = {
+      sv: {
+        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
+        searchSite: "Sök på hela sidan...", wallTitle: "Gemensamma Inlägg",
+        all: "Alla", text: "Text", image: "Bild", audio: "Ljud", video: "Klipp", combo: "Kombinerat",
+        searchWall: "Sök inlägg på väggen...",
+        commentPlaceholder: "Kommentera...", commentBtn: "Kommentera",
+        loginComment: "Logga in för att kommentera",
+        deletePost: "🗑️ Ta bort", confirmDelete: "Vill du ta bort detta inlägg?",
+        deleteComment: "🗑️", loading: "Laddar...", noPosts: "Inga inlägg ännu!",
+        removeReaction: "❌ Ta bort reaktion", needLoginReact: "Du måste vara inloggad för att reagera.",
+        needLoginComment: "Du måste vara inloggad för att kommentera.", maxWords: "Max 200 ord!",
+        replyBtn: "Svara", loginReply: "Logga in för att svara", removeReply: "Ta bort svar"
+      },
+      en: {
+        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
+        searchSite: "Search the site...", wallTitle: "All Posts",
+        all: "All", text: "Text", image: "Image", audio: "Audio", video: "Video", combo: "Mixed",
+        searchWall: "Search posts on wall...",
+        commentPlaceholder: "Comment...", commentBtn: "Comment",
+        loginComment: "Log in to comment",
+        deletePost: "🗑️ Delete", confirmDelete: "Do you want to delete this post?",
+        deleteComment: "🗑️", loading: "Loading...", noPosts: "No posts yet!",
+        removeReaction: "❌ Remove reaction", needLoginReact: "You need to be logged in to react.",
+        needLoginComment: "You need to be logged in to comment.", maxWords: "Max 200 words!",
+        replyBtn: "Reply", loginReply: "Log in to reply", removeReply: "Remove reply"
       }
-      if (activeSection === "image") {
-        const img = document.getElementById("image").files[0];
-        if (img && img.size > MAX_IMAGE_SIZE) {
-          spinner.style.display = "none";
-          return alert(Bilden är för stor! Maxstorlek: 5 MB.);
-        }
-        filesToUpload.push({ file: img, key: "imageUrl" });
-      }
-      if (activeSection === "video") {
-        const vid = document.getElementById("video").files[0];
-        if (vid && vid.size > MAX_VIDEO_SIZE) {
-          spinner.style.display = "none";
-          return alert(Videoklippet är för stort! Maxstorlek: 30 MB.);
-        }
-        filesToUpload.push({ file: vid, key: "videoUrl" });
-      }
-      if (activeSection === "audio") {
-        const aud = document.getElementById("audio").files[0];
-        if (aud && aud.size > MAX_AUDIO_SIZE) {
-          spinner.style.display = "none";
-          return alert(Ljudfilen är för stor! Maxstorlek: 5 MB.);
-        }
-        filesToUpload.push({ file: aud, key: "audioUrl" });
-      }
-      if (activeSection === "mic") {
-        const micBlob = window.lastRecordedAudioBlob;
-        if (micBlob && micBlob.size > MAX_MIC_SIZE) {
-          spinner.style.display = "none";
-          return alert(Röstinspelningen är för stor! Maxstorlek: 2 MB.);
-        }
-        if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
-      }
-      if (activeSection === "combo") {
-        postData.text = document.getElementById("comboText").value;
-        const comboImage = document.getElementById("comboImage").files[0];
-        const comboVideo = document.getElementById("comboVideo").files[0];
-        const comboAudio = document.getElementById("comboAudio").files[0];
-        if (comboImage && comboImage.size > MAX_IMAGE_SIZE) {
-          spinner.style.display = "none";
-          return alert(Bilden är för stor! Maxstorlek: 5 MB.);
-        }
-        if (comboVideo && comboVideo.size > MAX_VIDEO_SIZE) {
-          spinner.style.display = "none";
-          return alert(Videoklippet är för stort! Maxstorlek: 30 MB.);
-        }
-        if (comboAudio && comboAudio.size > MAX_AUDIO_SIZE) {
-          spinner.style.display = "none";
-          return alert(Ljudfilen är för stor! Maxstorlek: 5 MB.);
-        }
-        if (comboImage) filesToUpload.push({ file: comboImage, key: "imageUrl" });
-        if (comboVideo) filesToUpload.push({ file: comboVideo, key: "videoUrl" });
-        if (comboAudio) filesToUpload.push({ file: comboAudio, key: "audioUrl" });
-      }
-
-      // Ladda upp filer (om det finns)
-      for (let upload of filesToUpload) {
-        if (!upload.file) continue;
-        const storageRef = ref(storage, uploads/${Date.now()}_${upload.file.name});
-        await uploadBytes(storageRef, upload.file);
-        const url = await getDownloadURL(storageRef);
-        postData[upload.key] = url;
-      }
-
-      // Spara posten på "väggen"
-      await addDoc(collection(db, "wall"), postData);
-
-      spinner.style.display = "none";
-      alert("✅ Inlägget har laddats upp!");
-      uploadForm.reset();
-      window.location.href = "wall.html";
-    });
-
-    // --- Röstinspelning ---
-    let mediaRecorder, audioChunks = [];
-    const recordBtn = document.getElementById("recordButton");
-    const stopBtn = document.getElementById("stopButton");
-    const audioPreview = document.getElementById("audioPreview");
-    if (recordBtn && stopBtn && audioPreview) {
-      recordBtn.onclick = async function () {
-        audioChunks = [];
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-        recordBtn.disabled = true;
-        stopBtn.disabled = false;
-
-        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-        mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-          window.lastRecordedAudioBlob = audioBlob; // För uploaden!
-          audioPreview.src = URL.createObjectURL(audioBlob);
-          recordBtn.disabled = false;
-          stopBtn.disabled = true;
-        };
-      };
-      stopBtn.onclick = function () {
-        mediaRecorder && mediaRecorder.stop();
-      };
+    };
+    function tr(key) { return (texts[lang] && texts[lang][key]) || key; }
+    function applyLang() {
+      document.querySelectorAll('[data-t]').forEach(el => el.textContent = tr(el.getAttribute('data-t')));
+      document.querySelectorAll('[data-tph]').forEach(el => el.placeholder = tr(el.getAttribute('data-tph')));
     }
+    applyLang();
+
+    import { auth, db } from './scripts/firebase-init.js';
+    import {
+      collection, query, orderBy, onSnapshot, doc, getDocs, setDoc, addDoc, updateDoc, deleteDoc
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    // REACTIONS
+    const reactionsList = [
+      { key: "heart", emoji: "❤️" }, { key: "thumbs_up", emoji: "👍" }, { key: "laugh", emoji: "😂" },
+      { key: "happy", emoji: "😊" }, { key: "embarrassed", emoji: "😳" }, { key: "angel", emoji: "😇" },
+      { key: "surprised", emoji: "😲" }, { key: "sad", emoji: "😢" }, { key: "cry", emoji: "😭" },
+      { key: "thumbs_down", emoji: "👎" }, { key: "broken_heart", emoji: "💔" }
+    ];
+    let currentUser = null;
+    auth.onAuthStateChanged(user => { currentUser = user; });
+
+    // FILTER
+    let currentTypeFilter = 'all', currentSearch = '';
+    function setFilter(type) {
+      currentTypeFilter = type;
+      document.querySelectorAll('.search-filter button').forEach(btn =>
+        btn.classList.toggle('active', btn.getAttribute('data-t') === type)
+      );
+      filterPosts();
+    }
+    window.setFilter = setFilter;
+    function filterPosts() {
+      const search = document.getElementById("localSearchInput").value.toLowerCase();
+      currentSearch = search;
+      document.querySelectorAll('.post').forEach(postEl => {
+        const text = postEl.innerText.toLowerCase();
+        const type = postEl.dataset.type;
+        const showType = (currentTypeFilter === 'all' || type === currentTypeFilter);
+        const showSearch = !search || text.includes(search);
+        postEl.style.display = (showType && showSearch) ? '' : 'none';
+      });
+    }
+
+    // ---------- INBÄDDNING AV LÄNKAR ----------
+    function embedLinks(text) {
+      if (!text) return "";
+      let html = text.replace(/(https?:\/\/[^\s]+)/g, url => {
+        // YouTube
+        if (/youtu\.be|youtube\.com/.test(url)) {
+          let vid = url.match(/(?:youtu\.be\/|youtube\.com.*[?&]v=)([\w\-]+)/);
+          if (vid && vid[1]) {
+            return `<iframe width="360" height="210" style="max-width:99%;margin:6px 0;" src="https://www.youtube.com/embed/${vid[1]}" frameborder="0" allowfullscreen></iframe>`;
+          }
+        }
+        // TikTok
+        if (/tiktok\.com/.test(url)) {
+          return `<blockquote class="tiktok-embed" cite="${url}" style="max-width:325px;min-width:220px;"><a href="${url}">TikTok</a></blockquote>
+                  <script async src="https://www.tiktok.com/embed.js"></script>`;
+        }
+        // Spotify
+        if (/open\.spotify\.com/.test(url)) {
+          return `<iframe src="https://open.spotify.com/embed${url.split('spotify.com')[1]}" width="320" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="max-width:99%"></iframe>`;
+        }
+        // Annars: länk som vanligt
+        return `<a href="${url}" target="_blank" rel="noopener">${url}</a>`;
+      });
+      return html;
+    }
+
+    // ---------- WALL RENDER ----------
+    function renderMedia(post) {
+      let html = "";
+      if (post.imageUrl) html += `<img class="post-media" src="${post.imageUrl}" alt="Bild" />`;
+      if (post.videoUrl) html += `<video class="post-media" src="${post.videoUrl}" controls></video>`;
+      if (post.audioUrl) html += `<audio class="post-media" src="${post.audioUrl}" controls></audio>`;
+      if (post.micAudioUrl) html += `<audio class="post-media" src="${post.micAudioUrl}" controls></audio>`;
+      return html;
+    }
+
+    function renderReactions(post, postId, userReaction, counts) {
+      return `
+        <div class="reactions">
+          ${reactionsList.map(r => `
+            <button
+              ${userReaction === r.key ? 'class="selected"' : ''}
+              onclick="window.setReaction('${postId}','${r.key}')"
+              title="Reagera med ${r.emoji}"
+              >${r.emoji} <span class="reaction-count">${counts[r.key] || ''}</span></button>
+          `).join("")}
+          ${userReaction ? `<button onclick="window.removeReaction('${postId}')">${tr('removeReaction')}</button>` : ""}
+        </div>`;
+    }
+
+    // --- Reagera på post
+    window.setReaction = async (postId, key) => {
+      if (!currentUser) { alert(tr("needLoginReact")); return; }
+      const ref = doc(db, "wall", postId, "reactions", currentUser.uid);
+      await updateDoc(ref, { type: key }, { merge: true }).catch(async() => {
+        await setDoc(ref, { type: key });
+      });
+    };
+    window.removeReaction = async (postId) => {
+      if (!currentUser) return;
+      await deleteDoc(doc(db, "wall", postId, "reactions", currentUser.uid));
+    };
+
+    // --- Kommentera och svara
+    window.addComment = async (postId, inputId, parentCommentId = null) => {
+      const input = document.getElementById(inputId);
+      const content = input.value.trim();
+      if (!content) return;
+      if (!currentUser) { alert(tr("needLoginComment")); return; }
+      if (content.split(/\s+/).length > 200) { alert(tr("maxWords")); return; }
+      await addDoc(collection(db, "wall", postId, "comments"), {
+        content, user: currentUser.uid, createdAt: new Date(), parent: parentCommentId || null
+      });
+      input.value = "";
+    };
+    window.deleteComment = async (postId, commentId) => {
+      if (!currentUser) return;
+      await deleteDoc(doc(db, "wall", postId, "comments", commentId));
+    };
+
+    // --- Radera post
+    window.deletePost = async (postId, userId) => {
+      if (!currentUser || currentUser.uid !== userId) return;
+      if (!confirm(tr("confirmDelete"))) return;
+      await deleteDoc(doc(db, "wall", postId));
+    };
+
+    // --- Visa kommentarer i trådstruktur
+    function renderComments(comments, postId, parentId = null, level = 0) {
+      return comments
+        .filter(c => c.parent === parentId)
+        .map(c =>
+          `<div class="comment" style="margin-left:${level*18}px">
+            <div class="comment-content">${embedLinks(c.content)}</div>
+            ${currentUser && c.user === currentUser.uid
+              ? `<button class="delete-comment-btn" title="${tr('deleteComment')}" onclick="window.deleteComment('${postId}','${c.id}')">${tr('deleteComment')}</button>`
+              : ''
+            }
+            <button class="add-comment-btn" onclick="window.replyToComment('${postId}','${c.id}')" style="margin-left:7px;font-size:0.92em;">${tr('replyBtn')}</button>
+            <div id="reply-box-${postId}-${c.id}" style="margin-left:2px"></div>
+            ${renderComments(comments, postId, c.id, level+1)}
+          </div>`
+        ).join("");
+    }
+    window.replyToComment = function(postId, commentId) {
+      const box = document.getElementById(`reply-box-${postId}-${commentId}`);
+      if (!box.innerHTML) {
+        box.innerHTML = `<input type="text" id="reply-input-${postId}-${commentId}" placeholder="${tr('commentPlaceholder')}" maxlength="500" style="margin-top:5px;width:92%" />
+          <button class="add-comment-btn" onclick="window.addComment('${postId}','reply-input-${postId}-${commentId}','${commentId}')">${tr('commentBtn')}</button>`;
+      } else {
+        box.innerHTML = "";
+      }
+    }
+
+    function renderPost(post, postId, userReaction, reactionCounts, comments, userId) {
+      return `
+        <div class="post" data-type="${post.type}">
+          ${currentUser && currentUser.uid === userId ?
+            `<button class="delete-post-btn" onclick="window.deletePost('${postId}','${userId}')">${tr('deletePost')}</button>` : ""}
+          <div>
+            <strong>${post.text ? embedLinks(post.text) : ''}</strong>
+            ${renderMedia(post)}
+          </div>
+          ${renderReactions(post, postId, userReaction, reactionCounts)}
+          <div class="comments">
+            <div>
+              ${renderComments(comments, postId)}
+            </div>
+            ${currentUser ? `
+              <input type="text" placeholder="${tr('commentPlaceholder')}" id="comment-input-${postId}" maxlength="1000" />
+              <button class="add-comment-btn" onclick="window.addComment('${postId}','comment-input-${postId}')">${tr('commentBtn')}</button>
+            ` : `<div style="color:#f44;font-size:0.96em;">${tr('loginComment')}</div>`}
+          </div>
+        </div>
+      `;
+    }
+
+    // --- LADDA IN VÄGG
+    function listenToWall() {
+      const postsContainer = document.getElementById("postsContainer");
+      const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
+      onSnapshot(q, async snapshot => {
+        postsContainer.innerHTML = tr("loading");
+        let html = "";
+        let postsArr = [];
+        for (const docSnap of snapshot.docs) {
+          const post = docSnap.data();
+          post.id = docSnap.id;
+          postsArr.push(post);
+        }
+        for (const post of postsArr) {
+          let reactionsDocs = await getDocs(collection(db, "wall", post.id, "reactions"));
+          let reactionCounts = {}, userReaction = null;
+          reactionsDocs.forEach(rDoc => {
+            const r = rDoc.data().type;
+            if (rDoc.id === (currentUser && currentUser.uid)) userReaction = r;
+            reactionCounts[r] = (reactionCounts[r] || 0) + 1;
+          });
+
+          let commentsDocs = await getDocs(collection(db, "wall", post.id, "comments"));
+          let comments = [];
+          commentsDocs.forEach(cDoc => {
+            let c = cDoc.data();
+            c.id = cDoc.id;
+            comments.push(c);
+          });
+          comments.sort((a, b) => a.createdAt && b.createdAt ? a.createdAt.seconds - b.createdAt.seconds : 0);
+
+          html += renderPost(post, post.id, userReaction, reactionCounts, comments, post.user);
+        }
+        postsContainer.innerHTML = html || `<div style="text-align:center;color:#99d">${tr('noPosts')}</div>`;
+        filterPosts();
+      });
+    }
+    listenToWall();
   </script>
 </body>
 </html>
