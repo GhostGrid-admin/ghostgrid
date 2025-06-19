@@ -398,7 +398,6 @@
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
       window.addEventListener('scroll', function () {
-         window.addEventListener('scroll', function () {
         if (window.scrollY > lastScrollY && window.scrollY > 70) {
           navbar.classList.add('hide-navbar');
         } else {
@@ -408,7 +407,8 @@
       });
     }
   </script>
-  <!-- Firebase upload-scriptet -->
+
+  <!-- Firebase upload-scriptet + WALL-LOGIK -->
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
@@ -541,13 +541,61 @@
       };
     }
 
-    // ----- WALL: Visa alla inlägg + radera egna -----
+    // ------- INBÄDDNING AV KLIPP & LÄNKAR ---------
+    function embedMedia(text = "") {
+      if (!text) return "";
+      // YouTube
+      if (text.match(/(?:youtube\.com|youtu\.be)/)) {
+        let vid = text.match(/(?:youtube\.com.*[?&]v=|youtu\.be\/)([\w\-]+)/);
+        if (vid && vid[1]) {
+          return `<iframe width="360" height="215" style="max-width:97%" src="https://www.youtube.com/embed/${vid[1]}" frameborder="0" allowfullscreen></iframe>`;
+        }
+      }
+      // TikTok
+      if (text.match(/tiktok\.com/)) {
+        return `<blockquote class="tiktok-embed" cite="${text}" data-video-id="" style="max-width:325px;min-width:220px;">
+          <a href="${text}">TikTok</a>
+        </blockquote>
+        <script async src="https://www.tiktok.com/embed.js"></script>`;
+      }
+      // Spotify
+      if (text.match(/open\.spotify\.com/)) {
+        return `<iframe src="https://open.spotify.com/embed${text.split('spotify.com')[1]}"
+          width="320" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="max-width:99%"></iframe>`;
+      }
+      // SoundCloud
+      if (text.match(/soundcloud\.com/)) {
+        return `<iframe width="100%" height="120" scrolling="no" frameborder="no" allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=${encodeURIComponent(text)}&color=%2300ffcc"></iframe>`;
+      }
+      // Länk till bild (om någon klistrar in direkt)
+      if (text.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
+        return `<img src="${text}" alt="Bild" style="max-width:99%;border-radius:8px;margin-top:6px;" />`;
+      }
+      // Annan länk
+      if (text.match(/^https?:\/\//)) {
+        return `<a href="${text}" target="_blank" rel="noopener">${text}</a>`;
+      }
+      // Vanlig text
+      return text;
+    }
+
+    // ---------- WALL-RENDER FUNKTION ----------
     function renderPostSimple(post, postId, isMine) {
+      // Om textfältet innehåller länkar – tillåt radbrytning och bädda in klipp
+      let show = post.text
+        ? `<div>${post.text.split(/\s+/).map(embedMedia).join('<br>')}</div>`
+        : "";
+
+      // Om någon har laddat upp bild/video/ljud via upload
+      if (post.imageUrl) show += `<img src="${post.imageUrl}" alt="Bild" style="max-width:99%;border-radius:8px;margin-top:8px;">`;
+      if (post.videoUrl) show += `<video src="${post.videoUrl}" controls style="max-width:99%;border-radius:8px;margin-top:8px;"></video>`;
+      if (post.audioUrl) show += `<audio src="${post.audioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
+      if (post.micAudioUrl) show += `<audio src="${post.micAudioUrl}" controls style="margin-top:8px;width:99%"></audio>`;
+
       return `
         <div class="post">
-          <div>
-            <strong>${post.text ? post.text : "(inget meddelande)"}</strong>
-          </div>
+          ${show}
           ${isMine ? `<button class="delete-post-btn" onclick="window.deleteWallPost('${postId}')">🗑️ Ta bort</button>` : ""}
         </div>
       `;
