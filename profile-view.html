@@ -9,73 +9,96 @@
     body {
       background: black;
       color: #00ff00;
-      font-family: 'Courier New', monospace;
-      margin: 0; padding: 0; min-height: 100vh;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
     nav.navbar {
-      background: #000;
-      border-bottom: 3px solid #8d37ff;
-      padding: 16px 0;
       width: 100%;
-      box-shadow: 0 0 18px #8d37ff;
+      background: #0a0020;
+      border-bottom: 2.5px solid #bb00ff;
+      box-shadow: 0 0 24px #bb00ff66;
+      padding: 0;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      text-align: center;
+    }
+    .nav-content {
       display: flex;
+      gap: 56px;
       justify-content: center;
       align-items: center;
-      position: sticky; top: 0; z-index: 99;
+      padding: 18px 0;
     }
-    .nav-content { display: flex; gap: 48px; justify-content: center; }
     .nav-content a {
-      color: #fff; text-decoration: none; font-size: 1.33em;
-      font-family: 'Courier New', monospace; font-weight: bold;
-      text-shadow: 0 0 9px #fff, 0 0 5px #bb00ff;
-      padding: 3px 16px; border-radius: 7px; transition: 0.15s;
+      color: white;
+      text-decoration: none;
+      font-size: 1.32em;
+      letter-spacing: 2.5px;
+      text-shadow: 0 0 8px #bb00ff, 0 0 8px #00ffcc;
+      font-family: 'Share Tech Mono', monospace;
+      transition: 0.2s;
+      padding: 3px 12px;
     }
-    .nav-content a:hover { background: #8d37ff; color: #000; }
-    .profile-main {
-      display: flex; flex-direction: column; align-items: center;
-      width: 100%; min-height: calc(100vh - 60px); box-sizing: border-box; padding-top: 30px;
+    .nav-content a:hover { background: #00ffcc33; border-radius: 6px; color: #00fff7; }
+    .profile-centerbox {
+      margin: 100px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 75vh;
+      max-width: 600px;
+      width: 96vw;
+      padding-bottom: 36px;
     }
-    #profileContent {
-      margin: 0 auto; width: 100%; max-width: 600px;
-      min-height: 350px; background: none; display: flex;
-      flex-direction: column; align-items: center; position: relative;
+    .profile-custom {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 350px;
+      justify-content: center;
     }
-    /* Profilbild + like */
-    .profile-header-flex {
-      display: flex; flex-direction: row; align-items: flex-start; justify-content: center; width: 100%;
+    /* Reaktioner: fixera nere till höger */
+    .reaction-float {
+      position: fixed;
+      right: 3vw;
+      bottom: 3vw;
+      z-index: 12;
+      background: #130028ee;
+      border-radius: 18px;
+      border: 2px solid #00fff7;
+      padding: 18px 36px 14px 36px;
+      color: #fff;
+      font-size: 1.12em;
+      box-shadow: 0 0 28px #00fff777, 0 0 10px #ff003e66;
+      font-family: monospace;
+      min-width: 164px;
+      text-align: center;
     }
-    .profile-img-big {
-      width: 140px; height: 140px; border-radius: 50%; border: 3px solid #00ff00;
-      box-shadow: 0 0 13px #00ffcc, 0 0 8px #bb00ff; object-fit: cover; background: #111;
+    .reaction-btn {
+      font-size: 2.0em;
+      margin: 10px 8px 0 8px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.08s;
     }
-    .profile-like-box {
-      display: flex; flex-direction: column; align-items: flex-end; gap: 9px; margin-left: 24px;
-      position: relative; min-width: 160px; background: #1a1a1a; border-radius: 14px;
-      box-shadow: 0 0 16px #8d37ff55; border: 1px solid #00ffcc; padding: 9px 20px 10px 14px; font-size: 1em;
+    .reaction-btn:active {
+      transform: scale(1.25);
+      filter: brightness(1.5);
     }
-    .profile-like-label { font-size: 1.07em; color: #fff; margin-bottom: 6px; }
-    .like-btn-pic, .thumb-btn-pic, .like-btn, .thumb-btn {
-      background: none; border: none; font-size: 1.45em; cursor: pointer;
-      margin-left: 7px; margin-right: 2px; color: #ff4da6; transition: transform .1s;
-      vertical-align: middle;
-    }
-    .like-btn.active, .like-btn-pic.active { color: #ff4da6; transform: scale(1.2);}
-    .thumb-btn, .thumb-btn-pic { color: #00ffcc; margin-left: 12px;}
-    .thumb-btn.active, .thumb-btn-pic.active { color: #00ffcc; transform: scale(1.2);}
-    .like-count, .thumb-count { font-size: 1.02em; margin-right: 6px; font-weight: bold;}
-    /* Flytande ruta nere i högra hörnet för hela profilen */
-    .floating-profile-like-box {
-      position: fixed; right: 36px; bottom: 32px;
-      background: #181a24ee; color: #fff; border: 2px solid #8d37ff;
-      border-radius: 15px; box-shadow: 0 0 25px #00ffcc66;
-      padding: 15px 32px; z-index: 1300; font-size: 1.09em; text-align: center;
-      min-width: 160px;
-    }
-    @media (max-width: 850px) {
-      .profile-header-flex { flex-direction: column; align-items: center; }
-      .profile-like-box { margin-left: 0; margin-top: 14px; min-width: 90vw; width: 95vw; align-items: center; }
-      .floating-profile-like-box { right: 8px; bottom: 12px; padding: 9px 8px; min-width: 120px; }
-      #profileContent { max-width: 98vw;}
+    @media (max-width: 700px) {
+      .profile-centerbox, .profile-custom { max-width: 98vw; width: 98vw;}
+      .reaction-float { right: 1vw; min-width: 120px; }
+      .nav-content { gap: 10px; font-size: 0.85em; padding: 7px 0; }
     }
   </style>
 </head>
@@ -90,148 +113,85 @@
       <a href="friends.html">Vänner</a>
     </div>
   </nav>
-  <div class="profile-main">
-    <div id="profileContent"></div>
+  <div class="profile-centerbox">
+    <div id="profile-output" class="profile-custom"></div>
   </div>
-  <div class="floating-profile-like-box" id="profileLikeBox" style="display:none;">
-    <div style="margin-bottom: 6px;">Gilla profilen:</div>
-    <button class="like-btn" id="profile-heart">❤️</button>
-    <span class="like-count" id="profile-heart-count">0</span>
-    <button class="thumb-btn" id="profile-thumb">👍</button>
-    <span class="thumb-count" id="profile-thumb-count">0</span>
+  <div class="reaction-float" id="profileReactions">
+    <span style="font-size:1.07em;">Gilla profilen:</span>
+    <div>
+      <button class="reaction-btn" id="profile-heart">❤️</button> <span id="profile-heart-count">0</span>
+      <button class="reaction-btn" id="profile-thumb">👍</button> <span id="profile-thumb-count">0</span>
+    </div>
   </div>
-  <!-- Firebase/JS -->
   <script type="module">
     import { auth, db } from './scripts/firebase-init.js';
-    import { doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getDoc, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-    // --- ELEMENT
-    const profileContent = document.getElementById("profileContent");
-    const profileLikeBox = document.getElementById("profileLikeBox");
-    const profileHeartBtn = document.getElementById("profile-heart");
-    const profileThumbBtn = document.getElementById("profile-thumb");
-    const profileHeartCount = document.getElementById("profile-heart-count");
-    const profileThumbCount = document.getElementById("profile-thumb-count");
-
-    // --- UID
+    // Hämta uid från URL
     const uid = new URLSearchParams(window.location.search).get("uid");
+    const profileOutput = document.getElementById("profile-output");
+    const heartBtn = document.getElementById("profile-heart");
+    const thumbBtn = document.getElementById("profile-thumb");
+    const heartCount = document.getElementById("profile-heart-count");
+    const thumbCount = document.getElementById("profile-thumb-count");
+
     let currentUser = null;
+    let reactions = { heart: 0, thumb: 0, userHearts: [], userThumbs: [] };
 
-    // --- LADDA PROFILDATA OCH VISA
-    let profilePicUrl = "";
-    let profileHTML = "";
-
-    // Hämta profil-data från Firestore och rendera hela profilen
     async function renderProfile() {
-      const ref = doc(db, "profiles", uid);
-      const snap = await getDoc(ref);
+      // Hämta användarens profilkod & profilbildslänk
+      const snap = await getDoc(doc(db, "profiles", uid));
       if (snap.exists()) {
         const data = snap.data();
-        profilePicUrl = data.profilePicUrl || "";
-        profileHTML = data.profileCode || "";
-        // Visa profil
-        profileContent.innerHTML = `
-          <div class="profile-header-flex">
-            <img src="${profilePicUrl}" alt="Profilbild" class="profile-img-big" id="mainProfileImg">
-            <div class="profile-like-box">
-              <div class="profile-like-label">Gilla profilbilden:</div>
-              <button class="like-btn-pic" id="pic-heart">❤️</button>
-              <span class="like-count" id="pic-heart-count">0</span>
-              <button class="thumb-btn-pic" id="pic-thumb">👍</button>
-              <span class="thumb-count" id="pic-thumb-count">0</span>
-            </div>
-          </div>
-          <div style="width:100%;display:flex;justify-content:center;">
-            <div id="customProfileHTML" style="margin-top:36px;width:95%;max-width:520px;">
-              ${profileHTML}
-            </div>
-          </div>
-        `;
-        profileLikeBox.style.display = "block";
-        setUpProfilePicReactions();
+        // Ersätt ${profilePicUrl} om någon profil använder det i koden
+        let code = data.profileCode || "";
+        if (data.profilePicUrl) {
+          code = code.replace(/\$\{profilePicUrl\}/g, data.profilePicUrl);
+        }
+        profileOutput.innerHTML = code;
       } else {
-        profileContent.innerHTML = "<h2>Profil hittades inte.</h2>";
+        profileOutput.innerHTML = `<div style="color:red;text-align:center;">Ingen profil hittades.</div>`;
       }
     }
 
-    // --- LIVE REAKTIONER PÅ PROFIL (❤️👍) -- PROFIL, ej profilbild
-    function setUpProfileReactions() {
-      const profileReactionsRef = doc(db, "profiles", uid, "reactions", "all");
-      // Live update
-      onSnapshot(profileReactionsRef, (docSnap) => {
-        const d = docSnap.exists() ? docSnap.data() : {};
-        profileHeartCount.textContent = (d.heart || []).length || 0;
-        profileThumbCount.textContent = (d.thumb || []).length || 0;
-        if (currentUser) {
-          profileHeartBtn.classList.toggle("active", (d.heart||[]).includes(currentUser.uid));
-          profileThumbBtn.classList.toggle("active", (d.thumb||[]).includes(currentUser.uid));
-        }
-      });
-      // Klick - hjärta
-      profileHeartBtn.onclick = async () => {
-        if (!currentUser) return alert("Du måste vara inloggad.");
-        const d = (await getDoc(profileReactionsRef)).data() || {};
-        let arr = d.heart || [];
-        if (arr.includes(currentUser.uid)) arr = arr.filter(x => x !== currentUser.uid);
-        else arr.push(currentUser.uid);
-        await setDoc(profileReactionsRef, { ...d, heart: arr }, { merge: true });
-      };
-      // Klick - tumme
-      profileThumbBtn.onclick = async () => {
-        if (!currentUser) return alert("Du måste vara inloggad.");
-        const d = (await getDoc(profileReactionsRef)).data() || {};
-        let arr = d.thumb || [];
-        if (arr.includes(currentUser.uid)) arr = arr.filter(x => x !== currentUser.uid);
-        else arr.push(currentUser.uid);
-        await setDoc(profileReactionsRef, { ...d, thumb: arr }, { merge: true });
-      };
+    async function renderReactions() {
+      // Hämta och visa reaktionsdata från Firestore
+      const snap = await getDoc(doc(db, "profiles", uid));
+      if (snap.exists()) {
+        const data = snap.data();
+        reactions.heart = data.heartCount || 0;
+        reactions.thumb = data.thumbCount || 0;
+        reactions.userHearts = data.userHearts || [];
+        reactions.userThumbs = data.userThumbs || [];
+        heartCount.innerText = reactions.heart;
+        thumbCount.innerText = reactions.thumb;
+      }
     }
 
-    // --- LIVE REAKTIONER PÅ PROFILBILD (❤️👍)
-    function setUpProfilePicReactions() {
-      const picHeartBtn = document.getElementById("pic-heart");
-      const picThumbBtn = document.getElementById("pic-thumb");
-      const picHeartCount = document.getElementById("pic-heart-count");
-      const picThumbCount = document.getElementById("pic-thumb-count");
-      const picReactionsRef = doc(db, "profiles", uid, "picReactions", "all");
-      // Live update
-      onSnapshot(picReactionsRef, (docSnap) => {
-        const d = docSnap.exists() ? docSnap.data() : {};
-        picHeartCount.textContent = (d.heart || []).length || 0;
-        picThumbCount.textContent = (d.thumb || []).length || 0;
-        if (currentUser) {
-          picHeartBtn.classList.toggle("active", (d.heart||[]).includes(currentUser.uid));
-          picThumbBtn.classList.toggle("active", (d.thumb||[]).includes(currentUser.uid));
-        }
-      });
-      // Klick - hjärta
-      picHeartBtn.onclick = async () => {
-        if (!currentUser) return alert("Du måste vara inloggad.");
-        const d = (await getDoc(picReactionsRef)).data() || {};
-        let arr = d.heart || [];
-        if (arr.includes(currentUser.uid)) arr = arr.filter(x => x !== currentUser.uid);
-        else arr.push(currentUser.uid);
-        await setDoc(picReactionsRef, { ...d, heart: arr }, { merge: true });
-      };
-      // Klick - tumme
-      picThumbBtn.onclick = async () => {
-        if (!currentUser) return alert("Du måste vara inloggad.");
-        const d = (await getDoc(picReactionsRef)).data() || {};
-        let arr = d.thumb || [];
-        if (arr.includes(currentUser.uid)) arr = arr.filter(x => x !== currentUser.uid);
-        else arr.push(currentUser.uid);
-        await setDoc(picReactionsRef, { ...d, thumb: arr }, { merge: true });
-      };
+    async function addReaction(type) {
+      // Undvik att samma användare kan gilla flera gånger
+      if (!currentUser) return alert("Du måste vara inloggad!");
+      const field = type === "heart" ? "userHearts" : "userThumbs";
+      const userArr = reactions[field] || [];
+      if (userArr.includes(currentUser.uid)) return;
+      userArr.push(currentUser.uid);
+      // Spara +1 och array till Firestore
+      const update = {};
+      update[type + "Count"] = (reactions[type] || 0) + 1;
+      update[field] = userArr;
+      await updateDoc(doc(db, "profiles", uid), update);
+      renderReactions();
     }
 
-    // --- AUTENTISERING & INIT
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async user => {
       currentUser = user;
-      renderProfile();
-      setUpProfileReactions();
+      await renderProfile();
+      await renderReactions();
     });
 
+    heartBtn.onclick = () => addReaction("heart");
+    thumbBtn.onclick = () => addReaction("thumb");
   </script>
 </body>
 </html>
