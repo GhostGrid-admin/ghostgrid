@@ -74,8 +74,6 @@
       .nav-content.active { display: flex; }
       #menuBtn { display: block; }
     }
-
-    /* Centrera profilkoden både vertikalt och horisontellt */
     .main-content {
       flex: 1 1 auto;
       min-height: 0;
@@ -95,18 +93,17 @@
       align-items: center;
       margin: 0 auto;
       transition: box-shadow 0.3s;
-      /* Snygg glow */
       box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
       border-radius: 28px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
       padding: 38px 22px;
     }
-    /* Reaktion-float längst ner, syns bara när man scrollar ner */
+    /* Reaction bar sticky bottom center */
     .reaction-float {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 26px;
+      bottom: 28px;
       background: #100028ee;
       border: 2.5px solid #00ffcc;
       border-radius: 22px;
@@ -119,10 +116,11 @@
       flex-direction: column;
       align-items: center;
       font-size: 1.25em;
-      z-index: 9999;
+      z-index: 10000;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s, bottom 0.4s;
+      user-select: none;
     }
     .reaction-float.visible {
       opacity: 1;
@@ -154,17 +152,52 @@
       margin-left: 2px;
       margin-right: 10px;
     }
+    /* REKLAM-rutor nere till vänster och höger */
+    .reklam-float {
+      position: fixed;
+      bottom: 26px;
+      width: 210px;
+      max-width: 43vw;
+      min-height: 60px;
+      background: #18102aff;
+      border-radius: 15px;
+      border: 2px solid #00fff7;
+      box-shadow: 0 0 17px #ff003e55, 0 0 7px #00fff799;
+      color: #ffea00;
+      padding: 17px 15px 13px 15px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      pointer-events: none;
+      font-size: 1.14em;
+      font-family: 'Courier New', monospace;
+      transition: opacity 0.3s, bottom 0.3s;
+      user-select: none;
+    }
+    .reklam-float.left { left: 28px; }
+    .reklam-float.right { right: 28px; }
+    .reklam-float.visible { opacity: 1; pointer-events: auto; }
+    .reklam-float img {
+      width: 37px;
+      height: 37px;
+      border-radius: 8px;
+      margin-right: 10px;
+      box-shadow: 0 0 6px #00fff7cc;
+      background: #090a1a;
+      object-fit: cover;
+    }
     @media (max-width: 700px) {
       #profile-output {
         padding: 10px 2vw;
         min-height: 160px;
       }
-      .reaction-float {
-        min-width: 140px;
-        font-size: 1em;
-        bottom: 8px;
-        padding: 10px 9px 6px 9px;
-      }
+      .reaction-float { min-width: 140px; font-size: 1em; bottom: 8px; padding: 10px 9px 6px 9px; }
+      .reklam-float { max-width: 66vw; min-width: 94px; font-size: 0.98em; padding: 9px 4px 7px 9px; bottom: 8px; }
+      .reklam-float.left { left: 5px; }
+      .reklam-float.right { right: 5px; }
+      .reklam-float img { width: 26px; height: 26px; }
     }
   </style>
 </head>
@@ -183,6 +216,7 @@
   <div class="main-content">
     <div id="profile-output"></div>
   </div>
+  <!-- Floating reactions bar -->
   <div class="reaction-float" id="profileReactions">
     <div style="font-size:1.1em; letter-spacing:0.04em;">Gilla profilen:</div>
     <div class="reaction-row">
@@ -192,9 +226,18 @@
       <span class="reaction-count" id="count-thumb">0</span>
     </div>
   </div>
+  <!-- Floating ads, left/right -->
+  <div class="reklam-float left" id="adLeft">
+    <img src="https://dummyimage.com/60x60/8000ff/fff&text=Ad+1" alt="Ad1">
+    <span>Vill du annonsera här? Kontakta admin!</span>
+  </div>
+  <div class="reklam-float right" id="adRight">
+    <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
+    <span>Bli medlem och få exklusiva erbjudanden!</span>
+  </div>
   <script type="module">
     import { auth, db } from './scripts/firebase-init.js';
-    import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     // Hamburger-meny
     const menuBtn = document.getElementById("menuBtn");
@@ -211,7 +254,6 @@
     let userId = null;
     let heartUsers = [], thumbUsers = [];
 
-    // Hämta och rendera profil
     async function renderProfile() {
       const snap = await getDoc(profileRef);
       if (!snap.exists()) {
@@ -229,24 +271,38 @@
     }
     renderProfile();
 
-    // Scroll trigger för att visa/dölja "gilla profilen"
-    function checkReactionsVisible() {
+    // SCROLL-TRIGGER FÖR floating bar & ads
+    let lastScrollY = window.scrollY;
+    function checkFloatersVisible() {
       const reactionBox = document.getElementById('profileReactions');
-      const scrollPos = window.scrollY + window.innerHeight;
-      const pageHeight = document.body.scrollHeight;
-      // Visa om man är längst ner, annars dölj
-      if (scrollPos >= pageHeight - 12) {
+      const adLeft = document.getElementById('adLeft');
+      const adRight = document.getElementById('adRight');
+      const scrollY = window.scrollY;
+      const winH = window.innerHeight;
+      const docH = document.body.scrollHeight;
+
+      // Gilla-profilen: Visa om nära botten (sista 1/6 av sidan), annars göm
+      if (scrollY + winH >= docH - winH / 6) {
         reactionBox.classList.add("visible");
       } else {
         reactionBox.classList.remove("visible");
       }
+      // Reklamrutor: visa i sista 1/3 av sidan
+      if (scrollY + winH >= docH - docH / 3) {
+        adLeft.classList.add("visible");
+        adRight.classList.add("visible");
+      } else {
+        adLeft.classList.remove("visible");
+        adRight.classList.remove("visible");
+      }
+      lastScrollY = scrollY;
     }
-    window.addEventListener("scroll", checkReactionsVisible);
-    window.addEventListener("resize", checkReactionsVisible);
+    window.addEventListener("scroll", checkFloatersVisible);
+    window.addEventListener("resize", checkFloatersVisible);
+    setTimeout(checkFloatersVisible, 400);
 
-    // Reaktionsknappar
+    // REAKTIONER
     function updateReactionUI() {
-      // Markera om inloggad användare redan reagerat
       if (!userId) return;
       document.getElementById('like-heart').style.opacity = heartUsers.includes(userId) ? "1" : "0.7";
       document.getElementById('like-thumb').style.opacity = thumbUsers.includes(userId) ? "1" : "0.7";
@@ -276,9 +332,6 @@
       userId = user ? user.uid : null;
       updateReactionUI();
     });
-
-    // Se till att den visas/döljs från start
-    setTimeout(checkReactionsVisible, 300);
   </script>
 </body>
 </html>
