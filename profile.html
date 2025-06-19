@@ -25,11 +25,16 @@
       box-shadow: 0 0 20px #ad30fa;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
     .nav-content {
       display: flex;
       gap: 40px;
       padding: 14px 0 12px 0;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      transition: 0.18s;
     }
     .nav-content a {
       color: #e0ffff;
@@ -47,6 +52,18 @@
       background: #ad30fa;
       color: #000;
       box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
+    }
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.3em;
+      position: absolute;
+      right: 18px;
+      top: 5px;
+      cursor: pointer;
+      z-index: 3000;
     }
     .hidden { display: none !important; }
     .login-container {
@@ -129,14 +146,30 @@
       text-align: left;
     }
     .smeknamn-row label { font-size: 1.1em; color: #00ffcc; }
+    @media (max-width: 900px) {
+      .nav-content {
+        flex-direction: column;
+        background: #0a0020f7;
+        position: absolute;
+        left: 0; top: 55px;
+        width: 100vw;
+        gap: 18px;
+        padding: 15px 0 10px 0;
+        display: none;
+        z-index: 2000;
+      }
+      .nav-content.active { display: flex; }
+      #menuBtn { display: block; }
+    }
     @media (max-width: 600px) {
       .login-container { max-width: 98vw; }
+      .nav-content a { font-size: 1.11em; }
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <div class="nav-content">
+    <div class="nav-content" id="navLinks">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
@@ -144,6 +177,7 @@
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
     </div>
+    <button id="menuBtn" aria-label="Meny">&#9776;</button>
   </nav>
 
   <div class="login-container">
@@ -192,6 +226,14 @@
   </div>
 
   <script type="module">
+    // --- Hamburger-meny ---
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+    menuBtn.onclick = () => navLinks.classList.toggle("active");
+    document.querySelectorAll('.nav-content a').forEach(a =>
+      a.onclick = () => navLinks.classList.remove("active")
+    );
+    // --- Profilkod ---
     import { auth, db, storage } from './scripts/firebase-init.js';
     import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
@@ -200,7 +242,6 @@
     let profilePicUrl = "";
     let currentUser = null;
 
-    // Visa användarnamn, e-post och profilinfo direkt vid inloggning
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -221,7 +262,7 @@
     document.getElementById('profile-pic').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 4 * 1024 * 1024) { // 4 MB max
+      if (file.size > 4 * 1024 * 1024) {
         alert("Profilbilden får max vara 4 MB.");
         return;
       }
@@ -311,7 +352,6 @@
       </div>`
     };
 
-    // Byt kod i textarea när temat ändras
     document.getElementById('theme').addEventListener('change', function(e) {
       const theme = e.target.value;
       if (themeTemplates[theme]) {
@@ -321,7 +361,7 @@
       }
     });
 
-    // Spara profil (smeknamn, kod, tema, profilbild)
+    // Spara profil
     document.getElementById('saveBtn').addEventListener('click', async () => {
       if (!currentUser) return alert("Du är inte inloggad.");
       const nickname = document.getElementById('nickname').value.trim();
