@@ -64,7 +64,6 @@
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
-      .nav-content { font-size: 1em; gap: 7px; }
       .wall-container { padding: 3vw; }
       .wall-title { font-size: 1.2em; }
       .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
@@ -257,6 +256,35 @@
       cursor: pointer;
       margin-top: 6px;
     }
+    /* --- Hamburger meny CSS --- */
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.3em;
+      position: absolute;
+      right: 18px;
+      top: 8px;
+      cursor: pointer;
+      z-index: 3000;
+    }
+    @media (max-width: 900px) {
+      .nav-content {
+        flex-direction: column;
+        background: #170b1aee;
+        position: absolute;
+        left: 0; top: 54px;
+        width: 100vw;
+        gap: 14px;
+        padding: 18px 0 10px 0;
+        display: none;
+        z-index: 2050;
+        box-shadow: 0 8px 24px #ad30fa90;
+      }
+      .nav-content.active { display: flex; }
+      #menuBtn { display: block; }
+    }
   </style>
 </head>
 <body>
@@ -278,7 +306,8 @@
   </div>
   <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="nav-content">
+    <button id="menuBtn" aria-label="Meny">&#9776;</button>
+    <div class="nav-content" id="navLinks">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
@@ -318,15 +347,15 @@
     const reactionsList = [
       { key: "heart", emoji: "❤️" },
       { key: "thumbs_up", emoji: "👍" },
+      { key: "laugh", emoji: "😂" },
+      { key: "happy", emoji: "😊" },
+      { key: "embarrassed", emoji: "😳" },
+      { key: "angel", emoji: "😇" }
+      { key: "surprised", emoji: "😲" },
+      { key: "sad", emoji: "😢" },
+      { key: "cry", emoji: "😭" },
       { key: "thumbs_down", emoji: "👎" },
       { key: "broken_heart", emoji: "💔" },
-      { key: "happy", emoji: "😊" },
-      { key: "sad", emoji: "😢" },
-      { key: "laugh", emoji: "😂" },
-      { key: "cry", emoji: "😭" },
-      { key: "embarrassed", emoji: "😳" },
-      { key: "surprised", emoji: "😲" },
-      { key: "angel", emoji: "😇" }
     ];
     
     let currentUser = null;
@@ -524,6 +553,13 @@
         lastScrollY = window.scrollY;
       });
     }
+    // Hamburger meny-funktion
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+    menuBtn.onclick = () => navLinks.classList.toggle("active");
+    document.querySelectorAll('.nav-content a').forEach(a =>
+      a.onclick = () => navLinks.classList.remove("active")
+    );
   </script>
 </body>
 </html>
