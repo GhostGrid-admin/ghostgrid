@@ -27,18 +27,12 @@
     .glow-left {
       left: 0;
       background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
     .glow-right {
       right: 0;
       background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
     .side-banner {
       position: fixed;
@@ -85,6 +79,7 @@
     }
     @media (max-width: 700px) {
       .side-banner { display: none; }
+      .glow-left, .glow-right { display: none; }
     }
     nav.navbar {
       background-color: #000;
@@ -141,26 +136,28 @@
       width: 100%;
       max-width: 230px;
     }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-content { font-size: 1em; gap: 7px; }
+      .search-container input { width: 99vw; max-width: 99vw;}
+    }
     .wall-container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
-      padding: 12px;
-      background: rgba(6, 10, 16, 0.88);
-      border-radius: 18px;
-      box-shadow: 0 0 22px #00ffe033;
-      position: relative;
+      padding: 10px;
+      width: 100%;
       z-index: 2;
-      min-width: 0;
-      margin-top: 52px;
+      position: relative;
     }
     .wall-title {
-      font-size: 2.3em;
+      font-size: 2.2em;
       text-align: center;
       color: #aaffee;
-      margin: 10px 0 22px 0;
+      margin: 18px 0 22px 0;
       text-shadow: 0 0 8px #ffffff;
+      letter-spacing: 0.03em;
       font-weight: bold;
-      letter-spacing: 0.02em;
     }
     .search-filter, .filter-search {
       display: flex;
@@ -199,16 +196,16 @@
     .post {
       background-color: rgba(0, 0, 0, 0.88);
       padding: 15px 12px 8px 12px;
-      border-radius: 12px;
+      border-radius: 10px;
       border-left: 4px solid #00ffcc;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       word-break: break-word;
       box-shadow: 0 0 10px #4ef2ff11;
       position: relative;
     }
     .post strong {
       color: #ccffff;
-      font-size: 1.13em;
+      font-size: 1.08em;
     }
     .post .post-media {
       margin-top: 8px;
@@ -226,8 +223,8 @@
       color: white;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.15em;
-      padding: 2px 10px 2px 10px;
+      font-size: 1.2em;
+      padding: 3px 10px 2px 10px;
       z-index: 3;
       opacity: 0.87;
       transition: 0.2s;
@@ -241,7 +238,7 @@
       align-items: center;
     }
     .reactions button {
-      font-size: 1.2em;
+      font-size: 1.25em;
       background: none;
       border: none;
       cursor: pointer;
@@ -256,9 +253,9 @@
       font-weight: bold;
     }
     .reaction-count {
-      font-size: 0.93em;
+      font-size: 0.92em;
       margin-left: 3px;
-      margin-right: 8px;
+      margin-right: 10px;
       color: #ccc;
     }
     .comments {
@@ -288,7 +285,7 @@
       border-radius: 50%;
       cursor: pointer;
       padding: 0 6px;
-      font-size: 0.92em;
+      font-size: 0.95em;
       margin-left: 4px;
       margin-top: 2px;
     }
@@ -313,24 +310,42 @@
       border-radius: 5px;
       cursor: pointer;
       margin-top: 6px;
-      font-size: 1em;
     }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .nav-content { font-size: 1em; gap: 7px; }
-      .search-container input { width: 99vw; max-width: 99vw;}
-      .wall-container { padding: 3vw; margin-top:30px;}
-      .wall-title { font-size: 1.15em; }
-      .post { padding: 10px 3vw 7px 3vw; font-size: 0.97em; }
-      .filter-search input[type="text"] { width: 98vw; }
+    /* --- Hamburger meny CSS --- */
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.3em;
+      position: absolute;
+      right: 18px;
+      top: 8px;
+      cursor: pointer;
+      z-index: 3000;
+    }
+    @media (max-width: 900px) {
+      .nav-content {
+        flex-direction: column;
+        background: #170b1aee;
+        position: absolute;
+        left: 0; top: 54px;
+        width: 100vw;
+        gap: 14px;
+        padding: 18px 0 10px 0;
+        display: none;
+        z-index: 2050;
+        box-shadow: 0 8px 24px #ad30fa90;
+      }
+      .nav-content.active { display: flex; }
+      #menuBtn { display: block; }
     }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <!-- SIDBANNERS -->
+  <!-- Vänster sidbanner -->
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
@@ -338,6 +353,7 @@
       </a>
     </div>
   </div>
+  <!-- Höger sidbanner -->
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
@@ -345,8 +361,10 @@
       </a>
     </div>
   </div>
+  <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="nav-content">
+    <button id="menuBtn" aria-label="Meny">&#9776;</button>
+    <div class="nav-content" id="navLinks">
       <a href="forum.html" data-t="forum">Forum</a>
       <a href="store.html" data-t="store">Store</a>
       <a href="wall.html" data-t="wall">Väggen</a>
@@ -373,8 +391,9 @@
     </div>
     <div id="postsContainer"></div>
   </div>
+
+  <!-- SIDBANNERS – Rotera var 6:e sekund -->
   <script>
-    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -402,22 +421,13 @@
       updateBanners();
     }, 6000);
 
-    // Sök-fält
-    document.addEventListener("DOMContentLoaded", () => {
-      const searchInput = document.getElementById("searchInputGlobal");
-      if (searchInput) {
-        searchInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            const query = searchInput.value.trim();
-            if (query.length >= 2) {
-              window.location.href = "search.html?q=" + encodeURIComponent(query);
-            }
-          }
-        });
-      }
-    });
-
+    // Hamburger meny-funktion
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+    menuBtn.onclick = () => navLinks.classList.toggle("active");
+    document.querySelectorAll('.nav-content a').forEach(a =>
+      a.onclick = () => navLinks.classList.remove("active")
+    );
     // Navbar hide vid scroll på mobil
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
@@ -432,8 +442,10 @@
       });
     }
   </script>
+
+  <!-- HUVUDJAVASCRIPT – ALLT I SLUTET, INTE I DOMEN! -->
   <script type="module">
-    // --- SPRÅKSTÖD ---
+    // -------- SPRÅKSTÖD --------
     const lang = localStorage.getItem('language') || 'sv';
     const texts = {
       sv: {
@@ -447,7 +459,8 @@
         deleteComment: "🗑️", loading: "Laddar...", noPosts: "Inga inlägg ännu!",
         removeReaction: "❌ Ta bort reaktion", needLoginReact: "Du måste vara inloggad för att reagera.",
         needLoginComment: "Du måste vara inloggad för att kommentera.", maxWords: "Max 200 ord!",
-        replyBtn: "Svara", loginReply: "Logga in för att svara", removeReply: "Ta bort svar"
+        replyBtn: "Svara", loginReply: "Logga in för att svara",
+        removeReply: "Ta bort svar"
       },
       en: {
         forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
@@ -460,7 +473,8 @@
         deleteComment: "🗑️", loading: "Loading...", noPosts: "No posts yet!",
         removeReaction: "❌ Remove reaction", needLoginReact: "You need to be logged in to react.",
         needLoginComment: "You need to be logged in to comment.", maxWords: "Max 200 words!",
-        replyBtn: "Reply", loginReply: "Log in to reply", removeReply: "Remove reply"
+        replyBtn: "Reply", loginReply: "Log in to reply",
+        removeReply: "Remove reply"
       }
     };
     function tr(key) { return (texts[lang] && texts[lang][key]) || key; }
@@ -490,7 +504,7 @@
     function setFilter(type) {
       currentTypeFilter = type;
       document.querySelectorAll('.search-filter button').forEach(btn =>
-        btn.classList.toggle('active', btn.getAttribute('data-t') === type)
+        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(type) || (type === 'all' && btn.textContent.toLowerCase() === tr('all').toLowerCase()))
       );
       filterPosts();
     }
@@ -515,12 +529,14 @@
         if (/youtu\.be|youtube\.com/.test(url)) {
           let vid = url.match(/(?:youtu\.be\/|youtube\.com.*[?&]v=)([\w\-]+)/);
           if (vid && vid[1]) {
-            return `<iframe width="360" height="210" style="max-width:99%;margin:6px 0;" src="https://www.youtube.com/embed/${vid[1]}" frameborder="0" allowfullscreen></iframe>`;
+            return `<iframe width="360" height="210" style="max-width:95%;" src="https://www.youtube.com/embed/${vid[1]}" frameborder="0" allowfullscreen></iframe>`;
           }
         }
         // TikTok
         if (/tiktok\.com/.test(url)) {
-          return `<blockquote class="tiktok-embed" cite="${url}" style="max-width:325px;min-width:220px;"><a href="${url}">TikTok</a></blockquote>
+          return `<blockquote class="tiktok-embed" cite="${url}" data-video-id="" style="max-width:325px;min-width:220px;">
+                    <a href="${url}">TikTok</a>
+                  </blockquote>
                   <script async src="https://www.tiktok.com/embed.js"></script>`;
         }
         // Spotify
@@ -682,6 +698,15 @@
       });
     }
     listenToWall();
+
+    // --- Sök globalt
+    document.getElementById("searchInputGlobal").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        const q = e.target.value.trim();
+        if (q.length > 1) window.location.href = "search.html?q=" + encodeURIComponent(q);
+      }
+    });
   </script>
 </body>
+</html>
 </html>
