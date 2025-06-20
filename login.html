@@ -67,9 +67,16 @@
       font-size: 1rem;
     }
 
-    button {
+    .auth-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       margin-top: 20px;
-      padding: 12px 25px;
+    }
+
+    .main-btn {
+      width: 100%;
+      padding: 12px 0;
       font-size: 1rem;
       color: black;
       background-color: #00ff00;
@@ -77,10 +84,30 @@
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.3s;
+    }
+    .main-btn:hover {
+      background-color: #00cc00;
     }
 
-    button:hover {
-      background-color: #00cc00;
+    .guest-btn {
+      width: 100%;
+      padding: 12px 0;
+      font-size: 1rem;
+      color: #00ff00;
+      background: #101010;
+      border: 2px solid #00ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ff00;
+      transition: background 0.3s, color 0.3s, border 0.3s;
+    }
+    .guest-btn:hover {
+      background: #161616;
+      border-color: #00cc00;
+      color: #00ff99;
+      box-shadow: 0 0 16px #00ff00;
     }
 
     .extra-options {
@@ -114,20 +141,16 @@
       h1 {
         font-size: 1.5rem;
       }
-
       .login-container {
         padding: 20px;
       }
-
       input,
       button {
         font-size: 1rem;
       }
-
       label {
         font-size: 0.9rem;
       }
-
       .extra-options {
         flex-direction: column;
         align-items: center;
@@ -140,28 +163,28 @@
 
   <div class="login-container">
     <h1 data-i18n="login_title">Logga in på GhostGrid</h1>
+    <form id="loginForm">
+      <label for="email" data-i18n="email">E-postadress</label>
+      <input type="email" id="email" name="email" required data-i18n="email_placeholder" autocomplete="email">
 
-<form id="loginForm">
-  <label for="email" data-i18n="email">E-postadress</label>
-  <input type="email" id="email" name="email" required data-i18n="email_placeholder" autocomplete="email">
+      <label for="password" data-i18n="password">Lösenord</label>
+      <input type="password" id="password" name="password" required data-i18n="password_placeholder" autocomplete="current-password">
 
-  <label for="password" data-i18n="password">Lösenord</label>
-  <input type="password" id="password" name="password" required data-i18n="password_placeholder" autocomplete="current-password">
+      <div class="auth-buttons">
+        <button type="submit" class="main-btn" data-i18n="login_button_user">Logga in som användare</button>
+        <button type="button" id="guest-login" class="guest-btn" data-i18n="guest_login">Logga in som gäst</button>
+      </div>
 
-  <button type="submit" data-i18n="login_button">Logga in</button>
-
-  <button type="button" id="guest-login" style="margin-top: 10px; width: 100%;" data-i18n="guest_login"></button>
-  
-  <div class="extra-options">
-    <a href="reset-password.html" class="purple-button" data-i18n="forgot_password">Glömt ditt lösenord?</a>
-    <a href="register.html" class="purple-button" data-i18n="create_account">Skapa konto</a>
-  </div>
-</form>
+      <div class="extra-options">
+        <a href="reset-password.html" class="purple-button" data-i18n="forgot_password">Glömt ditt lösenord?</a>
+        <a href="register.html" class="purple-button" data-i18n="create_account">Skapa konto</a>
+      </div>
+    </form>
   </div>
 
   <script type="module">
     import { auth } from "./scripts/firebase-init.js";
-    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { signInWithEmailAndPassword, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
     window.addEventListener("load", () => {
       const audio = document.getElementById("keystrokeAudio");
@@ -179,7 +202,16 @@
         await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "profile.html";
       } catch (error) {
-        alert("Fel: " + error.message);
+        alert((localStorage.getItem("lang") === "en" ? "Error: " : "Fel: ") + error.message);
+      }
+    });
+
+    document.getElementById("guest-login").addEventListener("click", async () => {
+      try {
+        await signInAnonymously(auth);
+        window.location.href = "home.html"; // Ändra till rätt sida för gäster om du vill!
+      } catch (error) {
+        alert((localStorage.getItem("lang") === "en" ? "Could not log in as guest: " : "Kunde inte logga in som gäst: ") + error.message);
       }
     });
   </script>
@@ -193,9 +225,10 @@
         email_placeholder: "Ange din e-post",
         password: "Lösenord",
         password_placeholder: "Ange ditt lösenord",
-        login_button: "Logga in",
+        login_button_user: "Logga in som användare",
+        guest_login: "Logga in som gäst",
         forgot_password: "Glömt ditt lösenord?",
-        create_account: "Skapa nytt konto"
+        create_account: "Skapa konto"
       },
       en: {
         login_page_title: "Login – GhostGrid",
@@ -204,7 +237,8 @@
         email_placeholder: "Enter your email",
         password: "Password",
         password_placeholder: "Enter your password",
-        login_button: "Log in",
+        login_button_user: "Sign in as user",
+        guest_login: "Continue as guest",
         forgot_password: "Forgot your password?",
         create_account: "Create account"
       }
@@ -228,8 +262,5 @@
 
     document.addEventListener("DOMContentLoaded", applyTranslations);
   </script>
-
-  <!-- 🔒 Inloggningslogik + session -->
-  <script type="module" src="scripts/login.js"></script>
 </body>
 </html>
