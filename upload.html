@@ -275,55 +275,6 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
-
-    .ad-footer {
-      position: fixed;
-      left: 0; right: 0;
-      bottom: 0;
-      width: 100vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: none;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s;
-      min-height: 0;
-      z-index: 2100;
-      border: none;
-    }
-    .ad-footer.visible {
-      opacity: 1;
-      pointer-events: auto;
-      min-height: 90px;
-    }
-    .ad-banner {
-      width: 50vw;
-      max-width: 750px;
-      height: 90px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: transparent;
-      margin: 0 2vw;
-    }
-    .ad-banner img {
-      width: 100%;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 0 18px #7b00ff99;
-      background: #11002a;
-    }
-    @media (max-width: 900px) {
-      .ad-footer { flex-direction: column; min-height: 120px;}
-      .ad-banner { width: 95vw; max-width: 99vw; height: 80px;}
-      .ad-banner img { height: 80px;}
-    }
-    @media (max-width: 600px) {
-      .ad-footer { min-height: 60px;}
-      .ad-banner img { height: 55px;}
-    }
   </style>
 </head>
 <body>
@@ -406,19 +357,6 @@
       <button type="submit" style="margin-top:18px;">Ladda upp</button>
     </form>
   </div>
-  <!-- BOTTENREKLAM -->
-  <footer class="ad-footer" id="adFooter">
-    <div class="ad-banner">
-      <a href="#" target="_blank">
-        <img id="bannerImageLeft" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1" alt="Reklam vänster" />
-      </a>
-    </div>
-    <div class="ad-banner">
-      <a href="#" target="_blank">
-        <img id="bannerImageRight" src="https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2" alt="Reklam höger" />
-      </a>
-    </div>
-  </footer>
   <script>
     // SIDBANNER ROTATION (vänster och höger)
     const banners = [
@@ -500,19 +438,6 @@
         lastScrollY = window.scrollY;
       });
     }
-    // --- BOTTNREKLAM ---
-    let lastBannerScroll = window.scrollY;
-    window.addEventListener("scroll", function () {
-      const adFooter = document.getElementById("adFooter");
-      if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
-        adFooter.classList.add("visible");
-      } else if (window.scrollY > lastBannerScroll) {
-        adFooter.classList.add("visible");
-      } else {
-        adFooter.classList.remove("visible");
-      }
-      lastBannerScroll = window.scrollY;
-    });
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
