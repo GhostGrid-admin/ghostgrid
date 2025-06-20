@@ -6,258 +6,82 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      margin: 0;
-      background-color: #050505;
-      color: #e0ffff;
-      font-family: 'Courier New', monospace;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    nav.navbar {
-      background-color: #000;
-      border-bottom: 2px solid #bb00ff;
-      padding: 12px 0;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-    }
-    .nav-content {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 40px;
-      width: 100%;
-      max-width: 900px;
-      align-items: center;
-      text-align: center;
-    }
-    .nav-content a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.22em;
-      font-family: inherit;
-      padding: 7px 20px;
-      border-radius: 7px;
-      text-shadow: 0 0 8px #bb00ff;
-      transition: 0.3s;
-      font-weight: bold;
-    }
-    .nav-content a.active, .nav-content a:hover {
-      background: #bb00ff;
-      color: #000;
-      box-shadow: 0 0 12px #fff;
-      text-shadow: none;
-    }
-    .nav-content .search-container {
-      margin-left: 20px;
-    }
-    .nav-content input[type="text"] {
-      padding: 6px 18px;
-      border-radius: 8px;
-      border: 1px solid #00ffcc;
-      background: #151515;
-      color: #fff;
-      font-size: 1em;
-      outline: none;
-      min-width: 190px;
-      margin-top: 2px;
-    }
+    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
+    .glow-left, .glow-right { position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0; }
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
+    .side-banner { position: fixed; top: 87px; bottom: 0; width: 136px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
+    .side-banner .banner-inner { width: 120px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
+    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
+    .side-banner.left { left: 0; } .side-banner.right { right: 0; }
+    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
+    @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
 
-    /* --- SIDOREKLAMER --- */
-    .ad-side {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 86px;
-      z-index: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: stretch;
-      align-items: stretch;
-      pointer-events: none;
+    /* NavBar & Hamburger */
+    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
+    .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
+    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
+    .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
+    .search-container { width: 210px; display: flex; justify-content: center; margin-left: 12px;}
+    .search-container input { padding: 8px 14px; font-size: 1.05em; background-color: #111; border: 2px solid #00ffcc; border-radius: 8px; color: #fff; box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc; text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc; width: 100%; max-width: 230px;}
+    .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
+    .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
+    @media (max-width: 700px) {
+      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
+      .nav-content.show { display: flex; }
+      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
+      .search-container { margin: 10px auto 0 auto; width: 90vw; }
+      .search-container input { width: 100%; max-width: 100vw;}
+      .hamburger { display: flex; }
     }
-    .ad-left {
-      left: 0;
-      background: linear-gradient(180deg, #9900ff 60%, #00ffe5 100%);
-      border-top-left-radius: 15px;
-      border-bottom-left-radius: 15px;
-      box-shadow: 0 0 28px #9900ffbb;
-    }
-    .ad-right {
-      right: 0;
-      background: linear-gradient(180deg, #00ffe5 60%, #9900ff 100%);
-      border-top-right-radius: 15px;
-      border-bottom-right-radius: 15px;
-      box-shadow: 0 0 28px #00ffe5bb;
-    }
-    .ad-label {
-      color: #fff;
-      text-align: center;
-      font-size: 1em;
-      margin-top: 32vh;
-      opacity: 0.7;
-      writing-mode: vertical-lr;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #000;
-      pointer-events: none;
-      font-family: inherit;
-      user-select: none;
-    }
+    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
 
-    /* --- CENTRALT INNEHÅLL --- */
-    .forum-center {
-      max-width: 520px;
-      margin: 110px auto 0 auto;
-      background: #050505;
-      border-radius: 17px;
-      box-shadow: 0 0 18px #00ffcc44, 0 0 20px #bb00ff22 inset;
-      padding: 2.5vw 3vw 2vw 3vw;
-      border: 2.5px solid #00ffcc;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-    .forum-center h2 {
-      font-size: 2.1em;
-      color: #aaffee;
-      margin-bottom: 28px;
-      margin-top: 0;
-      text-shadow: 0 0 9px #bbfff6, 0 0 2px #fff;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1.5px;
-    }
-    .thread-form input, .thread-form textarea {
-      width: 100%;
-      background: #000;
-      border: 1.5px solid #00ffcc;
-      border-radius: 5px;
-      color: #00ffcc;
-      font-family: inherit;
-      font-size: 1.1em;
-      padding: 8px 10px;
-      margin-bottom: 15px;
-      margin-top: 2px;
-      outline: none;
-      box-shadow: 0 0 5px #00ffcc22 inset;
-      transition: border 0.18s;
-    }
-    .thread-form textarea { min-height: 60px; resize: vertical;}
-    .thread-form button {
-      background: #00ff55;
-      color: #000;
-      font-size: 1.19em;
-      padding: 8px 32px;
-      border-radius: 6px;
-      border: 1px solid #00ffcc;
-      cursor: pointer;
-      margin: 10px auto 0 auto;
-      font-family: inherit;
-      font-weight: bold;
-      box-shadow: 0 0 11px #00ffcc99;
-      transition: 0.16s;
-      display: block;
-    }
-    .thread-form button:hover { background: #00ffe5; color:#222;}
-    #threadsList { margin-top: 26px; }
+    /* Forum Main Content */
+    .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
+    .forum-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
 
-    /* --- AI-ASSISTENTER --- */
-    .ai-footer-wrap {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      width: 100vw;
-      max-width: 100vw;
-      margin: 0 auto;
-      padding-bottom: 26px;
-      position: relative;
-      z-index: 10;
-      gap: 24px;
-    }
-    .ai-bubble {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 130px;
-      max-width: 200px;
-      margin: 0 2vw;
-      font-size: 1.08em;
-      text-align: center;
-      user-select: none;
-    }
-    .ai-bubble.ghost .ai-label { color: #15fff0; font-weight:bold;}
-    .ai-bubble.glow .ai-label { color: #ffe44e; font-weight:bold;}
-    .ai-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 4px;
-      cursor: pointer;
-      transition: transform 0.17s;
-    }
-    .ai-icon:hover { transform: scale(1.13) rotate(-3deg);}
-    .ai-desc { font-size: 0.97em; margin-top: 3px; opacity: 0.94;}
-    /* Ghost vänstertext, Glow högertext */
-    .ai-desc.left { text-align: right; margin-right: 1vw;}
-    .ai-desc.right { text-align: left; margin-left: 1vw;}
-
-    /* --- RESPONSIVE --- */
-    @media (max-width: 1000px) {
-      .ad-side { display: none !important; }
-      .forum-center { margin: 100px 1vw 0 1vw; }
-      .ai-footer-wrap { flex-direction: column; align-items: center; gap: 10px; }
-      .ai-bubble .ai-desc { text-align: center !important; }
-    }
-    @media (max-width: 650px) {
-      .forum-center { padding: 10vw 2vw 5vw 2vw;}
-      .ai-footer-wrap { flex-direction: column; gap: 2px; padding-bottom: 16px; }
-    }
-    /* --- Kommentar/Tråd/Knappar --- */
-    .thread-card { background:#000b; border-radius:9px; margin:22px 0 12px 0; box-shadow:0 0 10px #00ffcc33; padding:13px 18px;}
-    .thread-title { font-size:1.23em; color:#30fff6; font-family:inherit; font-weight:bold; }
-    .thread-desc { color:#cdf; margin-bottom:7px;}
-    .thread-meta { color:#b6eeff; font-size:.91em; margin-bottom: 6px;}
-    .reactions-bar button.selected { background:#30fff6; color:#111; }
-    .reactions-bar button { background:none; border:none; font-size:1.35em; margin:0 2px; cursor:pointer;}
-    .edit-btn,.delete-btn,.reply-btn { background:#181; color:#fff; border-radius:4px; border:none; padding:3px 8px; margin:0 3px 0 0; font-size:.99em; cursor:pointer;}
-    .delete-btn { background:#922;}
-    .edit-btn:hover,.delete-btn:hover,.reply-btn:hover { filter:brightness(1.16);}
-    .add-comment-box { margin-top:8px;}
-    .add-comment-box textarea { width:100%; min-height:32px; border-radius:5px; padding:4px 7px; font-family:inherit;}
-    .add-comment-box button { background:#00ffcc; color:#111; border-radius:4px; border:none; font-weight:bold; margin-top:4px;}
-    .comment-card { margin:14px 0 2px 0; padding:9px 13px; background:#060d14bb; border-radius:7px; box-shadow:0 0 7px #00ffcc22;}
-    .comment-meta { font-size:.88em; color:#aae;}
-    .comment-content { margin:2px 0 7px 0; color:#fff;}
-    .comment-reactions button.selected { background:#30fff6; color:#111;}
-    .comment-reactions button { background:none; border:none; font-size:1.13em; margin:0 2px; cursor:pointer;}
-    /* --- Centrera hamburgermeny --- */
-    @media (max-width: 900px) {
-      .nav-content { flex-direction:column; gap:17px; padding:20px 0; background:#11091e; box-shadow:0 8px 20px #bb00ff99;}
-    }
-    #menuBtn { display: none; }
-    @media (max-width:900px) {
-      #menuBtn {
-        display:block;
-        background:none;
-        border:none;
-        color:#fff;
-        font-size:2.2em;
-        position: absolute;
-        left: 50%; top: 9px; transform: translateX(-50%);
-        z-index:3000;
-      }
-      .nav-content { display:none;}
-      .nav-content.active { display:flex;}
-    }
+    .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
+    .thread-form input, .thread-form textarea { padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; }
+    .thread-form button { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 9px 0; border-radius: 7px; font-size: 1.13em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer; margin-top: 3px; }
+    .thread-list { margin-top: 12px; }
+    .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22; }
+    .thread-header { padding: 16px 18px 6px 18px; font-size: 1.32em; font-weight: bold; color: #00ffd9; display: flex; justify-content: space-between; align-items: center;}
+    .thread-desc { font-size: 1.11em; color: #e0ffff; padding: 0 18px 8px 18px;}
+    .thread-content { padding: 10px 18px 18px 18px; }
+    .add-post-form textarea { width: 100%; padding: 7px; border-radius: 6px; background: #181f26; color: #fff; border: 1.5px solid #66ffcc; margin-bottom: 6px;}
+    .add-post-form button { background: #00ffcc; color: #000; border-radius: 5px; font-weight: bold; border: none; padding: 7px 16px; box-shadow: 0 0 5px #00ffcc80; cursor: pointer;}
+    .post { background: #13181f; border: 1.5px solid #66ffcc; border-radius: 9px; margin: 17px 0; padding: 12px 8px 8px 8px; }
+    .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
+    .post-content { font-size: 1.19em;}
+    .emoji-row { margin: 7px 0 3px 0; display: flex; flex-wrap: wrap; gap: 7px; }
+    .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
+    .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
+    .reactions-view { margin-left: 6px; font-size: 1.18em;}
+    .comments-block { margin-top: 13px; padding-top: 13px; border-top: 1px solid #333; }
+    .comment { margin-bottom: 11px; border-radius: 5px; background: #141923; padding: 8px 9px 6px 9px; }
+    .comment .comment-meta { color: #00ffd9; font-size: 0.96em; }
+    .comment .comment-text { margin: 4px 0 2px 0;}
+    .comment .emoji-row { margin-top: 1px;}
+    .comment-actions { font-size: 0.9em; color: #8ef; margin-top: 2px;}
+    .comment-actions a { margin-right: 9px; color: #00ccff; text-decoration: underline; cursor: pointer;}
+    .comment-actions a:hover { color: #00ffcc; }
+    .thread-delete-btn { background: none; border: none; color: #fa99bb; font-weight: bold; font-size: 1em; cursor: pointer;}
+    .thread-delete-btn:hover { color: #ff0055;}
+    /* AI BOTTEN */
+    .ai-footer { display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 70px; margin: 60px 0 28px 0;}
+    .ai-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start;}
+    .ai-avatar { display: flex; align-items: center; justify-content: center; width: 85px; height: 85px; border-radius: 44px; background: #181f26; box-shadow: 0 0 15px #00ffcc55;}
+    .ai-label { font-size: 1.11em; font-weight: bold; color: #00ffcc; margin-top: 6px;}
+    .ai-info { font-size: 1.04em; color: #bbffee; margin-top: 6px; text-align: center; max-width: 220px;}
+    @media (max-width: 900px) { .ai-footer { flex-direction: column; gap: 36px; margin-top: 48px; } .side-banner, .glow-left, .glow-right { display: none; } }
+    @media (max-width: 700px) { .forum-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
-  <!-- FIREBASE SETUP -->
+  <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script>
+    // -- DIN KONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -273,388 +97,421 @@
   </script>
 </head>
 <body>
-  <!-- SIDREKLAMER -->
-  <div class="ad-side ad-left">
-    <div class="ad-label">REKLAM VÄNSTER</div>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="side-banner left">
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
+    </div>
   </div>
-  <div class="ad-side ad-right">
-    <div class="ad-label">REKLAM HÖGER</div>
+  <div class="side-banner right">
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
   </div>
-
-  <!-- NAVIGATION -->
   <nav class="navbar">
-    <button id="menuBtn" aria-label="Meny">&#9776;</button>
-    <div class="nav-content" id="navLinks">
-      <a href="forum.html" class="active">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-content" id="navMenu">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="store.html" data-i18n="store">Store</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
       <div class="search-container">
-        <input type="text" id="globalSearchInput" placeholder="Sök på hela sidan...">
+        <input type="text" placeholder="" id="searchInput" />
       </div>
     </div>
   </nav>
 
-  <!-- CENTRALT INNEHÅLL -->
-  <div class="forum-center">
-    <h2 id="threadFormTitle">Skapa ny tråd</h2>
-    <div class="thread-form">
-      <input id="newThreadTitle" type="text" placeholder="Titel på tråd (t.ex. Matematik)">
-      <textarea id="newThreadDesc" placeholder="Beskrivning (valfritt)"></textarea>
-      <button id="createThreadBtn">Skapa tråd</button>
-    </div>
-    <div id="threadsList"></div>
+  <div class="forum-box">
+    <div class="forum-title" data-i18n="forum_title">Forum</div>
+    <form class="thread-form" id="threadForm">
+      <input type="text" id="threadTitle" placeholder="Titel på tråd..." maxlength="60" required>
+      <textarea id="threadDesc" placeholder="Beskrivning..." rows="2" maxlength="200" required></textarea>
+      <button type="submit" id="addThreadBtn">Skapa ny tråd</button>
+    </form>
+    <div id="threadList" class="thread-list"></div>
   </div>
 
-  <!-- AI-FOOTER CENTRERAT & KLICKBARA -->
-  <div class="ai-footer-wrap">
-    <div class="ai-bubble ghost">
-      <div class="ai-desc left">
-        Jag är Ghost, din tekniska support som guidar dig rätt på plattformen och svarar på frågor om funktioner, säkerhet och allt digitalt.<br>
-        <span style="color:#30fff6;">Klicka på Ghost för att chatta!</span>
-      </div>
-    </div>
-    <a class="ai-icon" href="ghost.html" title="Ghost – AI teknisk support" style="align-self:center;">
-      <svg width="50" height="50" viewBox="0 0 56 56" fill="none">
-        <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
-        <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
-        <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
-        <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
-        <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
-      </svg>
+  <!-- AI-footer längst ner -->
+  <div class="ai-footer">
+    <div class="ai-block">
+      <a href="ghost.html" class="ai-avatar">
+        <!-- Ghost-bild SVG exakt som innan -->
+        <svg width="68" height="68" viewBox="0 0 56 56" fill="none">
+          <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
+          <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
+          <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
+          <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
+          <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
+        </svg>
+      </a>
       <div class="ai-label">Ghost</div>
-    </a>
-    <a class="ai-icon" href="glow.html" title="Glow – AI stöd & vän" style="align-self:center;">
-      <svg width="50" height="50" viewBox="0 0 64 64" fill="none">
-        <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
-        <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
-        <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
-        <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
-        <g>
-          <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
-          <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
-          <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
-          <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
-          <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
-          <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
-        </g>
-      </svg>
+      <div class="ai-info" id="ghostDesc">
+        Jag är Ghost, din tekniska support och guide på GhostGrid.<br>Fråga mig om allt tekniskt eller hur du använder plattformen.
+      </div>
+    </div>
+    <div class="ai-block">
+      <a href="glow.html" class="ai-avatar">
+        <svg width="68" height="68" viewBox="0 0 64 64" fill="none">
+          <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
+          <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
+          <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
+          <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
+          <g>
+            <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
+            <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
+            <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
+            <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
+            <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
+            <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
+          </g>
+        </svg>
+      </a>
       <div class="ai-label">Glow</div>
-    </a>
-    <div class="ai-bubble glow">
-      <div class="ai-desc right">
-        Jag är Glow! Om du behöver någon att prata med, få stöd eller bara vill sprida lite positiv energi – chatta med mig när du vill!<br>
-        <span style="color:#ffe44e;">Klicka på Glow för att chatta!</span>
+      <div class="ai-info" id="glowDesc">
+        Jag är Glow – när du vill ha en vän, prata, få stöd eller bara ha någon som lyssnar. Du är alltid välkommen att skriva till mig!
       </div>
     </div>
   </div>
+  <!-- Resten av JS och översättning/kommentar/reaction/logik --->
   <script>
-/* -------------------- SPRÅKSTÖD -------------------- */
-const translations = {
-  sv: {
-    createThread: "Skapa ny tråd",
-    threadTitle: "Titel på tråd (t.ex. Matematik)",
-    threadDesc: "Beskrivning (valfritt)",
-    createBtn: "Skapa tråd",
-    noThreads: "Ingen tråd ännu – skapa en!",
-    addComment: "Kommentera",
-    edit: "Redigera",
-    delete: "Ta bort",
-    reply: "Svara",
-    save: "Spara",
-    cancel: "Avbryt",
-    commentPlaceholder: "Skriv din kommentar...",
-    loginReq: "Du måste vara inloggad för att göra detta.",
-    deleteConfirm: "Vill du verkligen ta bort?",
-    yes: "Ja",
-    no: "Nej"
-  },
-  en: {
-    createThread: "Create new thread",
-    threadTitle: "Thread title (e.g. Math)",
-    threadDesc: "Description (optional)",
-    createBtn: "Create thread",
-    noThreads: "No threads yet – create one!",
-    addComment: "Comment",
-    edit: "Edit",
-    delete: "Delete",
-    reply: "Reply",
-    save: "Save",
-    cancel: "Cancel",
-    commentPlaceholder: "Write your comment...",
-    loginReq: "You need to be logged in to do this.",
-    deleteConfirm: "Are you sure you want to delete?",
-    yes: "Yes",
-    no: "No"
-  }
-};
-let lang = (localStorage.language === "en") ? "en" : "sv";
-function _(key) { return translations[lang][key] || key; }
-
-function updateLangUI() {
-  document.getElementById("threadFormTitle").textContent = _( "createThread");
-  document.getElementById("newThreadTitle").placeholder = _( "threadTitle");
-  document.getElementById("newThreadDesc").placeholder = _( "threadDesc");
-  document.getElementById("createThreadBtn").textContent = _( "createBtn");
-}
-
-/* ----------------- EMOJI-REAKTIONER ---------------- */
-const REACTIONS = [
-  { emoji: "👍", key: "thumbsup" },
-  { emoji: "👎", key: "thumbsdown" },
-  { emoji: "🙂", key: "smile" },
-  { emoji: "😃", key: "bigsmile" },
-  { emoji: "😂", key: "laugh" },
-  { emoji: "😕", key: "confused" },
-  { emoji: "🙁", key: "sad" },
-  { emoji: "😢", key: "cry" },
-  { emoji: "😡", key: "angry" },
-  { emoji: "😳", key: "embarrassed" },
-  { emoji: "😇", key: "angel" }
-];
-
-let currentUser = null;
-
-/* -------- Hämta användare --------- */
-auth.onAuthStateChanged(user => {
-  currentUser = user;
-  loadThreads();
-});
-
-/* ---------- Skapa ny tråd ---------- */
-document.getElementById("createThreadBtn").onclick = async function() {
-  if (!currentUser) return alert(_( "loginReq"));
-  const title = document.getElementById("newThreadTitle").value.trim();
-  const desc = document.getElementById("newThreadDesc").value.trim();
-  if (!title) return;
-  await db.collection("threads").add({
-    title, description: desc, creatorUid: currentUser.uid, timestamp: new Date(), reactions: {}
-  });
-  document.getElementById("newThreadTitle").value = "";
-  document.getElementById("newThreadDesc").value = "";
-  loadThreads();
-};
-
-/* ---------- Hämta & visa trådar ---------- */
-async function loadThreads() {
-  const threadsList = document.getElementById("threadsList");
-  threadsList.innerHTML = "<div style='color:#31ffff; margin:15px;'>" + _( "noThreads") + "</div>";
-  const snap = await db.collection("threads").orderBy("timestamp", "desc").get();
-  if (!snap.size) return;
-  threadsList.innerHTML = "";
-  snap.forEach(doc => renderThread(doc, threadsList));
-}
-
-/* ----------- Visa tråd --------------- */
-function renderThread(doc, container) {
-  const data = doc.data();
-  const id = doc.id;
-  // Räkna reaktioner
-  const reactions = data.reactions || {};
-  const counts = {};
-  for (const uid in reactions) {
-    const react = reactions[uid];
-    counts[react] = (counts[react] || 0) + 1;
-  }
-  // Bygg tråd
-  const threadDiv = document.createElement("div");
-  threadDiv.className = "thread-card";
-  threadDiv.innerHTML = `
-    <div class="thread-title">${data.title}</div>
-    <div class="thread-desc">${data.description || ""}</div>
-    <div class="thread-meta">${new Date(data.timestamp?.toDate?.()||data.timestamp).toLocaleString()} </div>
-    <div class="reactions-bar">
-      ${REACTIONS.map(r =>
-        `<button class="reaction-btn${reactions[currentUser?.uid] === r.key ? " selected" : ""}" 
-          data-thread="${id}" data-reaction="${r.key}" title="${r.emoji}">
-          ${r.emoji}<span class="reaction-count">${counts[r.key] ? counts[r.key] : ""}</span>
-        </button>`).join("")}
-      ${currentUser && data.creatorUid === currentUser.uid
-        ? `<button class="edit-btn" data-thread="${id}">${_( "edit")}</button>
-           <button class="delete-btn" data-thread="${id}">${_( "delete")}</button>` : ""}
-    </div>
-    <div class="add-comment-box" id="addCommentBox_${id}">
-      <textarea placeholder="${_( "commentPlaceholder")}"></textarea>
-      <button>${_( "addComment")}</button>
-    </div>
-    <div class="comments-list" id="comments_${id}"></div>
-  `;
-  container.appendChild(threadDiv);
-
-  // Emoji-reaktioner på tråd
-  threadDiv.querySelectorAll(".reaction-btn").forEach(btn => {
-    btn.onclick = async function() {
-      if (!currentUser) return alert(_( "loginReq"));
-      const threadRef = db.collection("threads").doc(id);
-      const docSnap = await threadRef.get();
-      let reactions = docSnap.data().reactions || {};
-      const key = this.getAttribute("data-reaction");
-      if (reactions[currentUser.uid] === key) {
-        delete reactions[currentUser.uid];
-      } else {
-        reactions[currentUser.uid] = key;
-      }
-      await threadRef.update({ reactions });
-      loadThreads();
-    };
-  });
-  // Redigera/radera tråd
-  threadDiv.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.onclick = async function() {
-      // Kan lägga till edit-funktion här!
-    };
-  });
-  threadDiv.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.onclick = async function() {
-      if (confirm(_( "deleteConfirm"))) {
-        await db.collection("threads").doc(id).delete();
-        loadThreads();
-      }
-    };
-  });
-
-  // Kommentarer
-  renderComments(id, null, threadDiv.querySelector(".comments-list"), 0);
-
-  // Ny kommentar
-  const addBtn = threadDiv.querySelector(".add-comment-box button");
-  const textarea = threadDiv.querySelector(".add-comment-box textarea");
-  addBtn.onclick = async () => {
-    if (!currentUser) return alert(_( "loginReq"));
-    const text = textarea.value.trim();
-    if (!text) return;
-    await db.collection("threads").doc(id)
-      .collection("comments").add({
-        text, parent: null, creatorUid: currentUser.uid,
-        timestamp: new Date(), reactions: {}
-      });
-    textarea.value = "";
-    renderComments(id, null, threadDiv.querySelector(".comments-list"), 0);
-  };
-}
-
-/* -------- Rekursivt visa kommentarer -------- */
-async function renderComments(threadId, parentId, container, depth) {
-  container.innerHTML = "";
-  const commentsRef = db.collection("threads").doc(threadId).collection("comments");
-  const q = parentId ? commentsRef.where("parent", "==", parentId).orderBy("timestamp")
-                     : commentsRef.where("parent", "==", null).orderBy("timestamp");
-  const snap = await q.get();
-  snap.forEach(doc => {
-    const data = doc.data(), id = doc.id;
-    const commentDiv = document.createElement("div");
-    commentDiv.className = "comment-card";
-    commentDiv.style.marginLeft = (depth * 28) + "px";
-    // Räkna reaktioner
-    const reactions = data.reactions || {};
-    const counts = {};
-    for (const uid in reactions) {
-      const react = reactions[uid];
-      counts[react] = (counts[react] || 0) + 1;
+    // --- SIDBANNER ROTATION ---
+    const banners = [
+      { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
+      { left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
+    ];
+    let bannerIndex = 0;
+    function updateBanners() {
+      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
+      document.getElementById('leftBannerImg').src = left.src; document.getElementById('leftBannerImg').alt = left.alt; document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
     }
-    commentDiv.innerHTML = `
-      <div class="comment-meta">${new Date(data.timestamp?.toDate?.()||data.timestamp).toLocaleString()}</div>
-      <div class="comment-content">${data.text}</div>
-      <div class="comment-reactions">
-        ${REACTIONS.map(r =>
-          `<button class="comment-react${reactions[currentUser?.uid] === r.key ? " selected" : ""}" 
-            data-thread="${threadId}" data-comment="${id}" data-reaction="${r.key}" title="${r.emoji}">
-            ${r.emoji}<span class="reaction-count">${counts[r.key] ? counts[r.key] : ""}</span>
-          </button>`).join("")}
-        <button class="reply-btn" data-thread="${threadId}" data-comment="${id}">${_( "reply")}</button>
-        ${currentUser && data.creatorUid === currentUser.uid
-          ? `<button class="edit-btn" data-thread="${threadId}" data-comment="${id}">${_( "edit")}</button>
-             <button class="delete-btn" data-thread="${threadId}" data-comment="${id}">${_( "delete")}</button>` : ""}
-      </div>
-      <div class="add-comment-box reply" style="display:none;"><textarea placeholder="${_( "commentPlaceholder")}"></textarea>
-      <button>${_( "addComment")}</button></div>
-      <div class="comments-list"></div>
-    `;
-    container.appendChild(commentDiv);
+    updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
 
-    // Emoji-reaktioner på kommentar
-    commentDiv.querySelectorAll(".comment-react").forEach(btn => {
-      btn.onclick = async function() {
-        if (!currentUser) return alert(_( "loginReq"));
-        const commentRef = db.collection("threads").doc(threadId).collection("comments").doc(id);
-        const docSnap = await commentRef.get();
-        let reactions = docSnap.data().reactions || {};
-        const key = this.getAttribute("data-reaction");
-        if (reactions[currentUser.uid] === key) {
-          delete reactions[currentUser.uid];
-        } else {
-          reactions[currentUser.uid] = key;
-        }
-        await commentRef.update({ reactions });
-        renderComments(threadId, parentId, container, depth);
-      };
-    });
+    // --- HAMBURGERMENY ---
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    hamburgerBtn.addEventListener('click', function() { navMenu.classList.toggle('show'); });
+    navMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('show'); }); });
 
-    // Svara/reply
-    commentDiv.querySelectorAll(".reply-btn").forEach(btn => {
-      btn.onclick = function() {
-        const box = commentDiv.querySelector(".add-comment-box.reply");
-        box.style.display = box.style.display === "none" ? "block" : "none";
-      };
-    });
-    // Lägg till svarskommentar
-    commentDiv.querySelectorAll(".add-comment-box.reply button").forEach(btn => {
-      btn.onclick = async function() {
-        const text = commentDiv.querySelector(".add-comment-box.reply textarea").value.trim();
-        if (!text || !currentUser) return;
-        await db.collection("threads").doc(threadId).collection("comments").add({
-          text, parent: id, creatorUid: currentUser.uid,
-          timestamp: new Date(), reactions: {}
+    // --- SÖK ---
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      searchInput.placeholder = (localStorage.lang === "en" ? "Search the whole site..." : "Sök på hela sidan...");
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query.length >= 2) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+          }
         });
-        renderComments(threadId, parentId, container, depth);
-      };
+      }
     });
-    // Redigera/radera kommentar
-    commentDiv.querySelectorAll(".edit-btn").forEach(btn => {
-      btn.onclick = function() {
-        // Kan lägga till edit här!
-      };
-    });
-    commentDiv.querySelectorAll(".delete-btn").forEach(btn => {
-      btn.onclick = async function() {
-        if (confirm(_( "deleteConfirm"))) {
-          await db.collection("threads").doc(threadId).collection("comments").doc(id).delete();
-          renderComments(threadId, parentId, container, depth);
+
+    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) { navbar.classList.add('hide-navbar'); } else { navbar.classList.remove('hide-navbar'); }
+        lastScrollY = window.scrollY;
+      });
+    }
+
+    // --- TRANSLATIONS ---
+    const translations = {
+      sv: {
+        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
+        forum_title: "Forum",
+        thread_title: "Titel på tråd...", thread_desc: "Beskrivning...", add_thread: "Skapa ny tråd",
+        post_placeholder: "Skriv ett inlägg...",
+        comment: "Kommentera", comment_placeholder: "Kommentera...", login_to_comment: "Logga in för att kommentera.",
+        edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt",
+        guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.",
+        max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
+        login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
+        add_post: "Lägg till inlägg", post: "Inlägg", delete_thread: "Ta bort tråd", delete_thread_confirm: "Vill du verkligen ta bort tråden?"
+      },
+      en: {
+        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
+        forum_title: "Forum",
+        thread_title: "Thread title...", thread_desc: "Description...", add_thread: "Create new thread",
+        post_placeholder: "Write a post...",
+        comment: "Comment", comment_placeholder: "Comment...", login_to_comment: "Login to comment.",
+        edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel",
+        guest: "Guest", at: "at", comment_deleted: "Comment deleted.",
+        max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
+        login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
+        add_post: "Add post", post: "Post", delete_thread: "Delete thread", delete_thread_confirm: "Do you really want to delete the thread?"
+      }
+    };
+    function t(key) {
+      const lang = localStorage.lang === "en" ? "en" : "sv";
+      return translations[lang][key] || key;
+    }
+    function applyTranslations() {
+      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+      document.title = "GhostGrid – " + t("forum");
+      document.querySelector(".forum-title").textContent = t("forum_title");
+      document.getElementById("threadTitle").placeholder = t("thread_title");
+      document.getElementById("threadDesc").placeholder = t("thread_desc");
+      document.getElementById("addThreadBtn").textContent = t("add_thread");
+    }
+    applyTranslations();
+
+    // --- FIREBASE LOGIK ---
+    let currentUser = null;
+    let userMap = {};
+
+    // Emojis som valts
+    const emojis = [
+      { emoji: "👍", key: "thumbsup" }, { emoji: "👎", key: "thumbsdown" },
+      { emoji: "🙂", key: "smile" }, { emoji: "😃", key: "bigsmile" },
+      { emoji: "😂", key: "laugh" }, { emoji: "😕", key: "confused" },
+      { emoji: "🙁", key: "sad" }, { emoji: "😢", key: "cry" },
+      { emoji: "😡", key: "angry" }, { emoji: "😳", key: "embarrassed" }, { emoji: "😇", key: "angel" }
+    ];
+
+    async function fetchUsers() {
+      const snap = await db.collection("profiles").get();
+      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
+    }
+
+    // Ladda trådar
+    async function loadThreads() {
+      await fetchUsers();
+      const q = await db.collection("threads").orderBy("createdAt", "desc").get();
+      const threads = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
+      addThreadListeners(threads);
+    }
+
+    // Rendera en tråd
+    function renderThread(thread) {
+      return `<div class="thread" data-threadid="${thread.id}">
+        <div class="thread-header">
+          <span>${escapeHTML(thread.title)}</span>
+          ${currentUser && thread.user === currentUser.uid ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>` : ""}
+        </div>
+        <div class="thread-desc">${escapeHTML(thread.description)}</div>
+        <div class="thread-content" id="threadContent-${thread.id}"></div>
+        <form class="add-post-form" data-threadid="${thread.id}">
+          <textarea rows="2" maxlength="280" placeholder="${t("post_placeholder")}"></textarea>
+          <button type="submit">${t("add_post")}</button>
+        </form>
+      </div>`;
+    }
+
+    // Escape för HTML
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+    }
+
+    // Lägg till listeners på alla trådar/inlägg
+    function addThreadListeners(threads) {
+      threads.forEach(thread => {
+        loadPosts(thread.id);
+        // Radera tråd
+        const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
+        if (delBtn) {
+          delBtn.onclick = async function() {
+            if (confirm(t("delete_thread_confirm"))) {
+              await db.collection("threads").doc(thread.id).delete();
+              loadThreads();
+            }
+          }
         }
+        // Lägg till inlägg
+        const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
+        postForm.onsubmit = async function(e) {
+          e.preventDefault();
+          if (!currentUser) { alert(t("login_to_comment")); return; }
+          const textarea = this.querySelector("textarea");
+          const text = textarea.value.trim();
+          if (!text) return;
+          await db.collection("threads").doc(thread.id).collection("posts").add({
+            text, user: currentUser.uid, createdAt: new Date()
+          });
+          textarea.value = "";
+          loadPosts(thread.id);
+        }
+      });
+    }
+
+    // Ladda och rendera inlägg i tråd
+    async function loadPosts(threadId) {
+      const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
+      const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      document.getElementById(`threadContent-${threadId}`).innerHTML =
+        posts.map(post => renderPost(threadId, post)).join("");
+      posts.forEach(post => addPostListeners(threadId, post));
+    }
+
+    // Rendera inlägg med reaktioner och kommentarer
+    function renderPost(threadId, post) {
+      const name = userMap[post.user] || t("guest");
+      return `<div class="post" data-postid="${post.id}">
+        <div class="post-header">${t("user")}: ${name}</div>
+        <div class="post-content">${escapeHTML(post.text)}</div>
+        <div class="emoji-row">${emojis.map(e =>
+          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+        ).join("")}
+        <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
+        </div>
+        <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+        <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+          <button type="submit">${t("comment")}</button>
+        </form>
+      </div>`;
+    }
+
+    // Lägg till event på post/kommentar
+    function addPostListeners(threadId, post) {
+      // Reaktioner på inlägg
+      document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
+        btn.onclick = async function() {
+          if (!currentUser) return alert(t("login_to_react"));
+          const emojiKey = this.dataset.emoji;
+          const ref = db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
+          const snap = await ref.get();
+          if (snap.exists && snap.data().emoji === emojiKey) {
+            await ref.delete();
+          } else {
+            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          }
+          renderPostReactions(threadId, post.id);
+        };
+      });
+      // Ladda och rendera reaktioner
+      renderPostReactions(threadId, post.id);
+
+      // Kommentarer (inkl subkommentarer)
+      loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
+
+      // Skicka kommentar
+      document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function(e) {
+        e.preventDefault();
+        if (!currentUser) { alert(t("login_to_comment")); return; }
+        const textarea = this.querySelector("textarea");
+        const text = textarea.value.trim();
+        if (!text) return;
+        await db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
+          text, user: currentUser.uid, parent: null, createdAt: new Date()
+        });
+        textarea.value = "";
+        loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
       };
+    }
+
+    // Visa emoji-sammanfattning på post
+    async function renderPostReactions(threadId, postId) {
+      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
+      const reactions = q.docs.map(doc => doc.data());
+      if (!reactions.length) { document.getElementById(`postReactions-${threadId}-${postId}`).textContent = ""; return; }
+      let counts = {};
+      reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+      document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
+        Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+    }
+
+    // --- KOMMENTARER & subkommentarer
+    async function loadComments(threadId, postId, parentId, containerId) {
+      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
+        .where("parent", "==", parentId).orderBy("createdAt", "asc").get();
+      const comments = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      document.getElementById(containerId).innerHTML = comments.map(c => renderComment(threadId, postId, c)).join("");
+      comments.forEach(c => addCommentListeners(threadId, postId, c, containerId));
+    }
+    function renderComment(threadId, postId, c) {
+      const name = userMap[c.user] || t("guest");
+      return `<div class="comment" data-commentid="${c.id}">
+        <div class="comment-meta">${name}</div>
+        <div class="comment-text">${escapeHTML(c.text)}</div>
+        <div class="emoji-row">${emojis.map(e =>
+          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+        ).join("")}</div>
+        <div class="comment-actions">
+          <a href="#" class="reply-comment">${t("comment")}</a>
+        </div>
+        <div class="subcomments" id="subComments-${threadId}-${postId}-${c.id}"></div>
+        <form class="add-subcomment-form" data-threadid="${threadId}" data-postid="${postId}" data-parentid="${c.id}" style="display:none;">
+          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+          <button type="submit">${t("comment")}</button>
+        </form>
+      </div>`;
+    }
+    function addCommentListeners(threadId, postId, c, parentContainerId) {
+      // Emoji på kommentar
+      document.querySelectorAll(`.comment[data-commentid="${c.id}"] .emoji-btn`).forEach(btn => {
+        btn.onclick = async function() {
+          if (!currentUser) return alert(t("login_to_react"));
+          const emojiKey = this.dataset.emoji;
+          const ref = db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
+            .doc(c.id).collection("reactions").doc(currentUser.uid);
+          const snap = await ref.get();
+          if (snap.exists && snap.data().emoji === emojiKey) {
+            await ref.delete();
+          } else {
+            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          }
+          loadComments(threadId, postId, c.parent, parentContainerId);
+        };
+      });
+      // Svara/reply på kommentar
+      const replyBtn = document.querySelector(`.comment[data-commentid="${c.id}"] .reply-comment`);
+      const replyForm = document.querySelector(`.comment[data-commentid="${c.id}"] .add-subcomment-form`);
+      replyBtn.onclick = function(e) {
+        e.preventDefault();
+        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+      };
+      replyForm.onsubmit = async function(e) {
+        e.preventDefault();
+        if (!currentUser) { alert(t("login_to_comment")); return; }
+        const textarea = this.querySelector("textarea");
+        const text = textarea.value.trim();
+        if (!text) return;
+        await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments").add({
+          text, user: currentUser.uid, parent: c.id, createdAt: new Date()
+        });
+        textarea.value = "";
+        replyForm.style.display = "none";
+        loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
+      };
+      // Ladda subkommentarer
+      loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
+    }
+
+    // --- Skapa ny tråd
+    document.getElementById("threadForm").onsubmit = async function(e) {
+      e.preventDefault();
+      if (!currentUser) { alert(t("login_to_comment")); return; }
+      const title = document.getElementById("threadTitle").value.trim();
+      const desc = document.getElementById("threadDesc").value.trim();
+      if (!title || !desc) return alert(t("all_fields"));
+      await db.collection("threads").add({
+        title, description: desc, user: currentUser.uid, createdAt: new Date()
+      });
+      document.getElementById("threadTitle").value = "";
+      document.getElementById("threadDesc").value = "";
+      loadThreads();
+    }
+
+    // --- Inloggning
+    auth.onAuthStateChanged(user => {
+      currentUser = user;
+      loadThreads();
     });
-    // Barnkommentarer (rekursion)
-    renderComments(threadId, id, commentDiv.querySelector(".comments-list"), depth+1);
-  });
-}
-
-/* ------- Sökfunktion (global) ------- */
-document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    const query = this.value.trim();
-    if (query) window.location.href = "search.html?q=" + encodeURIComponent(query);
-  }
-});
-
-/* ------- Hamburgermeny centrering ------- */
-const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
-menuBtn.onclick = () => navLinks.classList.toggle("active");
-document.querySelectorAll('.nav-content a').forEach(a =>
-  a.onclick = () => navLinks.classList.remove("active")
-);
-
-/* ------- Språkbyte direkt ------- */
-updateLangUI();
-window.addEventListener('storage', function(e){
-  if(e.key === 'language') {
-    lang = localStorage.language === "en" ? "en" : "sv";
-    updateLangUI();
-    loadThreads();
-  }
-});
-</script>
+  </script>
 </body>
 </html>
