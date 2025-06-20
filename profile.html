@@ -7,65 +7,141 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      background-color: black;
-      color: #00ff00;
+      background: #0a0a0a;
+      color: #e0ffff;
       font-family: 'Courier New', monospace;
-      margin: 0;
-      padding: 0;
       min-height: 100vh;
-      padding-top: 74px !important;
+      margin: 0;
+      padding-top: 85px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 136px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow:
+        0 0 60px 30px #d900ffbb,
+        0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow:
+        0 0 60px 30px #d900ffbb,
+        0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
     }
     nav.navbar {
-      background: #000;
-      width: 100vw;
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 0;
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 2000;
-      border-bottom: 4px solid #ad30fa;
-      box-shadow: 0 0 20px #ad30fa;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
       display: flex;
       justify-content: center;
-      align-items: center;
+      transition: top 0.3s;
     }
     .nav-content {
       display: flex;
-      gap: 40px;
-      padding: 14px 0 12px 0;
-      align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 900px;
       width: 100%;
-      transition: 0.18s;
+      align-items: center;
+      text-align: center;
     }
     .nav-content a {
-      color: #e0ffff;
+      color: white;
       text-decoration: none;
-      font-size: 1.35em;
-      font-family: monospace;
-      padding: 5px 22px;
-      border-radius: 7px;
-      margin: 0 5px;
-      background: transparent;
-      transition: background 0.18s, color 0.18s, box-shadow 0.22s;
-      text-shadow: 0 0 8px #ad30fa, 0 0 3px #fff;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
     }
-    .nav-content a:hover, .nav-content a.active {
-      background: #ad30fa;
+    .nav-content a:hover {
+      background-color: #00ffcc;
       color: #000;
-      box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
+      box-shadow: 0 0 10px #ffffff;
     }
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
+    .search-container {
+      width: 210px;
+      display: flex;
+      justify-content: center;
+      margin-left: 12px;
+    }
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.05em;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 8px;
       color: #fff;
-      font-size: 2.3em;
-      position: absolute;
-      right: 18px;
-      top: 5px;
-      cursor: pointer;
-      z-index: 3000;
+      box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
+      text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
+      width: 100%;
+      max-width: 230px;
     }
-    .hidden { display: none !important; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    @media (max-width: 700px) {
+      .nav-content {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        left: 0; right: 0;
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+      }
+      .nav-content.show {
+        display: flex;
+      }
+      .nav-content a {
+        padding: 18px 10px;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+      }
+      .search-container { margin: 10px auto 0 auto; width: 90vw; }
+      .search-container input { width: 100%; max-width: 100vw;}
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+    }
     .login-container {
       background: rgba(0, 0, 0, 0.8);
       padding: 30px;
@@ -146,38 +222,30 @@
       text-align: left;
     }
     .smeknamn-row label { font-size: 1.1em; color: #00ffcc; }
-    @media (max-width: 900px) {
-      .nav-content {
-        flex-direction: column;
-        background: #0a0020f7;
-        position: absolute;
-        left: 0; top: 55px;
-        width: 100vw;
-        gap: 18px;
-        padding: 15px 0 10px 0;
-        display: none;
-        z-index: 2000;
-      }
-      .nav-content.active { display: flex; }
-      #menuBtn { display: block; }
-    }
-    @media (max-width: 600px) {
-      .login-container { max-width: 98vw; }
-      .nav-content a { font-size: 1.11em; }
-    }
+    #nicknameSavedMsg { color: #00ff00; }
+    #nicknameTakenMsg { color: #ff0040; }
+    .nickname-btn-row { display: flex; gap: 10px; align-items: center;}
   </style>
 </head>
 <body>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="nav-content" id="navLinks">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-content" id="navMenu">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
       <a href="upload.html">Ladda upp</a>
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="Sök på hela sidan..." id="searchInput" />
+      </div>
     </div>
-    <button id="menuBtn" aria-label="Meny">&#9776;</button>
   </nav>
 
   <div class="login-container">
@@ -185,7 +253,12 @@
     <p id="profile-email">E-post:</p>
     <div class="smeknamn-row">
       <label for="nickname">Smeknamn/användarnamn:</label>
-      <input type="text" id="nickname" maxlength="24" placeholder="Välj ditt smeknamn">
+      <div class="nickname-btn-row">
+        <input type="text" id="nickname" maxlength="24" placeholder="Välj ditt smeknamn">
+        <button type="button" id="saveNicknameBtn">Spara</button>
+      </div>
+      <span id="nicknameSavedMsg" style="display:none;">✅ Smeknamn sparat!</span>
+      <span id="nicknameTakenMsg" style="display:none;">❌ Smeknamnet är upptaget!</span>
     </div>
     <label for="profile-pic" data-i18n="upload_image">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
@@ -226,16 +299,50 @@
   </div>
 
   <script type="module">
-    // --- Hamburger-meny ---
-    const menuBtn = document.getElementById("menuBtn");
-    const navLinks = document.getElementById("navLinks");
-    menuBtn.onclick = () => navLinks.classList.toggle("active");
-    document.querySelectorAll('.nav-content a').forEach(a =>
-      a.onclick = () => navLinks.classList.remove("active")
-    );
+    // Hamburgermeny
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    hamburgerBtn.addEventListener('click', function() {
+      navMenu.classList.toggle('show');
+    });
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('show');
+      });
+    });
+
+    // Sök-fält
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query.length >= 2) {
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            }
+          }
+        });
+      }
+    });
+    // Navbar hide vid scroll på mobil
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
+
     // --- Profilkod ---
     import { auth, db, storage } from './scripts/firebase-init.js';
-    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
@@ -361,7 +468,41 @@
       }
     });
 
-    // Spara profil
+    // UNIKT SMEKNAMN: Endast tillåtet om ingen annan har det!
+    document.getElementById('saveNicknameBtn').addEventListener('click', async () => {
+      if (!currentUser) return alert("Du är inte inloggad.");
+      const nickname = document.getElementById('nickname').value.trim();
+      if (!nickname) return alert("Du måste ange ett smeknamn.");
+
+      // Sök om någon annan redan har samma smeknamn (ignorera eget UID)
+      const profilesRef = collection(db, "profiles");
+      const q = query(profilesRef, where("nickname", "==", nickname));
+      const querySnapshot = await getDocs(q);
+
+      let taken = false;
+      querySnapshot.forEach(docSnap => {
+        if (docSnap.id !== currentUser.uid) {
+          taken = true;
+        }
+      });
+
+      if (taken) {
+        document.getElementById('nicknameTakenMsg').style.display = "inline";
+        document.getElementById('nicknameSavedMsg').style.display = "none";
+        setTimeout(() => {
+          document.getElementById('nicknameTakenMsg').style.display = "none";
+        }, 1600);
+        return;
+      }
+
+      // Om ledigt, spara!
+      await setDoc(doc(db, "profiles", currentUser.uid), { nickname }, { merge: true });
+      document.getElementById('nicknameSavedMsg').style.display = "inline";
+      document.getElementById('nicknameTakenMsg').style.display = "none";
+      setTimeout(() => document.getElementById('nicknameSavedMsg').style.display = "none", 1600);
+    });
+
+    // Spara profilkod och tema
     document.getElementById('saveBtn').addEventListener('click', async () => {
       if (!currentUser) return alert("Du är inte inloggad.");
       const nickname = document.getElementById('nickname').value.trim();
