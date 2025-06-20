@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forum – GhostGrid</title>
+  <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
@@ -16,11 +16,9 @@
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
     @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-
-    /* NavBar & Hamburger */
-    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
+    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s; }
     .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
-    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
+    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; }
     .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
     .search-container { width: 210px; display: flex; justify-content: center; margin-left: 12px;}
     .search-container input { padding: 8px 14px; font-size: 1.05em; background-color: #111; border: 2px solid #00ffcc; border-radius: 8px; color: #fff; box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc; text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc; width: 100%; max-width: 230px;}
@@ -34,25 +32,18 @@
       .search-container input { width: 100%; max-width: 100vw;}
       .hamburger { display: flex; }
     }
-    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
-
-    /* Forum Main Content */
-    .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
-    .forum-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
-
-    .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
-    .thread-form input, .thread-form textarea { padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; }
-    .thread-form button { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 9px 0; border-radius: 7px; font-size: 1.13em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer; margin-top: 3px; }
-    .thread-list { margin-top: 12px; }
-    .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22; }
-    .thread-header { padding: 16px 18px 6px 18px; font-size: 1.32em; font-weight: bold; color: #00ffd9; display: flex; justify-content: space-between; align-items: center;}
-    .thread-desc { font-size: 1.11em; color: #e0ffff; padding: 0 18px 8px 18px;}
-    .thread-content { padding: 10px 18px 18px 18px; }
-    .add-post-form textarea { width: 100%; padding: 7px; border-radius: 6px; background: #181f26; color: #fff; border: 1.5px solid #66ffcc; margin-bottom: 6px;}
-    .add-post-form button { background: #00ffcc; color: #000; border-radius: 5px; font-weight: bold; border: none; padding: 7px 16px; box-shadow: 0 0 5px #00ffcc80; cursor: pointer;}
-    .post { background: #13181f; border: 1.5px solid #66ffcc; border-radius: 9px; margin: 17px 0; padding: 12px 8px 8px 8px; }
-    .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
-    .post-content { font-size: 1.19em;}
+    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } .wall-title { font-size: 1.6em; } .wall-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px;} }
+    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 550px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0;}
+    .wall-title { font-size: 2.6em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
+    .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
+    .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
+    .filter-btn.active, .filter-btn:hover { background: #00ffcc; color: #19191b; font-weight: bold; box-shadow: 0 0 12px #00ffcc; }
+    .post-list { width:100%; max-width:550px; margin:24px auto;}
+    .post { background: #181f26; border: 1.5px solid #66ffcc; border-radius: 9px; box-shadow: 0 0 10px #00ffcc30; margin-bottom: 24px; padding: 18px 13px; color: #e0ffff; word-break: break-word; overflow: auto; }
+    .post .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
+    .post .post-content { font-size: 1.19em;}
+    .post .post-time { color: #9df; font-size: 0.91em; margin-top: 6px;}
+    .post img, .post video, .post audio { max-width: 100%; border-radius: 7px; margin-top: 7px;}
     .emoji-row { margin: 7px 0 3px 0; display: flex; flex-wrap: wrap; gap: 7px; }
     .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
     .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
@@ -65,36 +56,7 @@
     .comment-actions { font-size: 0.9em; color: #8ef; margin-top: 2px;}
     .comment-actions a { margin-right: 9px; color: #00ccff; text-decoration: underline; cursor: pointer;}
     .comment-actions a:hover { color: #00ffcc; }
-    .thread-delete-btn { background: none; border: none; color: #fa99bb; font-weight: bold; font-size: 1em; cursor: pointer;}
-    .thread-delete-btn:hover { color: #ff0055;}
-    /* AI BOTTEN */
-    .ai-footer { display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 70px; margin: 60px 0 28px 0;}
-    .ai-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start;}
-    .ai-avatar { display: flex; align-items: center; justify-content: center; width: 85px; height: 85px; border-radius: 44px; background: #181f26; box-shadow: 0 0 15px #00ffcc55;}
-    .ai-label { font-size: 1.11em; font-weight: bold; color: #00ffcc; margin-top: 6px;}
-    .ai-info { font-size: 1.04em; color: #bbffee; margin-top: 6px; text-align: center; max-width: 220px;}
-    @media (max-width: 900px) { .ai-footer { flex-direction: column; gap: 36px; margin-top: 48px; } .side-banner, .glow-left, .glow-right { display: none; } }
-    @media (max-width: 700px) { .forum-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
-  <!-- FIREBASE SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script>
-    // -- DIN KONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.firebasestorage.app",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968",
-      measurementId: "G-B0WCKJCNT9"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-  </script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -129,59 +91,18 @@
       </div>
     </div>
   </nav>
-
-  <div class="forum-box">
-    <div class="forum-title" data-i18n="forum_title">Forum</div>
-    <form class="thread-form" id="threadForm">
-      <input type="text" id="threadTitle" placeholder="Titel på tråd..." maxlength="60" required>
-      <textarea id="threadDesc" placeholder="Beskrivning..." rows="2" maxlength="200" required></textarea>
-      <button type="submit" id="addThreadBtn">Skapa ny tråd</button>
-    </form>
-    <div id="threadList" class="thread-list"></div>
-  </div>
-
-  <!-- AI-footer längst ner -->
-  <div class="ai-footer">
-    <div class="ai-block">
-      <a href="ghost.html" class="ai-avatar">
-        <!-- Ghost-bild SVG exakt som innan -->
-        <svg width="68" height="68" viewBox="0 0 56 56" fill="none">
-          <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
-          <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
-          <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
-          <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
-          <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
-        </svg>
-      </a>
-      <div class="ai-label">Ghost</div>
-      <div class="ai-info" id="ghostDesc">
-        Jag är Ghost, din tekniska support och guide på GhostGrid.<br>Fråga mig om allt tekniskt eller hur du använder plattformen.
-      </div>
+  <div class="wall-box">
+    <div class="wall-title" data-i18n="wall_title">Väggen</div>
+    <div class="filter-row" id="filterRow">
+      <button class="filter-btn active" data-type="all" data-i18n="all">Alla</button>
+      <button class="filter-btn" data-type="text" data-i18n="post">Inlägg</button>
+      <button class="filter-btn" data-type="image" data-i18n="image">Bilder</button>
+      <button class="filter-btn" data-type="video" data-i18n="video">Klipp</button>
+      <button class="filter-btn" data-type="audio" data-i18n="audio">Ljud</button>
+      <button class="filter-btn" data-type="mic" data-i18n="mic">Röst</button>
     </div>
-    <div class="ai-block">
-      <a href="glow.html" class="ai-avatar">
-        <svg width="68" height="68" viewBox="0 0 64 64" fill="none">
-          <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
-          <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
-          <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
-          <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
-          <g>
-            <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
-            <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
-            <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
-            <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
-            <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
-            <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
-          </g>
-        </svg>
-      </a>
-      <div class="ai-label">Glow</div>
-      <div class="ai-info" id="glowDesc">
-        Jag är Glow – när du vill ha en vän, prata, få stöd eller bara ha någon som lyssnar. Du är alltid välkommen att skriva till mig!
-      </div>
-    </div>
+    <div id="postList" class="post-list"></div>
   </div>
-  <!-- Resten av JS och översättning/kommentar/reaction/logik --->
   <script>
     // --- SIDBANNER ROTATION ---
     const banners = [
@@ -211,7 +132,7 @@
           if (e.key === "Enter") {
             e.preventDefault();
             const query = searchInput.value.trim();
-            if (query.length >= 2) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            if (query.length >= 2) window.location.href = search.html?q=${encodeURIComponent(query)};
           }
         });
       }
@@ -231,27 +152,27 @@
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
-        forum_title: "Forum",
-        thread_title: "Titel på tråd...", thread_desc: "Beskrivning...", add_thread: "Skapa ny tråd",
-        post_placeholder: "Skriv ett inlägg...",
-        comment: "Kommentera", comment_placeholder: "Kommentera...", login_to_comment: "Logga in för att kommentera.",
+        wall_title: "Väggen",
+        all: "Alla", post: "Inlägg", image: "Bilder", video: "Klipp", audio: "Ljud", mic: "Röst",
+        loading: "Laddar inlägg...",
+        no_posts: "Inga inlägg hittades.",
+        user: "Användare", comment: "Kommentera", comment_placeholder: "Kommentera...", login_to_comment: "Logga in för att kommentera.",
         edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt",
         guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.",
         max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
-        login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
-        add_post: "Lägg till inlägg", post: "Inlägg", delete_thread: "Ta bort tråd", delete_thread_confirm: "Vill du verkligen ta bort tråden?"
+        login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i."
       },
       en: {
         forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
-        forum_title: "Forum",
-        thread_title: "Thread title...", thread_desc: "Description...", add_thread: "Create new thread",
-        post_placeholder: "Write a post...",
-        comment: "Comment", comment_placeholder: "Comment...", login_to_comment: "Login to comment.",
+        wall_title: "Wall",
+        all: "All", post: "Posts", image: "Images", video: "Videos", audio: "Audio", mic: "Voice",
+        loading: "Loading posts...",
+        no_posts: "No posts found.",
+        user: "User", comment: "Comment", comment_placeholder: "Comment...", login_to_comment: "Login to comment.",
         edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel",
         guest: "Guest", at: "at", comment_deleted: "Comment deleted.",
         max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
-        login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
-        add_post: "Add post", post: "Post", delete_thread: "Delete thread", delete_thread_confirm: "Do you really want to delete the thread?"
+        login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required."
       }
     };
     function t(key) {
@@ -260,19 +181,19 @@
     }
     function applyTranslations() {
       document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
-      document.title = "GhostGrid – " + t("forum");
-      document.querySelector(".forum-title").textContent = t("forum_title");
-      document.getElementById("threadTitle").placeholder = t("thread_title");
-      document.getElementById("threadDesc").placeholder = t("thread_desc");
-      document.getElementById("addThreadBtn").textContent = t("add_thread");
+      document.title = "GhostGrid – " + t("wall");
+      document.querySelector(".wall-title").textContent = t("wall_title");
     }
     applyTranslations();
 
     // --- FIREBASE LOGIK ---
-    let currentUser = null;
-    let userMap = {};
+  </script>
+  <script type="module">
+    import { auth, db } from "./scripts/firebase-init.js";
+    import { collection, query, orderBy, getDocs, doc, setDoc, getDoc, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-    // Emojis som valts
+    // --- EMOJIS
     const emojis = [
       { emoji: "👍", key: "thumbsup" }, { emoji: "👎", key: "thumbsdown" },
       { emoji: "🙂", key: "smile" }, { emoji: "😃", key: "bigsmile" },
@@ -280,238 +201,209 @@
       { emoji: "🙁", key: "sad" }, { emoji: "😢", key: "cry" },
       { emoji: "😡", key: "angry" }, { emoji: "😳", key: "embarrassed" }, { emoji: "😇", key: "angel" }
     ];
+    let currentUser = null;
+    let userMap = {}; // uid -> displayName/smeknamn
 
+    // Hämta alla användare (snabb förnamn-lookup)
     async function fetchUsers() {
-      const snap = await db.collection("profiles").get();
+      const q = query(collection(db, "profiles"));
+      const snap = await getDocs(q);
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
+    // --- LADDA OCH VISA POSTER ---
+    const filterRow = document.getElementById("filterRow");
+    const postList = document.getElementById("postList");
+    let allPosts = [];
 
-    // Ladda trådar
-    async function loadThreads() {
+    async function loadWallPosts() {
+      postList.innerHTML = <div style="color:#00ffcc; text-align:center;">${t("loading")}</div>;
       await fetchUsers();
-      const q = await db.collection("threads").orderBy("createdAt", "desc").get();
-      const threads = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
-      addThreadListeners(threads);
+      const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+      allPosts = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      renderPosts("all");
     }
-
-    // Rendera en tråd
-    function renderThread(thread) {
-      return `<div class="thread" data-threadid="${thread.id}">
-        <div class="thread-header">
-          <span>${escapeHTML(thread.title)}</span>
-          ${currentUser && thread.user === currentUser.uid ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>` : ""}
-        </div>
-        <div class="thread-desc">${escapeHTML(thread.description)}</div>
-        <div class="thread-content" id="threadContent-${thread.id}"></div>
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea rows="2" maxlength="280" placeholder="${t("post_placeholder")}"></textarea>
-          <button type="submit">${t("add_post")}</button>
-        </form>
-      </div>`;
-    }
-
-    // Escape för HTML
     function escapeHTML(str) {
       if (!str) return "";
       return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
     }
-
-    // Lägg till listeners på alla trådar/inlägg
-    function addThreadListeners(threads) {
-      threads.forEach(thread => {
-        loadPosts(thread.id);
-        // Radera tråd
-        const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
-        if (delBtn) {
-          delBtn.onclick = async function() {
-            if (confirm(t("delete_thread_confirm"))) {
-              await db.collection("threads").doc(thread.id).delete();
-              loadThreads();
-            }
-          }
-        }
-        // Lägg till inlägg
-        const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
-        postForm.onsubmit = async function(e) {
-          e.preventDefault();
-          if (!currentUser) { alert(t("login_to_comment")); return; }
-          const textarea = this.querySelector("textarea");
-          const text = textarea.value.trim();
-          if (!text) return;
-          await db.collection("threads").doc(thread.id).collection("posts").add({
-            text, user: currentUser.uid, createdAt: new Date()
-          });
-          textarea.value = "";
-          loadPosts(thread.id);
-        }
-      });
+    function formatPostContent(post) {
+      switch (post.type) {
+        case "text": return <div class="post-content">${escapeHTML(post.text)}</div>;
+        case "image": return post.imageUrl ? <img src="${post.imageUrl}" alt="Bild" /> : "";
+        case "video": return post.videoUrl ? <video controls src="${post.videoUrl}"></video> : "";
+        case "audio": return post.audioUrl ? <audio controls src="${post.audioUrl}"></audio> : "";
+        case "mic": return post.micAudioUrl ? <audio controls src="${post.micAudioUrl}"></audio> : "";
+        default: return "";
+      }
     }
-
-    // Ladda och rendera inlägg i tråd
-    async function loadPosts(threadId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
-      const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById(`threadContent-${threadId}`).innerHTML =
-        posts.map(post => renderPost(threadId, post)).join("");
-      posts.forEach(post => addPostListeners(threadId, post));
+    async function renderPosts(type) {
+      let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
+      if (!posts.length) { postList.innerHTML = <div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>; return; }
+      postList.innerHTML = "";
+      for (let post of posts) {
+        const reactions = await loadReactions(post.id, "reactions");
+        const comments = await loadComments(post.id);
+        const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
+        let name = userMap[post.user] || t("guest");
+        postList.innerHTML += 
+          <div class="post" data-postid="${post.id}">
+            <div class="post-header">${t("user")}: ${name}</div>
+            ${formatPostContent(post)}
+            <div class="emoji-row">${emojis.map(e =>
+              <button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
+            ).join("")}
+            <span class="reactions-view">${emojiSummary(reactions)}</span>
+            </div>
+            <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+            <div class="comments-block">
+              <div class="comment-list">${comments.map(c => renderComment(post.id, c)).join("")}</div>
+              ${currentUser ? <form class="add-comment-form" data-postid="${post.id}">
+                <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+                <button type="submit">${t("comment")}</button>
+              </form> : <div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>}
+            </div>
+          </div>
+        ;
+      }
+      addEventListeners();
     }
-
-    // Rendera inlägg med reaktioner och kommentarer
-    function renderPost(threadId, post) {
-      const name = userMap[post.user] || t("guest");
-      return `<div class="post" data-postid="${post.id}">
-        <div class="post-header">${t("user")}: ${name}</div>
-        <div class="post-content">${escapeHTML(post.text)}</div>
-        <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
-        ).join("")}
-        <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
-        </div>
-        <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-        <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
-          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-          <button type="submit">${t("comment")}</button>
-        </form>
-      </div>`;
+    // Reaction helpers
+    async function loadReactions(postId, subcol) {
+      const q = query(collection(db, "wall", postId, subcol));
+      const snap = await getDocs(q);
+      return snap.docs.map(doc => doc.data());
     }
-
-    // Lägg till event på post/kommentar
-    function addPostListeners(threadId, post) {
-      // Reaktioner på inlägg
-      document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
-        btn.onclick = async function() {
-          if (!currentUser) return alert(t("login_to_react"));
-          const emojiKey = this.dataset.emoji;
-          const ref = db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
-          const snap = await ref.get();
-          if (snap.exists && snap.data().emoji === emojiKey) {
-            await ref.delete();
-          } else {
-            await ref.set({ emoji: emojiKey, user: currentUser.uid });
-          }
-          renderPostReactions(threadId, post.id);
-        };
-      });
-      // Ladda och rendera reaktioner
-      renderPostReactions(threadId, post.id);
-
-      // Kommentarer (inkl subkommentarer)
-      loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
-
-      // Skicka kommentar
-      document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function(e) {
-        e.preventDefault();
-        if (!currentUser) { alert(t("login_to_comment")); return; }
-        const textarea = this.querySelector("textarea");
-        const text = textarea.value.trim();
-        if (!text) return;
-        await db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
-          text, user: currentUser.uid, parent: null, createdAt: new Date()
-        });
-        textarea.value = "";
-        loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
-      };
-    }
-
-    // Visa emoji-sammanfattning på post
-    async function renderPostReactions(threadId, postId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
-      const reactions = q.docs.map(doc => doc.data());
-      if (!reactions.length) { document.getElementById(`postReactions-${threadId}-${postId}`).textContent = ""; return; }
+    function emojiSummary(reactions) {
+      if (!reactions || reactions.length === 0) return "";
       let counts = {};
       reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-      document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
-        Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+      return Object.entries(counts).map(([k, v]) => ${emojis.find(e => e.key === k)?.emoji || ""} ${v}).join(" ");
+    }
+    // Kommentar helpers
+    async function loadComments(postId) {
+      const q = query(collection(db, "wall", postId, "comments"), orderBy("createdAt", "asc"));
+      const snap = await getDocs(q);
+      return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+    function renderComment(postId, c) {
+      let name = userMap[c.userId] || t("guest");
+      return 
+        <div class="comment" data-commentid="${c.id}" data-postid="${postId}">
+          <div class="comment-meta">${name} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+          <div class="comment-text">${escapeHTML(c.text)}</div>
+          <div class="emoji-row">${emojis.map(e =>
+            <button class="emoji-btn${c.userReaction === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
+          ).join("")}</div>
+          <div class="comment-actions">
+            ${currentUser && currentUser.uid === c.userId ?
+              <a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a> : ""}
+          </div>
+        </div>;
     }
 
-    // --- KOMMENTARER & subkommentarer
-    async function loadComments(threadId, postId, parentId, containerId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
-        .where("parent", "==", parentId).orderBy("createdAt", "asc").get();
-      const comments = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById(containerId).innerHTML = comments.map(c => renderComment(threadId, postId, c)).join("");
-      comments.forEach(c => addCommentListeners(threadId, postId, c, containerId));
-    }
-    function renderComment(threadId, postId, c) {
-      const name = userMap[c.user] || t("guest");
-      return `<div class="comment" data-commentid="${c.id}">
-        <div class="comment-meta">${name}</div>
-        <div class="comment-text">${escapeHTML(c.text)}</div>
-        <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
-        ).join("")}</div>
-        <div class="comment-actions">
-          <a href="#" class="reply-comment">${t("comment")}</a>
-        </div>
-        <div class="subcomments" id="subComments-${threadId}-${postId}-${c.id}"></div>
-        <form class="add-subcomment-form" data-threadid="${threadId}" data-postid="${postId}" data-parentid="${c.id}" style="display:none;">
-          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-          <button type="submit">${t("comment")}</button>
-        </form>
-      </div>`;
-    }
-    function addCommentListeners(threadId, postId, c, parentContainerId) {
-      // Emoji på kommentar
-      document.querySelectorAll(`.comment[data-commentid="${c.id}"] .emoji-btn`).forEach(btn => {
+    // --- Eventlisteners
+    function addEventListeners() {
+      // Emoji på post
+      document.querySelectorAll(".post .emoji-btn").forEach(btn => {
         btn.onclick = async function() {
           if (!currentUser) return alert(t("login_to_react"));
+          const postId = this.closest(".post").dataset.postid;
           const emojiKey = this.dataset.emoji;
-          const ref = db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
-            .doc(c.id).collection("reactions").doc(currentUser.uid);
-          const snap = await ref.get();
-          if (snap.exists && snap.data().emoji === emojiKey) {
-            await ref.delete();
+          const ref = doc(db, "wall", postId, "reactions", currentUser.uid);
+          const snap = await getDoc(ref);
+          if (snap.exists() && snap.data().emoji === emojiKey) {
+            await deleteDoc(ref);
           } else {
-            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+            await setDoc(ref, { emoji: emojiKey, user: currentUser.uid });
           }
-          loadComments(threadId, postId, c.parent, parentContainerId);
+          loadWallPosts();
         };
       });
-      // Svara/reply på kommentar
-      const replyBtn = document.querySelector(`.comment[data-commentid="${c.id}"] .reply-comment`);
-      const replyForm = document.querySelector(`.comment[data-commentid="${c.id}"] .add-subcomment-form`);
-      replyBtn.onclick = function(e) {
-        e.preventDefault();
-        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
-      };
-      replyForm.onsubmit = async function(e) {
-        e.preventDefault();
-        if (!currentUser) { alert(t("login_to_comment")); return; }
-        const textarea = this.querySelector("textarea");
-        const text = textarea.value.trim();
-        if (!text) return;
-        await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments").add({
-          text, user: currentUser.uid, parent: c.id, createdAt: new Date()
-        });
-        textarea.value = "";
-        replyForm.style.display = "none";
-        loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
-      };
-      // Ladda subkommentarer
-      loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
-    }
-
-    // --- Skapa ny tråd
-    document.getElementById("threadForm").onsubmit = async function(e) {
-      e.preventDefault();
-      if (!currentUser) { alert(t("login_to_comment")); return; }
-      const title = document.getElementById("threadTitle").value.trim();
-      const desc = document.getElementById("threadDesc").value.trim();
-      if (!title || !desc) return alert(t("all_fields"));
-      await db.collection("threads").add({
-        title, description: desc, user: currentUser.uid, createdAt: new Date()
+      // Kommentar-submit
+      document.querySelectorAll(".add-comment-form").forEach(form => {
+        form.onsubmit = async function(e) {
+          e.preventDefault();
+          const textarea = this.querySelector("textarea");
+          const text = textarea.value.trim();
+          if (text.length === 0) return alert(t("comment_empty"));
+          if (text.length > 200) return alert(t("max_200"));
+          const postId = this.dataset.postid;
+          const comments = await loadComments(postId);
+          if (comments.length > 0 && comments[comments.length-1].userId === currentUser.uid && comments[comments.length-1].text === text) return alert(t("no_spam"));
+          const now = Date.now();
+          if (window.lastCommentTime && now - window.lastCommentTime < 15000) return alert(t("wait"));
+          await addDoc(collection(db, "wall", postId, "comments"), {
+            text, user: currentUser.displayName || currentUser.email || "?", userId: currentUser.uid, createdAt: new Date()
+          });
+          window.lastCommentTime = now;
+          textarea.value = "";
+          loadWallPosts();
+        };
       });
-      document.getElementById("threadTitle").value = "";
-      document.getElementById("threadDesc").value = "";
-      loadThreads();
+      // Emoji på kommentar (per user)
+      document.querySelectorAll(".comment .emoji-btn").forEach(btn => {
+        btn.onclick = async function() {
+          if (!currentUser) return alert(t("login_to_react"));
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          const emojiKey = this.dataset.emoji;
+          const ref = doc(db, "wall", postId, "comments", commentId, "reactions", currentUser.uid);
+          const snap = await getDoc(ref);
+          if (snap.exists() && snap.data().emoji === emojiKey) {
+            await deleteDoc(ref);
+          } else {
+            await setDoc(ref, { emoji: emojiKey, user: currentUser.uid });
+          }
+          loadWallPosts();
+        };
+      });
+      // Edit/radera egna kommentarer
+      document.querySelectorAll(".edit-comment").forEach(link => {
+        link.onclick = function(e) {
+          e.preventDefault();
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          const textDiv = commentDiv.querySelector(".comment-text");
+          const oldText = textDiv.textContent;
+          textDiv.innerHTML = <input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>;
+          textDiv.querySelector("button").onclick = async function() {
+            const newText = textDiv.querySelector("input").value.trim();
+            if (newText.length === 0) return alert(t("comment_empty"));
+            await updateDoc(doc(db, "wall", postId, "comments", commentId), { text: newText });
+            loadWallPosts();
+          };
+        };
+      });
+      document.querySelectorAll(".delete-comment").forEach(link => {
+        link.onclick = async function(e) {
+          e.preventDefault();
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          if (confirm(t("delete_confirm"))) {
+            await deleteDoc(doc(db, "wall", postId, "comments", commentId));
+            loadWallPosts();
+          }
+        };
+      });
     }
+    // För filterknappar
+    filterRow.addEventListener("click", (e) => {
+      if (e.target.classList.contains("filter-btn")) {
+        filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+        e.target.classList.add("active");
+        renderPosts(e.target.getAttribute("data-type"));
+      }
+    });
 
-    // --- Inloggning
-    auth.onAuthStateChanged(user => {
+    // Inloggning
+    onAuthStateChanged(auth, user => {
       currentUser = user;
-      loadThreads();
+      loadWallPosts();
     });
   </script>
 </body>
-</html>
+</html
