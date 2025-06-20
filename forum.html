@@ -8,48 +8,73 @@
   <style>
     body {
       margin: 0;
-      padding-top: 74px;
-      background-color: #0a0a0a;
+      background: #080808;
       color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+    /* Reklamkolumner */
+    .ad-col {
+      position: fixed;
+      top: 0; bottom: 0;
+      width: 90px;
+      background: linear-gradient(180deg, #6a11ea 80%, #00ffd0 100%);
+      border-radius: 18px;
+      box-shadow: 0 0 18px #ad30fa, 0 0 8px #00ffd0;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      z-index: 1;
+      padding: 0;
+      justify-content: space-between;
     }
+    .ad-col.left { left: 0; }
+    .ad-col.right { right: 0; }
+    .ad-label {
+      writing-mode: vertical-lr;
+      color: #fff;
+      opacity: 0.7;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 1em;
+      text-shadow: 0 0 8px #000;
+    }
+    /* NAV */
     nav.navbar {
       background: #000;
-      width: 100vw;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 2000;
       border-bottom: 4px solid #ad30fa;
       box-shadow: 0 0 20px #ad30fa;
       display: flex;
       justify-content: center;
       align-items: center;
+      width: 100vw;
+      left: 0; top: 0; position: fixed; right: 0;
+      z-index: 99;
+      padding: 0 0 0 0;
+      height: 58px;
     }
     .nav-content {
       display: flex;
-      gap: 40px;
-      padding: 14px 0 12px 0;
+      gap: 60px;
       align-items: center;
       justify-content: center;
       width: 100%;
       transition: 0.18s;
     }
     .nav-content a {
-      color: #e0ffff;
+      color: #fff;
       text-decoration: none;
-      font-size: 1.35em;
-      font-family: monospace;
-      padding: 5px 22px;
+      font-size: 1.25em;
+      padding: 10px 20px;
       border-radius: 7px;
       margin: 0 5px;
       background: transparent;
       transition: background 0.18s, color 0.18s, box-shadow 0.22s;
-      text-shadow: 0 0 8px #ad30fa, 0 0 3px #fff;
+      text-shadow: 0 0 10px #ad30fa, 0 0 3px #fff;
+      font-weight: bold;
     }
-    .nav-content a:hover, .nav-content a.active {
+    .nav-content a.active, .nav-content a:hover {
       background: #ad30fa;
       color: #000;
       box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
@@ -59,175 +84,234 @@
       background: none;
       border: none;
       color: #fff;
-      font-size: 2.3em;
+      font-size: 2.2em;
       position: absolute;
-      right: 18px;
-      top: 5px;
+      left: 18px; top: 8px;
       cursor: pointer;
-      z-index: 3000;
+      z-index: 200;
+    }
+    @media (max-width: 1100px) {
+      .ad-col { display: none; }
     }
     @media (max-width: 900px) {
       .nav-content {
         flex-direction: column;
-        background: #0a0020f7;
+        background: #1e0024e8;
         position: absolute;
-        left: 0; top: 55px;
+        left: 0; top: 58px;
         width: 100vw;
-        gap: 18px;
-        padding: 15px 0 10px 0;
+        gap: 24px;
+        padding: 19px 0 12px 0;
         display: none;
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
+        z-index: 150;
       }
       .nav-content.active { display: flex; }
       #menuBtn { display: block; }
+      nav.navbar {
+        height: 56px;
+        justify-content: center;
+      }
     }
     @media (max-width: 600px) {
-      .nav-content a { font-size: 1.11em; }
+      .nav-content a { font-size: 1.09em; }
     }
-    /* SIDREKLAM */
-    .side-ads {
-      position: fixed;
-      top: 74px;
-      bottom: 0;
-      width: 110px;
-      z-index: 1010;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-    .side-ads.left { left: 0; }
-    .side-ads.right { right: 0; }
-    .side-ad-img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 0 18px #7b00ff99;
-      background: #11002a;
-      pointer-events: auto;
-      cursor: pointer;
-      display: block;
-    }
-    @media (max-width: 1200px) {
-      .side-ads { display: none; }
-    }
-    /* HUVUDINNEHÅLL */
+
+    /* Forum main layout */
     .forum-main-container {
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 92px 0 110px 0;
+      position: relative;
+      z-index: 10;
+      min-height: 80vh;
+    }
+    .thread-form-box {
+      margin: 0 auto 40px auto;
+      padding: 30px 24px 26px 24px;
+      border-radius: 18px;
+      background: #0a0a0a;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 18px #00ff00, 0 0 12px #ad30fa90;
+      text-align: center;
+      max-width: 500px;
+      color: #fff;
+    }
+    .thread-form-box h2 {
+      font-family: 'Courier New', monospace;
+      font-size: 2em;
+      margin: 0 0 18px 0;
+      color: #fff;
+      text-shadow: 0 0 8px #00ffcc;
+      letter-spacing: 1px;
+    }
+    .thread-form-box input, .thread-form-box textarea {
+      width: 100%;
+      margin: 12px 0;
+      padding: 12px 10px;
+      border-radius: 7px;
+      border: 1.5px solid #00ff00;
+      background: #000;
+      color: #00ff00;
+      font-size: 1.13em;
+      font-family: 'Courier New', monospace;
+      outline: none;
+      transition: border 0.16s;
+    }
+    .thread-form-box button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 1.08em;
+      margin-top: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.16s;
+      box-shadow: 0 0 6px #00ffcc;
+    }
+    .thread-form-box button:hover { background: #04df49; }
+    /* Tråd/inlägg/kommentar struktur */
+    .threads-list {
+      margin: 0 auto 50px auto;
+      max-width: 770px;
+      min-height: 250px;
+    }
+    .thread-card, .comment-card {
+      background: #141415;
+      border: 2px solid #00ffcc;
+      border-radius: 13px;
+      margin: 28px 0 15px 0;
+      box-shadow: 0 0 10px #ad30fa60, 0 0 2px #00ffcc;
+      padding: 22px 19px 10px 19px;
+      position: relative;
+    }
+    .thread-title { font-size: 1.2em; font-weight: bold; color: #00ffcc; margin-bottom: 7px;}
+    .thread-desc { font-size: 1.01em; margin-bottom: 9px; color: #fff;}
+    .thread-meta, .comment-meta { font-size: .98em; color: #93f3dc; margin-bottom: 6px;}
+    .reactions-bar, .comment-reactions { margin: 4px 0 7px 0; }
+    .reactions-bar button, .comment-reactions button {
+      background: transparent;
+      color: #fff;
+      border: none;
+      font-size: 1.4em;
+      cursor: pointer;
+      margin: 0 3px;
+      transition: transform 0.13s;
+      border-radius: 4px;
+    }
+    .reactions-bar button.selected, .comment-reactions button.selected {
+      background: #00ffcc33;
+      box-shadow: 0 0 8px #00ffcc, 0 0 3px #fff;
+    }
+    .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+      background: #ad30fa;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin: 0 5px 0 0;
+      padding: 5px 13px;
+      font-size: .93em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background .12s;
+    }
+    .delete-btn { background: #ff0e53; }
+    .save-btn { background: #00ffcc; color: #111;}
+    .cancel-btn { background: #333; color: #fff;}
+    .edit-btn:hover, .delete-btn:hover, .save-btn:hover, .cancel-btn:hover {
+      opacity: 0.9;
+      filter: brightness(1.11);
+    }
+    .add-comment-box {
+      margin: 9px 0 0 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      max-width: 950px;
-      margin: 0 auto 140px auto;
-      width: 100%;
-      padding: 0 15px;
-      position: relative;
-      z-index: 2;
+      gap: 7px;
     }
-    .create-thread-form {
-      margin-top: 12px;
-      background: rgba(0,0,0,0.8);
-      border: 2px solid #00ff00;
-      border-radius: 10px;
-      padding: 32px 25px 28px 25px;
-      max-width: 530px;
-      width: 100%;
-      box-shadow: 0 0 15px #00ff00;
-      margin-bottom: 36px;
-      text-align: center;
-    }
-    .create-thread-form input, .create-thread-form textarea {
-      width: 100%;
-      margin-bottom: 13px;
-      border-radius: 5px;
-      border: 1px solid #00ff00;
-      background-color: #111;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      padding: 11px;
-      font-size: 1.1em;
-    }
-    .create-thread-form button {
-      background-color: #00ff00;
-      color: #18191a;
-      border: none;
-      padding: 12px 40px;
-      font-size: 1.12em;
-      border-radius: 7px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 5px #00ff00;
-      transition: background 0.18s;
-    }
-    .create-thread-form button:hover {
-      background: #00cc00;
-    }
-    .thread-list { width: 100%; max-width: 850px; margin-bottom: 60px; }
-    .thread-item {
-      background: #14141f;
-      border-radius: 13px;
-      box-shadow: 0 0 9px #bb00ff80;
-      margin-bottom: 25px;
-      padding: 20px 16px 13px 16px;
-      cursor: pointer;
-      transition: box-shadow 0.2s, background 0.2s;
-    }
-    .thread-item:hover {
-      box-shadow: 0 0 24px #00ffcc80;
-      background: #181927;
-    }
-    .thread-title {
-      font-size: 1.3em;
+    .add-comment-box textarea {
+      background: #0d0d0d;
+      border: 1px solid #ad30fa;
       color: #00ffcc;
-      margin-bottom: 7px;
-      font-weight: bold;
-      text-shadow: 0 0 6px #fff, 0 0 10px #00ffcc88;
-    }
-    .thread-desc {
-      color: #d8ffff;
+      border-radius: 7px;
+      font-family: inherit;
       font-size: 1em;
-      margin-bottom: 6px;
+      padding: 9px 10px;
+      min-height: 37px;
+      resize: vertical;
     }
-    /* Ghost & Glow i botten */
+    .add-comment-box button {
+      background: #ad30fa;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 0;
+      width: 120px;
+      align-self: flex-end;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 4px #ad30fa80;
+      font-size: 1.01em;
+      margin-top: 4px;
+    }
+    /* Ai assistenter nere */
     .ai-footer {
       position: fixed;
-      left: 0; right: 0;
-      bottom: 0;
+      bottom: 0; left: 0; right: 0;
+      width: 100vw;
       display: flex;
       justify-content: center;
-      align-items: end;
-      z-index: 2100;
-      gap: 45px;
-      padding: 6px 0 16px 0;
+      align-items: flex-end;
+      z-index: 200;
+      gap: 110px;
+      padding-bottom: 12px;
       pointer-events: none;
-      background: none;
-      height: 120px;
     }
-    .ai-avatar {
-      text-align: center;
-      flex: 0 0 auto;
+    .ai-block {
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      min-width: 150px;
       pointer-events: auto;
-      cursor: pointer;
     }
-    .ai-label {
-      color: #00ffcc;
+    .ai-info {
+      color: #93f3dc;
+      font-size: 1em;
+      max-width: 190px;
+      margin-bottom: 3px;
+      line-height: 1.3;
+      text-shadow: 0 0 6px #000;
+    }
+    .ai-block .ai-label {
       font-weight: bold;
-      font-size: 1.11em;
+      text-align: center;
+      color: #00ffcc;
+      font-size: 1.08em;
+      margin-top: 2px;
+      margin-bottom: 0;
     }
-    .ai-label.glow { color: #ffe700; }
-    @media (max-width: 600px) {
-      .ai-footer { gap: 22px; height: 85px; }
+    .ai-block .ai-label.glow { color: #ffe700; }
+    .ai-block .ai-icon {
+      width: 41px; height: 41px;
+      display: flex;
+      align-items: center; justify-content: center;
+      margin-bottom: 1px;
+    }
+    @media (max-width:900px) {
+      .forum-main-container { padding-left: 3vw; padding-right: 3vw;}
+      .ai-footer { gap: 25vw; }
+    }
+    @media (max-width:600px) {
+      .ai-footer { gap: 10vw; }
+      .ai-block .ai-info { max-width: 110px; font-size: 0.98em;}
     }
   </style>
-  <!-- FIREBASE & MODULER -->
+  <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script>
-    // --- Firebase init ---
+    // FIREBASE-CONFIG
     const firebaseConfig = { 
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -243,19 +327,16 @@
   </script>
 </head>
 <body>
-  <!-- SIDOREKLAM -->
-  <div class="side-ads left">
-    <a href="#" class="side-ad-img" target="_blank">
-      <img src="https://dummyimage.com/110x320/7b00ff/fff&text=Reklam+1" alt="Reklam vänster" />
-    </a>
+  <!-- REKLAM VÄNSTER/HÖGER -->
+  <div class="ad-col left">
+    <div class="ad-label">REKLAM VÄNSTER</div>
+    <div></div>
   </div>
-  <div class="side-ads right">
-    <a href="#" class="side-ad-img" target="_blank">
-      <img src="https://dummyimage.com/110x320/00ffcc/222&text=Reklam+2" alt="Reklam höger" />
-    </a>
+  <div class="ad-col right">
+    <div></div>
+    <div class="ad-label">REKLAM HÖGER</div>
   </div>
-
-  <!-- MENY -->
+  <!-- NAVIGATION -->
   <nav class="navbar">
     <button id="menuBtn" aria-label="Meny">&#9776;</button>
     <div class="nav-content" id="navLinks">
@@ -265,411 +346,340 @@
       <a href="upload.html">Ladda upp</a>
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
+      <div class="search-container">
+        <input type="text" id="globalSearchInput" placeholder="Sök på hela sidan...">
+      </div>
     </div>
   </nav>
-  
-  <!-- HUVUDINNEHÅLL -->
+  <!-- FORUM MAIN -->
   <div class="forum-main-container">
-    <!-- Skapa ny tråd -->
-    <form class="create-thread-form" id="createThreadForm">
-      <h2 id="createThreadTitle">Skapa ny tråd</h2>
-      <input type="text" id="threadTitle" maxlength="64" placeholder="Titel på tråd (t.ex. Matematik)" required>
-      <textarea id="threadDesc" rows="3" maxlength="220" placeholder="Beskrivning (valfritt)"></textarea>
-      <button type="submit" id="createThreadBtn">Skapa tråd</button>
-    </form>
-    <!-- Lista på trådar -->
-    <div class="thread-list" id="threadList"></div>
-  </div>
-
-  <!-- AI FOOTER -->
-  <div class="ai-footer">
-    <div class="ai-avatar" onclick="window.location='ghost.html'">
-      <!-- Ghost ikon SVG -->
-      <svg width="52" height="52" viewBox="0 0 56 56" fill="none">
-        <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
-        <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
-        <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
-        <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
-        <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
-      </svg>
-      <div class="ai-label">Ghost</div>
+    <div class="thread-form-box" id="threadFormBox">
+      <h2 id="threadFormTitle">Skapa ny tråd</h2>
+      <input id="newThreadTitle" placeholder="Titel på tråd (t.ex. Matematik)">
+      <textarea id="newThreadDesc" rows="3" placeholder="Beskrivning (valfritt)"></textarea>
+      <button id="createThreadBtn">Skapa tråd</button>
     </div>
-    <div class="ai-avatar" onclick="window.location='glow.html'">
-      <!-- Glow ikon SVG -->
-      <svg width="52" height="52" viewBox="0 0 64 64" fill="none">
-        <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
-        <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
-        <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
-        <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
-        <g>
-          <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
-          <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
-          <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
-          <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
-          <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
-          <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
-        </g>
-      </svg>
-      <div class="ai-label glow">Glow</div>
+    <div class="threads-list" id="threadsList">
+      <div style="text-align:center;color:#ad30fa;font-size:1.12em;" id="loadingMsg">Laddar...</div>
+    </div>
+  </div>
+  <!-- AI-footer -->
+  <div class="ai-footer">
+    <div class="ai-block">
+      <div class="ai-icon">
+        <!-- GHOST SVG (från din tidigare bild, ändra ej) -->
+        <svg width="44" height="44" viewBox="0 0 56 56" fill="none"><ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/><ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/><ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/><rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/><rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/></svg>
+      </div>
+      <div>
+        <div class="ai-label">Ghost</div>
+        <div class="ai-info" id="ghostInfo">
+          Jag är Ghost, din tekniska support som guidar dig rätt på plattformen och svarar på frågor om funktioner, säkerhet och allt digitalt. Klicka på Ghost i menyn för att chatta!
+        </div>
+      </div>
+    </div>
+    <div class="ai-block">
+      <div class="ai-icon">
+        <!-- GLOW SVG (från din tidigare bild, ändra ej) -->
+        <svg width="44" height="44" viewBox="0 0 64 64" fill="none"><ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/><path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/><ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/><ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/><g><circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/><circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/><circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/><circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/><circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/><circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/></g></svg>
+      </div>
+      <div>
+        <div class="ai-label glow">Glow</div>
+        <div class="ai-info" id="glowInfo">
+          Jag är Glow! Om du behöver någon att prata med, få stöd eller bara vill sprida lite positiv energi – chatta med mig när du vill!
+        </div>
+      </div>
     </div>
   </div>
   <script>
-    // --- Hamburgermeny (centrerad) ---
-    const menuBtn = document.getElementById("menuBtn");
-    const navLinks = document.getElementById("navLinks");
-    menuBtn.onclick = () => navLinks.classList.toggle("active");
-    document.querySelectorAll('.nav-content a').forEach(a =>
-      a.onclick = () => navLinks.classList.remove("active")
-    );
+const EMOJIS = [
+  { emoji: "👍", key: "thumbsup" }, { emoji: "👎", key: "thumbsdown" },
+  { emoji: "🙂", key: "smile" }, { emoji: "😃", key: "bigsmile" },
+  { emoji: "😂", key: "laugh" }, { emoji: "😕", key: "confused" },
+  { emoji: "🙁", key: "sad" }, { emoji: "😢", key: "cry" },
+  { emoji: "😡", key: "angry" }, { emoji: "😳", key: "embarrassed" }, { emoji: "😇", key: "angel" }
+];
+const TRANSLATE = {
+  sv: {
+    createThread: "Skapa ny tråd",
+    threadTitle: "Titel på tråd (t.ex. Matematik)",
+    threadDesc: "Beskrivning (valfritt)",
+    createBtn: "Skapa tråd",
+    addComment: "Kommentera",
+    edit: "Redigera", delete: "Ta bort", save: "Spara", cancel: "Avbryt",
+    reply: "Svara", reactions: "Reaktioner", loading: "Laddar...",
+    editComment: "Redigera kommentar",
+    enterComment: "Skriv kommentar...",
+    confirmDelete: "Är du säker på att du vill ta bort?",
+    needLogin: "Du måste vara inloggad för att göra detta.",
+    fillTitle: "Fyll i titel på tråden!",
+    fillComment: "Skriv något i kommentaren!",
+    showReplies: "Visa svar",
+    hideReplies: "Dölj svar",
+    showMore: "Visa fler", showLess: "Visa färre"
+  },
+  en: {
+    createThread: "Create new thread",
+    threadTitle: "Thread title (e.g. Math)",
+    threadDesc: "Description (optional)",
+    createBtn: "Create thread",
+    addComment: "Add comment",
+    edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel",
+    reply: "Reply", reactions: "Reactions", loading: "Loading...",
+    editComment: "Edit comment",
+    enterComment: "Write a comment...",
+    confirmDelete: "Are you sure you want to delete?",
+    needLogin: "You need to be logged in.",
+    fillTitle: "Please enter a thread title!",
+    fillComment: "Please write a comment!",
+    showReplies: "Show replies",
+    hideReplies: "Hide replies",
+    showMore: "Show more", showLess: "Show less"
+  }
+};
+let lang = (localStorage.language === "en" ? "en" : "sv");
 
-    // --- Språkstöd ---
-    const translations = {
-      sv: {
-        createThreadTitle: "Skapa ny tråd",
-        createThreadBtn: "Skapa tråd",
-        threadTitlePlaceholder: "Titel på tråd (t.ex. Matematik)",
-        threadDescPlaceholder: "Beskrivning (valfritt)",
-        needLogin: "Du måste vara inloggad.",
-        addPostBtn: "Lägg upp inlägg",
-        postPlaceholder: "Skriv ett inlägg...",
-        addCommentBtn: "Kommentera",
-        commentPlaceholder: "Skriv en kommentar...",
-        delete: "Ta bort",
-        edit: "Redigera",
-        save: "Spara",
-        cancel: "Avbryt",
-        confirmDelete: "Är du säker på att du vill ta bort?",
-        loginToPost: "Logga in för att delta.",
-        reply: "Svara",
-        showReplies: "Visa svar",
-        hideReplies: "Dölj svar"
-      },
-      en: {
-        createThreadTitle: "Create New Thread",
-        createThreadBtn: "Create Thread",
-        threadTitlePlaceholder: "Thread title (e.g. Mathematics)",
-        threadDescPlaceholder: "Description (optional)",
-        needLogin: "You must be logged in.",
-        addPostBtn: "Add Post",
-        postPlaceholder: "Write a post...",
-        addCommentBtn: "Comment",
-        commentPlaceholder: "Write a comment...",
-        delete: "Delete",
-        edit: "Edit",
-        save: "Save",
-        cancel: "Cancel",
-        confirmDelete: "Are you sure you want to delete?",
-        loginToPost: "Log in to participate.",
-        reply: "Reply",
-        showReplies: "Show replies",
-        hideReplies: "Hide replies"
-      }
-    };
-    let lang = localStorage.language === "en" ? "en" : "sv";
-    function t(key) { return translations[lang][key] || key; }
+function t(key) { return TRANSLATE[lang][key] || key; }
 
-    function updateUIStrings() {
-      document.getElementById("createThreadTitle").textContent = t("createThreadTitle");
-      document.getElementById("createThreadBtn").textContent = t("createThreadBtn");
-      document.getElementById("threadTitle").placeholder = t("threadTitlePlaceholder");
-      document.getElementById("threadDesc").placeholder = t("threadDescPlaceholder");
-      // Inlägg/kommentarers knappar sätts dynamiskt i render
+// Centrera hamburgermeny på mobil
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+menuBtn.onclick = () => navLinks.classList.toggle("active");
+document.querySelectorAll('.nav-content a').forEach(a =>
+  a.onclick = () => navLinks.classList.remove("active")
+);
+
+// --- Språk på formulär
+function setFormLang() {
+  document.getElementById('threadFormTitle').textContent = t('createThread');
+  document.getElementById('newThreadTitle').placeholder = t('threadTitle');
+  document.getElementById('newThreadDesc').placeholder = t('threadDesc');
+  document.getElementById('createThreadBtn').textContent = t('createBtn');
+}
+setFormLang();
+
+// --- NAV fästs högst upp vid scroll (mobil)
+if (window.innerWidth < 900) {
+  let lastY = window.scrollY;
+  let nav = document.querySelector('.navbar');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > lastY && window.scrollY > 56) {
+      nav.classList.add('hide-navbar');
+    } else {
+      nav.classList.remove('hide-navbar');
     }
-    updateUIStrings();
-    window.addEventListener('storage', function(e){
-      if(e.key === 'language') {
-        lang = localStorage.language === "en" ? "en" : "sv";
-        updateUIStrings();
-        renderThreads();
-      }
-    });
+    lastY = window.scrollY;
+  });
+}
 
-    // --- Reaktionsikoner ---
-    const REACTIONS = [
-      { emoji: "👍", key: "thumbsup" },
-      { emoji: "👎", key: "thumbsdown" },
-      { emoji: "🙂", key: "smile" },
-      { emoji: "😃", key: "bigsmile" },
-      { emoji: "😂", key: "laugh" },
-      { emoji: "😕", key: "confused" },
-      { emoji: "🙁", key: "sad" },
-      { emoji: "😢", key: "cry" },
-      { emoji: "😡", key: "angry" },
-      { emoji: "😳", key: "embarrassed" },
-      { emoji: "😇", key: "angel" }
-    ];
+// --- Autentisering
+let currentUser = null;
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+  renderThreads();
+});
 
-    // --- Firebase auth + data ---
-    let currentUser = null;
-    auth.onAuthStateChanged(user => {
-      currentUser = user;
-      renderThreads();
-    });
+// --- Skapa ny tråd
+document.getElementById("createThreadBtn").onclick = async function() {
+  if (!currentUser) { alert(t('needLogin')); return; }
+  let title = document.getElementById("newThreadTitle").value.trim();
+  let desc = document.getElementById("newThreadDesc").value.trim();
+  if (!title) { alert(t('fillTitle')); return; }
+  await db.collection("forumThreads").add({
+    title, desc, uid: currentUser.uid, name: currentUser.displayName || "Anonym",
+    time: new Date(), reactions: {}, lang, deleted: false
+  });
+  document.getElementById("newThreadTitle").value = "";
+  document.getElementById("newThreadDesc").value = "";
+  renderThreads();
+};
 
-    // --- Skapa ny tråd ---
-    document.getElementById("createThreadForm").onsubmit = async e => {
-      e.preventDefault();
-      if (!currentUser) return alert(t("needLogin"));
-      const title = document.getElementById("threadTitle").value.trim();
-      const desc = document.getElementById("threadDesc").value.trim();
-      if (!title) return alert(t("threadTitlePlaceholder"));
-      await db.collection("threads").add({
-        title, description: desc,
-        creatorUid: currentUser.uid,
-        timestamp: new Date(),
-        reactions: {},
-      });
-      document.getElementById("threadTitle").value = "";
-      document.getElementById("threadDesc").value = "";
-      renderThreads();
-    };
+async function renderThreads() {
+  const list = document.getElementById('threadsList');
+  list.innerHTML = `<div style="text-align:center;color:#ad30fa;font-size:1.12em;">${t('loading')}</div>`;
+  const qsnap = await db.collection("forumThreads").orderBy("time", "desc").get();
+  list.innerHTML = '';
+  if (qsnap.empty) {
+    list.innerHTML = `<div style="color:#00ffcc;text-align:center;font-size:1.12em;margin-top:28px">Ingen tråd ännu – skapa en!</div>`;
+    return;
+  }
+  qsnap.forEach(doc => {
+    if (doc.data().deleted) return;
+    const data = doc.data();
+    const el = renderThreadCard(doc.id, data);
+    list.appendChild(el);
+  });
+}
 
-    // --- Rendera trådar ---
-    async function renderThreads() {
-      const list = document.getElementById("threadList");
-      list.innerHTML = "<div style='text-align:center; color:#888;'>Laddar...</div>";
-      const query = await db.collection("threads").orderBy("timestamp", "desc").get();
-      list.innerHTML = "";
-      if (query.empty) {
-        list.innerHTML = "<div style='text-align:center; color:#666; font-size:1.25em;'>"+(lang=="sv"?"Inga trådar än. Skapa en!":"No threads yet. Create one!")+"</div>";
-      }
-      query.forEach(doc => {
-        const data = doc.data();
-        const id = doc.id;
-        // Räkna reaktioner
-        const reactions = data.reactions || {};
-        const counts = {};
-        for (const uid in reactions) {
-          const reaction = reactions[uid];
-          counts[reaction] = (counts[reaction] || 0) + 1;
-        }
-        // Tråd div
-        const div = document.createElement("div");
-        div.className = "thread-item";
-        div.innerHTML = `
-          <div class="thread-title">${data.title}</div>
-          <div class="thread-desc">${data.description||""}</div>
-          <div class="reactions-bar" style="margin-bottom:12px;">
-            ${REACTIONS.map(r => `
-              <button class="reaction-btn${reactions[currentUser?.uid] === r.key ? " selected" : ""}" 
-                data-thread="${id}" data-reaction="${r.key}" title="${r.emoji}">
-                ${r.emoji}<span class="reaction-count">${counts[r.key] ? counts[r.key] : ""}</span>
-              </button>
-            `).join("")}
-            ${currentUser && data.creatorUid === currentUser.uid
-              ? `<button class="delete-thread-btn" data-thread="${id}">${t("delete")}</button>`
-              : ""}
-          </div>
-          <div class="post-section" id="posts-${id}">
-            <div class="add-post-form" style="margin-bottom:8px;">
-              ${currentUser ? `
-                <textarea class="add-post-input" rows="2" placeholder="${t("postPlaceholder")}"></textarea>
-                <button class="add-post-btn" data-thread="${id}">${t("addPostBtn")}</button>
-              ` : `<div style="color:#bbb; margin-bottom:9px;">${t("loginToPost")}</div>`}
-            </div>
-            <div class="posts-list"></div>
-          </div>
-        `;
-        list.appendChild(div);
-        // Ladda inlägg för tråden
-        loadPosts(id, div.querySelector('.posts-list'));
-      });
-      addReactionsListeners();
-      addPostListeners();
-      addDeleteThreadListeners();
-    }
+// --- Rendera tråd (inkl inlägg och kommentarer, rekursivt)
+function renderThreadCard(threadId, data) {
+  let card = document.createElement("div");
+  card.className = "thread-card";
+  card.innerHTML = `
+    <div class="thread-title">${escapeHtml(data.title)}</div>
+    ${data.desc ? `<div class="thread-desc">${escapeHtml(data.desc)}</div>` : ""}
+    <div class="thread-meta">${data.name} &ndash; ${formatDate(data.time)}</div>
+    <div class="reactions-bar">${renderReactions(threadId, data.reactions || {}, "thread")}</div>
+    ${currentUser && currentUser.uid === data.uid ? 
+      `<button class="edit-btn" onclick="editThread('${threadId}')">${t('edit')}</button>
+       <button class="delete-btn" onclick="deleteThread('${threadId}')">${t('delete')}</button>` : ""}
+    <div id="comments-${threadId}" class="comments"></div>
+    <div class="add-comment-box">
+      <textarea id="comment-inp-${threadId}" placeholder="${t('enterComment')}"></textarea>
+      <button onclick="addComment('${threadId}', null)">${t('addComment')}</button>
+    </div>
+  `;
+  // Ladda kommentarer till tråd
+  setTimeout(() => { loadComments(threadId, null, `comments-${threadId}`); }, 0);
+  return card;
+}
 
-    // --- Reaktioner på tråd ---
-    function addReactionsListeners() {
-      document.querySelectorAll(".reaction-btn").forEach(btn => {
-        btn.onclick = async function() {
-          if (!currentUser) return alert(t("needLogin"));
-          const threadId = this.getAttribute("data-thread");
-          const reaction = this.getAttribute("data-reaction");
-          const ref = db.collection("threads").doc(threadId);
-          const snap = await ref.get();
-          let reactions = snap.data().reactions || {};
-          if (reactions[currentUser.uid] === reaction) {
-            delete reactions[currentUser.uid];
-          } else {
-            reactions[currentUser.uid] = reaction;
-          }
-          await ref.update({ reactions });
-          renderThreads();
-        };
-      });
-    }
+// Escape för XSS-skydd
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[m]));
+}
+// Datumformat
+function formatDate(ts) {
+  try {
+    const d = ts?.toDate?.() || new Date(ts);
+    return d.toLocaleString(lang === "sv" ? "sv-SE" : "en-GB", {dateStyle:"short", timeStyle:"short"});
+  } catch { return ""; }
+}
 
-    // --- Ta bort tråd ---
-    function addDeleteThreadListeners() {
-      document.querySelectorAll(".delete-thread-btn").forEach(btn => {
-        btn.onclick = async function() {
-          if (!confirm(t("confirmDelete"))) return;
-          const threadId = this.getAttribute("data-thread");
-          await db.collection("threads").doc(threadId).delete();
-          renderThreads();
-        };
-      });
-    }
+// --- Kommentar- & reply-funktion: laddar in (och renderar rekursivt)
+async function loadComments(threadId, parentId, containerId, depth=0) {
+  const box = document.getElementById(containerId);
+  box.innerHTML = "";
+  const ref = db.collection("forumThreads").doc(threadId).collection("comments");
+  let qsnap;
+  if (!parentId) {
+    qsnap = await ref.where("parent", "==", null).orderBy("time").get();
+  } else {
+    qsnap = await ref.where("parent", "==", parentId).orderBy("time").get();
+  }
+  qsnap.forEach(doc => {
+    if (doc.data().deleted) return;
+    const cEl = renderComment(threadId, doc.id, doc.data(), depth);
+    box.appendChild(cEl);
+  });
+}
 
-    // --- Lägga upp inlägg i tråd ---
-    function addPostListeners() {
-      document.querySelectorAll(".add-post-btn").forEach(btn => {
-        btn.onclick = async function() {
-          const threadId = btn.getAttribute("data-thread");
-          const textarea = btn.parentElement.querySelector(".add-post-input");
-          const text = textarea.value.trim();
-          if (!text) return;
-          if (!currentUser) return alert(t("needLogin"));
-          await db.collection("threads").doc(threadId)
-            .collection("posts").add({
-              text, creatorUid: currentUser.uid, timestamp: new Date(),
-              reactions: {}
-            });
-          textarea.value = "";
-          loadPosts(threadId, btn.closest(".post-section").querySelector(".posts-list"));
-        };
-      });
-    }
+// Rendera en kommentar (inkl. reply, edit, reaktion)
+function renderComment(threadId, commentId, data, depth) {
+  const cdiv = document.createElement("div");
+  cdiv.className = "comment-card";
+  cdiv.style.marginLeft = depth ? `${depth*23}px` : "";
+  cdiv.innerHTML = `
+    <div class="comment-meta">${data.name || "Anonym"} &ndash; ${formatDate(data.time)}</div>
+    <div class="comment-content" id="content-${threadId}-${commentId}">${escapeHtml(data.content || "")}</div>
+    <div class="comment-reactions">${renderReactions(commentId, data.reactions || {}, "comment", threadId)}</div>
+    <div style="margin-bottom:4px">
+      <button class="reply-btn" onclick="showReply('${threadId}','${commentId}',${depth+1})">${t('reply')}</button>
+      ${currentUser && currentUser.uid === data.uid ?
+        `<button class="edit-btn" onclick="editComment('${threadId}','${commentId}')">${t('edit')}</button>
+         <button class="delete-btn" onclick="deleteComment('${threadId}','${commentId}')">${t('delete')}</button>` : ""}
+    </div>
+    <div id="replies-${threadId}-${commentId}"></div>
+  `;
+  // Ladda replies
+  setTimeout(() => loadComments(threadId, commentId, `replies-${threadId}-${commentId}`, depth+1), 0);
+  return cdiv;
+}
 
-    // --- Ladda inlägg (och rendera) ---
-    async function loadPosts(threadId, container) {
-      container.innerHTML = "<div style='text-align:center; color:#888;'>Laddar...</div>";
-      const postsQuery = await db.collection("threads").doc(threadId)
-        .collection("posts").orderBy("timestamp", "asc").get();
-      container.innerHTML = "";
-      postsQuery.forEach(postDoc => {
-        const data = postDoc.data();
-        const postId = postDoc.id;
-        container.appendChild(renderPost(threadId, postId, data, 0));
-      });
-    }
+// Reaktioner med emojis på trådar/kommentarer
+function renderReactions(itemId, reactions, type, threadId) {
+  let html = "";
+  EMOJIS.forEach(({emoji, key}) => {
+    let count = Object.values(reactions || {}).filter(r=>r===key).length;
+    let sel = currentUser && reactions && reactions[currentUser.uid] === key ? "selected" : "";
+    html += `<button class="${sel}" title="${emoji}" onclick="reactTo('${itemId}','${key}','${type}','${threadId||""}')">${emoji}${count?'<span style=\'font-size:.8em;margin-left:1px\'>' + count + '</span>':''}</button>`;
+  });
+  return html;
+}
 
-    // --- Rendera inlägg + kommentarer (rekursivt, obegränsat djup) ---
-    function renderPost(threadId, postId, data, level) {
-      const reactions = data.reactions || {};
-      const counts = {};
-      for (const uid in reactions) {
-        const reaction = reactions[uid];
-        counts[reaction] = (counts[reaction] || 0) + 1;
-      }
-      // Inläggs-div
-      const postDiv = document.createElement("div");
-      postDiv.className = "forum-post" + (level > 0 ? " forum-comment" : "");
-      postDiv.style.marginLeft = (level * 30) + "px";
-      postDiv.innerHTML = `
-        <div class="post-content" style="padding-bottom:6px;">${escapeHtml(data.text)}</div>
-        <div class="reactions-bar">
-          ${REACTIONS.map(r => `
-            <button class="reaction-btn${reactions[currentUser?.uid] === r.key ? " selected" : ""}" 
-              data-thread="${threadId}" data-post="${postId}" data-reaction="${r.key}" title="${r.emoji}">
-              ${r.emoji}<span class="reaction-count">${counts[r.key] ? counts[r.key] : ""}</span>
-            </button>
-          `).join("")}
-          ${currentUser && data.creatorUid === currentUser.uid
-            ? `<button class="delete-post-btn" data-thread="${threadId}" data-post="${postId}">${t("delete")}</button>`
-            : ""}
-          <button class="reply-btn" data-thread="${threadId}" data-post="${postId}">${t("reply")}</button>
-        </div>
-        <div class="reply-form" style="display:none;">
-          <textarea rows="2" class="reply-input" placeholder="${t("commentPlaceholder")}"></textarea>
-          <button class="add-reply-btn" data-thread="${threadId}" data-post="${postId}">${t("addCommentBtn")}</button>
-        </div>
-        <div class="comments-list"></div>
-      `;
-      // --- Kommentarer ---
-      loadComments(threadId, postId, postDiv.querySelector(".comments-list"), level + 1);
+// Global reaktions-funktion
+window.reactTo = async function(itemId, reaction, type, threadId="") {
+  if (!currentUser) { alert(t('needLogin')); return; }
+  let ref;
+  if (type==="thread") ref = db.collection("forumThreads").doc(itemId);
+  else ref = db.collection("forumThreads").doc(threadId).collection("comments").doc(itemId);
+  let snap = await ref.get();
+  let reactions = snap.data().reactions || {};
+  if (reactions[currentUser.uid] === reaction) delete reactions[currentUser.uid];
+  else reactions[currentUser.uid] = reaction;
+  await ref.update({reactions});
+  if (type==="thread") renderThreads();
+  else loadComments(threadId, null, `comments-${threadId}`);
+};
 
-      // --- Svara/visa svar ---
-      const replyBtn = postDiv.querySelector(".reply-btn");
-      replyBtn.onclick = function() {
-        const replyForm = postDiv.querySelector(".reply-form");
-        replyForm.style.display = replyForm.style.display === "none" ? "" : "none";
-      };
-      postDiv.querySelector(".add-reply-btn").onclick = async function() {
-        const replyInput = postDiv.querySelector(".reply-input");
-        const text = replyInput.value.trim();
-        if (!text) return;
-        if (!currentUser) return alert(t("needLogin"));
-        await db.collection("threads").doc(threadId)
-          .collection("posts").doc(postId).collection("comments")
-          .add({
-            text, creatorUid: currentUser.uid, timestamp: new Date(), reactions: {}
-          });
-        replyInput.value = "";
-        loadComments(threadId, postId, postDiv.querySelector(".comments-list"), level + 1);
-      };
+// Kommentar: add, edit, delete, reply
+window.addComment = async function(threadId, parentId) {
+  if (!currentUser) { alert(t('needLogin')); return; }
+  let inpId = parentId ? `reply-input-${threadId}-${parentId}` : `comment-inp-${threadId}`;
+  let val = document.getElementById(inpId).value.trim();
+  if (!val) { alert(t('fillComment')); return; }
+  await db.collection("forumThreads").doc(threadId).collection("comments").add({
+    content: val, parent: parentId || null,
+    uid: currentUser.uid, name: currentUser.displayName || "Anonym",
+    time: new Date(), reactions: {}, lang, deleted: false
+  });
+  document.getElementById(inpId).value = "";
+  loadComments(threadId, null, `comments-${threadId}`);
+};
 
-      // --- Reaktioner på inlägg ---
-      postDiv.querySelectorAll(".reaction-btn").forEach(btn => {
-        btn.onclick = async function() {
-          if (!currentUser) return alert(t("needLogin"));
-          const postId = btn.getAttribute("data-post");
-          const threadId = btn.getAttribute("data-thread");
-          const reaction = btn.getAttribute("data-reaction");
-          let ref = db.collection("threads").doc(threadId).collection("posts").doc(postId);
-          if (level > 0) {
-            // Kommentarsnivå
-            const parentIds = postDiv.parentElement.closest('.forum-post')?.dataset || {};
-            ref = db.collection("threads").doc(threadId)
-              .collection("posts").doc(parentIds.postId)
-              .collection("comments").doc(postId);
-          }
-          const snap = await ref.get();
-          let reactions = snap.data().reactions || {};
-          if (reactions[currentUser.uid] === reaction) {
-            delete reactions[currentUser.uid];
-          } else {
-            reactions[currentUser.uid] = reaction;
-          }
-          await ref.update({ reactions });
-          renderThreads();
-        };
-      });
+window.showReply = function(threadId, commentId, depth) {
+  let el = document.getElementById(`replies-${threadId}-${commentId}`);
+  if (!el.querySelector('textarea')) {
+    el.innerHTML = `<div class="add-comment-box">
+      <textarea id="reply-input-${threadId}-${commentId}" placeholder="${t('enterComment')}"></textarea>
+      <button onclick="addComment('${threadId}','${commentId}')">${t('addComment')}</button>
+    </div>`;
+  } else {
+    el.innerHTML = "";
+  }
+};
 
-      // --- Ta bort inlägg/kommentar ---
-      if (postDiv.querySelector(".delete-post-btn")) {
-        postDiv.querySelector(".delete-post-btn").onclick = async function() {
-          if (!confirm(t("confirmDelete"))) return;
-          if (level === 0) {
-            await db.collection("threads").doc(threadId).collection("posts").doc(postId).delete();
-            renderThreads();
-          } else {
-            const parentIds = postDiv.parentElement.closest('.forum-post')?.dataset || {};
-            await db.collection("threads").doc(threadId)
-              .collection("posts").doc(parentIds.postId)
-              .collection("comments").doc(postId).delete();
-            renderThreads();
-          }
-        };
-      }
-      postDiv.dataset.postId = postId; // För nested
+window.editThread = function(threadId) {
+  // ... Implementera edit tråd (du kan lägga till edit-funktion likt kommentars-edit)
+  alert("Redigera tråd (kommer snart!)");
+};
+window.deleteThread = async function(threadId) {
+  if (!confirm(t('confirmDelete'))) return;
+  await db.collection("forumThreads").doc(threadId).update({deleted:true});
+  renderThreads();
+};
 
-      return postDiv;
-    }
+window.editComment = function(threadId, commentId) {
+  // ... Implementera edit för kommentarer om du vill!
+  alert("Redigera kommentar (kommer snart!)");
+};
+window.deleteComment = async function(threadId, commentId) {
+  if (!confirm(t('confirmDelete'))) return;
+  await db.collection("forumThreads").doc(threadId).collection("comments").doc(commentId).update({deleted:true});
+  loadComments(threadId, null, `comments-${threadId}`);
+};
 
-    // --- Ladda kommentarer (obegränsat djup) ---
-    async function loadComments(threadId, parentPostId, container, level) {
-      container.innerHTML = "";
-      const commentsQuery = await db.collection("threads").doc(threadId)
-        .collection("posts").doc(parentPostId)
-        .collection("comments").orderBy("timestamp", "asc").get();
-      commentsQuery.forEach(commentDoc => {
-        const data = commentDoc.data();
-        const commentId = commentDoc.id;
-        container.appendChild(renderPost(threadId, commentId, data, level));
-      });
-    }
+// Språkbyte live (om man byter språk i localStorage från annan flik)
+window.addEventListener('storage', function(e){
+  if(e.key === 'language') {
+    lang = (localStorage.language === "en" ? "en" : "sv");
+    setFormLang();
+    renderThreads();
+  }
+});
 
-    // --- Helper: escape HTML ---
-    function escapeHtml(text) {
-      return text.replace(/[&<>"'`]/g, function (m) {
-        return ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;',
-          '"': '&quot;', "'": '&#39;', '`': '&#96;'
-        })[m];
-      });
-    }
-  </script>
+// Sök (global, men lägger bara till redirect nu)
+document.getElementById("globalSearchInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    const query = this.value.trim();
+    if (query) window.location.href = "search.html?q=" + encodeURIComponent(query);
+  }
+});
+
+// Starta trådvisning direkt
+renderThreads();
+
+</script>
 </body>
 </html>
