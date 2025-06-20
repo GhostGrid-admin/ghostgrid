@@ -13,43 +13,101 @@
       color: #e0ffff;
       font-family: 'Courier New', monospace;
       min-height: 100vh;
+      box-sizing: border-box;
     }
     nav.navbar {
-      background-color: #000;
-      border-bottom: 2px solid #00ffcc;
-      padding: 12px 0;
+      background: #000;
+      width: 100vw;
       position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 0 20px #bb00ff;
+      top: 0; left: 0; right: 0;
+      z-index: 2000;
+      border-bottom: 4px solid #ad30fa;
+      box-shadow: 0 0 20px #ad30fa;
       display: flex;
       justify-content: center;
-      transition: top 0.3s;
+      align-items: center;
     }
     .nav-content {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      max-width: 900px;
-      width: 100%;
+      gap: 40px;
+      padding: 14px 0 12px 0;
       align-items: center;
-      text-align: center;
+      justify-content: center;
+      width: 100%;
+      transition: 0.18s;
     }
     .nav-content a {
-      color: white;
+      color: #e0ffff;
       text-decoration: none;
-      font-size: 1.2em;
-      padding: 7px 10px;
-      border-radius: 4px;
-      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
-      transition: 0.3s;
+      font-size: 1.35em;
+      font-family: monospace;
+      padding: 5px 22px;
+      border-radius: 7px;
+      margin: 0 5px;
+      background: transparent;
+      transition: background 0.18s, color 0.18s, box-shadow 0.22s;
+      text-shadow: 0 0 8px #ad30fa, 0 0 3px #fff;
     }
-    .nav-content a:hover {
-      background-color: #00ffcc;
+    .nav-content a:hover, .nav-content a.active {
+      background: #ad30fa;
       color: #000;
-      box-shadow: 0 0 10px #ffffff;
+      box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
+    }
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.3em;
+      position: absolute;
+      right: 18px;
+      top: 5px;
+      cursor: pointer;
+      z-index: 3000;
+    }
+    .ad-side {
+      position: fixed;
+      top: 98px;
+      bottom: 18px;
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 900;
+      pointer-events: none;
+    }
+    .ad-side img {
+      width: 110px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 0 12px #ad30fa99;
+      margin-top: 10px;
+      background: #0f0020;
+      pointer-events: auto;
+    }
+    .ad-left { left: 0; }
+    .ad-right { right: 0; }
+    @media (max-width: 1000px) {
+      .ad-side { display: none !important; }
+    }
+    @media (max-width: 900px) {
+      .nav-content {
+        flex-direction: column;
+        background: #0a0020f7;
+        position: absolute;
+        left: 0; top: 55px;
+        width: 100vw;
+        gap: 18px;
+        padding: 15px 0 10px 0;
+        display: none;
+        z-index: 2000;
+      }
+      .nav-content.active { display: flex; }
+      #menuBtn { display: block; }
+    }
+    @media (max-width: 600px) {
+      .nav-content a { font-size: 1.11em; }
     }
     .forum-container {
       max-width: 900px;
@@ -178,93 +236,43 @@
       margin: 0 0 3px 0;
       text-align: center;
     }
-    .ad-footer {
+    /* Popup */
+    .popup-bg {
       position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100vw;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
       display: flex;
-      flex-direction: row;
-      justify-content: center;
       align-items: center;
-      z-index: 2000;
-      background: none;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s;
-      min-height: 0;
-      border: none;
-    }
-    .ad-footer.visible {
-      opacity: 1;
-      pointer-events: auto;
-      min-height: 90px;
-    }
-    .ad-banner {
-      width: 50vw;
-      max-width: 750px;
-      height: 90px;
-      display: flex;
       justify-content: center;
-      align-items: center;
-      background: transparent;
-      margin: 0 2vw;
     }
-    .ad-banner img {
-      width: 100%;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 0 18px #7b00ff99;
-      background: #11002a;
-    }
-    @media (max-width: 900px) {
-      .forum-container { flex-direction: column; gap: 0; }
-      .forum-sidebar { width: 98%; max-width: 98vw; border-left: none; border-top: 2px solid #00ffcc; margin-top: 25px; }
-      .new-category-form { max-width: 98vw;}
-      .ai-section { margin-top: 18px;}
-      .ad-footer { flex-direction: column; min-height: 120px;}
-      .ad-banner { width: 95vw; max-width: 99vw; height: 80px;}
-      .ad-banner img { height: 80px;}
-    }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .forum-container { padding: 3vw; }
-      .forum-title { font-size: 1.2em; }
-      .new-category-form { padding: 9px 2vw 8px 2vw;}
-      .ai-section { padding: 8px 2vw 10px 2vw;}
-      .ad-footer { min-height: 60px;}
-      .ad-banner img { height: 55px;}
-    }
-    /* --- Hamburger meny CSS --- */
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
+    .popup-dialog {
+      background: #18192a;
       color: #fff;
-      font-size: 2.3em;
-      position: absolute;
-      right: 18px;
-      top: 8px;
-      cursor: pointer;
-      z-index: 3000;
+      border-radius: 14px;
+      box-shadow: 0 0 24px #00ffcc66;
+      padding: 34px 38px 26px 38px;
+      min-width: 220px;
+      text-align: center;
     }
-    @media (max-width: 900px) {
-      .nav-content {
-        flex-direction: column;
-        background: #170b1aee;
-        position: absolute;
-        left: 0; top: 54px;
-        width: 100vw;
-        gap: 14px;
-        padding: 18px 0 10px 0;
-        display: none;
-        z-index: 2050;
-        box-shadow: 0 8px 24px #ad30fa90;
-      }
-      .nav-content.active { display: flex; }
-      #menuBtn { display: block; }
+    .popup-dialog button {
+      margin: 22px 16px 0 16px;
+      padding: 6px 20px;
+      font-size: 1.07em;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 4px #00ffcc77;
+      background: #00ffcc;
+      color: #18192a;
+      transition: background 0.16s, color 0.16s;
+    }
+    .popup-dialog .no-btn {
+      background: #111;
+      color: #ccc;
+      box-shadow: none;
+      border: 1px solid #aaa;
     }
   </style>
   <!-- FIREBASE SETUP -->
@@ -276,7 +284,7 @@
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
       projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.firebasestorage.app",
+      storageBucket: "ghostgrid-fb278.appspot.com",
       messagingSenderId: "283208202937",
       appId: "1:283208202937:web:11c0cea81fd81a31163968",
       measurementId: "G-B0WCKJCNT9"
@@ -287,8 +295,15 @@
   </script>
 </head>
 <body>
+  <!-- SIDREKLAMER -->
+  <div class="ad-side ad-left">
+    <img src="https://dummyimage.com/110x280/7b00ff/fff&text=Reklam+Vänster" alt="Reklam vänster">
+  </div>
+  <div class="ad-side ad-right">
+    <img src="https://dummyimage.com/110x280/00ffcc/222&text=Reklam+Höger" alt="Reklam höger">
+  </div>
+
   <nav class="navbar">
-    <button id="menuBtn" aria-label="Meny">&#9776;</button>
     <div class="nav-content" id="navLinks">
       <a href="forum.html">Forum</a>
       <a href="store.html">Store</a>
@@ -300,6 +315,7 @@
         <input type="text" id="globalSearchInput" placeholder="Sök på hela sidan...">
       </div>
     </div>
+    <button id="menuBtn" aria-label="Meny">&#9776;</button>
   </nav>
 
   <div class="forum-container">
@@ -378,60 +394,7 @@
     </div>
   </div>
 
-  <footer class="ad-footer" id="adFooter">
-    <div class="ad-banner">
-      <a href="#" target="_blank">
-        <img id="bannerImageLeft" src="https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1" alt="Reklam vänster" />
-      </a>
-    </div>
-    <div class="ad-banner">
-      <a href="#" target="_blank">
-        <img id="bannerImageRight" src="https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2" alt="Reklam höger" />
-      </a>
-    </div>
-  </footer>
-
-  <style>
-    .popup-bg {
-      position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.7);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .popup-dialog {
-      background: #18192a;
-      color: #fff;
-      border-radius: 14px;
-      box-shadow: 0 0 24px #00ffcc66;
-      padding: 34px 38px 26px 38px;
-      min-width: 220px;
-      text-align: center;
-    }
-    .popup-dialog button {
-      margin: 22px 16px 0 16px;
-      padding: 6px 20px;
-      font-size: 1.07em;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 4px #00ffcc77;
-      background: #00ffcc;
-      color: #18192a;
-      transition: background 0.16s, color 0.16s;
-    }
-    .popup-dialog .no-btn {
-      background: #111;
-      color: #ccc;
-      box-shadow: none;
-      border: 1px solid #aaa;
-    }
-  </style>
-
-  <!-- Hamburgermeny JS (lägger till/byter meny på mobil) -->
+  <!-- Hamburgermeny JS -->
   <script>
     const menuBtn = document.getElementById("menuBtn");
     const navLinks = document.getElementById("navLinks");
@@ -441,7 +404,7 @@
     );
   </script>
 
-  <!-- Ditt JS (ORÖRT) -->
+  <!-- All din forumfunktionalitet JS -->
   <script>
     // --- Språkstöd ---
     const translations = {
@@ -676,42 +639,6 @@
 
     // --- Ladda kategorier direkt om ej inloggad ---
     if (!currentUser) loadCategories();
-
-    // --- BANNER ROTATION + VISAS ENDAST VID BOTTEN ---
-    const bannersLeft = [
-      { src: "https://dummyimage.com/728x90/7b00ff/fff&text=Reklam+1", alt: "Reklam vänster 1", url: "#" },
-      { src: "https://dummyimage.com/728x90/ff0099/fff&text=Annonsplats+Ledig", alt: "Annons vänster", url: "#" },
-      { src: "https://dummyimage.com/728x90/222/fff&text=Tips:+Bli+medlem+idag!", alt: "Bli medlem vänster", url: "register.html" }
-    ];
-    const bannersRight = [
-      { src: "https://dummyimage.com/728x90/00ffcc/222&text=Reklam+2", alt: "Reklam höger 1", url: "#" },
-      { src: "https://dummyimage.com/728x90/222299/fff&text=Din+Annons+Här", alt: "Annons höger", url: "#" },
-      { src: "https://dummyimage.com/728x90/222/fff&text=Mer+Info", alt: "Mer info höger", url: "#" }
-    ];
-    let bannerIndex = 0;
-    function rotateBanners() {
-      const left = bannersLeft[bannerIndex % bannersLeft.length];
-      document.getElementById('bannerImageLeft').src = left.src;
-      document.getElementById('bannerImageLeft').alt = left.alt;
-      document.getElementById('bannerImageLeft').parentElement.href = left.url;
-      const right = bannersRight[bannerIndex % bannersRight.length];
-      document.getElementById('bannerImageRight').src = right.src;
-      document.getElementById('bannerImageRight').alt = right.alt;
-      document.getElementById('bannerImageRight').parentElement.href = right.url;
-      bannerIndex++;
-    }
-    rotateBanners();
-    setInterval(rotateBanners, 6000);
-
-    // Visa banners när man når botten
-    window.addEventListener("scroll", function() {
-      const adFooter = document.getElementById("adFooter");
-      if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 20)) {
-        adFooter.classList.add("visible");
-      } else {
-        adFooter.classList.remove("visible");
-      }
-    });
   </script>
 </body>
 </html>
