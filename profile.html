@@ -6,7 +6,6 @@
   <title data-i18n="profile_title">Min Profil – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* ...samma CSS som innan... */
     body { background-color: black; color: #00ff00; font-family: 'Courier New', monospace; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-top: 100px;}
     .hidden { display: none !important; }
     nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 40px; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; }
@@ -155,8 +154,14 @@
 
     // Decennium
     const dec = {
-      "50s": {sv:"50-tal", en:"50s"}, "60s": {sv:"60-tal", en:"60s"}, "70s": {sv:"70-tal", en:"70s"},
-      "80s": {sv:"80-tal", en:"80s"}, "90s": {sv:"90-tal", en:"90s"}, "y2k": {sv:"Y2K", en:"Y2K"}
+      "50s": {sv:"50-tal", en:"50s"},
+      "60s": {sv:"60-tal", en:"60s"},
+      "70s": {sv:"70-tal", en:"70s"},
+      "80s": {sv:"80-tal", en:"80s"},
+      "90s": {sv:"90-tal", en:"90s"},
+      "y2k": {sv:"Y2K", en:"Y2K"},
+      "2010s": {sv:"2010-tal", en:"2010s"},
+      "2020s": {sv:"2020-tal", en:"2020s"}
     };
     // Livsstilar/subkulturer
     const life = {
@@ -205,16 +210,12 @@
 
     // Lägg till alla options i rätt ordning
     const themeSelect = document.getElementById("theme");
-    themeSelect.innerHTML = ""; // Töm
+    themeSelect.innerHTML = "";
     themeSelect.appendChild(new Option(lang === "en" ? "Custom code (advanced!)" : "Egen kod (avancerat!)", "custom"));
-    // Decennium
     Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key][lang], key)));
-    // Livsstilar/subkulturer
     Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key][lang], key)));
-    // Musikstilar
     Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key][lang], key)));
 
-    // Byt övriga texter på sidan
     Object.keys(t).forEach(id => {
       const el = document.getElementById(id);
       if (el) el.textContent = t[id][lang];
@@ -232,6 +233,8 @@
       "80s": "<div style='padding:15px; background:#d2f0fc; border-radius:16px; text-align:center;'><h2>80s</h2><p>Neon, synth & leg warmers.</p></div>",
       "90s": "<div style='padding:15px; background:#f0e6ff; border-radius:16px; text-align:center;'><h2>90s</h2><p>MTV, grunge & Tamagotchi.</p></div>",
       "y2k": "<div style='padding:15px; background:#e6f7ff; border-radius:16px; text-align:center;'><h2>Y2K</h2><p>Millennium vibes, flip phones & glitter!</p></div>",
+      "2010s": "<div style='padding:15px; background:#eafffc; border-radius:16px; text-align:center;'><h2>2010s</h2><p>Selfies, sociala medier & festivaler.</p></div>",
+      "2020s": "<div style='padding:15px; background:#fff5c2; border-radius:16px; text-align:center;'><h2>2020s</h2><p>Streaming, memes & digital närvaro.</p></div>",
 
       goth: "<div style='padding:15px; background:#171717; color:#ba00d3; border-radius:16px; text-align:center;'><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>",
       emo: "<div style='padding:15px; background:#333; color:#fe52a0; border-radius:16px; text-align:center;'><h2>Emo</h2><p>Feeling all the feels.</p></div>",
