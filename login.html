@@ -171,7 +171,7 @@
       <input type="password" id="password" name="password" required data-i18n="password_placeholder" autocomplete="current-password">
 
       <div class="auth-buttons">
-        <button type="submit" class="main-btn" data-i18n="login_button_user">Logga in som användare</button>
+        <button type="submit" class="main-btn" data-i18n="login_button_member">Logga in som medlem</button>
         <button type="button" id="guest-login" class="guest-btn" data-i18n="guest_login">Logga in som gäst</button>
       </div>
 
@@ -209,7 +209,7 @@
     document.getElementById("guest-login").addEventListener("click", async () => {
       try {
         await signInAnonymously(auth);
-        window.location.href = "home.html"; // Ändra till rätt sida för gäster om du vill!
+        window.location.href = "forum.html";
       } catch (error) {
         alert((localStorage.getItem("lang") === "en" ? "Could not log in as guest: " : "Kunde inte logga in som gäst: ") + error.message);
       }
@@ -225,7 +225,7 @@
         email_placeholder: "Ange din e-post",
         password: "Lösenord",
         password_placeholder: "Ange ditt lösenord",
-        login_button_user: "Logga in som användare",
+        login_button_member: "Logga in som medlem",
         guest_login: "Logga in som gäst",
         forgot_password: "Glömt ditt lösenord?",
         create_account: "Skapa konto"
@@ -237,7 +237,7 @@
         email_placeholder: "Enter your email",
         password: "Password",
         password_placeholder: "Enter your password",
-        login_button_user: "Sign in as user",
+        login_button_member: "Sign in as member",
         guest_login: "Continue as guest",
         forgot_password: "Forgot your password?",
         create_account: "Create account"
