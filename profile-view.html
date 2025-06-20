@@ -260,6 +260,10 @@
       }
       const data = snap.data();
       profileOut.innerHTML = data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
+      // --------- Sätt in ALIAS på alla rätta ställen ---------
+      const nickname = data.nickname || "";
+      document.querySelectorAll('.profile-alias').forEach(el => el.textContent = nickname);
+
       // Ladda reaktioner
       heartUsers = Array.isArray(data.heartUsers) ? data.heartUsers : [];
       thumbUsers = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
