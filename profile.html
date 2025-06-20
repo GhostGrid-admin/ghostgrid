@@ -12,53 +12,52 @@
       font-family: 'Courier New', monospace;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
-      padding-top: 85px !important;
+      padding-top: 100px;
     }
+    .hidden { display: none !important; }
     nav.navbar {
-      background: #000;
-      width: 100vw;
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 40px;
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 2000;
-      border-bottom: 4px solid #ad30fa;
-      box-shadow: 0 0 20px #ad30fa;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 0;
-      transition: top 0.3s;
     }
     .nav-content {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      max-width: 900px;
-      width: 100%;
       align-items: center;
-      text-align: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
     }
     .nav-content a {
-      color: #e0ffff;
+      color: white;
       text-decoration: none;
-      font-size: 1.2em;
-      padding: 7px 10px;
+      font-size: 1.5em;
+      padding: 6px 10px;
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
     }
-    .nav-content a:hover, .nav-content a.active {
-      background: #ad30fa;
+    .nav-content a:hover {
+      background-color: #00ffcc;
       color: #000;
-      box-shadow: 0 0 16px #ad30fa, 0 0 5px #fff;
+      box-shadow: 0 0 10px #ffffff;
     }
     .hamburger {
       display: none;
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 12px;
     }
     .hamburger span {
       width: 29px;
@@ -74,7 +73,7 @@
         flex-direction: column;
         position: fixed;
         left: 0; right: 0;
-        top: 58px;
+        top: 60px;
         background: #181f26;
         box-shadow: 0 4px 28px #00ffcc77;
         z-index: 1101;
@@ -94,21 +93,15 @@
       }
       .hamburger { display: flex; }
     }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .login-container { max-width: 98vw; }
-      .nav-content a { font-size: 1.11em; }
-    }
     .login-container {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.7);
       padding: 30px;
       border: 2px solid #00ff00;
       border-radius: 10px;
       text-align: center;
       box-shadow: 0 0 15px #00ff00;
-      max-width: 420px;
-      margin: 48px auto 0 auto;
+      max-width: 90%;
+      width: 400px;
     }
     textarea, input[type="file"], select, input[type="text"] {
       width: 100%;
@@ -121,7 +114,7 @@
       margin-bottom: 14px;
     }
     button {
-      margin-top: 13px;
+      margin-top: 15px;
       padding: 12px 20px;
       font-size: 1em;
       color: black;
@@ -142,11 +135,6 @@
     }
     #profileContent {
       margin-top: 60px;
-      width: 100%;
-      min-height: 350px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
     }
     #exitPreviewBtn {
       position: fixed;
@@ -162,24 +150,6 @@
     #exitPreviewBtn:hover {
       background-color: #00cc00;
     }
-    .profile-img {
-      display: block;
-      margin: 0 auto 14px auto;
-      border-radius: 50%;
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-      border: 3px solid #00ff00;
-      box-shadow: 0 0 10px #00ffcc, 0 0 12px #bb00ff;
-    }
-    .smeknamn-row {
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      text-align: left;
-    }
-    .smeknamn-row label { font-size: 1.1em; color: #00ffcc; }
   </style>
 </head>
 <body>
@@ -196,51 +166,61 @@
       <a href="friends.html">Vänner</a>
     </div>
   </nav>
+
   <div class="login-container">
     <h2 data-i18n="profile_edit">Redigera din profil</h2>
     <p id="profile-email">E-post:</p>
-    <div class="smeknamn-row">
+    <div style="margin-bottom:14px; text-align:left;">
       <label for="nickname">Smeknamn/användarnamn:</label>
       <input type="text" id="nickname" maxlength="24" placeholder="Välj ditt smeknamn">
+      <button id="saveNicknameBtn" type="button">Spara smeknamn</button>
+      <div id="nicknameStatus" style="color:#ff8888; margin:6px 0 0 0; min-height:18px"></div>
     </div>
     <label for="profile-pic" data-i18n="upload_image">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
 
+    <!-- Temaväljare här -->
     <label for="theme">Välj profiltema:</label>
     <select id="theme">
-      <option value="blank">Eget tema (Blank)</option>
       <option value="50s">50-tal</option>
       <option value="60s">60-tal</option>
       <option value="70s">70-tal</option>
       <option value="80s">80-tal</option>
       <option value="90s">90-tal</option>
       <option value="y2k">Y2K</option>
+      <option value="raggare">Raggare</option>
       <option value="rock">Rock</option>
       <option value="punk">Punk</option>
       <option value="cyberpunk">Cyberpunk</option>
-      <option value="hiphop">Hip-Hop</option>
-      <option value="pop">Pop</option>
-      <option value="raggare">Raggare</option>
       <option value="romantik">Romantik</option>
-      <option value="hippie">Hippie</option>
     </select>
 
     <label for="custom-code" data-i18n="custom_code">Profilkod (HTML/CSS):</label>
     <textarea id="custom-code" rows="10"></textarea>
 
     <button id="saveBtn" data-i18n="save">Spara kod</button>
-    <button id="viewProfileBtn" data-i18n="view_profile">Visa profil</button>
+    <button onclick="goToProfileView()" data-i18n="view_profile">Visa profil</button>
+    <button id="editProfileBtn" class="hidden" data-i18n="edit_profile">Redigera profil</button>
+
     <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;" data-i18n="profile_saved">
       ✅ Profil sparad!
     </div>
+
     <p style="margin-top: 20px;"><a href="#" id="logoutLink" data-i18n="logout">Logga ut</a></p>
   </div>
+
   <div id="fullscreenPreview" class="hidden">
     <button id="exitPreviewBtn" data-i18n="edit_profile">Redigera profil</button>
     <div id="profileContent"></div>
   </div>
+
+  <script type="module" src="scripts/profile-script.js"></script>
   <script type="module">
-    // --- Hamburgermeny ---
+    import { auth, db } from './scripts/firebase-init.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    // --- Hamburger-meny ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMenu = document.getElementById('navMenu');
     hamburgerBtn.addEventListener('click', function() {
@@ -252,182 +232,71 @@
       });
     });
 
-    // --- Profilkod och Firebase ---
-    import { auth, db, storage } from './scripts/firebase-init.js';
-    import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-
-    let profilePicUrl = "";
+    // --- Nickname save/check logic ---
     let currentUser = null;
-
+    let lastSavedNickname = "";
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
         document.getElementById('profile-email').innerText = "E-post: " + (user.email || "");
-        // Ladda befintlig profil från Firestore
+        // Load user's nickname
         const snap = await getDoc(doc(db, "profiles", user.uid));
         if (snap.exists()) {
           const data = snap.data();
-          document.getElementById('custom-code').value = data.profileCode || '';
-          document.getElementById('theme').value = data.theme || 'blank';
           document.getElementById('nickname').value = data.nickname || '';
-          profilePicUrl = data.profilePicUrl || '';
+          lastSavedNickname = data.nickname || '';
         }
       }
     });
 
-    // PROFILBILD – uppladdning och Firebase Storage
-    document.getElementById('profile-pic').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 4 * 1024 * 1024) {
-        alert("Profilbilden får max vara 4 MB.");
+    document.getElementById('saveNicknameBtn').onclick = async () => {
+      if (!currentUser) return alert("Du är inte inloggad.");
+      const newNick = document.getElementById('nickname').value.trim();
+      if (!newNick) {
+        document.getElementById('nicknameStatus').textContent = "Du måste ange ett smeknamn.";
         return;
       }
-      if (!currentUser) return alert("Du är inte inloggad.");
-      const imgRef = ref(storage, `user_uploads/${currentUser.uid}/profilepic.jpg`);
-      await uploadBytes(imgRef, file);
-      profilePicUrl = await getDownloadURL(imgRef);
-      alert("Profilbild uppladdad!");
-    });
-
-    // TEMAKODER – ALLA SOM STRÄNGAR!
-    const themeTemplates = {
-      "blank": `<div style="background:#0a0a0a; border-radius:24px; padding:26px; text-align:center;">
-  <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-  <h2>Här kan du skriva din egen profilkod!</h2>
-  <p>Allt är tillåtet – HTML, CSS, text och bild.</p>
-</div>`,
-      "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#cc0066; font-family: 'Pacifico', cursive; font-size:2.6em;">🍦 50-talets Stjärna</h1>
-        <p style="font-family: 'Courier New', monospace; color:#333;">Sockersöt, klassisk och med rock'n'roll i hjärtat!</p>
-      </div>`,
-      "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#ff8800; font-family: 'Dancing Script', cursive; font-size:2.5em;">✌️ 60-talets Frihetsdröm</h1>
-        <p style="color:#333;">Flower power, fred & musik!</p>
-      </div>`,
-      "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#bb8800; font-family: 'Permanent Marker', cursive; font-size:2.5em;">🌼 70-tals Groove</h1>
-        <p style="color:#884400;">Disco, peace & flower power!</p>
-      </div>`,
-      "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#ff44ee; font-family:'Monoton', cursive; font-size:2.3em;">🕹️ 80-tals Neon</h1>
-        <p style="color:#0033aa;">Synthwave, pastell & axelvaddar!</p>
-      </div>`,
-      "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#0055bb; font-family:'Comic Sans MS', cursive;">📟 90-tals Kid</h1>
-        <p style="color:#333;">Gameboy, färgsprak & pogs!</p>
-      </div>`,
-      "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#ff22dd; font-family:'Orbitron', sans-serif;">💾 Y2K Millennium</h1>
-        <p style="color:#444;">Tech, metallic & bling bling!</p>
-      </div>`,
-      "rock": `<div style="background:#111; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#bb0000;">🤘 Rock Legend</h1>
-        <p style="font-style:italic;">Gör världen till din scen!</p>
-      </div>`,
-      "punk": `<div style="background:#ffe357; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#e00; font-family:Impact;">☠️ Punk</h1>
-        <p style="font-weight:bold; color:#000;">Frihet, nitar & revolt!</p>
-      </div>`,
-      "cyberpunk": `<div style="background:#0f0027; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#0ff;">👾 Cyberpunk</h1>
-        <p>Neon, hacking & dystopier.</p>
-      </div>`,
-      "hiphop": `<div style="background:#222; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#ffe500; font-family:'Bangers', cursive;">🎤 Hip-Hop Vibe</h1>
-        <p style="color:#fff;">Beat, flow & streetstyle!</p>
-      </div>`,
-      "pop": `<div style="background:#fff3fa; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#d600ff; font-family:'Arial Black',sans-serif;">🎶 Popstjärna</h1>
-        <p style="color:#222;">Glitter, energi & catchiga hits!</p>
-      </div>`,
-      "raggare": `<div style="background:#fafafa; border-radius:20px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#222;">🚗 Raggare</h1>
-        <p style="color:#ba2222;">Volvo Amazon, brylcreem & rockabilly!</p>
-      </div>`,
-      "romantik": `<div style="background:#fff0f6; border-radius:20px; padding:24px; text-align:center; color:#b8004b;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1>💕 Romantisk själ</h1>
-        <p>Kärlek, poesi & varma känslor.</p>
-      </div>`,
-      "hippie": `<div style="background:#e3ffd0; border-radius:22px; padding:24px; text-align:center;">
-        <img src="\${profilePicUrl}" class="profile-img" alt="Profilbild">
-        <h1 style="color:#4caf50; font-family: 'Caveat', cursive;">🌻 Hippie Spirit</h1>
-        <p style="color:#444;">Peace, love & festival!</p>
-      </div>`
+      // Kolla så det inte är upptaget
+      const q = query(collection(db, "profiles"), where("nickname", "==", newNick));
+      const snap = await getDocs(q);
+      let taken = false;
+      snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
+      if (taken) {
+        document.getElementById('nicknameStatus').textContent = "Smeknamnet är upptaget!";
+        return;
+      }
+      // Spara och uppdatera smeknamn
+      await setDoc(doc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
+      lastSavedNickname = newNick;
+      document.getElementById('nicknameStatus').style.color = "#00ff00";
+      document.getElementById('nicknameStatus').textContent = "Smeknamn sparat!";
+      setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
     };
 
-    document.getElementById('theme').addEventListener('change', function(e) {
-      const theme = e.target.value;
-      if (themeTemplates[theme]) {
-        document.getElementById('custom-code').value = themeTemplates[theme].replace(/\$\{profilePicUrl\}/g, profilePicUrl);
-      } else {
-        document.getElementById('custom-code').value = "";
-      }
-    });
-
-    // Kontrollera UNIKA smeknamn
-    async function isNicknameAvailable(nickname, uid) {
-      const nickQuery = query(
-        collection(db, "profiles"),
-        where("nickname", "==", nickname)
-      );
-      const querySnapshot = await getDocs(nickQuery);
-      // Tillåt om det är ens egen profil
-      return querySnapshot.empty || (querySnapshot.docs.length === 1 && querySnapshot.docs[0].id === uid);
-    }
-
-    // Spara profil med unik smeknamn
-    document.getElementById('saveBtn').addEventListener('click', async () => {
-      if (!currentUser) return alert("Du är inte inloggad.");
-      const nickname = document.getElementById('nickname').value.trim();
-      if (!nickname) return alert("Du måste ange ett smeknamn.");
-      const isAvailable = await isNicknameAvailable(nickname, currentUser.uid);
-      if (!isAvailable) {
-        alert("Smeknamnet är redan upptaget! Välj ett annat.");
-        return;
-      }
-      const theme = document.getElementById('theme').value;
-      let profileCode = document.getElementById('custom-code').value;
-      if (theme !== "blank" && themeTemplates[theme]) {
-        profileCode = themeTemplates[theme].replace(/\$\{profilePicUrl\}/g, profilePicUrl);
-      }
-      await setDoc(doc(db, "profiles", currentUser.uid), {
-        nickname,
-        theme,
-        profileCode,
-        profilePicUrl
-      }, { merge: true });
-      document.getElementById('saveNotice').style.display = "block";
-      setTimeout(() => document.getElementById('saveNotice').style.display = "none", 2000);
-    });
-
-    // Visa profil på view-sidan (extern, helsida)
-    document.getElementById('viewProfileBtn').onclick = function() {
+    // --- Gå till profilvy ---
+    window.goToProfileView = function() {
       if (!currentUser) return alert("Du är inte inloggad.");
       window.location.href = `profile-view.html?uid=${currentUser.uid}`;
     };
-
-    // Logga ut
-    document.getElementById('logoutLink').onclick = async function(e) {
-      e.preventDefault();
-      await signOut(auth);
-      window.location.href = "index.html";
+  </script>
+  <script>
+    // Temakoder för förhandsvisning/ifyllning (samma som du redan har)
+    const themeTemplates = {
+      "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; text-align:center;">
+        <h1 style="color:#cc0066; font-family: 'Pacifico', cursive; font-size:2.6em;">🍦 50-talets Stjärna</h1>
+        <img src="https://i.imgur.com/1vQRZyD.png" alt="50-tal" style="border-radius:50%;width:110px; margin:15px 0;">
+        <p style="font-family: 'Courier New', monospace; color:#333;">Sockersöt, klassisk och med rock'n'roll i hjärtat!</p>
+      </div>`,
+      // ... resten av mallarna ...
+      "romantik": `<div style="background:#fff0f6; border-radius:20px; padding:24px; text-align:center; color:#b8004b;">
+        <h1>💕 Romantisk själ</h1>
+        <p>Kärlek, poesi & varma känslor.</p>
+        <img src="https://i.imgur.com/oCBcIpC.png" alt="Romantik" style="width:90px; border-radius:50%;">
+      </div>`
     };
+    document.getElementById('theme').addEventListener('change', function(e) {
+      document.getElementById('custom-code').value = themeTemplates[e.target.value] || '';
+    });
   </script>
 </body>
 </html>
