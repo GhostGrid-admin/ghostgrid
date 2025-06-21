@@ -99,6 +99,12 @@
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
       padding: 38px 22px;
     }
+    .profile-picture-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .profile-picture {
       width: 135px;
       height: 135px;
@@ -168,14 +174,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="nav-content" id="navLinks">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-    </div>
+    <div class="nav-content" id="navLinks"></div>
     <button id="menuBtn" aria-label="Meny">&#9776;</button>
   </nav>
   <div class="main-content">
@@ -198,11 +197,35 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
+    // Språkväxling för menyn
+    const menuItems = {
+      sv: [
+        { href: "forum.html", label: "Forum" },
+        { href: "store.html", label: "Butik" },
+        { href: "wall.html", label: "Väggen" },
+        { href: "upload.html", label: "Ladda upp" },
+        { href: "profile.html", label: "Profil" },
+        { href: "friends.html", label: "Vänner" }
+      ],
+      en: [
+        { href: "forum.html", label: "Forum" },
+        { href: "store.html", label: "Store" },
+        { href: "wall.html", label: "Wall" },
+        { href: "upload.html", label: "Upload" },
+        { href: "profile.html", label: "Profile" },
+        { href: "friends.html", label: "Friends" }
+      ]
+    };
+    const lang = localStorage.getItem("lang") || "sv";
+    const navLinks = document.getElementById("navLinks");
+    navLinks.innerHTML = menuItems[lang].map(
+      m => `<a href="${m.href}">${m.label}</a>`
+    ).join("");
+
     // Hamburger-meny
     const menuBtn = document.getElementById("menuBtn");
-    const navLinks = document.getElementById("navLinks");
     menuBtn.onclick = () => navLinks.classList.toggle("active");
-    document.querySelectorAll('.nav-content a').forEach(a =>
+    navLinks.querySelectorAll('a').forEach(a =>
       a.onclick = () => navLinks.classList.remove("active")
     );
 
@@ -225,15 +248,15 @@
       // PROFILBILD + REAKTIONER
       if (data.profilePicUrl) {
         profileHtml += `
-          <div style="text-align:center;">
+          <div class="profile-picture-wrapper">
             <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">
-            <div class="pic-reactions">
-              <div>Lämna en reaktion på profilbilden:</div>
-              <button class="reaction-btn" id="pic-heart" title="Gilla profilbild ❤️">❤️</button>
-              <span id="pic-heart-count">0</span>
-              <button class="reaction-btn" id="pic-smile" title="Glad för bilden 😄">😄</button>
-              <span id="pic-smile-count">0</span>
-            </div>
+          </div>
+          <div class="pic-reactions">
+            <div>${lang === 'sv' ? 'Lämna en reaktion på profilbilden:' : 'React to profile picture:'}</div>
+            <button class="reaction-btn" id="pic-heart" title="Gilla profilbild ❤️">❤️</button>
+            <span id="pic-heart-count">0</span>
+            <button class="reaction-btn" id="pic-smile" title="Glad för bilden 😄">😄</button>
+            <span id="pic-smile-count">0</span>
           </div>
         `;
       }
@@ -242,8 +265,8 @@
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
       profileHtml += `
         <div class="profile-reactions">
-          <div>Gilla hela profilen:</div>
-          <button class="reaction-btn" id="like-heart" title="❤️ Gilla">❤️</button>
+          <div>${lang === 'sv' ? 'Gilla hela profilen:' : 'React to profile:'}</div>
+          <button class="reaction-btn" id="like-heart" title="❤️ Hjärta profilen">❤️</button>
           <span class="reaction-count" id="count-heart">0</span>
           <button class="reaction-btn" id="like-thumb" title="👍 Tumme upp">👍</button>
           <span class="reaction-count" id="count-thumb">0</span>
@@ -251,11 +274,15 @@
         <div class="ads-wrapper">
           <div class="ad-left">
             <img src="https://dummyimage.com/60x60/8000ff/fff&text=Ad+1" alt="Ad1">
-            <span>Vill du annonsera här? Kontakta admin!</span>
+            <span>${lang === 'sv'
+              ? 'Vill du annonsera här? Kontakta admin!'
+              : 'Want to advertise here? Contact admin!'}</span>
           </div>
           <div class="ad-right">
             <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
-            <span>Bli medlem och få exklusiva erbjudanden!</span>
+            <span>${lang === 'sv'
+              ? 'Bli medlem och få exklusiva erbjudanden!'
+              : 'Become a member and get exclusive offers!'}</span>
           </div>
         </div>
       </div>`;
@@ -283,16 +310,13 @@
 
     function updateReactionUI() {
       if (!userId) return;
-      // Profilreaktioner
       document.getElementById('like-heart').style.opacity = heartUsers.includes(userId) ? "1" : "0.7";
       document.getElementById('like-thumb').style.opacity = thumbUsers.includes(userId) ? "1" : "0.7";
-      // Profilbildsreaktioner
       document.getElementById('pic-heart').style.opacity = picHeartUsers.includes(userId) ? "1" : "0.7";
       document.getElementById('pic-smile').style.opacity = picSmileUsers.includes(userId) ? "1" : "0.7";
     }
-
     async function toggleReaction(type) {
-      if (!userId) { alert("Du måste vara inloggad för att reagera!"); return; }
+      if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
       const snap = await getDoc(profileRef);
       const data = snap.data() || {};
       let arr = Array.isArray(data[type]) ? data[type] : [];
@@ -312,14 +336,12 @@
       document.getElementById('pic-smile-count').innerText = picSmileUsers.length;
       updateReactionUI();
     }
-
     function setupReactionEvents() {
       document.getElementById('like-heart').onclick = () => toggleReaction("heartUsers");
       document.getElementById('like-thumb').onclick = () => toggleReaction("thumbUsers");
       document.getElementById('pic-heart').onclick = () => toggleReaction("picHeartUsers");
       document.getElementById('pic-smile').onclick = () => toggleReaction("picSmileUsers");
     }
-
     onAuthStateChanged(auth, user => {
       userId = user ? user.uid : null;
       updateReactionUI();
