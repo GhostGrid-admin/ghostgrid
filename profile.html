@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -35,7 +35,14 @@
     #profileContent { margin-top: 60px; }
     #exitPreviewBtn { position: fixed; top: 20px; right: 20px; background-color: #00ff00; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
     #exitPreviewBtn:hover { background-color: #00cc00; }
-    #profilePicNotice { color: #00ff00; margin-top: 6px; min-height: 0; font-size: 1.06em; display: none; }
+    #profilePicNotice {
+      color: #00ff00;
+      margin-top: 6px;
+      min-height: 18px;
+      font-size: 1.06em;
+      display: none;
+      transition: opacity 0.5s ease;
+    }
   </style>
 </head>
 <body>
@@ -62,10 +69,13 @@
       <button id="saveNicknameBtn" type="button">Spara smeknamn</button>
       <div id="nicknameStatus" style="color:#ff8888; margin:6px 0 0 0; min-height:18px"></div>
     </div>
+
     <label for="profile-pic" id="label-pic">Ladda upp profilbild:</label>
     <input type="file" id="profile-pic" accept="image/*" />
+    
     <button id="saveProfilePicBtn" type="button">Spara profilbild</button>
     <div id="profilePicNotice"></div>
+
     <label for="theme" id="label-theme">Välj profiltema:</label>
     <select id="theme"></select>
     <label for="custom-code" id="label-customcode">Profilkod (HTML/CSS):</label>
@@ -89,11 +99,24 @@
     import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
     // Teman: decennier
-    const dec = { "50s":"50-tal", "60s":"60-tal", "70s":"70-tal", "80s":"80-tal", "90s":"90-tal", "y2k":"Y2K", "2010s":"2010-tal", "2020s":"2020-tal" };
-    const life = { goth:"Goth", emo:"Emo", vampyr:"Vampyr", metalhead:"Metalhead", hårdrockare:"Hårdrockare", skate:"Skate", gamer:"Gamer", anime:"Anime", steampunk:"Steampunk", boho:"Boho", raggare:"Raggare", rockabilly:"Rockabilly", streetracer:"Streetracer", nerd:"Nörd", fitness:"Träningsprofil", urbanexplorer:"Urban Explorer", fantasy:"Fantasy", vintage:"Vintage", retro:"Retro", streetwear:"Streetwear", hacker:"Hacker", darkacademia:"Dark Academia" };
-    const music = { pop:"Pop", hiphop:"Hiphop", jazz:"Jazz", disco:"Disco", metal:"Metal", edm:"EDM", techno:"Techno", house:"House", reggae:"Reggae", blues:"Blues", country:"Country", indie:"Indie", synthwave:"Synthwave", punk:"Punk", rock:"Rock", romantik:"Romantik" };
+    const dec = { 
+      "50s":"50-tal", "60s":"60-tal", "70s":"70-tal", "80s":"80-tal", "90s":"90-tal", 
+      "y2k":"Y2K", "2010s":"2010-tal", "2020s":"2020-tal" 
+    };
+    const life = { 
+      goth:"Goth", emo:"Emo", vampyr:"Vampyr", metalhead:"Metalhead", hårdrockare:"Hårdrockare", 
+      skate:"Skate", gamer:"Gamer", anime:"Anime", steampunk:"Steampunk", boho:"Boho", raggare:"Raggare", 
+      rockabilly:"Rockabilly", streetracer:"Streetracer", nerd:"Nörd", fitness:"Träningsprofil", 
+      urbanexplorer:"Urban Explorer", fantasy:"Fantasy", vintage:"Vintage", retro:"Retro", 
+      streetwear:"Streetwear", hacker:"Hacker", darkacademia:"Dark Academia" 
+    };
+    const music = { 
+      pop:"Pop", hiphop:"Hiphop", jazz:"Jazz", disco:"Disco", metal:"Metal", edm:"EDM", techno:"Techno", 
+      house:"House", reggae:"Reggae", blues:"Blues", country:"Country", indie:"Indie", synthwave:"Synthwave", 
+      punk:"Punk", rock:"Rock", romantik:"Romantik" 
+    };
 
-    // PROFILKODER/TEMPLATES – ALLA (förkortade men du kan lägga in alla dina här, inkl. den långa 50-talaren)
+    // PROFILKODER/TEMPLATES – ALLA (hela listan)
     const themeTemplates = {
       custom: "",
       "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;">
@@ -102,7 +125,6 @@
         <div style='margin-top:40px;display:flex;align-items:center;gap:20px;justify-content:center;'><img src='https://cdn.pixabay.com/photo/2012/04/01/17/01/beverage-23703_1280.png' alt='Milkshake' style='width:54px;height:54px;filter:drop-shadow(0 0 12px #fff3);'><span style='font-size:1.25em;color:#f8549a;font-family:"Pacifico",cursive;'>Let's twist!</span><span style='font-size:2em;color:#ffe500;text-shadow:0 0 8px #fffa;'>★ ★ ★</span></div>
         <div style='margin-top:18px;text-align:center;font-size:1em;color:#bbb;'>Din 50-talsprofil &copy; <span style='color:#00baff'>GhostGrid</span></div>
       </div>`,
-      // Alla övriga teman nedan (copy-paste från tidigare kodblock):
       "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;"><h2 style="color:#ff8800;font-family:'Dancing Script',cursive;font-size:2em;">✌️ 60-talets Frihetsdröm</h2><p style="color:#333;">Flower power, fred & musik!</p></div>`,
       "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;"><h2 style="color:#bb8800;font-family:'Permanent Marker',cursive;font-size:2em;">🌼 70-tals Groove</h2><p style="color:#884400;">Disco, peace & flower power!</p></div>`,
       "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;"><h2 style="color:#ff44ee;font-family:'Monoton',cursive;font-size:2em;">🕹️ 80-tals Neon</h2><p style="color:#0033aa;">Synthwave, pastell & axelvaddar!</p></div>`,
@@ -179,17 +201,25 @@
     });
 
     // ---------- LOGIK OCH SPARA -----------
+
     let currentUser = null;
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
         document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
+        // Hämta profil-data
         const snap = await getDoc(doc(db, "profiles", user.uid));
         if (snap.exists()) {
           const data = snap.data();
           document.getElementById('nickname').value = data.nickname || '';
           if (data.profileTheme) themeSelect.value = data.profileTheme;
           document.getElementById('custom-code').value = data.profileCode || '';
+          // Visa profilbild om sparad
+          if (data.profilePic) {
+            document.getElementById('profilePicNotice').textContent = lang === "en" ? "Profile picture loaded." : "Profilbild hämtad.";
+            document.getElementById('profilePicNotice').style.display = "block";
+            setTimeout(() => { document.getElementById('profilePicNotice').style.display = "none"; }, 2800);
+          }
         }
       }
     });
@@ -234,27 +264,27 @@
       notice.style.display = "block";
       notice.textContent = "";
       if (!currentUser) {
-        notice.textContent = "Du är inte inloggad.";
+        notice.textContent = lang === "en" ? "You are not logged in." : "Du är inte inloggad.";
         setTimeout(() => { notice.style.display = "none"; }, 2200);
         return;
       }
       const file = profilePicInput.files[0];
       if (!file) {
-        notice.textContent = "Ingen bild vald.";
+        notice.textContent = lang === "en" ? "No file selected." : "Ingen bild vald.";
         setTimeout(() => { notice.style.display = "none"; }, 2000);
         return;
       }
       try {
-        const storageRef = ref(storage, `profile_pics/${currentUser.uid}/${file.name}`);
+        const storageRef = ref(storage, `profile_pics/${currentUser.uid}/profile.jpg`);
         await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(storageRef);
         await setDoc(doc(db, "profiles", currentUser.uid), {
           profilePic: downloadUrl
         }, { merge: true });
-        notice.textContent = "Profilbild uppladdad!";
+        notice.textContent = lang === "en" ? "Profile picture saved!" : "Profilbild sparad!";
         setTimeout(() => { notice.style.display = "none"; }, 2600);
       } catch (err) {
-        notice.textContent = "Fel vid uppladdning.";
+        notice.textContent = lang === "en" ? "Error uploading file." : "Fel vid uppladdning.";
         setTimeout(() => { notice.style.display = "none"; }, 3500);
       }
     };
