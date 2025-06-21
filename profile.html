@@ -187,145 +187,190 @@
     // ---- LÅNG obj: themeTemplates ----
     const themeTemplates = {
       custom: "",
-      "50s": `<div id="profile-fifties"></div>
-<script>
-(function() {
-  const lang = localStorage.getItem('lang') || 'sv';
-  const profile = {
-    sv: {
-      title: "50-talsvågen",
-      subtitle: "Milkshake, rock 'n roll & jukebox-magi!",
-      slogans: [
-        '"Stoppa ett mynt i jukeboxen – glöm dina bekymmer!"',
-        '"Dansa som ingen ser dig – retro är alltid rätt."',
-        '"Retro är en känsla, inte ett årtal!"',
-        '"Alltid plats för en milkshake till."'
-      ],
-      icons: ["Milkshake", "Musik", "Cruisin’"],
-      mood: 'Dansgolv, milkshakes, vänskap och nostalgi på menyn.',
-      welcome: "Välkommen till den gladaste tiden!",
-      life: "Livet är en jukebox – välj din låt och kör!"
-    },
-    en: {
-      title: "The 50's Wave",
-      subtitle: "Milkshake, rock 'n roll & jukebox magic!",
-      slogans: [
-        '"Put another dime in the jukebox, baby!"',
-        '"Dance like nobody’s watching – retro always fits."',
-        '"Retro is a mood, not a decade!"',
-        '"There’s always room for one more milkshake."'
-      ],
-      icons: ["Milkshake", "Music", "Cruisin’"],
-      mood: 'Dance floors, milkshakes, friendship & nostalgia on the menu.',
-      welcome: "Welcome to the happiest time!",
-      life: "Life’s a jukebox – pick your song and go!"
-    }
-  }[lang];
-
-  document.getElementById('profile-fifties').innerHTML = `
-  <div style="background: linear-gradient(120deg, #fdf6f0 60%, #ffe6f9 100%); border-radius: 36px; padding: 44px 18px 42px 18px; margin: 30px auto 0 auto; max-width: 540px; min-height: 500px; box-shadow: 0 0 56px #fd49a799, 0 0 22px #3de7e866; position: relative; font-family: 'Quicksand', 'Fira Mono', 'Courier New', monospace;">
-    <div style="position:absolute; left:-44px; top:36px; width:70px; height:70px; background:radial-gradient(circle at 45% 45%, #fff 22%, #fd49a7 33%, #f5cdd2 70%, #321d37 85%); border-radius:50%; box-shadow:0 0 16px #f5cdd2;"></div>
-    <div style="position:absolute; right:-44px; bottom:24px; width:70px; height:70px; background:radial-gradient(circle at 55% 45%, #fff 25%, #38e7f3 35%, #b1f5f3 80%, #321d37 90%); border-radius:50%; box-shadow:0 0 16px #b1f5f3;"></div>
-    <div style="text-align:center; margin-bottom:12px;">
-      <span style="font-size:2em; font-weight:700; color:#fd49a7; letter-spacing:2px; text-shadow:0 0 8px #fff, 0 0 18px #3de7e8;">
-        ${profile.title}
-      </span>
-      <br>
-      <span style="font-size:1.14em; color:#321d37; background: #f5cdd2; padding:5px 16px; border-radius:15px; margin-top:10px; box-shadow:0 0 7px #fff7;">
-        ${profile.subtitle}
-      </span>
-    </div>
-    <div style="display:flex; justify-content:center; align-items:center; gap:22px; margin:30px 0 18px 0; flex-wrap:wrap;">
-      <!-- Milkshake -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-        <div style="width:36px;height:48px;position:relative;">
-          <div style="position:absolute;bottom:0;left:7px;width:22px;height:28px;background:#fff0f8;border-radius:8px 8px 12px 12px/11px 11px 8px 8px;box-shadow:0 2px 4px #fd49a766;"></div>
-          <div style="position:absolute;top:4px;left:13px;width:10px;height:14px;background:#fd49a7;border-radius:40% 60% 30% 40%/38% 38% 70% 70%;"></div>
-          <div style="position:absolute;top:0;left:16px;width:5px;height:9px;background:#fff;border-radius:60% 60% 40% 40%/50% 50% 60% 60%;"></div>
-          <div style="position:absolute;top:8px;left:14px;width:8px;height:4px;background:#fde2ed;border-radius:5px;"></div>
-          <div style="position:absolute;top:2px;left:22px;width:2px;height:15px;background:#3de7e8;border-radius:2px;"></div>
-          <div style="position:absolute;bottom:2px;left:10px;width:13px;height:4px;background:#321d37;border-radius:6px;opacity:.22;"></div>
-        </div>
-        <span style="font-size:.9em;color:#fd49a7;margin-top:1px;">${profile.icons[0]}</span>
-      </div>
-      <!-- Musiknot -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-        <div style="width:30px;height:34px;position:relative;">
-          <svg width="30" height="34" viewBox="0 0 30 34"><ellipse cx="17" cy="25" rx="10" ry="6" fill="#3de7e8" opacity="0.45"/><ellipse cx="14" cy="18" rx="5" ry="9" fill="#321d37"/><rect x="12" y="7" width="4" height="14" rx="2" fill="#321d37"/><circle cx="14" cy="7" r="4" fill="#fd49a7" stroke="#fff" stroke-width="2"/></svg>
-        </div>
-        <span style="font-size:.88em;color:#3de7e8;margin-top:1px;">${profile.icons[1]}</span>
-      </div>
-      <!-- Bil -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-        <div style="width:35px;height:20px;position:relative;">
-          <div style="position:absolute;left:3px;bottom:0;width:27px;height:11px;background:#38e7f3;border-radius:7px 7px 8px 8px/8px 8px 8px 8px;box-shadow:0 2px 4px #3de7e844;"></div>
-          <div style="position:absolute;left:8px;top:2px;width:18px;height:8px;background:#fff0f8;border-radius:5px 5px 7px 7px/5px 5px 8px 8px;"></div>
-          <div style="position:absolute;left:5px;bottom:-2px;width:7px;height:7px;background:#321d37;border-radius:50%;"></div>
-          <div style="position:absolute;right:5px;bottom:-2px;width:7px;height:7px;background:#321d37;border-radius:50%;"></div>
-        </div>
-        <span style="font-size:.88em;color:#38e7f3;margin-top:1px;">${profile.icons[2]}</span>
-      </div>
-    </div>
-    <div style="margin:30px auto 0 auto; max-width:420px; text-align:center;">
-      <span style="display:block;font-size:1.13em;font-family:'Fira Mono','Courier New',monospace;font-weight:600;color:#fd49a7;letter-spacing:1px;text-shadow:0 0 8px #fff7;">${profile.slogans[0]}</span>
-      <span style="display:block;font-size:1em;color:#321d37;margin-top:8px;font-weight:500;">${profile.slogans[1]}</span>
-      <span style="display:block;font-size:.99em;color:#38e7f3;margin-top:8px;">${profile.slogans[2]}</span>
-      <span style="display:block;font-size:.92em;color:#888;margin-top:7px;">${profile.slogans[3]}</span>
-    </div>
-    <div style="margin:28px auto 0 auto; max-width:420px; padding:18px 18px 13px 18px; background: repeating-radial-gradient(circle, #fff 2.5px, #ffe6f9 4px, transparent 8px); border-radius:16px; box-shadow:0 0 14px #38e7f388;">
-      <p style="font-size:1.02em; color:#222; font-family:'Quicksand','Fira Mono','Courier New',monospace; margin:0; text-align:center; line-height:1.7;">
-        <b style="color:#fd49a7;">${profile.welcome}</b><br>
-        ${profile.mood}<br>
-        <span style="color:#321d37;">${profile.life}</span>
-      </p>
-    </div>
-    <div style="width:60%;height:3px;background:linear-gradient(90deg,#fd49a7,#fff,#38e7f3);margin:28px auto 0 auto;border-radius:4px;opacity:0.77;"></div>
-  </div>`,
-      "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff8800'>60-talets Frihetsdröm</h2><p>Flower power, fred & musik!</p></div>`,
-      "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#bb8800'>70-tals Groove</h2><p>Disco, peace & flower power!</p></div>`,
-      "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff44ee'>80-tals Neon</h2><p>Synthwave, pastell & axelvaddar!</p></div>`,
-      "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#0055bb'>90-tals Kid</h2><p>Gameboy, färgsprak & pogs!</p></div>`,
-      "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff22dd'>Y2K Millennium</h2><p>Tech, metallic & bling bling!</p></div>`,
-      "2010s": `<div style="background:#e2f2ff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#1b8cff'>2010-talet</h2><p>Instagram, memes, hipsterkaffe & festivaler.</p></div>`,
-      "2020s": `<div style="background:#181c21; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#0ff'>2020-talet</h2><p>TikTok, AI, pandemi & digital frihet.</p></div>`,
-      goth: `<div style="background:#171717;color:#ba00d3;border-radius:16px;padding:15px;text-align:center;"><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>`,
-      emo: `<div style="background:#333;color:#fe52a0;border-radius:16px;padding:15px;text-align:center;"><h2>Emo</h2><p>Feeling all the feels.</p></div>`,
-      vampyr: `<div style="background:#2d0012;color:#ff0038;border-radius:16px;padding:15px;text-align:center;"><h2>Vampyr</h2><p>Evigt nattliv.</p></div>`,
-      metalhead: `<div style="background:#19191a;color:#d8d8d8;border-radius:16px;padding:15px;text-align:center;"><h2>Metalhead</h2><p>Långt hår, nitar & höga riff.</p></div>`,
-      hårdrockare: `<div style="background:#212121;color:#c00;border-radius:16px;padding:15px;text-align:center;"><h2>Hårdrockare</h2><p>Skinnjacka & elgitarr.</p></div>`,
-      skate: `<div style="background:#d7faff;color:#0d3d7f;border-radius:16px;padding:15px;text-align:center;"><h2>Skate</h2><p>Brädor, ramper & street style.</p></div>`,
-      gamer: `<div style="background:#222233;color:#55ccff;border-radius:16px;padding:15px;text-align:center;"><h2>Gamer</h2><p>Game on! ⌨️🎮</p></div>`,
-      anime: `<div style="background:#ffe6f7;color:#c800b0;border-radius:16px;padding:15px;text-align:center;"><h2>Anime</h2><p>Kawaii, cosplay & manga.</p></div>`,
-      steampunk: `<div style="background:#453122;color:#fcd35f;border-radius:16px;padding:15px;text-align:center;"><h2>Steampunk</h2><p>Mässing, kugghjul & vintage tech.</p></div>`,
-      boho: `<div style="background:#faf6e6;color:#a87328;border-radius:16px;padding:15px;text-align:center;"><h2>Boho</h2><p>Fransar, jordnära färger & fri själ.</p></div>`,
-      raggare: `<div style="background:#233232;color:#faf211;border-radius:16px;padding:15px;text-align:center;"><h2>Raggare</h2><p>V8, jeansjacka & bilar från förr.</p></div>`,
-      rockabilly: `<div style="background:#ffedec;color:#d41039;border-radius:16px;padding:15px;text-align:center;"><h2>Rockabilly</h2><p>Pompadour, prickigt & rock'n'roll.</p></div>`,
-      streetracer: `<div style="background:#191919;color:#00fdff;border-radius:16px;padding:15px;text-align:center;"><h2>Streetracer</h2><p>Turbo, neon & snabba nätter.</p></div>`,
-      nerd: `<div style="background:#f5f5ff;color:#3a0088;border-radius:16px;padding:15px;text-align:center;"><h2>Nörd</h2><p>Kod, spel & fun facts!</p></div>`,
-      fitness: `<div style="background:#e2ffe2;color:#18c700;border-radius:16px;padding:15px;text-align:center;"><h2>Träningsprofil</h2><p>Stark kropp, stark själ.</p></div>`,
-      urbanexplorer: `<div style="background:#313c44;color:#62d0d9;border-radius:16px;padding:15px;text-align:center;"><h2>Urban Explorer</h2><p>Städer, ruiner & äventyr.</p></div>`,
-      fantasy: `<div style="background:#dfd3ff;color:#6a32b5;border-radius:16px;padding:15px;text-align:center;"><h2>Fantasy</h2><p>Drakar, magi & äventyr.</p></div>`,
-      vintage: `<div style="background:#f9f4e2;color:#a1814c;border-radius:16px;padding:15px;text-align:center;"><h2>Vintage</h2><p>Oldschool vibes.</p></div>`,
-      retro: `<div style="background:#ffeebb;color:#d46b00;border-radius:16px;padding:15px;text-align:center;"><h2>Retro</h2><p>80- och 90-tals känsla.</p></div>`,
-      streetwear: `<div style="background:#0f0f0f;color:#00ff00;border-radius:16px;padding:15px;text-align:center;"><h2>Streetwear</h2><p>Casual, cool & modern.</p></div>`,
-      hacker: `<div style="background:#070707;color:#00ff99;border-radius:16px;padding:15px;text-align:center;"><h2>Hacker</h2><p>#include &lt;din värld&gt; // root access granted</p></div>`,
-      darkacademia: `<div style="background:#292c2f;color:#eee;border-radius:16px;padding:15px;text-align:center;"><h2>Dark Academia</h2><p>Böcker, mystik & klassisk stil.</p></div>`,
-      pop: `<div style="background:#ffedfa;color:#d700ad;border-radius:16px;padding:15px;text-align:center;"><h2>Pop</h2><p>Catchy hooks & glitter.</p></div>`,
-      hiphop: `<div style="background:#161515;color:#ffc312;border-radius:16px;padding:15px;text-align:center;"><h2>Hiphop</h2><p>Beat, flow & streetpoesi.</p></div>`,
-      jazz: `<div style="background:#e4e4e4;color:#6a4a1b;border-radius:16px;padding:15px;text-align:center;"><h2>Jazz</h2><p>Sax, blås & lounge.</p></div>`,
-      disco: `<div style="background:#d7d0ff;color:#a637cf;border-radius:16px;padding:15px;text-align:center;"><h2>Disco</h2><p>Discokulor, glitter & groove.</p></div>`,
-      metal: `<div style="background:#222;color:#bbb;border-radius:16px;padding:15px;text-align:center;"><h2>Metal</h2><p>Tungt, snabbt & högt!</p></div>`,
-      edm: `<div style="background:#171717;color:#43ffa1;border-radius:16px;padding:15px;text-align:center;"><h2>EDM</h2><p>Drop the bass!</p></div>`,
-      techno: `<div style="background:#000214;color:#00eaff;border-radius:16px;padding:15px;text-align:center;"><h2>Techno</h2><p>Beat, rave & puls.</p></div>`,
-      house: `<div style="background:#d9fff0;color:#1cd84d;border-radius:16px;padding:15px;text-align:center;"><h2>House</h2><p>Pumpande klubbmusik.</p></div>`,
-      reggae: `<div style="background:#fefcce;color:#0d9600;border-radius:16px;padding:15px;text-align:center;"><h2>Reggae</h2><p>Peace, love & vibes.</p></div>`,
-      blues: `<div style="background:#dbe7ff;color:#2b3d76;border-radius:16px;padding:15px;text-align:center;"><h2>Blues</h2><p>Känsla, gitarr & själ.</p></div>`,
-      country: `<div style="background:#ffeedd;color:#c7761b;border-radius:16px;padding:15px;text-align:center;"><h2>Country</h2><p>Boots, hatt & kärlek.</p></div>`,
-      indie: `<div style="background:#ffe2e2;color:#264586;border-radius:16px;padding:15px;text-align:center;"><h2>Indie</h2><p>Eget sound, egen väg.</p></div>`,
-      synthwave: `<div style="background:#0e0526;color:#d600ff;border-radius:16px;padding:15px;text-align:center;"><h2>Synthwave</h2><p>Retro futurism & neon.</p></div>`,
-      punk: `<div style="background:#2d2d2d;color:#f50000;border-radius:16px;padding:15px;text-align:center;"><h2>Punk</h2><p>Uppror, nitar & snabb musik.</p></div>`,
-      rock: `<div style="background:#2a2020;color:#fff200;border-radius:16px;padding:15px;text-align:center;"><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>`,
-      romantik: `<div style="background:#fff0f6;color:#b8004b;border-radius:16px;padding:15px;text-align:center;"><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>`
+      "50s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "60s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "70s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "80s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "90s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "y2k": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "2010s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      "2020s": {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      goth: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      emo: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      vampyr: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      metalhead: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      hårdrockare: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      skate: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      gamer: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      anime: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      steampunk: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      boho: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      raggare: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      rockabilly: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      streetracer: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      nerd: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      fitness: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      urbanexplorer: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      fantasy: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      vintage: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      retro: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      streetwear: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      hacker: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      darkacademia: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      pop: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      hiphop: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      jazz: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      disco: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      metal: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      edm: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      techno: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      house: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      reggae: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      blues: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      country: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      indie: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      synthwave: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      punk: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      rock: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
+      romantik: {
+        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+      },
     };
 
     // ---- RESTEN AV DIN KOD OFÖRÄNDRAD (alla events och funktioner) ----
