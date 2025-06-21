@@ -14,7 +14,12 @@
     .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
     .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 12px;}
     .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s;}
-    @media (max-width: 700px) {.nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 60px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; } .nav-content.show { display: flex; } .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; } .hamburger { display: flex; } }
+    @media (max-width: 700px) {
+      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 60px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
+      .nav-content.show { display: flex; }
+      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; }
+      .hamburger { display: flex; }
+    }
     .login-container { background: rgba(0, 0, 0, 0.7); padding: 30px; border: 2px solid #00ff00; border-radius: 10px; text-align: center; box-shadow: 0 0 15px #00ff00; max-width: 90%; width: 400px; }
     textarea, input[type="file"], select, input[type="text"] { width: 100%; padding: 10px; background-color: black; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; font-family: 'Courier New', monospace; margin-bottom: 14px;}
     button { margin-top: 15px; padding: 12px 20px; font-size: 1em; color: black; background-color: #00ff00; border: none; border-radius: 5px; cursor: pointer; }
@@ -23,7 +28,6 @@
     #profileContent { margin-top: 60px; }
     #exitPreviewBtn { position: fixed; top: 20px; right: 20px; background-color: #00ff00; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
     #exitPreviewBtn:hover { background-color: #00cc00; }
-    #saveNotice { display:none; color:#00ff00; margin-top:10px; background:rgba(0,50,0,0.33); padding:8px 0; border-radius:8px;}
   </style>
 </head>
 <body>
@@ -64,7 +68,7 @@
     <button onclick="goToProfileView()" id="btn-view-profile">Visa profil</button>
     <button id="editProfileBtn" class="hidden">Redigera profil</button>
 
-    <div id="saveNotice">
+    <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;">
       ✅ Profil sparad!
     </div>
 
@@ -76,6 +80,7 @@
     <div id="profileContent"></div>
   </div>
 
+  <script type="module" src="scripts/profile-script.js"></script>
   <script type="module">
     import { auth, db } from './scripts/firebase-init.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
@@ -93,28 +98,51 @@
       });
     });
 
+    // Nickname-logik
+    let currentUser = null;
+    let lastSavedNickname = "";
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
+        const snap = await getDoc(doc(db, "profiles", user.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          document.getElementById('nickname').value = data.nickname || '';
+          lastSavedNickname = data.nickname || '';
+        }
+      }
+    });
+
+    document.getElementById('saveNicknameBtn').onclick = async () => {
+      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+      const newNick = document.getElementById('nickname').value.trim();
+      if (!newNick) {
+        document.getElementById('nicknameStatus').textContent = lang === "en" ? "You must enter a nickname." : "Du måste ange ett smeknamn.";
+        return;
+      }
+      const q = query(collection(db, "profiles"), where("nickname", "==", newNick));
+      const snap = await getDocs(q);
+      let taken = false;
+      snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
+      if (taken) {
+        document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname is already taken!" : "Smeknamnet är upptaget!";
+        return;
+      }
+      await setDoc(doc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
+      lastSavedNickname = newNick;
+      document.getElementById('nicknameStatus').style.color = "#00ff00";
+      document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname saved!" : "Smeknamn sparat!";
+      setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
+    };
+
+    window.goToProfileView = function() {
+      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
+    };
+
     // --------- SPRÅKVAL & ALLA TEMA-ALTERNATIV ---------
     const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
-    // Textnycklar svenska/engelska
-    const t = {
-      "header-txt": {sv: "Redigera din profil", en: "Edit your profile"},
-      "label-nickname": {sv: "Smeknamn/användarnamn:", en: "Nickname/Username:"},
-      "label-pic": {sv: "Ladda upp profilbild:", en: "Upload profile picture:"},
-      "label-theme": {sv: "Välj profiltema:", en: "Choose profile theme:"},
-      "label-customcode": {sv: "Profilkod (HTML/CSS):", en: "Profile code (HTML/CSS):"},
-      "saveBtn": {sv: "Spara kod", en: "Save code"},
-      "btn-view-profile": {sv: "Visa profil", en: "View profile"},
-      "editProfileBtn": {sv: "Redigera profil", en: "Edit profile"},
-      "saveNotice": {sv: "✅ Profil sparad!", en: "✅ Profile saved!"},
-      "logoutLink": {sv: "Logga ut", en: "Log out"},
-    };
-    Object.keys(t).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = t[id][lang];
-    });
-    document.getElementById("custom-code").placeholder = lang === "en"
-      ? "Write or paste your own HTML/CSS here..." : "Skriv eller klistra in din egen HTML/CSS här...";
-
     // Decennium
     const dec = {
       "50s": {sv:"50-tal", en:"50s"}, "60s": {sv:"60-tal", en:"60s"}, "70s": {sv:"70-tal", en:"70s"},
@@ -166,161 +194,68 @@
       romantik: {sv:"Romantik", en:"Romantic"}
     };
 
+    // Förenklade profiler per tema
+    const themeTemplates = {
+      custom: "",
+      "50s": "<div style='padding:16px; background:#fbeee6; border-radius:14px; text-align:center;'><h2>50-tal</h2><p>Rock'n'roll, diners & retro vibes.</p></div>",
+      "60s": "<div style='padding:16px; background:#eaffd0; border-radius:14px; text-align:center;'><h2>60-tal</h2><p>Hippie, peace & love.</p></div>",
+      "70s": "<div style='padding:16px; background:#fffbe8; border-radius:14px; text-align:center;'><h2>70-tal</h2><p>Disco, flower power & glitter.</p></div>",
+      "80s": "<div style='padding:16px; background:#d2f0fc; border-radius:14px; text-align:center;'><h2>80-tal</h2><p>Neon, synth & leg warmers.</p></div>",
+      "90s": "<div style='padding:16px; background:#f0e6ff; border-radius:14px; text-align:center;'><h2>90-tal</h2><p>MTV, grunge & Tamagotchi.</p></div>",
+      "y2k": "<div style='padding:16px; background:#e6f7ff; border-radius:14px; text-align:center;'><h2>Y2K</h2><p>Millennium vibes, flip phones & glitter!</p></div>",
+      "2010s": "<div style='padding:16px; background:#e6f9f3; border-radius:14px; text-align:center;'><h2>2010-tal</h2><p>Instagram, EDM & skinny jeans.</p></div>",
+      "2020s": "<div style='padding:16px; background:#fff5e6; border-radius:14px; text-align:center;'><h2>2020-tal</h2><p>Gen Z, TikTok & digital värld.</p></div>",
+      goth: "<div style='padding:16px; background:#171717; color:#ba00d3; border-radius:14px; text-align:center;'><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>",
+      emo: "<div style='padding:16px; background:#333; color:#fe52a0; border-radius:14px; text-align:center;'><h2>Emo</h2><p>Feeling all the feels.</p></div>",
+      vampyr: "<div style='padding:16px; background:#2d0012; color:#ff0038; border-radius:14px; text-align:center;'><h2>Vampyr</h2><p>Evigt nattliv.</p></div>",
+      metalhead: "<div style='padding:16px; background:#19191a; color:#d8d8d8; border-radius:14px; text-align:center;'><h2>Metalhead</h2><p>Långt hår, nitar & höga riff.</p></div>",
+      hårdrockare: "<div style='padding:16px; background:#212121; color:#c00; border-radius:14px; text-align:center;'><h2>Hårdrockare</h2><p>Skinnjacka & elgitarr.</p></div>",
+      skate: "<div style='padding:16px; background:#d7faff; color:#0d3d7f; border-radius:14px; text-align:center;'><h2>Skate</h2><p>Brädor, ramper & street style.</p></div>",
+      gamer: "<div style='padding:16px; background:#222233; color:#55ccff; border-radius:14px; text-align:center;'><h2>Gamer</h2><p>Game on! ⌨️🎮</p></div>",
+      anime: "<div style='padding:16px; background:#ffe6f7; color:#c800b0; border-radius:14px; text-align:center;'><h2>Anime</h2><p>Kawaii, cosplay & manga.</p></div>",
+      steampunk: "<div style='padding:16px; background:#453122; color:#fcd35f; border-radius:14px; text-align:center;'><h2>Steampunk</h2><p>Mässing, kugghjul & vintage tech.</p></div>",
+      boho: "<div style='padding:16px; background:#faf6e6; color:#a87328; border-radius:14px; text-align:center;'><h2>Boho</h2><p>Fransar, jordnära färger & fri själ.</p></div>",
+      raggare: "<div style='padding:16px; background:#233232; color:#faf211; border-radius:14px; text-align:center;'><h2>Raggare</h2><p>V8, jeansjacka & bilar från förr.</p></div>",
+      rockabilly: "<div style='padding:16px; background:#ffedec; color:#d41039; border-radius:14px; text-align:center;'><h2>Rockabilly</h2><p>Pompadour, prickigt & rock'n'roll.</p></div>",
+      streetracer: "<div style='padding:16px; background:#191919; color:#00fdff; border-radius:14px; text-align:center;'><h2>Streetracer</h2><p>Turbo, neon & snabba nätter.</p></div>",
+      nerd: "<div style='padding:16px; background:#f5f5ff; color:#3a0088; border-radius:14px; text-align:center;'><h2>Nörd</h2><p>Kod, spel & fun facts!</p></div>",
+      fitness: "<div style='padding:16px; background:#e2ffe2; color:#18c700; border-radius:14px; text-align:center;'><h2>Träningsprofil</h2><p>Stark kropp, stark själ.</p></div>",
+      urbanexplorer: "<div style='padding:16px; background:#313c44; color:#62d0d9; border-radius:14px; text-align:center;'><h2>Urban Explorer</h2><p>Städer, ruiner & äventyr.</p></div>",
+      fantasy: "<div style='padding:16px; background:#dfd3ff; color:#6a32b5; border-radius:14px; text-align:center;'><h2>Fantasy</h2><p>Drakar, magi & äventyr.</p></div>",
+      vintage: "<div style='padding:16px; background:#f9f4e2; color:#a1814c; border-radius:14px; text-align:center;'><h2>Vintage</h2><p>Oldschool vibes.</p></div>",
+      retro: "<div style='padding:16px; background:#ffeebb; color:#d46b00; border-radius:14px; text-align:center;'><h2>Retro</h2><p>80- och 90-tals känsla.</p></div>",
+      streetwear: "<div style='padding:16px; background:#0f0f0f; color:#00ff00; border-radius:14px; text-align:center;'><h2>Streetwear</h2><p>Casual, cool & modern.</p></div>",
+      hacker: "<div style='padding:16px; background:#070707; color:#00ff99; border-radius:14px; text-align:center;'><h2>Hacker</h2><p>// root access granted</p></div>",
+      darkacademia: "<div style='padding:16px; background:#292c2f; color:#eee; border-radius:14px; text-align:center;'><h2>Dark Academia</h2><p>Böcker, mystik & klassisk stil.</p></div>",
+      pop: "<div style='padding:16px; background:#ffedfa; color:#d700ad; border-radius:14px; text-align:center;'><h2>Pop</h2><p>Catchy hooks & glitter.</p></div>",
+      hiphop: "<div style='padding:16px; background:#161515; color:#ffc312; border-radius:14px; text-align:center;'><h2>Hiphop</h2><p>Beat, flow & streetpoesi.</p></div>",
+      jazz: "<div style='padding:16px; background:#e4e4e4; color:#6a4a1b; border-radius:14px; text-align:center;'><h2>Jazz</h2><p>Sax, blås & lounge.</p></div>",
+      disco: "<div style='padding:16px; background:#d7d0ff; color:#a637cf; border-radius:14px; text-align:center;'><h2>Disco</h2><p>Discokulor, glitter & groove.</p></div>",
+      metal: "<div style='padding:16px; background:#222; color:#bbb; border-radius:14px; text-align:center;'><h2>Metal</h2><p>Tungt, snabbt & högt!</p></div>",
+      edm: "<div style='padding:16px; background:#171717; color:#43ffa1; border-radius:14px; text-align:center;'><h2>EDM</h2><p>Drop the bass!</p></div>",
+      techno: "<div style='padding:16px; background:#000214; color:#00eaff; border-radius:14px; text-align:center;'><h2>Techno</h2><p>Beat, rave & puls.</p></div>",
+      house: "<div style='padding:16px; background:#d9fff0; color:#1cd84d; border-radius:14px; text-align:center;'><h2>House</h2><p>Pumpande klubbmusik.</p></div>",
+      reggae: "<div style='padding:16px; background:#fefcce; color:#0d9600; border-radius:14px; text-align:center;'><h2>Reggae</h2><p>Peace, love & vibes.</p></div>",
+      blues: "<div style='padding:16px; background:#dbe7ff; color:#2b3d76; border-radius:14px; text-align:center;'><h2>Blues</h2><p>Känsla, gitarr & själ.</p></div>",
+      country: "<div style='padding:16px; background:#ffeedd; color:#c7761b; border-radius:14px; text-align:center;'><h2>Country</h2><p>Boots, hatt & kärlek.</p></div>",
+      indie: "<div style='padding:16px; background:#ffe2e2; color:#264586; border-radius:14px; text-align:center;'><h2>Indie</h2><p>Eget sound, egen väg.</p></div>",
+      synthwave: "<div style='padding:16px; background:#0e0526; color:#d600ff; border-radius:14px; text-align:center;'><h2>Synthwave</h2><p>Retro futurism & neon.</p></div>",
+      punk: "<div style='padding:16px; background:#2d2d2d; color:#f50000; border-radius:14px; text-align:center;'><h2>Punk</h2><p>Uppror, nitar & snabb musik.</p></div>",
+      rock: "<div style='padding:16px; background:#2a2020; color:#fff200; border-radius:14px; text-align:center;'><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>",
+      romantik: "<div style='padding:16px; background:#fff0f6; color:#b8004b; border-radius:14px; text-align:center;'><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>"
+    };
+
     // Lägg till alla options i rätt ordning
     const themeSelect = document.getElementById("theme");
-    themeSelect.innerHTML = "";
+    themeSelect.innerHTML = ""; // Töm
     themeSelect.appendChild(new Option(lang === "en" ? "Custom code (advanced!)" : "Egen kod (avancerat!)", "custom"));
     Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key][lang], key)));
     Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key][lang], key)));
     Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key][lang], key)));
 
-    // ------- PROFILKOD-MALLAR PER THEMA -------
-    const themeTemplates = {
-      custom: "",
-      "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; max-width:750px; margin:0 auto; box-shadow:0 0 22px #e51f8d44,0 0 10px #00c4ff44;">
-        <div style="display:flex;align-items:center;gap:20px;">
-          <div style="font-size:2.7em;filter:drop-shadow(0 0 8px #f240a7cc);">🎙️</div>
-          <div>
-            <div style="font-family:'Pacifico',cursive;font-size:1.39em;color:#cc0066;letter-spacing:1.1px;">Alias: <span style="color:#00a8ff;">RetroStar</span></div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:1.09em;color:#ffbb00;margin-top:6px;">
-              Rockabilly & Rock'n'Roll-älskare
-            </div>
-          </div>
-        </div>
-        <div style="margin:22px 0 0 8px;line-height:1.64;font-family:'Fira Mono',monospace;color:#432010;">
-          <b style="color:#cc0066;">Vem är RetroStar?</b><br>
-          Bakom aliaset RetroStar döljer sig en person som lever för <span style="color:#ff003e;">milkshakes</span>, jukebox, polka dots & vilda nätter på dansgolvet.<br><br>
-          <b style="color:#00a8ff;">Dröm:</b><br>
-          Att dansa sig igenom livet med ett leende, bjuda på glädje och starta spontana twist-battles!<br><br>
-          <span style="color:#ffbb00;background:rgba(34,34,0,0.09);padding:6px 10px 5px 10px;border-radius:9px;display:inline-block;">
-            Här är alla välkomna – så länge du respekterar andra och kan uppskatta lite vinylknaster mellan beatsen.
-          </span>
-          <br><br>
-          <b style="color:#00a8ff;">Citat:</b><br>
-          <span style="color:#cc0066;">"Life's short – so grab your petticoat and hit the diner!"</span><br>
-          Alltid redo för cruising, musik och en klassisk milkshake.
-          <br><span style="color:#ff003e;">#SockHop #RetroVibes #BornToRock</span>
-        </div>
-        <div style="margin-top:22px;padding:8px 0 0 0;font-family:monospace;color:#ffbb00;">
-          Vill du jamma ihop eller bara snacka om skivsamlingar? <b style="color:#00a8ff;">Skicka ett PM!</b>
-          <br><span style="color:#00a8ff;">// Kodknastret är alltid retro i källaren.</span>
-        </div>
-      </div>`,
-      // ...lägg in fler avancerade teman här!
-    };
-
-    // ==================== FIREBASE-PROFILLOGIK ====================
-    let currentUser = null;
-    let lastSavedNickname = "";
-    let lastSavedTheme = "custom";
-    let lastSavedCode = "";
-
-    import { doc as fDoc, setDoc as fSetDoc, getDoc as fGetDoc, collection as fCollection, query as fQuery, where as fWhere, getDocs as fGetDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { onAuthStateChanged as fOnAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-
-    const codeField = document.getElementById("custom-code");
-    const saveBtn = document.getElementById("saveBtn");
-    const themeSelectDom = document.getElementById("theme");
-    const notice = document.getElementById("saveNotice");
-    const viewBtn = document.getElementById("btn-view-profile");
-    const editBtn = document.getElementById("editProfileBtn");
-    const preview = document.getElementById("fullscreenPreview");
-    const profileContent = document.getElementById("profileContent");
-
-    fOnAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
-        const snap = await fGetDoc(fDoc(db, "profiles", user.uid));
-        if (snap.exists()) {
-          const data = snap.data();
-          document.getElementById('nickname').value = data.nickname || '';
-          lastSavedNickname = data.nickname || '';
-          lastSavedTheme = data.profileTheme || "custom";
-          lastSavedCode = data.profileCode || "";
-          themeSelectDom.value = lastSavedTheme;
-          codeField.value = lastSavedCode || themeTemplates[lastSavedTheme] || "";
-        } else {
-          codeField.value = "";
-          themeSelectDom.value = "custom";
-        }
-      }
-    });
-
-    // Nickname-logik
-    document.getElementById('saveNicknameBtn').onclick = async () => {
-      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
-      const newNick = document.getElementById('nickname').value.trim();
-      if (!newNick) {
-        document.getElementById('nicknameStatus').textContent = lang === "en" ? "You must enter a nickname." : "Du måste ange ett smeknamn.";
-        return;
-      }
-      const q = fQuery(fCollection(db, "profiles"), fWhere("nickname", "==", newNick));
-      const snap = await fGetDocs(q);
-      let taken = false;
-      snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
-      if (taken) {
-        document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname is already taken!" : "Smeknamnet är upptaget!";
-        return;
-      }
-      await fSetDoc(fDoc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
-      lastSavedNickname = newNick;
-      document.getElementById('nicknameStatus').style.color = "#00ff00";
-      document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname saved!" : "Smeknamn sparat!";
-      setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
-    };
-
-    window.goToProfileView = function() {
-      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
-      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
-    };
-
-    // ---- AUTO-SAVE TEMA DIREKT VID VAL ----
-    themeSelectDom.addEventListener("change", async function(e) {
-      const theme = e.target.value;
-      codeField.value = themeTemplates[theme] || "";
-      // Autospara direkt vid byte av tema
-      if (currentUser) {
-        await fSetDoc(fDoc(db, "profiles", currentUser.uid), {
-          profileTheme: theme,
-          profileCode: codeField.value
-        }, { merge: true });
-        showSaveNotice();
-      }
-    });
-
-    // ---- Spara kod-knapp (manuell) ----
-    saveBtn.addEventListener("click", async () => {
-      if (currentUser) {
-        await fSetDoc(fDoc(db, "profiles", currentUser.uid), {
-          profileTheme: themeSelectDom.value,
-          profileCode: codeField.value
-        }, { merge: true });
-        showSaveNotice();
-      }
-    });
-
-    // Visa/grön notis
-    function showSaveNotice() {
-      notice.textContent = t.saveNotice[lang];
-      notice.style.display = "block";
-      setTimeout(() => { notice.style.display = "none"; }, 2500);
-    }
-
-    // Förhandsgranskning
-    viewBtn.addEventListener("click", () => {
-      profileContent.innerHTML = codeField.value;
-      preview.classList.remove("hidden");
-      editBtn.classList.remove("hidden");
-    });
-
-    editBtn.addEventListener("click", () => {
-      preview.classList.add("hidden");
-    });
-
-    // Logga ut
-    document.getElementById("logoutLink").addEventListener("click", () => {
-      auth.signOut().then(() => location.href = "login.html");
+    // Visa kodmall vid tema-val
+    themeSelect.addEventListener('change', function(e) {
+      document.getElementById('custom-code').value = themeTemplates[e.target.value] || "";
     });
 
   </script>
