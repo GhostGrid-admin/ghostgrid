@@ -380,8 +380,157 @@
 </div>`
       },
       "70s": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #ffe6a1 0%, #ffcc86 30%, #f38a54 100%);
+  border-radius: 44px;
+  padding: 56px 30px 42px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 80px #f9c889e0, 0 0 24px #915e2b44;
+  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 70-tals groovy animation högst upp -->
+  <div style="position:absolute; left:0; top:0; width:100%; height:120px; pointer-events:none;">
+    <svg width="100%" height="120" viewBox="0 0 900 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="180" cy="60" rx="100" ry="35" fill="#f38a54">
+        <animate attributeName="cx" values="180;240;180" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="420" cy="80" rx="80" ry="26" fill="#ffd43b">
+        <animate attributeName="cx" values="420;350;420" dur="3.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="670" cy="40" rx="70" ry="28" fill="#795548">
+        <animate attributeName="cy" values="40;75;40" dur="4.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="800" cy="90" rx="58" ry="16" fill="#67c4f8">
+        <animate attributeName="cx" values="800;740;800" dur="3.8s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+
+  <div style="text-align:center; margin-bottom: 12px; position:relative; z-index:1;">
+    <span style="font-size:2.5em; letter-spacing:0.04em;">🪩 🛼 🌅 🎷</span>
+  </div>
+  <h2 style="color:#7e3707; text-align:center; margin-top:10px; font-family:'Baloo 2',cursive,monospace;font-size:2.3em;letter-spacing:0.09em;text-shadow:0 3px 6px #fff5d8cc;">70-talsprofil</h2>
+  <p style="font-size:1.15em; text-align:center; color:#653317; margin:19px 0 28px 0;">
+    <i>"Disco, färg, frihet och groove – där varje dag är en dans på rullskridskor."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:27px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:#fff3e0dd; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #f8b887;">
+      <b style="color:#f38a54;">🪩 Disco Fever</b><br/>
+      <span style="color:#66442c;">Blinkande lampor, platåskor och spegelbollar.</span>
+      <div style="margin-top:6px;color:#ffd43b;">✨</div>
+    </div>
+    <div style="background:#ffe0aedd; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #ffd43b99;">
+      <b style="color:#7e3707;">🌅 Sunset Vibes</b><br/>
+      <span style="color:#66442c;">Solnedgångsfärger, peace & långhåriga ballader.</span>
+      <div style="margin-top:6px;color:#7e3707;">🌞</div>
+    </div>
+    <div style="background:#d0eeffd8; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #68cfff;">
+      <b style="color:#0676ae;">🛼 Rollers & Funk</b><br/>
+      <span style="color:#253847;">Rullskridskor, funk och soul i hörlurarna.</span>
+      <div style="margin-top:6px;color:#0676ae;">🎸</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:#ffefde; color:#7e3707; padding:8px 24px; border-radius:15px; box-shadow:0 0 7px #ffd43b55;">
+      "Lev groovy och låt rytmen styra stegen!"
+    </span>
+  </p>
+  <!-- Liten dansande discoboll, animerad längst ned -->
+  <div style="margin-top:35px; text-align:center; height:60px;position:relative;">
+    <svg width="60" height="60" viewBox="0 0 60 60" style="vertical-align:middle;">
+      <g>
+        <circle cx="30" cy="30" r="22" fill="#d0eaff" stroke="#ffd43b" stroke-width="5"/>
+        <circle cx="30" cy="30" r="18" fill="#f6e579" />
+        <rect x="24" y="8" width="12" height="6" rx="2" fill="#fdc35e">
+          <animate attributeName="y" values="8;13;8" dur="1.6s" repeatCount="indefinite"/>
+        </rect>
+        <ellipse cx="30" cy="45" rx="14" ry="4" fill="#ece7c3">
+          <animate attributeName="rx" values="14;8;14" dur="1.5s" repeatCount="indefinite"/>
+        </ellipse>
+      </g>
+    </svg>
+    <span style="font-size:1.3em;color:#f38a54;vertical-align:middle;">🕺</span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #ffe6a1 0%, #ffcc86 30%, #f38a54 100%);
+  border-radius: 44px;
+  padding: 56px 30px 42px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 80px #f9c889e0, 0 0 24px #915e2b44;
+  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 70s groovy animation top -->
+  <div style="position:absolute; left:0; top:0; width:100%; height:120px; pointer-events:none;">
+    <svg width="100%" height="120" viewBox="0 0 900 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="180" cy="60" rx="100" ry="35" fill="#f38a54">
+        <animate attributeName="cx" values="180;240;180" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="420" cy="80" rx="80" ry="26" fill="#ffd43b">
+        <animate attributeName="cx" values="420;350;420" dur="3.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="670" cy="40" rx="70" ry="28" fill="#795548">
+        <animate attributeName="cy" values="40;75;40" dur="4.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="800" cy="90" rx="58" ry="16" fill="#67c4f8">
+        <animate attributeName="cx" values="800;740;800" dur="3.8s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom: 12px; position:relative; z-index:1;">
+    <span style="font-size:2.5em; letter-spacing:0.04em;">🪩 🛼 🌅 🎷</span>
+  </div>
+  <h2 style="color:#7e3707; text-align:center; margin-top:10px; font-family:'Baloo 2',cursive,monospace;font-size:2.3em;letter-spacing:0.09em;text-shadow:0 3px 6px #fff5d8cc;">70s Profile</h2>
+  <p style="font-size:1.15em; text-align:center; color:#653317; margin:19px 0 28px 0;">
+    <i>"Disco, color, freedom and groove – where every day is a dance on roller skates."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:27px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:#fff3e0dd; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #f8b887;">
+      <b style="color:#f38a54;">🪩 Disco Fever</b><br/>
+      <span style="color:#66442c;">Flashing lights, platform shoes and mirror balls.</span>
+      <div style="margin-top:6px;color:#ffd43b;">✨</div>
+    </div>
+    <div style="background:#ffe0aedd; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #ffd43b99;">
+      <b style="color:#7e3707;">🌅 Sunset Vibes</b><br/>
+      <span style="color:#66442c;">Sunset colors, peace & long-haired ballads.</span>
+      <div style="margin-top:6px;color:#7e3707;">🌞</div>
+    </div>
+    <div style="background:#d0eeffd8; border-radius:20px; padding:16px 24px; min-width:225px; box-shadow:0 0 9px #68cfff;">
+      <b style="color:#0676ae;">🛼 Rollers & Funk</b><br/>
+      <span style="color:#253847;">Roller skates, funk and soul in the headphones.</span>
+      <div style="margin-top:6px;color:#0676ae;">🎸</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:#ffefde; color:#7e3707; padding:8px 24px; border-radius:15px; box-shadow:0 0 7px #ffd43b55;">
+      "Stay groovy and let the rhythm lead the way!"
+    </span>
+  </p>
+  <!-- Small animated disco ball at bottom -->
+  <div style="margin-top:35px; text-align:center; height:60px;position:relative;">
+    <svg width="60" height="60" viewBox="0 0 60 60" style="vertical-align:middle;">
+      <g>
+        <circle cx="30" cy="30" r="22" fill="#d0eaff" stroke="#ffd43b" stroke-width="5"/>
+        <circle cx="30" cy="30" r="18" fill="#f6e579" />
+        <rect x="24" y="8" width="12" height="6" rx="2" fill="#fdc35e">
+          <animate attributeName="y" values="8;13;8" dur="1.6s" repeatCount="indefinite"/>
+        </rect>
+        <ellipse cx="30" cy="45" rx="14" ry="4" fill="#ece7c3">
+          <animate attributeName="rx" values="14;8;14" dur="1.5s" repeatCount="indefinite"/>
+        </ellipse>
+      </g>
+    </svg>
+    <span style="font-size:1.3em;color:#f38a54;vertical-align:middle;">🕺</span>
+  </div>
+</div>`
       },
       "80s": {
         sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
