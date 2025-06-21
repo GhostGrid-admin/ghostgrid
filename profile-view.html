@@ -104,13 +104,66 @@
       height: 135px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
       border: 3px solid #0ff;
       background: #111;
       display: block;
     }
-    /* ... (dina reaktions/reklam-float styles här, samma som innan) ... */
+    .pic-reactions, .profile-reactions {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 1em;
+      text-shadow: 0 0 4px #0ff;
+    }
+    .reaction-btn {
+      font-size: 1.4em;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      transition: transform 0.2s;
+    }
+    .reaction-btn:hover {
+      transform: scale(1.3);
+    }
+    .reaction-count {
+      font-size: 1.2em;
+      margin-right: 12px;
+    }
+    .ads-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: 24px;
+      gap: 20px;
+      padding: 10px 0;
+    }
+    .ad-left, .ad-right {
+      flex: 1 1 48%;
+      background: #111;
+      border: 1px solid #0ff;
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 0 18px #8000ff88;
+      font-size: 0.9em;
+      min-width: 220px;
+    }
+    @media (max-width: 900px) {
+      .ads-wrapper { gap: 10px; }
+      .ad-left, .ad-right { min-width: 140px; }
+    }
+    @media (max-width: 650px) {
+      .ads-wrapper,
+      .ad-left, .ad-right { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -128,29 +181,23 @@
   <div class="main-content">
     <div id="profile-output"></div>
   </div>
-  <!-- Floating reactions bar -->
-  <div class="reaction-float" id="profileReactions">
-    <div style="font-size:1.1em; letter-spacing:0.04em;">Gilla profilen:</div>
-    <div class="reaction-row">
-      <button class="reaction-btn" id="like-heart" title="Gilla med hjärta">❤️</button>
-      <span class="reaction-count" id="count-heart">0</span>
-      <button class="reaction-btn" id="like-thumb" title="Tumme upp">👍</button>
-      <span class="reaction-count" id="count-thumb">0</span>
-    </div>
-  </div>
-  <!-- Floating ads, left/right -->
-  <div class="reklam-float left" id="adLeft">
-    <img src="https://dummyimage.com/60x60/8000ff/fff&text=Ad+1" alt="Ad1">
-    <span>Vill du annonsera här? Kontakta admin!</span>
-  </div>
-  <div class="reklam-float right" id="adRight">
-    <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
-    <span>Bli medlem och få exklusiva erbjudanden!</span>
-  </div>
   <script type="module">
-    import { auth, db } from './scripts/firebase-init.js';
-    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    // --- FIREBASE INIT ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.firebasestorage.app",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd18a31163968"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
     // Hamburger-meny
     const menuBtn = document.getElementById("menuBtn");
     const navLinks = document.getElementById("navLinks");
@@ -165,6 +212,7 @@
     let profileRef = doc(db, "profiles", uid);
     let userId = null;
     let heartUsers = [], thumbUsers = [];
+    let picHeartUsers = [], picSmileUsers = [];
 
     async function renderProfile() {
       const snap = await getDoc(profileRef);
@@ -173,77 +221,76 @@
         return;
       }
       const data = snap.data();
-      // PROFILBILD (Nu med profilePicUrl!)
       let profileHtml = '';
+      // PROFILBILD + REAKTIONER
       if (data.profilePicUrl) {
-        profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+        profileHtml += `
+          <div style="text-align:center;">
+            <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">
+            <div class="pic-reactions">
+              <div>Lämna en reaktion på profilbilden:</div>
+              <button class="reaction-btn" id="pic-heart" title="Gilla profilbild ❤️">❤️</button>
+              <span id="pic-heart-count">0</span>
+              <button class="reaction-btn" id="pic-smile" title="Glad för bilden 😄">😄</button>
+              <span id="pic-smile-count">0</span>
+            </div>
+          </div>
+        `;
       }
-      // PROFILKOD/HTML
+      // PROFILKOD + REAKTIONER + REKLAM
+      profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
+      profileHtml += `
+        <div class="profile-reactions">
+          <div>Gilla hela profilen:</div>
+          <button class="reaction-btn" id="like-heart" title="❤️ Gilla">❤️</button>
+          <span class="reaction-count" id="count-heart">0</span>
+          <button class="reaction-btn" id="like-thumb" title="👍 Tumme upp">👍</button>
+          <span class="reaction-count" id="count-thumb">0</span>
+        </div>
+        <div class="ads-wrapper">
+          <div class="ad-left">
+            <img src="https://dummyimage.com/60x60/8000ff/fff&text=Ad+1" alt="Ad1">
+            <span>Vill du annonsera här? Kontakta admin!</span>
+          </div>
+          <div class="ad-right">
+            <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
+            <span>Bli medlem och få exklusiva erbjudanden!</span>
+          </div>
+        </div>
+      </div>`;
       profileOut.innerHTML = profileHtml;
 
-      // --------- Sätt in ALIAS på alla rätta ställen ---------
+      // Alias
       const nickname = data.nickname || "";
       document.querySelectorAll('.profile-alias').forEach(el => el.textContent = nickname);
 
       // Ladda reaktioner
       heartUsers = Array.isArray(data.heartUsers) ? data.heartUsers : [];
       thumbUsers = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
+      picHeartUsers = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
+      picSmileUsers = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
+
       document.getElementById('count-heart').innerText = heartUsers.length;
       document.getElementById('count-thumb').innerText = thumbUsers.length;
+      document.getElementById('pic-heart-count').innerText = picHeartUsers.length;
+      document.getElementById('pic-smile-count').innerText = picSmileUsers.length;
+
       updateReactionUI();
+      setupReactionEvents();
     }
     renderProfile();
 
-    // --- FLYTANDE GREJER VID SCROLL NERÅT ---
-    let lastScrollY = window.scrollY;
-    let showTimeout = null;
-    let adsTimeout = null;
-
-    function showFloaters() {
-      document.getElementById('profileReactions').classList.add('visible');
-      document.getElementById('adLeft').classList.add('visible');
-      document.getElementById('adRight').classList.add('visible');
-      clearTimeout(showTimeout);
-      showTimeout = setTimeout(() => {
-        document.getElementById('profileReactions').classList.remove('visible');
-        document.getElementById('adLeft').classList.remove('visible');
-        document.getElementById('adRight').classList.remove('visible');
-      }, 3000);
-    }
-    function hideFloaters() {
-      document.getElementById('profileReactions').classList.remove('visible');
-      document.getElementById('adLeft').classList.remove('visible');
-      document.getElementById('adRight').classList.remove('visible');
-      clearTimeout(showTimeout);
-    }
-    window.addEventListener('scroll', function() {
-      let newScrollY = window.scrollY;
-      if (newScrollY > lastScrollY) { showFloaters(); }
-      else { hideFloaters(); }
-      lastScrollY = newScrollY;
-    });
-
-    // Touch scroll på mobil
-    let lastTouchY = 0;
-    window.addEventListener('touchstart', function(e) {
-      if (e.touches.length > 0) lastTouchY = e.touches[0].clientY;
-    });
-    window.addEventListener('touchmove', function(e) {
-      if (e.touches.length > 0) {
-        let currentY = e.touches[0].clientY;
-        if (currentY < lastTouchY) { showFloaters(); }
-        else { hideFloaters(); }
-        lastTouchY = currentY;
-      }
-    });
-
-    // REAKTIONER
     function updateReactionUI() {
       if (!userId) return;
+      // Profilreaktioner
       document.getElementById('like-heart').style.opacity = heartUsers.includes(userId) ? "1" : "0.7";
       document.getElementById('like-thumb').style.opacity = thumbUsers.includes(userId) ? "1" : "0.7";
+      // Profilbildsreaktioner
+      document.getElementById('pic-heart').style.opacity = picHeartUsers.includes(userId) ? "1" : "0.7";
+      document.getElementById('pic-smile').style.opacity = picSmileUsers.includes(userId) ? "1" : "0.7";
     }
+
     async function toggleReaction(type) {
       if (!userId) { alert("Du måste vara inloggad för att reagera!"); return; }
       const snap = await getDoc(profileRef);
@@ -257,12 +304,21 @@
       await updateDoc(profileRef, { [type]: arr });
       if (type === "heartUsers") heartUsers = arr;
       if (type === "thumbUsers") thumbUsers = arr;
+      if (type === "picHeartUsers") picHeartUsers = arr;
+      if (type === "picSmileUsers") picSmileUsers = arr;
       document.getElementById('count-heart').innerText = heartUsers.length;
       document.getElementById('count-thumb').innerText = thumbUsers.length;
+      document.getElementById('pic-heart-count').innerText = picHeartUsers.length;
+      document.getElementById('pic-smile-count').innerText = picSmileUsers.length;
       updateReactionUI();
     }
-    document.getElementById('like-heart').onclick = () => toggleReaction("heartUsers");
-    document.getElementById('like-thumb').onclick = () => toggleReaction("thumbUsers");
+
+    function setupReactionEvents() {
+      document.getElementById('like-heart').onclick = () => toggleReaction("heartUsers");
+      document.getElementById('like-thumb').onclick = () => toggleReaction("thumbUsers");
+      document.getElementById('pic-heart').onclick = () => toggleReaction("picHeartUsers");
+      document.getElementById('pic-smile').onclick = () => toggleReaction("picSmileUsers");
+    }
 
     onAuthStateChanged(auth, user => {
       userId = user ? user.uid : null;
