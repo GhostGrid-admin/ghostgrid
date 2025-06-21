@@ -27,9 +27,39 @@
       .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; }
       .hamburger { display: flex; }
     }
-    .login-container { background: rgba(0, 0, 0, 0.7); padding: 30px; border: 2px solid #00ff00; border-radius: 10px; text-align: center; box-shadow: 0 0 15px #00ff00; max-width: 90%; width: 400px; }
-    textarea, input[type="file"], select, input[type="text"] { width: 100%; padding: 10px; background-color: black; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; font-family: 'Courier New', monospace; margin-bottom: 14px;}
-    button { margin-top: 15px; padding: 12px 20px; font-size: 1em; color: black; background-color: #00ff00; border: none; border-radius: 5px; cursor: pointer; }
+    .login-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px #00ff00;
+      max-width: 90%;
+      width: 400px;
+    }
+    textarea, input[type="file"], select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 14px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 1em;
+      color: black;
+      background-color: #00ff00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
     button:hover { background-color: #00cc00; }
     #fullscreenPreview { position: fixed; inset: 0; background-color: black; z-index: 9999; color: white; overflow: auto; padding: 20px; }
     #profileContent { margin-top: 60px; }
@@ -52,6 +82,30 @@
       border: 2.5px solid #00ffcc;
       background: #232323;
       display: none;
+    }
+    #profilePicBtnBox {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    #themeBox {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #theme {
+      max-width: 260px;
+      margin-top: 3px;
+      margin-bottom: 13px;
+      text-align: center;
+      display: block;
+    }
+    /* Extra för centrerat läge */
+    @media (max-width: 520px) {
+      .login-container { width: 98vw; min-width: 0; padding: 12px; }
+      #profilePicPreview { width: 70px; height: 70px; }
+      #theme { font-size: 1em; }
     }
   </style>
 </head>
@@ -80,14 +134,19 @@
       <div id="nicknameStatus" style="color:#ff8888; margin:6px 0 0 0; min-height:18px"></div>
     </div>
 
-    <label for="profile-pic" id="label-pic">Ladda upp profilbild:</label>
-    <input type="file" id="profile-pic" accept="image/*" />
+    <label for="profile-pic" id="label-pic" style="display:block;text-align:center;">Ladda upp profilbild:</label>
+    <input type="file" id="profile-pic" accept="image/*" style="display:block;margin:0 auto 0 auto;" />
     <img id="profilePicPreview" src="" alt="Profilbild" />
-    <button id="saveProfilePicBtn" type="button">Spara profilbild</button>
+    <div id="profilePicBtnBox">
+      <button id="saveProfilePicBtn" type="button" style="margin:0 auto;">Spara profilbild</button>
+    </div>
     <div id="profilePicNotice"></div>
 
-    <label for="theme" id="label-theme">Välj profiltema:</label>
-    <select id="theme"></select>
+    <div id="themeBox">
+      <label for="theme" id="label-theme" style="margin-bottom:3px;">Välj profiltema:</label>
+      <select id="theme"></select>
+    </div>
+
     <label for="custom-code" id="label-customcode">Profilkod (HTML/CSS):</label>
     <textarea id="custom-code" rows="10" placeholder="Skriv eller klistra in din egen HTML/CSS här..."></textarea>
     <button id="saveBtn">Spara kod</button>
@@ -217,7 +276,6 @@
           document.getElementById('nickname').value = data.nickname || '';
           if (data.profileTheme) themeSelect.value = data.profileTheme;
           document.getElementById('custom-code').value = data.profileCode || '';
-          // Visa profilbild direkt om det finns en URL
           if (data.profilePicUrl) {
             const pic = document.getElementById('profilePicPreview');
             pic.src = data.profilePicUrl;
@@ -303,7 +361,6 @@
         }, { merge: true });
         document.getElementById('profilePicPreview').src = downloadUrl;
         document.getElementById('profilePicPreview').style.display = 'block';
-        // Grön bock och text:
         notice.innerHTML = `<span style="font-size:1.6em;color:#00ff00;vertical-align:-4px;">&#10003;</span> Profilbild sparad!`;
         notice.style.display = "block";
         setTimeout(() => { notice.style.display = "none"; }, 2500);
@@ -329,7 +386,6 @@
         alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
         return;
       }
-      // Hämta profilbild-URL från Firestore
       const docRef = doc(db, "profiles", currentUser.uid);
       const docSnap = await getDoc(docRef);
       let profilePicHtml = "";
@@ -339,7 +395,6 @@
           profilePicHtml = `<img src="${data.profilePicUrl}" alt="Profilbild" style="display:block; margin: 0 auto 20px auto; width: 120px; height: 120px; border-radius: 50%;">`;
         }
       }
-      // Sätt HTML i preview: profilbild + profilkod
       profileContent.innerHTML = profilePicHtml + document.getElementById('custom-code').value;
       preview.classList.remove("hidden");
       editBtn.classList.remove("hidden");
@@ -349,7 +404,6 @@
       preview.classList.add("hidden");
     });
 
-    // Logga ut
     document.getElementById("logoutLink").addEventListener("click", () => {
       auth.signOut().then(() => location.href = "login.html");
     });
