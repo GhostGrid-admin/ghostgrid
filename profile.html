@@ -295,21 +295,43 @@
       window.location.href = `profile-view.html?uid=${currentUser.uid}`;
     };
 
-    // Preview
-    const preview = document.getElementById("fullscreenPreview");
-    const profileContent = document.getElementById("profileContent");
-    const editBtn = document.getElementById("editProfileBtn");
-    document.getElementById('btn-view-profile').addEventListener('click', () => {
-      profileContent.innerHTML = document.getElementById('custom-code').value;
-      preview.classList.remove("hidden");
-      editBtn.classList.remove("hidden");
-    });
-    editBtn.addEventListener("click", () => { preview.classList.add("hidden"); });
+// Preview
+const preview = document.getElementById("fullscreenPreview");
+const profileContent = document.getElementById("profileContent");
+const editBtn = document.getElementById("editProfileBtn");
 
-    // Logga ut
-    document.getElementById("logoutLink").addEventListener("click", () => {
-      auth.signOut().then(() => location.href = "login.html");
-    });
+document.getElementById('btn-view-profile').addEventListener('click', async () => {
+  if (!currentUser) {
+    alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+    return;
+  }
+
+  // Hämta profilbild-URL från Firestore
+  const docRef = doc(db, "profiles", currentUser.uid);
+  const docSnap = await getDoc(docRef);
+  let profilePicHtml = "";
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    if (data.profilePic) {
+      profilePicHtml = `<img src="${data.profilePic}" alt="Profilbild" style="display:block; margin: 0 auto 20px auto; width: 120px; height: 120px; border-radius: 50%;">`;
+    }
+  }
+
+  // Sätt HTML i preview: profilbild + profilkod
+  profileContent.innerHTML = profilePicHtml + document.getElementById('custom-code').value;
+
+  preview.classList.remove("hidden");
+  editBtn.classList.remove("hidden");
+});
+
+editBtn.addEventListener("click", () => {
+  preview.classList.add("hidden");
+});
+
+// Logga ut
+document.getElementById("logoutLink").addEventListener("click", () => {
+  auth.signOut().then(() => location.href = "login.html");
+});
   </script>
 </body>
 </html>
