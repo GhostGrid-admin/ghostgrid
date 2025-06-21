@@ -35,7 +35,7 @@
     #profileContent { margin-top: 60px; }
     #exitPreviewBtn { position: fixed; top: 20px; right: 20px; background-color: #00ff00; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
     #exitPreviewBtn:hover { background-color: #00cc00; }
-    #profilePicNotice { color: #00ff00; margin-top: 6px; min-height: 24px; font-size: 1.06em;}
+    #profilePicNotice, #saveNotice { color: #00ff00; margin-top: 10px; min-height: 24px; font-size: 1.06em; background: #002d00; border-radius: 6px; padding: 7px 10px;}
   </style>
 </head>
 <body>
@@ -78,7 +78,7 @@
     <button onclick="goToProfileView()" id="btn-view-profile">Visa profil</button>
     <button id="editProfileBtn" class="hidden">Redigera profil</button>
 
-    <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;">
+    <div id="saveNotice" style="display:none;">
       ✅ Profil sparad!
     </div>
 
@@ -111,7 +111,7 @@
       });
     });
 
-    // ------ PROFILTEMPLATES --------
+    // --------- ALLA PROFILTEMAN ----------
     const themeTemplates = {
       custom: "",
       "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;">
@@ -293,11 +293,15 @@
       const notice = document.getElementById('profilePicNotice');
       if (!currentUser) {
         notice.textContent = "Du är inte inloggad.";
+        notice.style.display = "block";
+        setTimeout(() => { notice.style.display = "none"; }, 2500);
         return;
       }
       const file = profilePicInput.files[0];
       if (!file) {
         notice.textContent = "Ingen bild vald.";
+        notice.style.display = "block";
+        setTimeout(() => { notice.style.display = "none"; }, 2500);
         return;
       }
       try {
@@ -308,9 +312,12 @@
           profilePic: downloadUrl
         }, { merge: true });
         notice.textContent = "Profilbild uppladdad!";
-        setTimeout(() => notice.textContent = "", 2500);
+        notice.style.display = "block";
+        setTimeout(() => { notice.style.display = "none"; }, 3000);
       } catch (err) {
         notice.textContent = "Fel vid uppladdning.";
+        notice.style.display = "block";
+        setTimeout(() => { notice.style.display = "none"; }, 3500);
       }
     };
 
