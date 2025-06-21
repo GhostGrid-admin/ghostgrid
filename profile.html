@@ -455,9 +455,19 @@
     Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key], key)));
     Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key], key)));
 
-    themeSelect.addEventListener('change', function(e) {
-      document.getElementById('custom-code').value = themeTemplates[e.target.value] || "";
-    });
+themeSelect.addEventListener('change', function(e) {
+  const val = e.target.value;
+  let code = "";
+  if (themeTemplates[val]) {
+    // Om objektet är ett språkobjekt (har sv/en)
+    if (typeof themeTemplates[val] === "object" && (themeTemplates[val].sv || themeTemplates[val].en)) {
+      code = themeTemplates[val][lang] || "";
+    } else {
+      code = themeTemplates[val];
+    }
+  }
+  document.getElementById('custom-code').value = code;
+});
 
     // ---------- LOGIK OCH SPARA -----------
 
