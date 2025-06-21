@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Min Profil – GhostGrid</title>
+  <title data-i18n="profile_title">Min Profil – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background-color: black; color: #00ff00; font-family: 'Courier New', monospace; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-top: 100px;}
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh; padding-top: 100px;
+    }
     .hidden { display: none !important; }
     nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 40px; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; }
     .nav-content { display: flex; align-items: center; flex-wrap: wrap; gap: 25px; justify-content: center; }
@@ -24,7 +31,6 @@
     textarea, input[type="file"], select, input[type="text"] { width: 100%; padding: 10px; background-color: black; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; font-family: 'Courier New', monospace; margin-bottom: 14px;}
     button { margin-top: 15px; padding: 12px 20px; font-size: 1em; color: black; background-color: #00ff00; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: #00cc00; }
-    #saveNotice { display:none; color:#00ff00; margin-top:10px; background: #012c01; padding:8px 0; border-radius:7px;}
     #fullscreenPreview { position: fixed; inset: 0; background-color: black; z-index: 9999; color: white; overflow: auto; padding: 20px; }
     #profileContent { margin-top: 60px; }
     #exitPreviewBtn { position: fixed; top: 20px; right: 20px; background-color: #00ff00; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
@@ -37,12 +43,12 @@
       <span></span><span></span><span></span>
     </div>
     <div class="nav-content" id="navMenu">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Butik</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
     </div>
   </nav>
 
@@ -69,7 +75,7 @@
     <button onclick="goToProfileView()" id="btn-view-profile">Visa profil</button>
     <button id="editProfileBtn" class="hidden">Redigera profil</button>
 
-    <div id="saveNotice">
+    <div id="saveNotice" style="display:none; color:#00ff00; margin-top:10px;">
       ✅ Profil sparad!
     </div>
 
@@ -86,7 +92,10 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Hamburger-meny
+    // Språkfix – detta MÅSTE komma först!
+    const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
+
+    // Meny
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMenu = document.getElementById('navMenu');
     hamburgerBtn.addEventListener('click', function() {
@@ -98,132 +107,125 @@
       });
     });
 
-    // -------- TEMA-TEMPLATES --------
+    // Teman – decennium, subkulturer, musik + några till
     const themeTemplates = {
       custom: "",
-      "50s": "<div style='padding:16px; background:#fbeee6; border-radius:14px; text-align:center;'><h2>50-tal</h2><p>Rock'n'roll, diners & retro vibes.</p></div>",
-      "60s": "<div style='padding:16px; background:#eaffd0; border-radius:14px; text-align:center;'><h2>60-tal</h2><p>Hippie, peace & love.</p></div>",
-      "70s": "<div style='padding:16px; background:#fffbe8; border-radius:14px; text-align:center;'><h2>70-tal</h2><p>Disco, flower power & glitter.</p></div>",
-      "80s": "<div style='padding:16px; background:#d2f0fc; border-radius:14px; text-align:center;'><h2>80-tal</h2><p>Neon, synth & benvärmare.</p></div>",
-      "90s": "<div style='padding:16px; background:#f0e6ff; border-radius:14px; text-align:center;'><h2>90-tal</h2><p>MTV, grunge & Tamagotchi.</p></div>",
-      "y2k": "<div style='padding:16px; background:#e6f7ff; border-radius:14px; text-align:center;'><h2>Y2K</h2><p>Millennium vibes, flip phones & glitter!</p></div>",
-      "2010s": "<div style='padding:16px; background:#e6f9f3; border-radius:14px; text-align:center;'><h2>2010-tal</h2><p>Instagram, EDM & skinny jeans.</p></div>",
-      "2020s": "<div style='padding:16px; background:#fff5e6; border-radius:14px; text-align:center;'><h2>2020-tal</h2><p>Gen Z, TikTok & digital värld.</p></div>",
-
-      // Livsstil/subkultur
-      goth: "<div style='padding:16px; background:#1c1c22; color:#ba00d3; border-radius:14px; text-align:center;'><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>",
-      emo: "<div style='padding:16px; background:#333; color:#fe52a0; border-radius:14px; text-align:center;'><h2>Emo</h2><p>Feeling all the feels.</p></div>",
-      vampyr: "<div style='padding:16px; background:#2d0012; color:#ff0038; border-radius:14px; text-align:center;'><h2>Vampyr</h2><p>Evigt nattliv.</p></div>",
-      metalhead: "<div style='padding:16px; background:#19191a; color:#d8d8d8; border-radius:14px; text-align:center;'><h2>Metalhead</h2><p>Långt hår, nitar & höga riff.</p></div>",
-      hårdrockare: "<div style='padding:16px; background:#212121; color:#c00; border-radius:14px; text-align:center;'><h2>Hårdrockare</h2><p>Skinnjacka & elgitarr.</p></div>",
-      skate: "<div style='padding:16px; background:#d7faff; color:#0d3d7f; border-radius:14px; text-align:center;'><h2>Skate</h2><p>Brädor, ramper & street style.</p></div>",
-      gamer: "<div style='padding:16px; background:#222233; color:#55ccff; border-radius:14px; text-align:center;'><h2>Gamer</h2><p>Game on! ⌨️🎮</p></div>",
-      anime: "<div style='padding:16px; background:#ffe6f7; color:#c800b0; border-radius:14px; text-align:center;'><h2>Anime</h2><p>Kawaii, cosplay & manga.</p></div>",
-      steampunk: "<div style='padding:16px; background:#453122; color:#fcd35f; border-radius:14px; text-align:center;'><h2>Steampunk</h2><p>Mässing, kugghjul & vintage tech.</p></div>",
-      boho: "<div style='padding:16px; background:#faf6e6; color:#a87328; border-radius:14px; text-align:center;'><h2>Boho</h2><p>Fransar, jordnära färger & fri själ.</p></div>",
-      raggare: "<div style='padding:16px; background:#233232; color:#faf211; border-radius:14px; text-align:center;'><h2>Raggare</h2><p>V8, jeansjacka & bilar från förr.</p></div>",
-      rockabilly: "<div style='padding:16px; background:#ffedec; color:#d41039; border-radius:14px; text-align:center;'><h2>Rockabilly</h2><p>Pompadour, prickigt & rock'n'roll.</p></div>",
-      streetracer: "<div style='padding:16px; background:#191919; color:#00fdff; border-radius:14px; text-align:center;'><h2>Streetracer</h2><p>Turbo, neon & snabba nätter.</p></div>",
-      nerd: "<div style='padding:16px; background:#f5f5ff; color:#3a0088; border-radius:14px; text-align:center;'><h2>Nörd</h2><p>Kod, spel & fun facts!</p></div>",
-      fitness: "<div style='padding:16px; background:#e2ffe2; color:#18c700; border-radius:14px; text-align:center;'><h2>Träningsprofil</h2><p>Stark kropp, stark själ.</p></div>",
-      urbanexplorer: "<div style='padding:16px; background:#313c44; color:#62d0d9; border-radius:14px; text-align:center;'><h2>Urban Explorer</h2><p>Städer, ruiner & äventyr.</p></div>",
-      fantasy: "<div style='padding:16px; background:#dfd3ff; color:#6a32b5; border-radius:14px; text-align:center;'><h2>Fantasy</h2><p>Drakar, magi & äventyr.</p></div>",
-      vintage: "<div style='padding:16px; background:#f9f4e2; color:#a1814c; border-radius:14px; text-align:center;'><h2>Vintage</h2><p>Oldschool vibes.</p></div>",
-      retro: "<div style='padding:16px; background:#ffeebb; color:#d46b00; border-radius:14px; text-align:center;'><h2>Retro</h2><p>80- och 90-tals känsla.</p></div>",
-      streetwear: "<div style='padding:16px; background:#0f0f0f; color:#00ff00; border-radius:14px; text-align:center;'><h2>Streetwear</h2><p>Casual, cool & modern.</p></div>",
-      hacker: "<div style='padding:16px; background:#070707; color:#00ff99; border-radius:14px; text-align:center;'><h2>Hacker</h2><p>#include &lt;din värld&gt; // root access granted</p></div>",
-      darkacademia: "<div style='padding:16px; background:#292c2f; color:#eee; border-radius:14px; text-align:center;'><h2>Dark Academia</h2><p>Böcker, mystik & klassisk stil.</p></div>",
-
-      // Musikstilar
-      pop: "<div style='padding:16px; background:#ffedfa; color:#d700ad; border-radius:14px; text-align:center;'><h2>Pop</h2><p>Catchy hooks & glitter.</p></div>",
-      hiphop: "<div style='padding:16px; background:#161515; color:#ffc312; border-radius:14px; text-align:center;'><h2>Hiphop</h2><p>Beat, flow & streetpoesi.</p></div>",
-      jazz: "<div style='padding:16px; background:#e4e4e4; color:#6a4a1b; border-radius:14px; text-align:center;'><h2>Jazz</h2><p>Sax, blås & lounge.</p></div>",
-      disco: "<div style='padding:16px; background:#d7d0ff; color:#a637cf; border-radius:14px; text-align:center;'><h2>Disco</h2><p>Discokulor, glitter & groove.</p></div>",
-      metal: "<div style='padding:16px; background:#222; color:#bbb; border-radius:14px; text-align:center;'><h2>Metal</h2><p>Tungt, snabbt & högt!</p></div>",
-      edm: "<div style='padding:16px; background:#171717; color:#43ffa1; border-radius:14px; text-align:center;'><h2>EDM</h2><p>Drop the bass!</p></div>",
-      techno: "<div style='padding:16px; background:#000214; color:#00eaff; border-radius:14px; text-align:center;'><h2>Techno</h2><p>Beat, rave & puls.</p></div>",
-      house: "<div style='padding:16px; background:#d9fff0; color:#1cd84d; border-radius:14px; text-align:center;'><h2>House</h2><p>Pumpande klubbmusik.</p></div>",
-      reggae: "<div style='padding:16px; background:#fefcce; color:#0d9600; border-radius:14px; text-align:center;'><h2>Reggae</h2><p>Peace, love & vibes.</p></div>",
-      blues: "<div style='padding:16px; background:#dbe7ff; color:#2b3d76; border-radius:14px; text-align:center;'><h2>Blues</h2><p>Känsla, gitarr & själ.</p></div>",
-      country: "<div style='padding:16px; background:#ffeedd; color:#c7761b; border-radius:14px; text-align:center;'><h2>Country</h2><p>Boots, hatt & kärlek.</p></div>",
-      indie: "<div style='padding:16px; background:#ffe2e2; color:#264586; border-radius:14px; text-align:center;'><h2>Indie</h2><p>Eget sound, egen väg.</p></div>",
-      synthwave: "<div style='padding:16px; background:#0e0526; color:#d600ff; border-radius:14px; text-align:center;'><h2>Synthwave</h2><p>Retro futurism & neon.</p></div>",
-      punk: "<div style='padding:16px; background:#2d2d2d; color:#f50000; border-radius:14px; text-align:center;'><h2>Punk</h2><p>Uppror, nitar & snabb musik.</p></div>",
-      rock: "<div style='padding:16px; background:#2a2020; color:#fff200; border-radius:14px; text-align:center;'><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>",
-      romantik: "<div style='padding:16px; background:#fff0f6; color:#b8004b; border-radius:14px; text-align:center;'><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>"
+      "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; max-width:700px; margin:40px auto; text-align:center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/1950s_Diner.jpg" alt="50-tals diner" style="width:90%;border-radius:14px;box-shadow:0 0 22px #cc006633;">
+        <h2 style="font-family:'Pacifico',cursive;color:#cc0066;font-size:2.1em;margin-top:14px;">🍦 50-talets Stjärna</h2>
+        <p style="font-family:'Courier New',monospace;color:#333;">Sockersöt, klassisk och med rock'n'roll i hjärtat!</p>
+        <div style="margin-top:10px;color:#552266;font-family:monospace;">Elvis, jukebox & milkshakes på diner.<br>Frihet, stil & nya drömmar!</div>
+      </div>`,
+      "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#ff8800;font-family:'Dancing Script',cursive;font-size:2em;">✌️ 60-talets Frihetsdröm</h2>
+        <p style="color:#333;">Flower power, fred & musik!</p>
+      </div>`,
+      "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#bb8800;font-family:'Permanent Marker',cursive;font-size:2em;">🌼 70-tals Groove</h2>
+        <p style="color:#884400;">Disco, peace & flower power!</p>
+      </div>`,
+      "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#ff44ee;font-family:'Monoton',cursive;font-size:2em;">🕹️ 80-tals Neon</h2>
+        <p style="color:#0033aa;">Synthwave, pastell & axelvaddar!</p>
+      </div>`,
+      "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#0055bb;font-family:'Comic Sans MS',cursive;">📟 90-tals Kid</h2>
+        <p style="color:#333;">Gameboy, färgsprak & pogs!</p>
+      </div>`,
+      "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#ff22dd;font-family:'Orbitron',sans-serif;">💾 Y2K Millennium</h2>
+        <p style="color:#444;">Tech, metallic & bling bling!</p>
+      </div>`,
+      "2010s": `<div style="background:#e2f2ff; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#1b8cff;font-family:'Segoe Script',cursive;">📱 2010-talet</h2>
+        <p style="color:#333;">Instagram, memes, hipsterkaffe & festivaler.</p>
+      </div>`,
+      "2020s": `<div style="background:#181c21; border-radius:20px; padding:24px; text-align:center;">
+        <h2 style="color:#0ff;font-family:'Courier New',monospace;">🌍 2020-talet</h2>
+        <p style="color:#fff;">TikTok, AI, pandemi & digital frihet.</p>
+      </div>`,
+      goth: `<div style="background:#171717;color:#ba00d3;border-radius:16px;padding:15px;text-align:center;"><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>`,
+      emo: `<div style="background:#333;color:#fe52a0;border-radius:16px;padding:15px;text-align:center;"><h2>Emo</h2><p>Feeling all the feels.</p></div>`,
+      vampyr: `<div style="background:#2d0012;color:#ff0038;border-radius:16px;padding:15px;text-align:center;"><h2>Vampyr</h2><p>Evigt nattliv.</p></div>`,
+      metalhead: `<div style="background:#19191a;color:#d8d8d8;border-radius:16px;padding:15px;text-align:center;"><h2>Metalhead</h2><p>Långt hår, nitar & höga riff.</p></div>`,
+      hårdrockare: `<div style="background:#212121;color:#c00;border-radius:16px;padding:15px;text-align:center;"><h2>Hårdrockare</h2><p>Skinnjacka & elgitarr.</p></div>`,
+      skate: `<div style="background:#d7faff;color:#0d3d7f;border-radius:16px;padding:15px;text-align:center;"><h2>Skate</h2><p>Brädor, ramper & street style.</p></div>`,
+      gamer: `<div style="background:#222233;color:#55ccff;border-radius:16px;padding:15px;text-align:center;"><h2>Gamer</h2><p>Game on! ⌨️🎮</p></div>`,
+      anime: `<div style="background:#ffe6f7;color:#c800b0;border-radius:16px;padding:15px;text-align:center;"><h2>Anime</h2><p>Kawaii, cosplay & manga.</p></div>`,
+      steampunk: `<div style="background:#453122;color:#fcd35f;border-radius:16px;padding:15px;text-align:center;"><h2>Steampunk</h2><p>Mässing, kugghjul & vintage tech.</p></div>`,
+      boho: `<div style="background:#faf6e6;color:#a87328;border-radius:16px;padding:15px;text-align:center;"><h2>Boho</h2><p>Fransar, jordnära färger & fri själ.</p></div>`,
+      raggare: `<div style="background:#233232;color:#faf211;border-radius:16px;padding:15px;text-align:center;"><h2>Raggare</h2><p>V8, jeansjacka & bilar från förr.</p></div>`,
+      rockabilly: `<div style="background:#ffedec;color:#d41039;border-radius:16px;padding:15px;text-align:center;"><h2>Rockabilly</h2><p>Pompadour, prickigt & rock'n'roll.</p></div>`,
+      streetracer: `<div style="background:#191919;color:#00fdff;border-radius:16px;padding:15px;text-align:center;"><h2>Streetracer</h2><p>Turbo, neon & snabba nätter.</p></div>`,
+      nerd: `<div style="background:#f5f5ff;color:#3a0088;border-radius:16px;padding:15px;text-align:center;"><h2>Nörd</h2><p>Kod, spel & fun facts!</p></div>`,
+      fitness: `<div style="background:#e2ffe2;color:#18c700;border-radius:16px;padding:15px;text-align:center;"><h2>Träningsprofil</h2><p>Stark kropp, stark själ.</p></div>`,
+      urbanexplorer: `<div style="background:#313c44;color:#62d0d9;border-radius:16px;padding:15px;text-align:center;"><h2>Urban Explorer</h2><p>Städer, ruiner & äventyr.</p></div>`,
+      fantasy: `<div style="background:#dfd3ff;color:#6a32b5;border-radius:16px;padding:15px;text-align:center;"><h2>Fantasy</h2><p>Drakar, magi & äventyr.</p></div>`,
+      vintage: `<div style="background:#f9f4e2;color:#a1814c;border-radius:16px;padding:15px;text-align:center;"><h2>Vintage</h2><p>Oldschool vibes.</p></div>`,
+      retro: `<div style="background:#ffeebb;color:#d46b00;border-radius:16px;padding:15px;text-align:center;"><h2>Retro</h2><p>80- och 90-tals känsla.</p></div>`,
+      streetwear: `<div style="background:#0f0f0f;color:#00ff00;border-radius:16px;padding:15px;text-align:center;"><h2>Streetwear</h2><p>Casual, cool & modern.</p></div>`,
+      hacker: `<div style="background:#070707;color:#00ff99;border-radius:16px;padding:15px;text-align:center;"><h2>Hacker</h2><p>#include &lt;din värld&gt; // root access granted</p></div>`,
+      darkacademia: `<div style="background:#292c2f;color:#eee;border-radius:16px;padding:15px;text-align:center;"><h2>Dark Academia</h2><p>Böcker, mystik & klassisk stil.</p></div>`,
+      pop: `<div style="background:#ffedfa;color:#d700ad;border-radius:16px;padding:15px;text-align:center;"><h2>Pop</h2><p>Catchy hooks & glitter.</p></div>`,
+      hiphop: `<div style="background:#161515;color:#ffc312;border-radius:16px;padding:15px;text-align:center;"><h2>Hiphop</h2><p>Beat, flow & streetpoesi.</p></div>`,
+      jazz: `<div style="background:#e4e4e4;color:#6a4a1b;border-radius:16px;padding:15px;text-align:center;"><h2>Jazz</h2><p>Sax, blås & lounge.</p></div>`,
+      disco: `<div style="background:#d7d0ff;color:#a637cf;border-radius:16px;padding:15px;text-align:center;"><h2>Disco</h2><p>Discokulor, glitter & groove.</p></div>`,
+      metal: `<div style="background:#222;color:#bbb;border-radius:16px;padding:15px;text-align:center;"><h2>Metal</h2><p>Tungt, snabbt & högt!</p></div>`,
+      edm: `<div style="background:#171717;color:#43ffa1;border-radius:16px;padding:15px;text-align:center;"><h2>EDM</h2><p>Drop the bass!</p></div>`,
+      techno: `<div style="background:#000214;color:#00eaff;border-radius:16px;padding:15px;text-align:center;"><h2>Techno</h2><p>Beat, rave & puls.</p></div>`,
+      house: `<div style="background:#d9fff0;color:#1cd84d;border-radius:16px;padding:15px;text-align:center;"><h2>House</h2><p>Pumpande klubbmusik.</p></div>`,
+      reggae: `<div style="background:#fefcce;color:#0d9600;border-radius:16px;padding:15px;text-align:center;"><h2>Reggae</h2><p>Peace, love & vibes.</p></div>`,
+      blues: `<div style="background:#dbe7ff;color:#2b3d76;border-radius:16px;padding:15px;text-align:center;"><h2>Blues</h2><p>Känsla, gitarr & själ.</p></div>`,
+      country: `<div style="background:#ffeedd;color:#c7761b;border-radius:16px;padding:15px;text-align:center;"><h2>Country</h2><p>Boots, hatt & kärlek.</p></div>`,
+      indie: `<div style="background:#ffe2e2;color:#264586;border-radius:16px;padding:15px;text-align:center;"><h2>Indie</h2><p>Eget sound, egen väg.</p></div>`,
+      synthwave: `<div style="background:#0e0526;color:#d600ff;border-radius:16px;padding:15px;text-align:center;"><h2>Synthwave</h2><p>Retro futurism & neon.</p></div>`,
+      punk: `<div style="background:#2d2d2d;color:#f50000;border-radius:16px;padding:15px;text-align:center;"><h2>Punk</h2><p>Uppror, nitar & snabb musik.</p></div>`,
+      rock: `<div style="background:#2a2020;color:#fff200;border-radius:16px;padding:15px;text-align:center;"><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>`,
+      romantik: `<div style="background:#fff0f6;color:#b8004b;border-radius:16px;padding:15px;text-align:center;"><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>`
     };
 
-    // ----- Options till select -----
-    const dec = {
-      "50s": {sv:"50-tal", en:"50s"}, "60s": {sv:"60-tal", en:"60s"}, "70s": {sv:"70-tal", en:"70s"},
-      "80s": {sv:"80-tal", en:"80s"}, "90s": {sv:"90-tal", en:"90s"}, "y2k": {sv:"Y2K", en:"Y2K"},
-      "2010s": {sv:"2010-tal", en:"2010s"}, "2020s": {sv:"2020-tal", en:"2020s"}
-    };
-    const life = {
-      goth: {sv:"Goth", en:"Goth"}, emo: {sv:"Emo", en:"Emo"}, vampyr: {sv:"Vampyr", en:"Vampire"},
-      metalhead: {sv:"Metalhead", en:"Metalhead"}, hårdrockare: {sv:"Hårdrockare", en:"Hard Rocker"},
-      skate: {sv:"Skate", en:"Skater"}, gamer: {sv:"Gamer", en:"Gamer"}, anime: {sv:"Anime", en:"Anime"},
-      steampunk: {sv:"Steampunk", en:"Steampunk"}, boho: {sv:"Boho", en:"Boho"}, raggare: {sv:"Raggare", en:"Greaser"},
-      rockabilly: {sv:"Rockabilly", en:"Rockabilly"}, streetracer: {sv:"Streetracer", en:"Street Racer"},
-      nerd: {sv:"Nörd", en:"Nerd"}, fitness: {sv:"Träningsprofil", en:"Fitness"}, urbanexplorer: {sv:"Urban Explorer", en:"Urban Explorer"},
-      fantasy: {sv:"Fantasy", en:"Fantasy"}, vintage: {sv:"Vintage", en:"Vintage"}, retro: {sv:"Retro", en:"Retro"},
-      streetwear: {sv:"Streetwear", en:"Streetwear"}, hacker: {sv:"Hacker", en:"Hacker"}, darkacademia: {sv:"Dark Academia", en:"Dark Academia"},
-    };
-    const music = {
-      pop: {sv:"Pop", en:"Pop"}, hiphop: {sv:"Hiphop", en:"Hip hop"}, jazz: {sv:"Jazz", en:"Jazz"}, disco: {sv:"Disco", en:"Disco"},
-      metal: {sv:"Metal", en:"Metal"}, edm: {sv:"EDM", en:"EDM"}, techno: {sv:"Techno", en:"Techno"}, house: {sv:"House", en:"House"},
-      reggae: {sv:"Reggae", en:"Reggae"}, blues: {sv:"Blues", en:"Blues"}, country: {sv:"Country", en:"Country"}, indie: {sv:"Indie", en:"Indie"},
-      synthwave: {sv:"Synthwave", en:"Synthwave"}, punk: {sv:"Punk", en:"Punk"}, rock: {sv:"Rock", en:"Rock"}, romantik: {sv:"Romantik", en:"Romantic"}
-    };
+    // Lista med teman, grupperat i ordning
+    const dec = { "50s":"50-tal", "60s":"60-tal", "70s":"70-tal", "80s":"80-tal", "90s":"90-tal", "y2k":"Y2K", "2010s":"2010-tal", "2020s":"2020-tal" };
+    const life = { goth:"Goth", emo:"Emo", vampyr:"Vampyr", metalhead:"Metalhead", hårdrockare:"Hårdrockare", skate:"Skate", gamer:"Gamer", anime:"Anime", steampunk:"Steampunk", boho:"Boho", raggare:"Raggare", rockabilly:"Rockabilly", streetracer:"Streetracer", nerd:"Nörd", fitness:"Träningsprofil", urbanexplorer:"Urban Explorer", fantasy:"Fantasy", vintage:"Vintage", retro:"Retro", streetwear:"Streetwear", hacker:"Hacker", darkacademia:"Dark Academia" };
+    const music = { pop:"Pop", hiphop:"Hiphop", jazz:"Jazz", disco:"Disco", metal:"Metal", edm:"EDM", techno:"Techno", house:"House", reggae:"Reggae", blues:"Blues", country:"Country", indie:"Indie", synthwave:"Synthwave", punk:"Punk", rock:"Rock", romantik:"Romantik" };
 
+    // Ladda in alla teman i dropdown
     const themeSelect = document.getElementById("theme");
-    themeSelect.innerHTML = "";
+    themeSelect.innerHTML = ""; // Töm först
     themeSelect.appendChild(new Option(lang === "en" ? "Custom code (advanced!)" : "Egen kod (avancerat!)", "custom"));
-    Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key][lang], key)));
-    Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key][lang], key)));
-    Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key][lang], key)));
+    Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key], key)));
+    Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key], key)));
+    Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key], key)));
 
-    // Vid tema-val: byt kod automatiskt
+    // Vid tema-val – byt kod automatiskt
     themeSelect.addEventListener('change', function(e) {
       document.getElementById('custom-code').value = themeTemplates[e.target.value] || "";
     });
 
-    // ------ Sparning & laddning --------
+    // Spara profil – även när man byter tema eller kod
     let currentUser = null;
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) return location.href = "login.html";
-      currentUser = user;
-      document.getElementById('profile-email').innerText = "E-post: " + (user.email || "");
-      const snap = await getDoc(doc(db, "profiles", user.uid));
-      if (snap.exists()) {
-        const data = snap.data();
-        document.getElementById('custom-code').value = data.profileCode || "";
-        if (data.profileTheme) themeSelect.value = data.profileTheme;
-      }
+    import('https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js').then(() => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          currentUser = user;
+          document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
+          const snap = await getDoc(doc(db, "profiles", user.uid));
+          if (snap.exists()) {
+            const data = snap.data();
+            document.getElementById('nickname').value = data.nickname || '';
+            if (data.profileTheme) themeSelect.value = data.profileTheme;
+            document.getElementById('custom-code').value = data.profileCode || '';
+          }
+        }
+      });
     });
 
-    document.getElementById('saveBtn').onclick = async () => {
-      if (!currentUser) return alert("Du är inte inloggad.");
-      await setDoc(doc(db, "profiles", currentUser.uid), {
-        profileCode: document.getElementById('custom-code').value,
-        profileTheme: themeSelect.value
-      }, { merge: true });
-      const notice = document.getElementById('saveNotice');
-      notice.style.display = "block";
-      setTimeout(() => notice.style.display = "none", 2300);
-    };
-
-    window.goToProfileView = function() {
-      if (!currentUser) return alert("Du är inte inloggad.");
-      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
-    };
-
-    // Nickname-logik (från din förra kod)
+    // Spara smeknamn
     document.getElementById('saveNicknameBtn').onclick = async () => {
-      if (!currentUser) return alert("Du är inte inloggad.");
+      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
       const newNick = document.getElementById('nickname').value.trim();
       if (!newNick) {
-        document.getElementById('nicknameStatus').textContent = "Du måste ange ett smeknamn.";
+        document.getElementById('nicknameStatus').textContent = lang === "en" ? "You must enter a nickname." : "Du måste ange ett smeknamn.";
         return;
       }
       const q = query(collection(db, "profiles"), where("nickname", "==", newNick));
@@ -231,14 +233,47 @@
       let taken = false;
       snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
       if (taken) {
-        document.getElementById('nicknameStatus').textContent = "Smeknamnet är upptaget!";
+        document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname is already taken!" : "Smeknamnet är upptaget!";
         return;
       }
       await setDoc(doc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
       document.getElementById('nicknameStatus').style.color = "#00ff00";
-      document.getElementById('nicknameStatus').textContent = "Smeknamn sparat!";
+      document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname saved!" : "Smeknamn sparat!";
       setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
     };
+
+    // Spara profilkod och tema
+    document.getElementById('saveBtn').onclick = async () => {
+      if (!currentUser) return;
+      await setDoc(doc(db, "profiles", currentUser.uid), {
+        profileCode: document.getElementById('custom-code').value,
+        profileTheme: themeSelect.value
+      }, { merge: true });
+      document.getElementById('saveNotice').style.display = "block";
+      setTimeout(() => document.getElementById('saveNotice').style.display = "none", 3000);
+    };
+
+    // Visa profil
+    window.goToProfileView = function() {
+      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
+    };
+
+    // Förhandsgranska profil i helskärm (lokalt)
+    const preview = document.getElementById("fullscreenPreview");
+    const profileContent = document.getElementById("profileContent");
+    const editBtn = document.getElementById("editProfileBtn");
+    document.getElementById('btn-view-profile').addEventListener('click', () => {
+      profileContent.innerHTML = document.getElementById('custom-code').value;
+      preview.classList.remove("hidden");
+      editBtn.classList.remove("hidden");
+    });
+    editBtn.addEventListener("click", () => { preview.classList.add("hidden"); });
+
+    // Logga ut
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      auth.signOut().then(() => location.href = "login.html");
+    });
   </script>
 </body>
 </html>
