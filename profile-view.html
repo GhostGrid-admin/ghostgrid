@@ -347,7 +347,6 @@
         }
       });
       // Lägg till i ny reaktion om den inte redan var satt
-      const key = type + "Users";
       if (!profileReactions[type].includes(userId)) {
         profileReactions[type].push(userId);
       }
@@ -364,13 +363,12 @@
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
       // Ta bort användaren från alla reaktionslistor
       ["picHeartUsers", "picThumbUsers", "picSmileUsers"].forEach(field => {
-        if (picReactions[field.replace("pic", "").toLowerCase()].includes(userId)) {
-          picReactions[field.replace("pic", "").toLowerCase()] =
-            picReactions[field.replace("pic", "").toLowerCase()].filter(uid => uid !== userId);
+        const arrKey = field.replace("pic", "").toLowerCase();
+        if (picReactions[arrKey].includes(userId)) {
+          picReactions[arrKey] = picReactions[arrKey].filter(uid => uid !== userId);
         }
       });
       // Lägg till i ny reaktion om den inte redan var satt
-      const key = "pic" + type.charAt(0).toUpperCase() + type.slice(1) + "Users";
       if (!picReactions[type].includes(userId)) {
         picReactions[type].push(userId);
       }
