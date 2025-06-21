@@ -274,8 +274,8 @@
       const data = snap.data();
       // PROFILBILD
       let profileHtml = '';
-      if (data.profilePic) {
-        profileHtml += `<img src="${data.profilePic}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+      if (data.profilePicUrl) {
+        profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
       }
       // PROFILKOD/HTML
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
