@@ -110,12 +110,64 @@
     // Teman – decennium, subkulturer, musik + några till
     const themeTemplates = {
       custom: "",
-      "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; max-width:700px; margin:40px auto; text-align:center;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/1950s_Diner.jpg" alt="50-tals diner" style="width:90%;border-radius:14px;box-shadow:0 0 22px #cc006633;">
-        <h2 style="font-family:'Pacifico',cursive;color:#cc0066;font-size:2.1em;margin-top:14px;">🍦 50-talets Stjärna</h2>
-        <p style="font-family:'Courier New',monospace;color:#333;">Sockersöt, klassisk och med rock'n'roll i hjärtat!</p>
-        <div style="margin-top:10px;color:#552266;font-family:monospace;">Elvis, jukebox & milkshakes på diner.<br>Frihet, stil & nya drömmar!</div>
-      </div>`,
+      "50s": `<div style="
+  background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%);
+  border-radius: 30px;
+  padding: 44px 28px 38px 28px;
+  margin: 40px auto 0 auto;
+  max-width: 950px;
+  box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66;
+  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+">
+  <!-- Jukebox och aliasraden -->
+  <div style="display: flex; align-items: center; gap: 24px;">
+    <img src='https://cdn.pixabay.com/photo/2013/07/13/13/41/jukebox-161885_1280.png' alt="Jukebox" style="width:72px; height:72px; border-radius:15px; background:#ffeabf; border: 2.5px solid #f8549a; box-shadow: 0 0 18px #ff8cce;">
+    <div>
+      <div style="font-size:1.95em; color:#f8549a; font-family:'Pacifico', cursive, monospace; letter-spacing:1.2px;">
+        <span style="color:#00baff">Alias:</span>
+        <span style="color:#f8549a;">{{smeknamn}}</span>
+      </div>
+      <div style="font-size:1.13em; color:#2d2d2d; margin-top:8px; font-family:'Share Tech Mono', monospace;">
+        <!-- Könsneutral beskrivning -->
+        Retroälskare & vän av vinyl, milkshake och dansgolv
+      </div>
+    </div>
+  </div>
+
+  <!-- Diner-detaljer och presentation -->
+  <div style="margin:30px 0 0 8px; line-height:1.66; color:#402a3c; font-size:1.11em; background:rgba(255,255,255,0.78); border-radius:16px; box-shadow:0 0 12px #ffd2d2cc; padding:20px 30px 24px 22px;">
+    <b style="color:#f8549a;">Vem är {{smeknamn}}?</b><br>
+    <span style="color:#ff0080">
+      Här hittar du en riktig 50-talsentusiast med förkärlek för rock'n'roll, pasteller och jukeboxens ljuva toner. Lever för milkshakes, dans och stjärnklara sommarkvällar på en amerikansk diner.
+    </span>
+    <br><br>
+    <b style="color:#00baff;">Favoriter:</b><br>
+    🍔 Hamburgare<br>
+    🥤 Milkshake (jordgubb, såklart!)<br>
+    🎶 Sockhop, jukebox & vinyl<br><br>
+
+    <span style="color:#fff;background:#00baff;padding:7px 13px 7px 13px;border-radius:9px;display:inline-block;font-size:1em; box-shadow:0 0 7px #00baff99;">
+      Här är alla välkomna – så länge du gillar glada toner, respekt och en gnutta nostalgi!
+    </span>
+    <br><br>
+    <b style="color:#f8549a;">Citat:</b><br>
+    <span style="color:#00baff;">"Varje dag är en chans till en extra körsbär på toppen!"</span><br>
+    <span style="color:#f8549a;">#JukeboxLife #RetroSoul #DansPåGolvet</span>
+  </div>
+
+  <!-- Milkshake och stjärnor längst ner -->
+  <div style="margin-top:40px; display:flex; align-items:center; gap:20px; justify-content:center;">
+    <img src="https://cdn.pixabay.com/photo/2012/04/01/17/01/beverage-23703_1280.png" alt="Milkshake" style="width:54px;height:54px;filter:drop-shadow(0 0 12px #fff3);">
+    <span style="font-size:1.25em;color:#f8549a;font-family:'Pacifico',cursive;">Let's twist!</span>
+    <span style="font-size:2em;color:#ffe500;text-shadow:0 0 8px #fffa;">★ ★ ★</span>
+  </div>
+  <div style="margin-top:18px;text-align:center;font-size:1em;color:#bbb;">Din 50-talsprofil &copy; <span style="color:#00baff">GhostGrid</span></div>
+</div>`,
       "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;">
         <h2 style="color:#ff8800;font-family:'Dancing Script',cursive;font-size:2em;">✌️ 60-talets Frihetsdröm</h2>
         <p style="color:#333;">Flower power, fred & musik!</p>
