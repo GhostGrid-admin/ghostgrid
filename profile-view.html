@@ -89,7 +89,8 @@
       width: 100%;
       min-height: 340px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
       margin: 0 auto;
       transition: box-shadow 0.3s;
@@ -97,6 +98,17 @@
       border-radius: 28px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
       padding: 38px 22px;
+    }
+    .profile-picture {
+      width: 135px;
+      height: 135px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 30px;
+      box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
+      border: 3px solid #0ff;
+      background: #111;
+      display: block;
     }
     .reaction-float {
       position: fixed;
@@ -196,6 +208,7 @@
       .reklam-float.left { left: 5px; }
       .reklam-float.right { right: 5px; }
       .reklam-float img { width: 26px; height: 26px; }
+      .profile-picture { width: 88px; height: 88px; }
     }
   </style>
 </head>
@@ -259,7 +272,15 @@
         return;
       }
       const data = snap.data();
-      profileOut.innerHTML = data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
+      // PROFILBILD
+      let profileHtml = '';
+      if (data.profilePic) {
+        profileHtml += `<img src="${data.profilePic}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+      }
+      // PROFILKOD/HTML
+      profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
+      profileOut.innerHTML = profileHtml;
+
       // --------- Sätt in ALIAS på alla rätta ställen ---------
       const nickname = data.nickname || "";
       document.querySelectorAll('.profile-alias').forEach(el => el.textContent = nickname);
