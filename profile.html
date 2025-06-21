@@ -187,7 +187,121 @@
     // ---- LÅNG obj: themeTemplates ----
     const themeTemplates = {
       custom: "",
-      "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+      "50s": `<div id="fiftiesProfile"></div>
+<script>
+const lang = localStorage.getItem('lang') || 'sv';
+const profile = {
+  sv: {
+    title: "50's Vibes",
+    subtitle: "Milkshake, rock 'n roll & jukebox magic!",
+    slogans: [
+      '"Stoppa ett mynt i jukeboxen – glöm dina bekymmer!"',
+      '"Dansa som ingen ser dig – retro är alltid rätt."',
+      '"Retro är en känsla, inte ett årtal!"',
+      '"Alltid plats för en milkshake till."'
+    ],
+    music: "Musik",
+    milkshake: "Milkshake",
+    cruising: "Cruisin’",
+    welcome: "Välkommen till den gladaste tiden!",
+    mood: 'Dansgolv, milkshakes, vänskap och nostalgi på menyn.',
+    life: '”Livet är en jukebox – välj din låt och kör!”'
+  },
+  en: {
+    title: "50's Vibes",
+    subtitle: "Milkshake, rock 'n roll & jukebox magic!",
+    slogans: [
+      '"Put another dime in the jukebox, baby!"',
+      '"Dance like nobody’s watching – retro always fits."',
+      '"Retro is a mood, not a decade!"',
+      '"There’s always room for one more milkshake."'
+    ],
+    music: "Music",
+    milkshake: "Milkshake",
+    cruising: "Cruisin’",
+    welcome: "Welcome to the happiest time!",
+    mood: "Dance floors, milkshakes, friendship & nostalgia on the menu.",
+    life: '"Life’s a jukebox – pick your song and go!"'
+  }
+}[lang];
+
+document.getElementById('fiftiesProfile').innerHTML = `
+<div style="background: linear-gradient(120deg, #fdf6f0 60%, #ffe6f9 100%); border-radius: 42px; padding: 54px 32px 48px 32px; margin: 36px auto 0 auto; max-width: 980px; min-height: 520px; box-shadow: 0 0 96px #fd49a799, 0 0 32px #3de7e866; position: relative; font-family: 'Quicksand', 'Fira Mono', 'Courier New', monospace;">
+  <!-- Vinyl vänster -->
+  <div style="position:absolute; left:-68px; top:40px; width:110px; height:110px; background:radial-gradient(circle at 45% 45%, #fff 18%, #fd49a7 23%, #f5cdd2 60%, #321d37 75%); border-radius:50%; box-shadow:0 0 26px #f5cdd2;">
+    <div style="position:absolute; left:39px; top:39px; width:34px; height:34px; background: #e6e6e6; border-radius:50%; box-shadow:0 0 6px #fff;"></div>
+    <div style="position:absolute; left:52px; top:52px; width:9px; height:9px; background:#321d37; border-radius:50%;"></div>
+  </div>
+  <!-- Vinyl höger -->
+  <div style="position:absolute; right:-68px; bottom:34px; width:110px; height:110px; background:radial-gradient(circle at 55% 45%, #fff 19%, #38e7f3 25%, #b1f5f3 62%, #321d37 78%); border-radius:50%; box-shadow:0 0 28px #b1f5f3;">
+    <div style="position:absolute; left:39px; top:39px; width:34px; height:34px; background: #fdf6f0; border-radius:50%; box-shadow:0 0 6px #fff;"></div>
+    <div style="position:absolute; left:52px; top:52px; width:9px; height:9px; background:#321d37; border-radius:50%;"></div>
+  </div>
+  <!-- Retro rubrik -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <span style="font-size:2.45em; font-weight:700; color:#fd49a7; letter-spacing:2px; text-shadow:0 0 16px #fff, 0 0 20px #3de7e8;">
+      <span style="font-family:'Fira Mono','Courier New',monospace;">●</span> ${profile.title} <span style="font-family:'Fira Mono','Courier New',monospace;">●</span>
+    </span>
+    <br>
+    <span style="font-size:1.17em; font-weight:600; color:#321d37; background: #f5cdd2; padding:7px 24px; border-radius:16px; margin-top:12px; box-shadow:0 0 14px #fff7;">
+      ${profile.subtitle}
+    </span>
+  </div>
+
+  <!-- Retrofigurer -->
+  <div style="display:flex; justify-content:center; align-items:center; gap:40px; margin:32px auto 10px auto; flex-wrap:wrap;">
+    <!-- Milkshake -->
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:60px;height:80px;position:relative;">
+        <div style="position:absolute;bottom:0;left:12px;width:36px;height:50px;background:#fff0f8;border-radius:16px 16px 20px 20px/24px 24px 18px 18px;box-shadow:0 2px 8px #fd49a766;"></div>
+        <div style="position:absolute;top:10px;left:20px;width:20px;height:26px;background:#fd49a7;border-radius:50% 50% 30% 30%/38% 38% 70% 70%;"></div>
+        <div style="position:absolute;top:0;left:27px;width:8px;height:20px;background:#fff;border-radius:60% 60% 40% 40%/50% 50% 60% 60%;"></div>
+        <div style="position:absolute;top:20px;left:22px;width:16px;height:8px;background:#fde2ed;border-radius:8px 8px 6px 6px;"></div>
+        <div style="position:absolute;top:4px;left:39px;width:4px;height:28px;background:#3de7e8;border-radius:2px;"></div>
+        <div style="position:absolute;bottom:2px;left:18px;width:24px;height:10px;background:#321d37;border-radius:9px;opacity:.22;"></div>
+      </div>
+      <span style="font-size:.98em;color:#fd49a7;margin-top:2px;">${profile.milkshake}</span>
+    </div>
+    <!-- Musiknot -->
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:55px;height:65px;position:relative;">
+        <svg width="55" height="65" viewBox="0 0 55 65"><ellipse cx="28" cy="48" rx="17" ry="12" fill="#3de7e8" opacity="0.45"/><ellipse cx="24" cy="36" rx="9" ry="16" fill="#321d37"/><rect x="21" y="12" width="6" height="24" rx="3" fill="#321d37"/><circle cx="24" cy="12" r="6" fill="#fd49a7" stroke="#fff" stroke-width="3"/></svg>
+      </div>
+      <span style="font-size:.97em;color:#3de7e8;margin-top:2px;">${profile.music}</span>
+    </div>
+    <!-- Bil -->
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:68px;height:38px;position:relative;">
+        <div style="position:absolute;left:6px;bottom:0;width:56px;height:22px;background:#38e7f3;border-radius:16px 16px 18px 18px/18px 18px 18px 18px;box-shadow:0 2px 6px #3de7e844;"></div>
+        <div style="position:absolute;left:16px;top:5px;width:36px;height:18px;background:#fff0f8;border-radius:9px 9px 15px 15px/12px 12px 18px 18px;"></div>
+        <div style="position:absolute;left:12px;bottom:-3px;width:14px;height:14px;background:#321d37;border-radius:50%;"></div>
+        <div style="position:absolute;right:12px;bottom:-3px;width:14px;height:14px;background:#321d37;border-radius:50%;"></div>
+      </div>
+      <span style="font-size:.97em;color:#38e7f3;margin-top:2px;">${profile.cruising}</span>
+    </div>
+  </div>
+
+  <!-- SLOGANS -->
+  <div style="margin:30px auto 0 auto; max-width:560px; text-align:center;">
+    <span style="display:block;font-size:1.22em;font-family:'Fira Mono','Courier New',monospace;font-weight:600;color:#fd49a7;letter-spacing:1px;text-shadow:0 0 8px #fff7;">${profile.slogans[0]}</span>
+    <span style="display:block;font-size:1.13em;color:#321d37;margin-top:8px;font-weight:500;">${profile.slogans[1]}</span>
+    <span style="display:block;font-size:1.07em;color:#38e7f3;margin-top:8px;">${profile.slogans[2]}</span>
+    <span style="display:block;font-size:.99em;color:#888;margin-top:7px;">${profile.slogans[3]}</span>
+  </div>
+  <!-- Prickigt rutmönster och beskrivning -->
+  <div style="margin:34px auto 0 auto; max-width:610px; padding:24px 30px 22px 30px; background: repeating-radial-gradient(circle, #fff 2.5px, #ffe6f9 4px, transparent 8px); border-radius:20px; box-shadow:0 0 24px #38e7f388;">
+    <p style="font-size:1.13em; color:#222; font-family:'Quicksand','Fira Mono','Courier New',monospace; margin:0; text-align:center; line-height:1.7;">
+      <b style="color:#fd49a7;">${profile.welcome}</b>  
+      <br>${profile.mood}
+      <br>
+      <span style="color:#321d37;">${profile.life}</span>
+    </p>
+  </div>
+  <!-- Dekor streck nedtill -->
+  <div style="width:60%;height:3px;background:linear-gradient(90deg,#fd49a7,#fff,#38e7f3);margin:38px auto 0 auto;border-radius:4px;opacity:0.77;"></div>
+</div>
+`;
+</script>`,
       "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff8800'>60-talets Frihetsdröm</h2><p>Flower power, fred & musik!</p></div>`,
       "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#bb8800'>70-tals Groove</h2><p>Disco, peace & flower power!</p></div>`,
       "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff44ee'>80-tals Neon</h2><p>Synthwave, pastell & axelvaddar!</p></div>`,
