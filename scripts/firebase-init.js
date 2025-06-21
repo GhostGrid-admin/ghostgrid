@@ -9,17 +9,17 @@ const firebaseConfig = {
   apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
   authDomain: "ghostgrid-fb278.firebaseapp.com",
   projectId: "ghostgrid-fb278",
-  storageBucket: "ghostgrid-fb278.appspot.com",
+  storageBucket: "ghostgrid-fb278.firebasestorage.app",
   messagingSenderId: "283208202937",
   appId: "1:283208202937:web:11c0cea81fd18a31163968"
 };
 
-const app  = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db   = getFirestore(app);
+const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Detta är bara för debug/felsökning:
+// Debug/felsökning:
 onAuthStateChanged(auth, user => {
   console.log(user ? `Inloggad som ${user.email}` : "Ingen användare inloggad");
 });
