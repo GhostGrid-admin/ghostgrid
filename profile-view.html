@@ -134,6 +134,11 @@
       color: #fff;
       transition: transform 0.2s;
     }
+    .reaction-btn.selected {
+      filter: brightness(2);
+      text-shadow: 0 0 8px #00ffd0, 0 0 4px #fff;
+      transform: scale(1.3);
+    }
     .reaction-btn:hover {
       transform: scale(1.3);
     }
@@ -221,8 +226,6 @@
     navLinks.innerHTML = menuItems[lang].map(
       m => `<a href="${m.href}">${m.label}</a>`
     ).join("");
-
-    // Hamburger-meny
     const menuBtn = document.getElementById("menuBtn");
     menuBtn.onclick = () => navLinks.classList.toggle("active");
     navLinks.querySelectorAll('a').forEach(a =>
@@ -234,8 +237,9 @@
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
     let userId = null;
-    let heartUsers = [], thumbUsers = [];
-    let picHeartUsers = [], picSmileUsers = [];
+    // Bara EN reaktion per användare/profil och profilbild
+    let profileReactions = { heart: [], thumb: [], smile: [] };
+    let picReactions = { heart: [], thumb: [], smile: [] };
 
     async function renderProfile() {
       const snap = await getDoc(profileRef);
@@ -244,6 +248,12 @@
         return;
       }
       const data = snap.data();
+      profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
+      profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
+      profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
+      picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
+      picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
+      picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
       let profileHtml = '';
       // PROFILBILD + REAKTIONER
       if (data.profilePicUrl) {
@@ -253,10 +263,12 @@
           </div>
           <div class="pic-reactions">
             <div>${lang === 'sv' ? 'Lämna en reaktion på profilbilden:' : 'React to profile picture:'}</div>
-            <button class="reaction-btn" id="pic-heart" title="Gilla profilbild ❤️">❤️</button>
-            <span id="pic-heart-count">0</span>
-            <button class="reaction-btn" id="pic-smile" title="Glad för bilden 😄">😄</button>
-            <span id="pic-smile-count">0</span>
+            <button class="reaction-btn" id="pic-heart" title="❤️">❤️</button>
+            <span id="pic-heart-count">${picReactions.heart.length}</span>
+            <button class="reaction-btn" id="pic-thumb" title="👍">👍</button>
+            <span id="pic-thumb-count">${picReactions.thumb.length}</span>
+            <button class="reaction-btn" id="pic-smile" title="😄">😄</button>
+            <span id="pic-smile-count">${picReactions.smile.length}</span>
           </div>
         `;
       }
@@ -266,10 +278,12 @@
       profileHtml += `
         <div class="profile-reactions">
           <div>${lang === 'sv' ? 'Gilla hela profilen:' : 'React to profile:'}</div>
-          <button class="reaction-btn" id="like-heart" title="❤️ Hjärta profilen">❤️</button>
-          <span class="reaction-count" id="count-heart">0</span>
-          <button class="reaction-btn" id="like-thumb" title="👍 Tumme upp">👍</button>
-          <span class="reaction-count" id="count-thumb">0</span>
+          <button class="reaction-btn" id="like-heart" title="❤️">❤️</button>
+          <span class="reaction-count" id="count-heart">${profileReactions.heart.length}</span>
+          <button class="reaction-btn" id="like-thumb" title="👍">👍</button>
+          <span class="reaction-count" id="count-thumb">${profileReactions.thumb.length}</span>
+          <button class="reaction-btn" id="like-smile" title="😄">😄</button>
+          <span class="reaction-count" id="count-smile">${profileReactions.smile.length}</span>
         </div>
         <div class="ads-wrapper">
           <div class="ad-left">
@@ -288,60 +302,98 @@
       </div>`;
       profileOut.innerHTML = profileHtml;
 
-      // Alias
-      const nickname = data.nickname || "";
-      document.querySelectorAll('.profile-alias').forEach(el => el.textContent = nickname);
-
-      // Ladda reaktioner
-      heartUsers = Array.isArray(data.heartUsers) ? data.heartUsers : [];
-      thumbUsers = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
-      picHeartUsers = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
-      picSmileUsers = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
-
-      document.getElementById('count-heart').innerText = heartUsers.length;
-      document.getElementById('count-thumb').innerText = thumbUsers.length;
-      document.getElementById('pic-heart-count').innerText = picHeartUsers.length;
-      document.getElementById('pic-smile-count').innerText = picSmileUsers.length;
-
       updateReactionUI();
       setupReactionEvents();
     }
     renderProfile();
 
+    function getMyProfileReaction() {
+      if (!userId) return null;
+      if (profileReactions.heart.includes(userId)) return "heart";
+      if (profileReactions.thumb.includes(userId)) return "thumb";
+      if (profileReactions.smile.includes(userId)) return "smile";
+      return null;
+    }
+    function getMyPicReaction() {
+      if (!userId) return null;
+      if (picReactions.heart.includes(userId)) return "heart";
+      if (picReactions.thumb.includes(userId)) return "thumb";
+      if (picReactions.smile.includes(userId)) return "smile";
+      return null;
+    }
+
     function updateReactionUI() {
-      if (!userId) return;
-      document.getElementById('like-heart').style.opacity = heartUsers.includes(userId) ? "1" : "0.7";
-      document.getElementById('like-thumb').style.opacity = thumbUsers.includes(userId) ? "1" : "0.7";
-      document.getElementById('pic-heart').style.opacity = picHeartUsers.includes(userId) ? "1" : "0.7";
-      document.getElementById('pic-smile').style.opacity = picSmileUsers.includes(userId) ? "1" : "0.7";
+      // Profil
+      const myProfileReaction = getMyProfileReaction();
+      ["heart", "thumb", "smile"].forEach(type => {
+        const btn = document.getElementById('like-' + type);
+        if (btn) btn.classList.toggle('selected', myProfileReaction === type);
+      });
+      // Profilbild
+      const myPicReaction = getMyPicReaction();
+      ["heart", "thumb", "smile"].forEach(type => {
+        const btn = document.getElementById('pic-' + type);
+        if (btn) btn.classList.toggle('selected', myPicReaction === type);
+      });
     }
-    async function toggleReaction(type) {
+
+    async function setProfileReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
-      const snap = await getDoc(profileRef);
-      const data = snap.data() || {};
-      let arr = Array.isArray(data[type]) ? data[type] : [];
-      if (arr.includes(userId)) {
-        arr = arr.filter(uid => uid !== userId);
-      } else {
-        arr.push(userId);
+      // Ta bort användaren från alla reaktionslistor
+      ["heartUsers", "thumbUsers", "smileUsers"].forEach(field => {
+        if (profileReactions[field.replace("Users", "")].includes(userId)) {
+          profileReactions[field.replace("Users", "")] =
+            profileReactions[field.replace("Users", "")].filter(uid => uid !== userId);
+        }
+      });
+      // Lägg till i ny reaktion om den inte redan var satt
+      const key = type + "Users";
+      if (!profileReactions[type].includes(userId)) {
+        profileReactions[type].push(userId);
       }
-      await updateDoc(profileRef, { [type]: arr });
-      if (type === "heartUsers") heartUsers = arr;
-      if (type === "thumbUsers") thumbUsers = arr;
-      if (type === "picHeartUsers") picHeartUsers = arr;
-      if (type === "picSmileUsers") picSmileUsers = arr;
-      document.getElementById('count-heart').innerText = heartUsers.length;
-      document.getElementById('count-thumb').innerText = thumbUsers.length;
-      document.getElementById('pic-heart-count').innerText = picHeartUsers.length;
-      document.getElementById('pic-smile-count').innerText = picSmileUsers.length;
-      updateReactionUI();
+      // Spara
+      await updateDoc(profileRef, {
+        heartUsers: profileReactions.heart,
+        thumbUsers: profileReactions.thumb,
+        smileUsers: profileReactions.smile
+      });
+      renderProfile();
     }
+
+    async function setPicReaction(type) {
+      if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
+      // Ta bort användaren från alla reaktionslistor
+      ["picHeartUsers", "picThumbUsers", "picSmileUsers"].forEach(field => {
+        if (picReactions[field.replace("pic", "").toLowerCase()].includes(userId)) {
+          picReactions[field.replace("pic", "").toLowerCase()] =
+            picReactions[field.replace("pic", "").toLowerCase()].filter(uid => uid !== userId);
+        }
+      });
+      // Lägg till i ny reaktion om den inte redan var satt
+      const key = "pic" + type.charAt(0).toUpperCase() + type.slice(1) + "Users";
+      if (!picReactions[type].includes(userId)) {
+        picReactions[type].push(userId);
+      }
+      // Spara
+      await updateDoc(profileRef, {
+        picHeartUsers: picReactions.heart,
+        picThumbUsers: picReactions.thumb,
+        picSmileUsers: picReactions.smile
+      });
+      renderProfile();
+    }
+
     function setupReactionEvents() {
-      document.getElementById('like-heart').onclick = () => toggleReaction("heartUsers");
-      document.getElementById('like-thumb').onclick = () => toggleReaction("thumbUsers");
-      document.getElementById('pic-heart').onclick = () => toggleReaction("picHeartUsers");
-      document.getElementById('pic-smile').onclick = () => toggleReaction("picSmileUsers");
+      // PROFIL
+      document.getElementById('like-heart').onclick = () => setProfileReaction("heart");
+      document.getElementById('like-thumb').onclick = () => setProfileReaction("thumb");
+      document.getElementById('like-smile').onclick = () => setProfileReaction("smile");
+      // PROFILBILD
+      document.getElementById('pic-heart').onclick = () => setPicReaction("heart");
+      document.getElementById('pic-thumb').onclick = () => setPicReaction("thumb");
+      document.getElementById('pic-smile').onclick = () => setPicReaction("smile");
     }
+
     onAuthStateChanged(auth, user => {
       userId = user ? user.uid : null;
       updateReactionUI();
