@@ -109,7 +109,6 @@
     import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
     // ----------- Alla teman FULL KOD -----------
-
     const dec = {
       "50s":"50-tal", "60s":"60-tal", "70s":"70-tal", "80s":"80-tal", "90s":"90-tal", 
       "y2k":"Y2K", "2010s":"2010-tal", "2020s":"2020-tal"
@@ -126,6 +125,7 @@
       house:"House", reggae:"Reggae", blues:"Blues", country:"Country", indie:"Indie", synthwave:"Synthwave",
       punk:"Punk", rock:"Rock", romantik:"Romantik"
     };
+    // ---- LÅNG obj: themeTemplates ----
     const themeTemplates = {
       custom: "",
       "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
@@ -175,6 +175,8 @@
       rock: `<div style="background:#2a2020;color:#fff200;border-radius:16px;padding:15px;text-align:center;"><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>`,
       romantik: `<div style="background:#fff0f6;color:#b8004b;border-radius:16px;padding:15px;text-align:center;"><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>`
     };
+
+    // ---- RESTEN AV DIN KOD OFÖRÄNDRAD (alla events och funktioner) ----
 
     const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
 
