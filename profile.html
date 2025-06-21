@@ -108,12 +108,12 @@
     import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
-    // Decennier
+    // ----------- Alla teman FULL KOD -----------
+
     const dec = {
       "50s":"50-tal", "60s":"60-tal", "70s":"70-tal", "80s":"80-tal", "90s":"90-tal", 
       "y2k":"Y2K", "2010s":"2010-tal", "2020s":"2020-tal"
     };
-    // Livsstilar
     const life = {
       goth:"Goth", emo:"Emo", vampyr:"Vampyr", metalhead:"Metalhead", hårdrockare:"Hårdrockare",
       skate:"Skate", gamer:"Gamer", anime:"Anime", steampunk:"Steampunk", boho:"Boho", raggare:"Raggare",
@@ -121,62 +121,59 @@
       urbanexplorer:"Urban Explorer", fantasy:"Fantasy", vintage:"Vintage", retro:"Retro",
       streetwear:"Streetwear", hacker:"Hacker", darkacademia:"Dark Academia"
     };
-    // Musikstilar
     const music = {
       pop:"Pop", hiphop:"Hiphop", jazz:"Jazz", disco:"Disco", metal:"Metal", edm:"EDM", techno:"Techno",
       house:"House", reggae:"Reggae", blues:"Blues", country:"Country", indie:"Indie", synthwave:"Synthwave",
       punk:"Punk", rock:"Rock", romantik:"Romantik"
     };
-
-    // PROFILKODER – KOPIERA TEMAN SOM DU HAFT TIDIGARE! (förkortat här)
     const themeTemplates = {
       custom: "",
-      "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;">...</div>`,
-      "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "2010s": `<div style="background:#e2f2ff; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      "2020s": `<div style="background:#181c21; border-radius:20px; padding:24px; text-align:center;">...</div>`,
-      goth: `<div style="background:#171717;color:#ba00d3;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      emo: `<div style="background:#333;color:#fe52a0;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      vampyr: `<div style="background:#2d0012;color:#ff0038;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      metalhead: `<div style="background:#19191a;color:#d8d8d8;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      hårdrockare: `<div style="background:#212121;color:#c00;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      skate: `<div style="background:#d7faff;color:#0d3d7f;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      gamer: `<div style="background:#222233;color:#55ccff;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      anime: `<div style="background:#ffe6f7;color:#c800b0;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      steampunk: `<div style="background:#453122;color:#fcd35f;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      boho: `<div style="background:#faf6e6;color:#a87328;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      raggare: `<div style="background:#233232;color:#faf211;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      rockabilly: `<div style="background:#ffedec;color:#d41039;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      streetracer: `<div style="background:#191919;color:#00fdff;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      nerd: `<div style="background:#f5f5ff;color:#3a0088;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      fitness: `<div style="background:#e2ffe2;color:#18c700;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      urbanexplorer: `<div style="background:#313c44;color:#62d0d9;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      fantasy: `<div style="background:#dfd3ff;color:#6a32b5;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      vintage: `<div style="background:#f9f4e2;color:#a1814c;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      retro: `<div style="background:#ffeebb;color:#d46b00;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      streetwear: `<div style="background:#0f0f0f;color:#00ff00;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      hacker: `<div style="background:#070707;color:#00ff99;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      darkacademia: `<div style="background:#292c2f;color:#eee;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      pop: `<div style="background:#ffedfa;color:#d700ad;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      hiphop: `<div style="background:#161515;color:#ffc312;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      jazz: `<div style="background:#e4e4e4;color:#6a4a1b;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      disco: `<div style="background:#d7d0ff;color:#a637cf;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      metal: `<div style="background:#222;color:#bbb;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      edm: `<div style="background:#171717;color:#43ffa1;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      techno: `<div style="background:#000214;color:#00eaff;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      house: `<div style="background:#d9fff0;color:#1cd84d;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      reggae: `<div style="background:#fefcce;color:#0d9600;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      blues: `<div style="background:#dbe7ff;color:#2b3d76;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      country: `<div style="background:#ffeedd;color:#c7761b;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      indie: `<div style="background:#ffe2e2;color:#264586;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      synthwave: `<div style="background:#0e0526;color:#d600ff;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      punk: `<div style="background:#2d2d2d;color:#f50000;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      rock: `<div style="background:#2a2020;color:#fff200;border-radius:16px;padding:15px;text-align:center;">...</div>`,
-      romantik: `<div style="background:#fff0f6;color:#b8004b;border-radius:16px;padding:15px;text-align:center;">...</div>`
+      "50s": `<div style="background: linear-gradient(135deg, #ffe3ea 0%, #ffeabf 100%); border-radius: 30px; padding: 44px 28px 38px 28px; margin: 40px auto 0 auto; max-width: 950px; box-shadow: 0 0 80px #ff8cce88, 0 0 12px #00d7ff66; font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; position: relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+      "60s": `<div style="background:#c1e1c1; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff8800'>60-talets Frihetsdröm</h2><p>Flower power, fred & musik!</p></div>`,
+      "70s": `<div style="background:#fcfbb6; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#bb8800'>70-tals Groove</h2><p>Disco, peace & flower power!</p></div>`,
+      "80s": `<div style="background:#cdf0ff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff44ee'>80-tals Neon</h2><p>Synthwave, pastell & axelvaddar!</p></div>`,
+      "90s": `<div style="background:#ffe9f9; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#0055bb'>90-tals Kid</h2><p>Gameboy, färgsprak & pogs!</p></div>`,
+      "y2k": `<div style="background:#f2faff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#ff22dd'>Y2K Millennium</h2><p>Tech, metallic & bling bling!</p></div>`,
+      "2010s": `<div style="background:#e2f2ff; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#1b8cff'>2010-talet</h2><p>Instagram, memes, hipsterkaffe & festivaler.</p></div>`,
+      "2020s": `<div style="background:#181c21; border-radius:20px; padding:24px; text-align:center;"><h2 style='color:#0ff'>2020-talet</h2><p>TikTok, AI, pandemi & digital frihet.</p></div>`,
+      goth: `<div style="background:#171717;color:#ba00d3;border-radius:16px;padding:15px;text-align:center;"><h2>Goth</h2><p>Mörker, mystik & svart läder.</p></div>`,
+      emo: `<div style="background:#333;color:#fe52a0;border-radius:16px;padding:15px;text-align:center;"><h2>Emo</h2><p>Feeling all the feels.</p></div>`,
+      vampyr: `<div style="background:#2d0012;color:#ff0038;border-radius:16px;padding:15px;text-align:center;"><h2>Vampyr</h2><p>Evigt nattliv.</p></div>`,
+      metalhead: `<div style="background:#19191a;color:#d8d8d8;border-radius:16px;padding:15px;text-align:center;"><h2>Metalhead</h2><p>Långt hår, nitar & höga riff.</p></div>`,
+      hårdrockare: `<div style="background:#212121;color:#c00;border-radius:16px;padding:15px;text-align:center;"><h2>Hårdrockare</h2><p>Skinnjacka & elgitarr.</p></div>`,
+      skate: `<div style="background:#d7faff;color:#0d3d7f;border-radius:16px;padding:15px;text-align:center;"><h2>Skate</h2><p>Brädor, ramper & street style.</p></div>`,
+      gamer: `<div style="background:#222233;color:#55ccff;border-radius:16px;padding:15px;text-align:center;"><h2>Gamer</h2><p>Game on! ⌨️🎮</p></div>`,
+      anime: `<div style="background:#ffe6f7;color:#c800b0;border-radius:16px;padding:15px;text-align:center;"><h2>Anime</h2><p>Kawaii, cosplay & manga.</p></div>`,
+      steampunk: `<div style="background:#453122;color:#fcd35f;border-radius:16px;padding:15px;text-align:center;"><h2>Steampunk</h2><p>Mässing, kugghjul & vintage tech.</p></div>`,
+      boho: `<div style="background:#faf6e6;color:#a87328;border-radius:16px;padding:15px;text-align:center;"><h2>Boho</h2><p>Fransar, jordnära färger & fri själ.</p></div>`,
+      raggare: `<div style="background:#233232;color:#faf211;border-radius:16px;padding:15px;text-align:center;"><h2>Raggare</h2><p>V8, jeansjacka & bilar från förr.</p></div>`,
+      rockabilly: `<div style="background:#ffedec;color:#d41039;border-radius:16px;padding:15px;text-align:center;"><h2>Rockabilly</h2><p>Pompadour, prickigt & rock'n'roll.</p></div>`,
+      streetracer: `<div style="background:#191919;color:#00fdff;border-radius:16px;padding:15px;text-align:center;"><h2>Streetracer</h2><p>Turbo, neon & snabba nätter.</p></div>`,
+      nerd: `<div style="background:#f5f5ff;color:#3a0088;border-radius:16px;padding:15px;text-align:center;"><h2>Nörd</h2><p>Kod, spel & fun facts!</p></div>`,
+      fitness: `<div style="background:#e2ffe2;color:#18c700;border-radius:16px;padding:15px;text-align:center;"><h2>Träningsprofil</h2><p>Stark kropp, stark själ.</p></div>`,
+      urbanexplorer: `<div style="background:#313c44;color:#62d0d9;border-radius:16px;padding:15px;text-align:center;"><h2>Urban Explorer</h2><p>Städer, ruiner & äventyr.</p></div>`,
+      fantasy: `<div style="background:#dfd3ff;color:#6a32b5;border-radius:16px;padding:15px;text-align:center;"><h2>Fantasy</h2><p>Drakar, magi & äventyr.</p></div>`,
+      vintage: `<div style="background:#f9f4e2;color:#a1814c;border-radius:16px;padding:15px;text-align:center;"><h2>Vintage</h2><p>Oldschool vibes.</p></div>`,
+      retro: `<div style="background:#ffeebb;color:#d46b00;border-radius:16px;padding:15px;text-align:center;"><h2>Retro</h2><p>80- och 90-tals känsla.</p></div>`,
+      streetwear: `<div style="background:#0f0f0f;color:#00ff00;border-radius:16px;padding:15px;text-align:center;"><h2>Streetwear</h2><p>Casual, cool & modern.</p></div>`,
+      hacker: `<div style="background:#070707;color:#00ff99;border-radius:16px;padding:15px;text-align:center;"><h2>Hacker</h2><p>#include &lt;din värld&gt; // root access granted</p></div>`,
+      darkacademia: `<div style="background:#292c2f;color:#eee;border-radius:16px;padding:15px;text-align:center;"><h2>Dark Academia</h2><p>Böcker, mystik & klassisk stil.</p></div>`,
+      pop: `<div style="background:#ffedfa;color:#d700ad;border-radius:16px;padding:15px;text-align:center;"><h2>Pop</h2><p>Catchy hooks & glitter.</p></div>`,
+      hiphop: `<div style="background:#161515;color:#ffc312;border-radius:16px;padding:15px;text-align:center;"><h2>Hiphop</h2><p>Beat, flow & streetpoesi.</p></div>`,
+      jazz: `<div style="background:#e4e4e4;color:#6a4a1b;border-radius:16px;padding:15px;text-align:center;"><h2>Jazz</h2><p>Sax, blås & lounge.</p></div>`,
+      disco: `<div style="background:#d7d0ff;color:#a637cf;border-radius:16px;padding:15px;text-align:center;"><h2>Disco</h2><p>Discokulor, glitter & groove.</p></div>`,
+      metal: `<div style="background:#222;color:#bbb;border-radius:16px;padding:15px;text-align:center;"><h2>Metal</h2><p>Tungt, snabbt & högt!</p></div>`,
+      edm: `<div style="background:#171717;color:#43ffa1;border-radius:16px;padding:15px;text-align:center;"><h2>EDM</h2><p>Drop the bass!</p></div>`,
+      techno: `<div style="background:#000214;color:#00eaff;border-radius:16px;padding:15px;text-align:center;"><h2>Techno</h2><p>Beat, rave & puls.</p></div>`,
+      house: `<div style="background:#d9fff0;color:#1cd84d;border-radius:16px;padding:15px;text-align:center;"><h2>House</h2><p>Pumpande klubbmusik.</p></div>`,
+      reggae: `<div style="background:#fefcce;color:#0d9600;border-radius:16px;padding:15px;text-align:center;"><h2>Reggae</h2><p>Peace, love & vibes.</p></div>`,
+      blues: `<div style="background:#dbe7ff;color:#2b3d76;border-radius:16px;padding:15px;text-align:center;"><h2>Blues</h2><p>Känsla, gitarr & själ.</p></div>`,
+      country: `<div style="background:#ffeedd;color:#c7761b;border-radius:16px;padding:15px;text-align:center;"><h2>Country</h2><p>Boots, hatt & kärlek.</p></div>`,
+      indie: `<div style="background:#ffe2e2;color:#264586;border-radius:16px;padding:15px;text-align:center;"><h2>Indie</h2><p>Eget sound, egen väg.</p></div>`,
+      synthwave: `<div style="background:#0e0526;color:#d600ff;border-radius:16px;padding:15px;text-align:center;"><h2>Synthwave</h2><p>Retro futurism & neon.</p></div>`,
+      punk: `<div style="background:#2d2d2d;color:#f50000;border-radius:16px;padding:15px;text-align:center;"><h2>Punk</h2><p>Uppror, nitar & snabb musik.</p></div>`,
+      rock: `<div style="background:#2a2020;color:#fff200;border-radius:16px;padding:15px;text-align:center;"><h2>Rock</h2><p>Riff, hår & scennärvaro.</p></div>`,
+      romantik: `<div style="background:#fff0f6;color:#b8004b;border-radius:16px;padding:15px;text-align:center;"><h2>Romantik</h2><p>Kärlek, poesi & känslor.</p></div>`
     };
 
     const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
@@ -300,7 +297,7 @@
         await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(storageRef);
         await setDoc(doc(db, "profiles", currentUser.uid), {
-          profilePicUrl: downloadUrl // OBS! Spara som profilePicUrl
+          profilePicUrl: downloadUrl
         }, { merge: true });
         document.getElementById('profilePicPreview').src = downloadUrl;
         document.getElementById('profilePicPreview').style.display = 'block';
