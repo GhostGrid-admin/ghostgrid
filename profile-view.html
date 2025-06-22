@@ -231,7 +231,7 @@
   </div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     const firebaseConfig = {
       apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
@@ -245,7 +245,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // Språkväxling för menyn
+    // Meny
     const menuItems = {
       sv: [
         { href: "forum.html", label: "Forum" },
@@ -275,22 +275,31 @@
       a.onclick = () => navLinks.classList.remove("active")
     );
 
+    // PROFIL-VIEW LOGIK
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
     let userId = null;
     let profileReactions = { heart: [], thumb: [], smile: [] };
     let picReactions = { heart: [], thumb: [], smile: [] };
-    let unreadCount = 0;
+    let unreadTotal = 0;
 
+    // Hämta totala antal olästa meddelanden (endast på egen profil)
     async function getUnreadMessagesCount() {
-      if (!userId || userId === uid) return 0;
-      const convoId = [userId, uid].sort().join("_");
-      const convoRef = doc(db, "conversations", convoId);
-      const snap = await getDoc(convoRef);
-      if (!snap.exists()) return 0;
-      const data = snap.data();
-      return data.unread && data.unread[userId] ? data.unread[userId] : 0;
+      if (!userId) return 0;
+      let total = 0;
+      // Antag att du har en "conversations" collection, med en "unread" map: { [uid]: antal }
+      // Exempel: Samtliga konversationer där userId finns med, summera "unread[userId]"
+      const convosRef = collection(db, "conversations");
+      const q = query(convosRef, where("participants", "array-contains", userId));
+      const snap = await getDocs(q);
+      snap.forEach(docu => {
+        const data = docu.data();
+        if (data.unread && typeof data.unread[userId] === "number") {
+          total += data.unread[userId];
+        }
+      });
+      return total;
     }
 
     async function renderProfile() {
@@ -306,34 +315,47 @@
       picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
       picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
-
       let profileHtml = '';
+      // PROFILBILD + REAKTIONER + MEDDELANDESYMBOL
       if (data.profilePicUrl) {
         profileHtml += `<div class="profile-picture-wrapper">
           <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
-        // Meddelandesymbol endast för andra användare
-        if (userId && userId !== uid) {
-          profileHtml += `
-            <span class="ghostgrid-message-icon-wrap">
-              <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Meddelanden">
-                <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                  <defs>
-                    <filter id="glow-green" x="-40%" y="-40%" width="180%" height="180%">
-                      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                  <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3" filter="url(#glow-green)" />
-                  <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                ${unreadCount > 0 ? `<span class="ghostgrid-badge">${unreadCount}</span>` : ""}
-              </a>
-            </span>
-          `;
+        if (userId) {
+          // Meddelandesymbol på egen profil (med badge) - annars utan badge
+          if (userId === uid) {
+            profileHtml += `
+              <span class="ghostgrid-message-icon-wrap">
+                <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden">
+                  <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                    <defs>
+                      <filter id="glow-green" x="-40%" y="-40%" width="180%" height="180%">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3" filter="url(#glow-green)" />
+                    <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  ${unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+                </a>
+              </span>`;
+          } else {
+            // Meddelandesymbol på annans profil, ingen badge
+            profileHtml += `
+              <span class="ghostgrid-message-icon-wrap">
+                <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande">
+                  <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                    <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                    <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </span>`;
+          }
         }
         profileHtml += `</div>
           <div class="pic-reactions">
@@ -347,6 +369,7 @@
           </div>
         `;
       }
+      // PROFILKOD + REAKTIONER + REKLAM
       profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
       profileHtml += `
@@ -375,6 +398,7 @@
         </div>
       </div>`;
       profileOut.innerHTML = profileHtml;
+
       updateReactionUI();
       setupReactionEvents();
     }
@@ -395,11 +419,13 @@
     }
 
     function updateReactionUI() {
+      // PROFIL
       const myProfileReaction = getMyProfileReaction();
       ["heart", "thumb", "smile"].forEach(type => {
         const btn = document.getElementById('like-' + type);
         if (btn) btn.classList.toggle('selected', myProfileReaction === type);
       });
+      // PROFILBILD
       const myPicReaction = getMyPicReaction();
       ["heart", "thumb", "smile"].forEach(type => {
         const btn = document.getElementById('pic-' + type);
@@ -409,13 +435,13 @@
 
     async function setProfileReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
+      // Ta bort användaren från alla reaktionslistor (även om man klickar samma emoji)
       ["heartUsers", "thumbUsers", "smileUsers"].forEach(field => {
-        if (profileReactions[field.replace("Users", "")].includes(userId)) {
-          profileReactions[field.replace("Users", "")] =
-            profileReactions[field.replace("Users", "")].filter(uid => uid !== userId);
-        }
+        profileReactions[field.replace("Users", "")] =
+          profileReactions[field.replace("Users", "")].filter(uid => uid !== userId);
       });
-      if (!profileReactions[type].includes(userId)) {
+      // Toggle: lägg till om inte redan markerad
+      if (getMyProfileReaction() !== type) {
         profileReactions[type].push(userId);
       }
       await updateDoc(profileRef, {
@@ -430,11 +456,9 @@
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
       ["picHeartUsers", "picThumbUsers", "picSmileUsers"].forEach(field => {
         const arrKey = field.replace("pic", "").toLowerCase();
-        if (picReactions[arrKey].includes(userId)) {
-          picReactions[arrKey] = picReactions[arrKey].filter(uid => uid !== userId);
-        }
+        picReactions[arrKey] = picReactions[arrKey].filter(uid => uid !== userId);
       });
-      if (!picReactions[type].includes(userId)) {
+      if (getMyPicReaction() !== type) {
         picReactions[type].push(userId);
       }
       await updateDoc(profileRef, {
@@ -454,14 +478,16 @@
       document.getElementById('pic-smile').onclick = () => setPicReaction("smile");
     }
 
-    async function refreshAndRender() {
-      unreadCount = await getUnreadMessagesCount();
-      renderProfile();
-    }
-
-    onAuthStateChanged(auth, user => {
+    // Hantera auth och laddning av badge
+    onAuthStateChanged(auth, async user => {
       userId = user ? user.uid : null;
-      refreshAndRender();
+      // Bara om man är på sin egen profil: visa badge
+      if (userId && userId === uid) {
+        unreadTotal = await getUnreadMessagesCount();
+      } else {
+        unreadTotal = 0;
+      }
+      renderProfile();
     });
   </script>
 </body>
