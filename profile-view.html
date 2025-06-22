@@ -104,6 +104,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
     .profile-picture {
       width: 135px;
@@ -115,6 +116,49 @@
       border: 3px solid #0ff;
       background: #111;
       display: block;
+    }
+    .ghostgrid-message-icon-wrap {
+      position: absolute;
+      bottom: 0; right: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+    }
+    .ghostgrid-message-link {
+      position: relative;
+      display: inline-block;
+      border-radius: 50%;
+      background: #171c19;
+      transition: box-shadow .23s;
+      box-shadow: 0 0 10px #19ff19b0, 0 0 32px #19ff1990;
+    }
+    .ghostgrid-message-link:focus,
+    .ghostgrid-message-link:active {
+      box-shadow: 0 0 32px #19ff19, 0 0 44px #50ffb9;
+    }
+    .ghostgrid-message-svg {
+      display: block;
+      border-radius: 50%;
+    }
+    .ghostgrid-badge {
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      min-width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #19ff19;
+      color: #111;
+      font-size: 1.05em;
+      font-weight: bold;
+      box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
+      border: 2px solid #111;
+      display: flex; align-items: center; justify-content: center;
+      animation: pulseBadge 1.1s infinite alternate;
+    }
+    @keyframes pulseBadge {
+      0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
+      100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
     .pic-reactions, .profile-reactions {
       margin-top: 12px;
@@ -186,7 +230,6 @@
     <div id="profile-output"></div>
   </div>
   <script type="module">
-    // --- FIREBASE INIT ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
@@ -194,7 +237,7 @@
       apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
       projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.firebasestorage.app",
+      storageBucket: "ghostgrid-fb278.appspot.com",
       messagingSenderId: "283208202937",
       appId: "1:283208202937:web:11c0cea81fd18a31163968"
     };
@@ -232,14 +275,23 @@
       a.onclick = () => navLinks.classList.remove("active")
     );
 
-    // Profilladdning
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
     let userId = null;
-    // Bara EN reaktion per användare/profil och profilbild
     let profileReactions = { heart: [], thumb: [], smile: [] };
     let picReactions = { heart: [], thumb: [], smile: [] };
+    let unreadCount = 0;
+
+    async function getUnreadMessagesCount() {
+      if (!userId || userId === uid) return 0;
+      const convoId = [userId, uid].sort().join("_");
+      const convoRef = doc(db, "conversations", convoId);
+      const snap = await getDoc(convoRef);
+      if (!snap.exists()) return 0;
+      const data = snap.data();
+      return data.unread && data.unread[userId] ? data.unread[userId] : 0;
+    }
 
     async function renderProfile() {
       const snap = await getDoc(profileRef);
@@ -254,13 +306,36 @@
       picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
       picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
+
       let profileHtml = '';
-      // PROFILBILD + REAKTIONER
       if (data.profilePicUrl) {
-        profileHtml += `
-          <div class="profile-picture-wrapper">
-            <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">
-          </div>
+        profileHtml += `<div class="profile-picture-wrapper">
+          <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+        // Meddelandesymbol endast för andra användare
+        if (userId && userId !== uid) {
+          profileHtml += `
+            <span class="ghostgrid-message-icon-wrap">
+              <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Meddelanden">
+                <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                  <defs>
+                    <filter id="glow-green" x="-40%" y="-40%" width="180%" height="180%">
+                      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3" filter="url(#glow-green)" />
+                  <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${unreadCount > 0 ? `<span class="ghostgrid-badge">${unreadCount}</span>` : ""}
+              </a>
+            </span>
+          `;
+        }
+        profileHtml += `</div>
           <div class="pic-reactions">
             <div>${lang === 'sv' ? 'Lämna en reaktion på profilbilden:' : 'React to profile picture:'}</div>
             <button class="reaction-btn" id="pic-heart" title="❤️">❤️</button>
@@ -272,7 +347,6 @@
           </div>
         `;
       }
-      // PROFILKOD + REAKTIONER + REKLAM
       profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
       profileHtml += `
@@ -301,11 +375,9 @@
         </div>
       </div>`;
       profileOut.innerHTML = profileHtml;
-
       updateReactionUI();
       setupReactionEvents();
     }
-    renderProfile();
 
     function getMyProfileReaction() {
       if (!userId) return null;
@@ -323,13 +395,11 @@
     }
 
     function updateReactionUI() {
-      // Profil
       const myProfileReaction = getMyProfileReaction();
       ["heart", "thumb", "smile"].forEach(type => {
         const btn = document.getElementById('like-' + type);
         if (btn) btn.classList.toggle('selected', myProfileReaction === type);
       });
-      // Profilbild
       const myPicReaction = getMyPicReaction();
       ["heart", "thumb", "smile"].forEach(type => {
         const btn = document.getElementById('pic-' + type);
@@ -339,18 +409,15 @@
 
     async function setProfileReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
-      // Ta bort användaren från alla reaktionslistor
       ["heartUsers", "thumbUsers", "smileUsers"].forEach(field => {
         if (profileReactions[field.replace("Users", "")].includes(userId)) {
           profileReactions[field.replace("Users", "")] =
             profileReactions[field.replace("Users", "")].filter(uid => uid !== userId);
         }
       });
-      // Lägg till i ny reaktion om den inte redan var satt
       if (!profileReactions[type].includes(userId)) {
         profileReactions[type].push(userId);
       }
-      // Spara
       await updateDoc(profileRef, {
         heartUsers: profileReactions.heart,
         thumbUsers: profileReactions.thumb,
@@ -361,18 +428,15 @@
 
     async function setPicReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
-      // Ta bort användaren från alla reaktionslistor
       ["picHeartUsers", "picThumbUsers", "picSmileUsers"].forEach(field => {
         const arrKey = field.replace("pic", "").toLowerCase();
         if (picReactions[arrKey].includes(userId)) {
           picReactions[arrKey] = picReactions[arrKey].filter(uid => uid !== userId);
         }
       });
-      // Lägg till i ny reaktion om den inte redan var satt
       if (!picReactions[type].includes(userId)) {
         picReactions[type].push(userId);
       }
-      // Spara
       await updateDoc(profileRef, {
         picHeartUsers: picReactions.heart,
         picThumbUsers: picReactions.thumb,
@@ -382,19 +446,22 @@
     }
 
     function setupReactionEvents() {
-      // PROFIL
       document.getElementById('like-heart').onclick = () => setProfileReaction("heart");
       document.getElementById('like-thumb').onclick = () => setProfileReaction("thumb");
       document.getElementById('like-smile').onclick = () => setProfileReaction("smile");
-      // PROFILBILD
       document.getElementById('pic-heart').onclick = () => setPicReaction("heart");
       document.getElementById('pic-thumb').onclick = () => setPicReaction("thumb");
       document.getElementById('pic-smile').onclick = () => setPicReaction("smile");
     }
 
+    async function refreshAndRender() {
+      unreadCount = await getUnreadMessagesCount();
+      renderProfile();
+    }
+
     onAuthStateChanged(auth, user => {
       userId = user ? user.uid : null;
-      updateReactionUI();
+      refreshAndRender();
     });
   </script>
 </body>
