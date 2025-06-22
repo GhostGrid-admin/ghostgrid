@@ -17,17 +17,32 @@
     .convo img { width: 38px; height: 38px; border-radius: 50%; margin-right: 13px; }
     .convo .name { font-size: 1.15em; }
     .convo .badge { margin-left: auto; background: #19ff19; color: #0a2a0a; min-width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 16px; font-weight: bold; font-size: 1.05em; box-shadow: 0 0 10px #15ff1584; }
-    .chat-messages { max-height: 62vh; overflow-y: auto; padding-right: 12px; margin-bottom: 24px;}
-    .chat-bubble { background: #16ff16; color: #19221e; display: inline-block; padding: 10px 16px; border-radius: 14px 14px 4px 14px; margin: 6px 0; }
+    .chat-messages { max-height: 62vh; overflow-y: auto; padding-right: 12px; margin-bottom: 18px;}
+    .chat-bubble-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 8px; }
+    .chat-bubble { background: #16ff16; color: #19221e; display: inline-block; padding: 10px 16px; border-radius: 14px 14px 4px 14px; margin: 0; max-width: 62vw; word-break: break-word; }
     .chat-bubble.me { background: #0e2f1b; color: #7cff7c; border-radius: 14px 4px 14px 14px; margin-left: auto;}
     .chat-meta { font-size: 0.75em; color: #47ff9e; margin-top: 2px; }
     .chat-input-row { display: flex; gap: 10px; }
     .chat-input { flex: 1; padding: 8px 16px; border-radius: 14px; border: none; font-size: 1.08em; }
     .send-btn { background: #21ff21; color: #222; font-weight: bold; border: none; border-radius: 14px; padding: 8px 26px; font-size: 1em; cursor: pointer; }
+    .delete-btn { background: #ff4040; color: #fff; border: none; border-radius: 10px; padding: 6px 16px; font-size: 1em; cursor: pointer; margin-bottom: 12px; margin-left: 6px; }
+    .msg-checkbox { transform: scale(1.35); accent-color: #00ff7e; margin-right: 6px;}
+    .block-btn, .unblock-btn {
+      background: #222; border: 2px solid #ff4444; color: #ff4444;
+      padding: 6px 18px; border-radius: 14px; margin-bottom: 16px; margin-top: 4px;
+      font-weight: bold; cursor: pointer; font-size: 1em; transition: all 0.15s;
+    }
+    .block-btn:hover, .unblock-btn:hover { background: #ff4444; color: #fff; }
+    .blocked-warning {
+      color: #ff4444; background: #330000bb; border-radius: 10px;
+      padding: 8px 15px; font-weight: bold; margin-bottom: 10px; margin-top: 10px; text-align: center;
+    }
+    .chat-image { max-width: 150px; max-height: 150px; border-radius: 10px; box-shadow: 0 0 10px #21ff21aa;}
     @media (max-width: 900px) {
       .convo-list, .chat-window { width: 100%; max-width: 100%; display: block;}
       .messages-container { padding: 6px; }
       .chat-window { padding-left: 0; }
+      .chat-bubble { max-width: 90vw;}
     }
   </style>
 </head>
@@ -35,38 +50,34 @@
   <div class="messages-container">
     <div class="convo-list" id="convo-list">
       <h2 style="text-align:center; color:#19ff19; margin:12px 0;">Meddelanden</h2>
-      <!-- Konversationslistan laddas här -->
     </div>
     <div class="chat-window" id="chat-window">
-      <!-- Chatten med användaren laddas här -->
       <div style="text-align:center; margin-top:42px; color:#6ad96a;">Välj en konversation eller börja skriva till någon!</div>
     </div>
   </div>
-
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
   <script>
-    // === 1. INIT FIREBASE (byt config till din) ===
+    // === FIREBASE INIT ===
     const firebaseConfig = {
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
       projectId: "ghostgrid-fb278",
       storageBucket: "ghostgrid-fb278.appspot.com",
       messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968",
-      measurementId: "G-B0WCKJCNT9"
+      appId: "1:283208202937:web:11c0cea81fd81a31163968"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
-    // === 2. HJÄLPFUNKTIONER ===
-    // Skapar ett samtals-ID som alltid är samma för två användare oavsett ordning
+    // === HJÄLPFUNKTIONER ===
     function getConversationId(uid1, uid2) {
       return [uid1, uid2].sort().join("_");
     }
-    // Hämta användarinfo (displayName, foto) från profiles
     async function getUserProfile(uid) {
       const ref = db.collection('profiles').doc(uid);
       const snap = await ref.get();
@@ -74,39 +85,35 @@
       const data = snap.data();
       return {
         displayName: data.displayName || "Okänd",
-        photoURL: data.photoURL || "default-avatar.png"
+        photoURL: data.profilePicUrl || "default-avatar.png"
       };
     }
 
-    // === 3. MAIN LOGIK ===
-    let currentUser, conversations = [], activeConvoId = null;
-    let convoUserProfiles = {}; // cache för snabb rendering
+    // === MAIN LOGIK ===
+    let currentUser, conversations = [], activeConvoId = null, activeOtherUser = null, convoUserProfiles = {};
+    let blockedMap = {};
 
     firebase.auth().onAuthStateChanged(async (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-        return;
-      }
+      if (!user) { window.location.href = "login.html"; return; }
       currentUser = user;
       await loadConversations();
 
-      // Om vi kom hit via profilknapp: ?to=anvandarid
+      // ?to= användare vid start
       const params = new URLSearchParams(window.location.search);
       const toUserId = params.get('to');
       if (toUserId) {
-        // Hitta existerande konvo eller skapa ny
         const convoId = getConversationId(currentUser.uid, toUserId);
         activeConvoId = convoId;
-        // Om konvo redan finns i lista, öppna den – annars skapa & ladda
+        activeOtherUser = toUserId;
         if (!conversations.find(c => c.id === convoId)) {
-          // Lägg till temporär konvo till listan
           const toProfile = await getUserProfile(toUserId);
           conversations.unshift({
             id: convoId,
             users: [currentUser.uid, toUserId],
             other: toProfile,
             lastMessage: "",
-            unread: 0
+            unread: 0,
+            blocked: {}
           });
         }
         renderConversations();
@@ -114,9 +121,7 @@
       }
     });
 
-    // === 4. LADDA OCH VISA INKORG ===
     async function loadConversations() {
-      // Hämta konversationer där currentUser.uid ingår i users-array
       const convosSnap = await db.collection('conversations')
         .where('users', 'array-contains', currentUser.uid)
         .orderBy('updatedAt', 'desc')
@@ -124,7 +129,6 @@
       conversations = [];
       for (const doc of convosSnap.docs) {
         const data = doc.data();
-        // Ta fram "andra användaren"
         const otherId = data.users.find(uid => uid !== currentUser.uid);
         if (!convoUserProfiles[otherId]) {
           convoUserProfiles[otherId] = await getUserProfile(otherId);
@@ -134,8 +138,10 @@
           users: data.users,
           other: convoUserProfiles[otherId],
           lastMessage: data.lastMessage,
-          unread: data.unread && data.unread[currentUser.uid] ? data.unread[currentUser.uid] : 0
+          unread: data.unread && data.unread[currentUser.uid] ? data.unread[currentUser.uid] : 0,
+          blocked: data.blocked || {}
         });
+        blockedMap[doc.id] = data.blocked || {};
       }
       renderConversations();
     }
@@ -156,12 +162,12 @@
               <div style="font-size:0.9em; color:#6bffbb">${convo.lastMessage ? convo.lastMessage.slice(0, 32) : "Ingen konvo än."}</div>
             </div>
             ${convo.unread > 0 ? `<div class="badge">${convo.unread}</div>` : ""}
+            ${(convo.blocked && (convo.blocked[currentUser.uid] || convo.blocked[convo.users.find(u => u !== currentUser.uid)])) ? `<span style="color:#ff4444;margin-left:8px;">🚫</span>` : ''}
           </div>
         `;
       });
     }
 
-    // === 5. VISA CHATT OCH MEDDELANDEN ===
     async function openConversation(convoId, otherId=null) {
       activeConvoId = convoId;
       renderConversations();
@@ -172,70 +178,137 @@
       // Hämta eller skapa konvo
       let convoRef = db.collection('conversations').doc(convoId);
       let convoDoc = await convoRef.get();
-      if (!convoDoc.exists && otherId) {
-        // Skapa första gången om den inte finns
+      let convoData = convoDoc.exists ? convoDoc.data() : null;
+      if (!convoData && otherId) {
         await convoRef.set({
           users: [currentUser.uid, otherId],
           lastMessage: "",
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          unread: { [currentUser.uid]: 0, [otherId]: 0 }
+          unread: { [currentUser.uid]: 0, [otherId]: 0 },
+          blocked: {}
         });
         convoDoc = await convoRef.get();
+        convoData = convoDoc.data();
       }
-      // Hämta meddelanden
-      const messagesSnap = await convoRef.collection('messages')
-        .orderBy('sentAt', 'asc').get();
-      let html = `<div class="chat-messages" id="chat-messages">`;
-      for (const doc of messagesSnap.docs) {
+      // BLOCKERINGSSTATUS
+      const blockedObj = convoData && convoData.blocked ? convoData.blocked : {};
+      const isBlockedByMe = blockedObj[currentUser.uid];
+      const isBlockedByOther = convoData && convoData.users && convoData.users.length === 2
+        ? blockedObj[convoData.users.find(u => u !== currentUser.uid)] : false;
+
+      // LADDA MEDDELANDEN
+      const messagesSnap = await convoRef.collection('messages').orderBy('sentAt', 'asc').get();
+      let html = '';
+      // Blockeringsinfo & knappar
+      if (isBlockedByMe) {
+        html += `<div class="blocked-warning">Du har blockerat denna användare.<br><button class="unblock-btn" onclick="unblockUser('${convoId}')">Avblockera</button></div>`;
+      } else if (isBlockedByOther) {
+        html += `<div class="blocked-warning">Du är blockerad av denna användare.</div>`;
+      } else {
+        html += `<button class="block-btn" style="float:right;" onclick="blockUser('${convoId}')">Blockera användare</button>`;
+      }
+      // Radera-knapp
+      html += `<button class="delete-btn" onclick="deleteSelectedMessages()">Radera markerade</button>`;
+      // Meddelanden
+      html += `<div class="chat-messages" id="chat-messages">`;
+      messagesSnap.forEach(doc => {
         const m = doc.data();
+        const isMine = m.from === currentUser.uid;
         html += `
-          <div class="chat-bubble${m.from === currentUser.uid ? ' me' : ''}">
-            ${m.text}
-            <div class="chat-meta">${new Date(m.sentAt.seconds*1000).toLocaleString("sv-SE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}</div>
+          <div class="chat-bubble-row">
+            <input type="checkbox" class="msg-checkbox" value="${doc.id}">
+            <div class="chat-bubble${isMine ? ' me' : ''}">
+              ${m.text ? m.text : ""}
+              ${m.imageUrl ? `<br><img src="${m.imageUrl}" class="chat-image" alt="Bildmeddelande"/>` : ""}
+              <div class="chat-meta">${m.from === currentUser.uid ? 'Du' : 'Den andre'} – ${m.sentAt && m.sentAt.seconds ? new Date(m.sentAt.seconds*1000).toLocaleString("sv-SE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : ""}</div>
+            </div>
           </div>
         `;
-      }
+      });
       html += `</div>
-        <form id="sendForm" class="chat-input-row" autocomplete="off">
-          <input type="text" id="msgInput" class="chat-input" placeholder="Skriv meddelande..." required maxlength="2000" />
-          <button class="send-btn" type="submit">Skicka</button>
+        <form id="sendForm" class="chat-input-row" autocomplete="off" enctype="multipart/form-data">
+          <input type="text" id="msgInput" class="chat-input" placeholder="Skriv meddelande..." maxlength="2000" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}/>
+          <label for="fileInput" style="cursor:pointer; margin-right:6px;">
+            <img src="image-icon.svg" style="width:30px;vertical-align:middle;" title="Bifoga bild"/>
+          </label>
+          <input type="file" id="fileInput" accept="image/*" style="display:none;" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}/>
+          <button class="send-btn" type="submit" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}>Skicka</button>
         </form>
+        <div id="uploadingStatus" style="color:#0ff; margin-top:2px;"></div>
       `;
       chatDiv.innerHTML = html;
 
-      // Skrolla längst ner
       setTimeout(() => {
-        document.getElementById('chat-messages').scrollTop = 99999;
+        const cm = document.getElementById('chat-messages');
+        if (cm) cm.scrollTop = 99999;
       }, 100);
 
       // Nollställ notiser när man öppnar
       await convoRef.update({ [`unread.${currentUser.uid}`]: 0 });
 
-      // Lägg till event på formulär
+      // Skicka meddelande (med bild)
       document.getElementById('sendForm').onsubmit = async (e) => {
         e.preventDefault();
         const msg = document.getElementById('msgInput').value.trim();
-        if (!msg) return;
-        // Spara meddelande
+        const fileInput = document.getElementById('fileInput');
+        let imageUrl = null;
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const ext = file.name.split('.').pop();
+          const fileRef = storage.ref(`conversations/${activeConvoId}/${Date.now()}.${ext}`);
+          document.getElementById('uploadingStatus').innerText = "Laddar upp bild...";
+          await fileRef.put(file);
+          imageUrl = await fileRef.getDownloadURL();
+          document.getElementById('uploadingStatus').innerText = "";
+        }
+        if (!msg && !imageUrl) return;
         await convoRef.collection('messages').add({
           text: msg,
+          imageUrl: imageUrl || null,
           from: currentUser.uid,
           sentAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         // Uppdatera konvo med sista meddelandet + notis för andra
         let otherUser = (convoDoc.data() ? convoDoc.data().users : [currentUser.uid, otherId]).find(u => u !== currentUser.uid);
         await convoRef.update({
-          lastMessage: msg,
+          lastMessage: msg || "[Bild]",
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           [`unread.${otherUser}`]: firebase.firestore.FieldValue.increment(1)
         });
         document.getElementById('msgInput').value = "";
-        openConversation(convoId); // ladda om chatten
+        document.getElementById('fileInput').value = "";
+        openConversation(convoId);
         await loadConversations();
       }
     }
 
-    // Gör funktionen global så onclick funkar från renderConversations
+    // === Blockera/avblockera ===
+    window.blockUser = async function(convoId) {
+      const convoRef = db.collection('conversations').doc(convoId);
+      await convoRef.set({ blocked: { [currentUser.uid]: true } }, { merge: true });
+      openConversation(convoId);
+      await loadConversations();
+    };
+    window.unblockUser = async function(convoId) {
+      const convoRef = db.collection('conversations').doc(convoId);
+      await convoRef.update({ [`blocked.${currentUser.uid}`]: firebase.firestore.FieldValue.delete() });
+      openConversation(convoId);
+      await loadConversations();
+    };
+
+    // === RADERA MARKERADE MEDDELANDEN ===
+    window.deleteSelectedMessages = async function() {
+      const boxes = document.querySelectorAll('.msg-checkbox:checked');
+      if (boxes.length === 0) return;
+      if (!confirm("Är du säker på att du vill radera valda meddelanden?")) return;
+      const convoRef = db.collection('conversations').doc(activeConvoId);
+      for (const box of boxes) {
+        await convoRef.collection('messages').doc(box.value).delete();
+      }
+      openConversation(activeConvoId);
+    };
+
+    // Gör openConversation global
     window.openConversation = openConversation;
   </script>
 </body>
