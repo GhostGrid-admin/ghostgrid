@@ -3460,60 +3460,2095 @@
 </div>`
       },
       fitness: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #fff 65%, #b7ffce 100%);
+  border-radius: 40px;
+  padding: 45px 30px 42px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #193818;
+  font-family: 'Oswald', 'Share Tech Mono', Arial, monospace;
+  box-shadow: 0 0 60px #3fd46922, 0 0 14px #36e17966;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- SVG hantlar med animerad rörelse -->
+  <div style="position:absolute; top:18px; left:22px; z-index:2;">
+    <svg width="64" height="30">
+      <g>
+        <rect x="14" y="14" width="36" height="6" rx="3" fill="#222" />
+        <rect x="8" y="12" width="6" height="10" rx="3" fill="#35e16c">
+          <animate attributeName="y" values="10;12;10" dur="1.3s" repeatCount="indefinite" />
+        </rect>
+        <rect x="50" y="12" width="6" height="10" rx="3" fill="#35e16c">
+          <animate attributeName="y" values="12;10;12" dur="1.3s" repeatCount="indefinite" />
+        </rect>
+      </g>
+    </svg>
+  </div>
+  <div style="position:absolute; bottom:20px; right:22px;">
+    <svg width="72" height="40">
+      <ellipse cx="36" cy="34" rx="25" ry="6" fill="#d1ffd1" opacity="0.65"/>
+      <rect x="14" y="17" width="44" height="10" rx="5" fill="#193818" />
+      <rect x="10" y="14" width="8" height="16" rx="4" fill="#36e179" />
+      <rect x="54" y="14" width="8" height="16" rx="4" fill="#36e179" />
+    </svg>
+  </div>
+  <!-- Titel & symboler -->
+  <div style="text-align:center; margin-bottom:10px;">
+    <span style="font-size:2em; letter-spacing:0.09em;">💪 🏋️‍♂️ 🥦 🏃‍♀️ 🥇</span>
+  </div>
+  <h2 style="color:#35e16c; text-align:center; font-size:2.12em; margin:0 0 14px 0; text-shadow:0 0 10px #b7ffce88;">
+    Fitnessprofil
+  </h2>
+  <p style="font-size:1.13em; text-align:center; color:#193818; margin:0 0 17px 0;">
+    <i>"Starkare än igår, alltid hungrig på nya mål – reps, svett och glädje i varje lyft."</i>
+  </p>
+  <!-- Fakta/egenskapsboxar -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(53,225,108,0.13); border:1.2px solid #35e16c; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #35e16c33;">
+      <b style="color:#35e16c;">🏋️‍♀️ Gymrat</b><br/>
+      <span style="color:#193818;">Tungt pass? Bring it!</span>
+    </div>
+    <div style="background:rgba(183,255,206,0.18); border:1.2px solid #193818; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #b7ffce44;">
+      <b style="color:#193818;">🥦 Meal Prep Master</b><br/>
+      <span style="color:#193818;">Kyckling, ris och broccolifilosofi.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.13); border:1.2px solid #fff; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #36e17922;">
+      <b style="color:#35e16c;">🏃 Cardio King</b><br/>
+      <span style="color:#193818;">Springer från problemen (och för hälsan).</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(53,225,108,0.09); color:#193818; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #35e16c22;">
+      "Du ångrar aldrig ett pass – bara de du missar!"
+    </span>
+  </p>
+  <div style="margin-top:22px; text-align:center;">
+    <span style="font-size:1.08em; color:#35e16c; letter-spacing:0.09em;">
+      #trainhard #eatclean #sweatlife
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #fff 65%, #b7ffce 100%);
+  border-radius: 40px;
+  padding: 45px 30px 42px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #193818;
+  font-family: 'Oswald', 'Share Tech Mono', Arial, monospace;
+  box-shadow: 0 0 60px #3fd46922, 0 0 14px #36e17966;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated dumbbells SVG -->
+  <div style="position:absolute; top:18px; left:22px; z-index:2;">
+    <svg width="64" height="30">
+      <g>
+        <rect x="14" y="14" width="36" height="6" rx="3" fill="#222" />
+        <rect x="8" y="12" width="6" height="10" rx="3" fill="#35e16c">
+          <animate attributeName="y" values="10;12;10" dur="1.3s" repeatCount="indefinite" />
+        </rect>
+        <rect x="50" y="12" width="6" height="10" rx="3" fill="#35e16c">
+          <animate attributeName="y" values="12;10;12" dur="1.3s" repeatCount="indefinite" />
+        </rect>
+      </g>
+    </svg>
+  </div>
+  <div style="position:absolute; bottom:20px; right:22px;">
+    <svg width="72" height="40">
+      <ellipse cx="36" cy="34" rx="25" ry="6" fill="#d1ffd1" opacity="0.65"/>
+      <rect x="14" y="17" width="44" height="10" rx="5" fill="#193818" />
+      <rect x="10" y="14" width="8" height="16" rx="4" fill="#36e179" />
+      <rect x="54" y="14" width="8" height="16" rx="4" fill="#36e179" />
+    </svg>
+  </div>
+  <!-- Title & icons -->
+  <div style="text-align:center; margin-bottom:10px;">
+    <span style="font-size:2em; letter-spacing:0.09em;">💪 🏋️‍♂️ 🥦 🏃‍♀️ 🥇</span>
+  </div>
+  <h2 style="color:#35e16c; text-align:center; font-size:2.12em; margin:0 0 14px 0; text-shadow:0 0 10px #b7ffce88;">
+    Fitness Profile
+  </h2>
+  <p style="font-size:1.13em; text-align:center; color:#193818; margin:0 0 17px 0;">
+    <i>"Stronger than yesterday, always hungry for new goals – reps, sweat, and joy in every lift."</i>
+  </p>
+  <!-- Fact/feature boxes -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(53,225,108,0.13); border:1.2px solid #35e16c; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #35e16c33;">
+      <b style="color:#35e16c;">🏋️‍♀️ Gymrat</b><br/>
+      <span style="color:#193818;">Heavy set? Bring it on!</span>
+    </div>
+    <div style="background:rgba(183,255,206,0.18); border:1.2px solid #193818; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #b7ffce44;">
+      <b style="color:#193818;">🥦 Meal Prep Master</b><br/>
+      <span style="color:#193818;">Chicken, rice, and broccoli philosophy.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.13); border:1.2px solid #fff; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 8px #36e17922;">
+      <b style="color:#35e16c;">🏃 Cardio King</b><br/>
+      <span style="color:#193818;">Running from problems (and for health).</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(53,225,108,0.09); color:#193818; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #35e16c22;">
+      "You never regret a workout – only the ones you miss!"
+    </span>
+  </p>
+  <div style="margin-top:22px; text-align:center;">
+    <span style="font-size:1.08em; color:#35e16c; letter-spacing:0.09em;">
+      #trainhard #eatclean #sweatlife
+    </span>
+  </div>
+</div>`
       },
       urbanexplorer: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #101a18 60%, #454e51 100%);
+  border-radius: 36px;
+  padding: 44px 30px 40px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 890px;
+  min-height: 84vh;
+  color: #f2ffe3;
+  font-family: 'Share Tech Mono', 'Oswald', 'Courier New', monospace;
+  box-shadow: 0 0 70px #00ff7a22, 0 0 14px #283a3499;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Urban cityscape SVG bakgrund -->
+  <div style="position:absolute; left:0; bottom:0; width:100%; z-index:0; opacity:0.14;">
+    <svg width="100%" height="100" viewBox="0 0 900 100" preserveAspectRatio="none">
+      <rect x="0" y="65" width="900" height="35" fill="#323f3b" />
+      <rect x="35" y="35" width="90" height="65" fill="#60716c"/>
+      <rect x="140" y="50" width="70" height="50" fill="#313b37"/>
+      <rect x="225" y="40" width="55" height="60" fill="#42504c"/>
+      <rect x="300" y="58" width="80" height="42" fill="#65756e"/>
+      <rect x="410" y="35" width="65" height="65" fill="#424d4b"/>
+      <rect x="510" y="45" width="70" height="55" fill="#2b3835"/>
+      <rect x="600" y="50" width="90" height="50" fill="#444f4d"/>
+      <rect x="710" y="40" width="100" height="60" fill="#323c39"/>
+      <rect x="830" y="30" width="60" height="70" fill="#3c4945"/>
+    </svg>
+  </div>
+  <!-- Titel & ikoner -->
+  <div style="text-align:center; margin-bottom:12px; z-index:1; position:relative;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🌆 🗝️ 🦇 🧢 🎒</span>
+  </div>
+  <h2 style="color:#00ff7a; text-align:center; font-size:2.15em; margin:0 0 13px 0; text-shadow:0 0 14px #00ffbb33;">
+    Urban Explorer
+  </h2>
+  <p style="font-size:1.08em; text-align:center; color:#dafae3; margin:0 0 19px 0;">
+    <i>"En ficklampa, ett lås som gått sönder, och pulsen slår – där andra ser förfall ser jag äventyr."</i>
+  </p>
+  <!-- Fakta/feature-rutor -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:29px; z-index:1; position:relative;">
+    <div style="background:rgba(0,255,122,0.11); border:1.2px solid #00ff7a; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a33;">
+      <b style="color:#00ff7a;">🗝️ Låsplockare</b><br/>
+      <span style="color:#f2ffe3;">Inget lås – ingen gräns.</span>
+    </div>
+    <div style="background:rgba(50,63,59,0.23); border:1.2px solid #60716c; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a11;">
+      <b style="color:#60716c;">🎒 Alltid redo</b><br/>
+      <span style="color:#eaffed;">Ryggsäck: Kamera, rep, snacks, mod.</span>
+    </div>
+    <div style="background:rgba(200,255,220,0.11); border:1.2px solid #283a34; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a22;">
+      <b style="color:#00ffbb;">🌃 Nattutforskare</b><br/>
+      <span style="color:#e0fff1;">När staden tystnar börjar äventyret.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em; z-index:1; position:relative;">
+    <span style="background:rgba(0,255,122,0.08); color:#00ff7a; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #00ff7a22;">
+      "Inget är så levande som en övergiven plats."
+    </span>
+  </p>
+  <div style="margin-top:22px; text-align:center; z-index:1; position:relative;">
+    <span style="font-size:1.08em; color:#00ffbb; letter-spacing:0.09em;">
+      #urbex #exploreeverything #nattäventyr
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #101a18 60%, #454e51 100%);
+  border-radius: 36px;
+  padding: 44px 30px 40px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 890px;
+  min-height: 84vh;
+  color: #f2ffe3;
+  font-family: 'Share Tech Mono', 'Oswald', 'Courier New', monospace;
+  box-shadow: 0 0 70px #00ff7a22, 0 0 14px #283a3499;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Urban cityscape SVG background -->
+  <div style="position:absolute; left:0; bottom:0; width:100%; z-index:0; opacity:0.14;">
+    <svg width="100%" height="100" viewBox="0 0 900 100" preserveAspectRatio="none">
+      <rect x="0" y="65" width="900" height="35" fill="#323f3b" />
+      <rect x="35" y="35" width="90" height="65" fill="#60716c"/>
+      <rect x="140" y="50" width="70" height="50" fill="#313b37"/>
+      <rect x="225" y="40" width="55" height="60" fill="#42504c"/>
+      <rect x="300" y="58" width="80" height="42" fill="#65756e"/>
+      <rect x="410" y="35" width="65" height="65" fill="#424d4b"/>
+      <rect x="510" y="45" width="70" height="55" fill="#2b3835"/>
+      <rect x="600" y="50" width="90" height="50" fill="#444f4d"/>
+      <rect x="710" y="40" width="100" height="60" fill="#323c39"/>
+      <rect x="830" y="30" width="60" height="70" fill="#3c4945"/>
+    </svg>
+  </div>
+  <!-- Title & icons -->
+  <div style="text-align:center; margin-bottom:12px; z-index:1; position:relative;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🌆 🗝️ 🦇 🧢 🎒</span>
+  </div>
+  <h2 style="color:#00ff7a; text-align:center; font-size:2.15em; margin:0 0 13px 0; text-shadow:0 0 14px #00ffbb33;">
+    Urban Explorer
+  </h2>
+  <p style="font-size:1.08em; text-align:center; color:#dafae3; margin:0 0 19px 0;">
+    <i>"A flashlight, a broken lock, and a racing heartbeat – where others see decay, I see adventure."</i>
+  </p>
+  <!-- Fact/feature boxes -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:29px; z-index:1; position:relative;">
+    <div style="background:rgba(0,255,122,0.11); border:1.2px solid #00ff7a; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a33;">
+      <b style="color:#00ff7a;">🗝️ Lockpicker</b><br/>
+      <span style="color:#f2ffe3;">No lock – no limits.</span>
+    </div>
+    <div style="background:rgba(50,63,59,0.23); border:1.2px solid #60716c; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a11;">
+      <b style="color:#60716c;">🎒 Always Ready</b><br/>
+      <span style="color:#eaffed;">Backpack: Camera, rope, snacks, and guts.</span>
+    </div>
+    <div style="background:rgba(200,255,220,0.11); border:1.2px solid #283a34; border-radius:18px; padding:15px 24px; min-width:156px; box-shadow:0 0 9px #00ff7a22;">
+      <b style="color:#00ffbb;">🌃 Night Explorer</b><br/>
+      <span style="color:#e0fff1;">When the city goes silent, the adventure begins.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em; z-index:1; position:relative;">
+    <span style="background:rgba(0,255,122,0.08); color:#00ff7a; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #00ff7a22;">
+      "Nothing feels as alive as an abandoned place."
+    </span>
+  </p>
+  <div style="margin-top:22px; text-align:center; z-index:1; position:relative;">
+    <span style="font-size:1.08em; color:#00ffbb; letter-spacing:0.09em;">
+      #urbex #exploreeverything #nightadventure
+    </span>
+  </div>
+</div>`
       },
       fantasy: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #29393f 70%, #8ba7a3 100%);
+  border-radius: 40px;
+  padding: 48px 32px 45px 32px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #f5faff;
+  font-family: 'IM Fell English SC', 'Share Tech Mono', 'Georgia', serif;
+  box-shadow: 0 0 80px #7bc4bb44, 0 0 10px #25424e66;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Drake & trollskog SVG -->
+  <div style="position:absolute; left:0; bottom:0; width:100%; z-index:0; opacity:0.12;">
+    <svg width="100%" height="110" viewBox="0 0 920 110" preserveAspectRatio="none">
+      <ellipse cx="110" cy="100" rx="95" ry="30" fill="#3a6353"/>
+      <ellipse cx="300" cy="102" rx="80" ry="20" fill="#26463e"/>
+      <rect x="410" y="50" width="34" height="60" fill="#496464"/>
+      <ellipse cx="680" cy="100" rx="100" ry="30" fill="#1a2926"/>
+      <polygon points="600,90 680,10 760,90" fill="#5db1a4"/>
+      <ellipse cx="850" cy="105" rx="55" ry="20" fill="#3a6353"/>
+      <!-- Drake (superenkel silhuett) -->
+      <path d="M160 65 Q170 40 210 70 Q200 55 235 60 Q180 80 205 90 Q180 70 160 65" fill="#9ee7f5" opacity="0.7"/>
+    </svg>
+  </div>
+  <!-- Rubrik & ikoner -->
+  <div style="text-align:center; margin-bottom:18px; z-index:1; position:relative;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🐉 ⚔️ 🌳 🏰 ✨</span>
+  </div>
+  <h2 style="color:#9ee7f5; text-align:center; font-size:2.2em; margin:0 0 16px 0; text-shadow:0 0 16px #74e0ff66;">
+    Fantasyprofil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#d1fcf7; margin:0 0 22px 0;">
+    <i>"Bär en mantel av magi, går där drakar viskar och skogens hjärta slår. Ditt äventyr har bara börjat."</i>
+  </p>
+  <!-- Fakta/egenskap-boxar -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:30px; z-index:1; position:relative;">
+    <div style="background:rgba(116,224,255,0.12); border:1.2px solid #9ee7f5; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 10px #9ee7f522;">
+      <b style="color:#9ee7f5;">🐉 Drakryttare</b><br/>
+      <span style="color:#f5faff;">Vän med det omöjliga.</span>
+    </div>
+    <div style="background:rgba(58,99,83,0.18); border:1.2px solid #26463e; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 9px #26463e33;">
+      <b style="color:#43ffd5;">🌳 Skogsvandrare</b><br/>
+      <span style="color:#eaffed;">Hittar alltid nya stigar.</span>
+    </div>
+    <div style="background:rgba(200,255,250,0.14); border:1.2px solid #74e0ff; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 10px #74e0ff33;">
+      <b style="color:#74e0ff;">✨ Magiker</b><br/>
+      <span style="color:#e0fff1;">Skapar magi i vardagen.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.1em; z-index:1; position:relative;">
+    <span style="background:rgba(116,224,255,0.08); color:#74e0ff; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 8px #74e0ff22;">
+      "Varje saga börjar med en som vågar gå vilse."
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center; z-index:1; position:relative;">
+    <span style="font-size:1.08em; color:#9ee7f5; letter-spacing:0.09em;">
+      #drakar #magi #fantasyäventyr #skogsälskare
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #29393f 70%, #8ba7a3 100%);
+  border-radius: 40px;
+  padding: 48px 32px 45px 32px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #f5faff;
+  font-family: 'IM Fell English SC', 'Share Tech Mono', 'Georgia', serif;
+  box-shadow: 0 0 80px #7bc4bb44, 0 0 10px #25424e66;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Dragon & enchanted forest SVG -->
+  <div style="position:absolute; left:0; bottom:0; width:100%; z-index:0; opacity:0.13;">
+    <svg width="100%" height="110" viewBox="0 0 920 110" preserveAspectRatio="none">
+      <ellipse cx="110" cy="100" rx="95" ry="30" fill="#3a6353"/>
+      <ellipse cx="300" cy="102" rx="80" ry="20" fill="#26463e"/>
+      <rect x="410" y="50" width="34" height="60" fill="#496464"/>
+      <ellipse cx="680" cy="100" rx="100" ry="30" fill="#1a2926"/>
+      <polygon points="600,90 680,10 760,90" fill="#5db1a4"/>
+      <ellipse cx="850" cy="105" rx="55" ry="20" fill="#3a6353"/>
+      <!-- Dragon (simple silhouette) -->
+      <path d="M160 65 Q170 40 210 70 Q200 55 235 60 Q180 80 205 90 Q180 70 160 65" fill="#9ee7f5" opacity="0.7"/>
+    </svg>
+  </div>
+  <!-- Title & icons -->
+  <div style="text-align:center; margin-bottom:18px; z-index:1; position:relative;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🐉 ⚔️ 🌳 🏰 ✨</span>
+  </div>
+  <h2 style="color:#9ee7f5; text-align:center; font-size:2.2em; margin:0 0 16px 0; text-shadow:0 0 16px #74e0ff66;">
+    Fantasy Profile
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#d1fcf7; margin:0 0 22px 0;">
+    <i>"Wearing a cloak of magic, walking where dragons whisper and the heart of the forest beats. Your adventure has just begun."</i>
+  </p>
+  <!-- Fact/feature boxes -->
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:30px; z-index:1; position:relative;">
+    <div style="background:rgba(116,224,255,0.12); border:1.2px solid #9ee7f5; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 10px #9ee7f522;">
+      <b style="color:#9ee7f5;">🐉 Dragon Rider</b><br/>
+      <span style="color:#f5faff;">Friends with the impossible.</span>
+    </div>
+    <div style="background:rgba(58,99,83,0.18); border:1.2px solid #26463e; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 9px #26463e33;">
+      <b style="color:#43ffd5;">🌳 Forest Wanderer</b><br/>
+      <span style="color:#eaffed;">Always finds a new path.</span>
+    </div>
+    <div style="background:rgba(200,255,250,0.14); border:1.2px solid #74e0ff; border-radius:18px; padding:15px 24px; min-width:148px; box-shadow:0 0 10px #74e0ff33;">
+      <b style="color:#74e0ff;">✨ Mage</b><br/>
+      <span style="color:#e0fff1;">Making magic out of the ordinary.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.1em; z-index:1; position:relative;">
+    <span style="background:rgba(116,224,255,0.08); color:#74e0ff; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 8px #74e0ff22;">
+      "Every tale starts with someone who dares to get lost."
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center; z-index:1; position:relative;">
+    <span style="font-size:1.08em; color:#9ee7f5; letter-spacing:0.09em;">
+      #dragons #magic #fantasyadventure #forestlover
+    </span>
+  </div>
+</div>`
       },
       vintage: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #eedec6 30%, #b4937c 100%);
+  border-radius: 38px;
+  padding: 46px 28px 42px 28px;
+  margin: 40px auto 0 auto;
+  max-width: 860px;
+  min-height: 82vh;
+  color: #57412c;
+  font-family: 'Spectral', 'Georgia', serif;
+  box-shadow: 0 0 60px #c2a38022, 0 0 8px #7c6045;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animerad vinylskiva -->
+  <div style="position:absolute; top:30px; left:30px; z-index:0;">
+    <svg width="70" height="70" style="animation:spin 4.2s linear infinite;">
+      <circle cx="35" cy="35" r="33" fill="#222" stroke="#eee" stroke-width="3"/>
+      <circle cx="35" cy="35" r="26" fill="#eecdaa" stroke="#baa97a" stroke-width="3"/>
+      <circle cx="35" cy="35" r="10" fill="#fff1d4"/>
+      <circle cx="35" cy="35" r="4" fill="#b07d3c"/>
+    </svg>
+  </div>
+  <!-- Blinkande ljus -->
+  <div style="position:absolute; top:32px; right:45px;">
+    <span style="display:inline-block;width:17px;height:17px;border-radius:50%;background:#f8e4a0;box-shadow:0 0 18px #ffeaaa;animation:blink 1.8s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes spin {
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes blink {
+      0% { opacity: 1;}
+      100% { opacity: 0.35;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:18px; z-index:1; position:relative;">
+    <span style="font-size:1.9em; letter-spacing:0.09em;">📻 💿 🕰️ 👗 🎩</span>
+  </div>
+  <h2 style="color:#b07d3c; text-align:center; font-size:2.07em; margin:0 0 13px 0; text-shadow:0 0 14px #b07d3c44;">
+    Vintageprofil
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#57412c; margin:0 0 22px 0;">
+    <i>"Nostalgi i hjärtat, jazz i öronen och en koffert fylld av minnen. Stil och charm går aldrig ur tiden."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(255,255,255,0.16); border:1.1px solid #b07d3c; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 8px #b07d3c22;">
+      <b style="color:#b07d3c;">📻 Radio Lover</b><br/>
+      <span>Slår på radion före mobilen.</span>
+    </div>
+    <div style="background:rgba(238,221,202,0.19); border:1.1px solid #57412c; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 7px #eecdaa33;">
+      <b style="color:#57412c;">🎩 Stilmedveten</b><br/>
+      <span>Hatt & klänning, aldrig fel.</span>
+    </div>
+    <div style="background:rgba(176,125,60,0.11); border:1.1px solid #baa97a; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 7px #baa97a33;">
+      <b style="color:#baa97a;">💿 Vinylfantast</b><br/>
+      <span>Samlar på det tidlösa ljudet.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.06em;">
+    <span style="background:rgba(255,221,154,0.18); color:#b07d3c; padding:7px 15px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #baa97a22;">
+      "Saker var inte alltid bättre förr – men de var definitivt stiligare."
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.01em; color:#b07d3c; letter-spacing:0.10em;">
+      #vintage #retro #nostalgi #tidlösstil
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #eedec6 30%, #b4937c 100%);
+  border-radius: 38px;
+  padding: 46px 28px 42px 28px;
+  margin: 40px auto 0 auto;
+  max-width: 860px;
+  min-height: 82vh;
+  color: #57412c;
+  font-family: 'Spectral', 'Georgia', serif;
+  box-shadow: 0 0 60px #c2a38022, 0 0 8px #7c6045;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated vinyl record -->
+  <div style="position:absolute; top:30px; left:30px; z-index:0;">
+    <svg width="70" height="70" style="animation:spin 4.2s linear infinite;">
+      <circle cx="35" cy="35" r="33" fill="#222" stroke="#eee" stroke-width="3"/>
+      <circle cx="35" cy="35" r="26" fill="#eecdaa" stroke="#baa97a" stroke-width="3"/>
+      <circle cx="35" cy="35" r="10" fill="#fff1d4"/>
+      <circle cx="35" cy="35" r="4" fill="#b07d3c"/>
+    </svg>
+  </div>
+  <!-- Blinking lamp -->
+  <div style="position:absolute; top:32px; right:45px;">
+    <span style="display:inline-block;width:17px;height:17px;border-radius:50%;background:#f8e4a0;box-shadow:0 0 18px #ffeaaa;animation:blink 1.8s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes spin {
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes blink {
+      0% { opacity: 1;}
+      100% { opacity: 0.35;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:18px; z-index:1; position:relative;">
+    <span style="font-size:1.9em; letter-spacing:0.09em;">📻 💿 🕰️ 👗 🎩</span>
+  </div>
+  <h2 style="color:#b07d3c; text-align:center; font-size:2.07em; margin:0 0 13px 0; text-shadow:0 0 14px #b07d3c44;">
+    Vintage Profile
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#57412c; margin:0 0 22px 0;">
+    <i>"Nostalgia in the heart, jazz in the ears and a suitcase full of memories. Style and charm never go out of fashion."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(255,255,255,0.16); border:1.1px solid #b07d3c; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 8px #b07d3c22;">
+      <b style="color:#b07d3c;">📻 Radio Lover</b><br/>
+      <span>Turns on the radio before the phone.</span>
+    </div>
+    <div style="background:rgba(238,221,202,0.19); border:1.1px solid #57412c; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 7px #eecdaa33;">
+      <b style="color:#57412c;">🎩 Style Conscious</b><br/>
+      <span>Hat & dress, always right.</span>
+    </div>
+    <div style="background:rgba(176,125,60,0.11); border:1.1px solid #baa97a; border-radius:18px; padding:14px 21px; min-width:138px; box-shadow:0 0 7px #baa97a33;">
+      <b style="color:#baa97a;">💿 Vinyl Enthusiast</b><br/>
+      <span>Collects the timeless sound.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.06em;">
+    <span style="background:rgba(255,221,154,0.18); color:#b07d3c; padding:7px 15px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #baa97a22;">
+      "Things weren't always better back then – but they were definitely more stylish."
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.01em; color:#b07d3c; letter-spacing:0.10em;">
+      #vintage #retro #nostalgia #timelessstyle
+    </span>
+  </div>
+</div>`
       },
       retro: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #1a1527 65%, #ffb0b0 120%);
+  border-radius: 40px;
+  padding: 46px 26px 44px 26px;
+  margin: 42px auto 0 auto;
+  max-width: 880px;
+  min-height: 83vh;
+  color: #fff1eb;
+  font-family: 'Orbitron', 'Share Tech Mono', 'Courier New', monospace;
+  box-shadow: 0 0 80px #ee3ddfa2, 0 0 10px #3f39c8;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animerad discokula -->
+  <div style="position:absolute; top:28px; right:38px; z-index:1;">
+    <svg width="64" height="64" style="animation: spin 3.8s linear infinite;">
+      <circle cx="32" cy="32" r="26" fill="#f8f8f8" stroke="#e7b2ef" stroke-width="2"/>
+      <g>
+        <rect x="17" y="29" width="7" height="4" fill="#beb7ff"/>
+        <rect x="27" y="21" width="10" height="4" fill="#ff9ad9"/>
+        <rect x="42" y="33" width="7" height="4" fill="#befff1"/>
+        <rect x="24" y="37" width="8" height="4" fill="#ffd69c"/>
+      </g>
+      <circle cx="32" cy="32" r="6" fill="#de79ff"/>
+    </svg>
+  </div>
+  <!-- Blinkande neonram upptill -->
+  <div style="position:absolute; top:0; left:0; width:100%; height:7px; background:linear-gradient(90deg,#f0e,#0ff,#ff0,#0ff,#f0e);box-shadow:0 0 22px #f0e,0 0 44px #0ff; animation: neonblink 1.9s infinite alternate;"></div>
+  <style>
+    @keyframes spin {
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes neonblink {
+      0% { opacity: 0.85;}
+      100% { opacity: 0.45;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:20px; z-index:2; position:relative;">
+    <span style="font-size:2.0em; letter-spacing:0.13em; text-shadow:0 0 12px #9d9fff;">🕹️ 🎶 🟪 🔮 📼</span>
+  </div>
+  <h2 style="color:#ff9ad9; text-align:center; font-size:2.15em; margin:0 0 13px 0; text-shadow:0 0 18px #ffb0b077;">
+    Retroprofil
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#fffbe6; margin:0 0 23px 0;">
+    <i>"Arcadespel och neonljus i blodet – framtidens hopp och 80-talets puls."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(63,57,200,0.15); border:1.3px solid #ffb0b0; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #9d9fff66;">
+      <b style="color:#ff9ad9;">🕹️ Arcadehero</b><br/>
+      <span style="color:#fff;">Högsta poäng på Pac-Man och Space Invaders!</span>
+    </div>
+    <div style="background:rgba(255,186,218,0.13); border:1.3px solid #3f39c8; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #ff9ad933;">
+      <b style="color:#ffd69c;">📼 VHS-mästare</b><br/>
+      <span style="color:#fff;">Filmafton med fuzzig bild och poppade popcorn.</span>
+    </div>
+    <div style="background:rgba(0,255,255,0.09); border:1.3px solid #ffb0b0; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #0fffff33;">
+      <b style="color:#0ff;">🔮 Neonfuturist</b><br/>
+      <span style="color:#fff;">Drömmer i rosa och blått ljus.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(255,154,217,0.11); color:#ff9ad9; padding:9px 19px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #ffb0b022;">
+      "Retro är mer än nostalgi – det är en livsstil!"
+    </span>
+  </p>
+  <div style="margin-top:26px; text-align:center;">
+    <span style="font-size:1.08em; color:#ff9ad9; letter-spacing:0.12em;">
+      #retro #arcade #neon #pacman
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #1a1527 65%, #ffb0b0 120%);
+  border-radius: 40px;
+  padding: 46px 26px 44px 26px;
+  margin: 42px auto 0 auto;
+  max-width: 880px;
+  min-height: 83vh;
+  color: #fff1eb;
+  font-family: 'Orbitron', 'Share Tech Mono', 'Courier New', monospace;
+  box-shadow: 0 0 80px #ee3ddfa2, 0 0 10px #3f39c8;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated disco ball -->
+  <div style="position:absolute; top:28px; right:38px; z-index:1;">
+    <svg width="64" height="64" style="animation: spin 3.8s linear infinite;">
+      <circle cx="32" cy="32" r="26" fill="#f8f8f8" stroke="#e7b2ef" stroke-width="2"/>
+      <g>
+        <rect x="17" y="29" width="7" height="4" fill="#beb7ff"/>
+        <rect x="27" y="21" width="10" height="4" fill="#ff9ad9"/>
+        <rect x="42" y="33" width="7" height="4" fill="#befff1"/>
+        <rect x="24" y="37" width="8" height="4" fill="#ffd69c"/>
+      </g>
+      <circle cx="32" cy="32" r="6" fill="#de79ff"/>
+    </svg>
+  </div>
+  <!-- Blinking neon bar -->
+  <div style="position:absolute; top:0; left:0; width:100%; height:7px; background:linear-gradient(90deg,#f0e,#0ff,#ff0,#0ff,#f0e);box-shadow:0 0 22px #f0e,0 0 44px #0ff; animation: neonblink 1.9s infinite alternate;"></div>
+  <style>
+    @keyframes spin {
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes neonblink {
+      0% { opacity: 0.85;}
+      100% { opacity: 0.45;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:20px; z-index:2; position:relative;">
+    <span style="font-size:2.0em; letter-spacing:0.13em; text-shadow:0 0 12px #9d9fff;">🕹️ 🎶 🟪 🔮 📼</span>
+  </div>
+  <h2 style="color:#ff9ad9; text-align:center; font-size:2.15em; margin:0 0 13px 0; text-shadow:0 0 18px #ffb0b077;">
+    Retro Profile
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#fffbe6; margin:0 0 23px 0;">
+    <i>"Arcade games and neon in my veins – hope for the future and the pulse of the '80s."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(63,57,200,0.15); border:1.3px solid #ffb0b0; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #9d9fff66;">
+      <b style="color:#ff9ad9;">🕹️ Arcade Hero</b><br/>
+      <span style="color:#fff;">High score on Pac-Man and Space Invaders!</span>
+    </div>
+    <div style="background:rgba(255,186,218,0.13); border:1.3px solid #3f39c8; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #ff9ad933;">
+      <b style="color:#ffd69c;">📼 VHS Master</b><br/>
+      <span style="color:#fff;">Movie night with fuzzy image and popcorn.</span>
+    </div>
+    <div style="background:rgba(0,255,255,0.09); border:1.3px solid #ffb0b0; border-radius:18px; padding:15px 24px; min-width:142px; box-shadow:0 0 8px #0fffff33;">
+      <b style="color:#0ff;">🔮 Neon Futurist</b><br/>
+      <span style="color:#fff;">Dreams in pink and blue light.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(255,154,217,0.11); color:#ff9ad9; padding:9px 19px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #ffb0b022;">
+      "Retro is more than nostalgia – it's a lifestyle!"
+    </span>
+  </p>
+  <div style="margin-top:26px; text-align:center;">
+    <span style="font-size:1.08em; color:#ff9ad9; letter-spacing:0.12em;">
+      #retro #arcade #neon #pacman
+    </span>
+  </div>
+</div>`
       },
       streetwear: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(110deg, #17181b 65%, #22d47a 130%);
+  border-radius: 38px;
+  padding: 46px 24px 44px 24px;
+  margin: 44px auto 0 auto;
+  max-width: 870px;
+  min-height: 84vh;
+  color: #e0ffe9;
+  font-family: 'Oswald', 'Share Tech Mono', 'Courier New', monospace;
+  box-shadow: 0 0 60px #12f7bb77, 0 0 10px #2d2d2d;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Graffiti-tag (blinkar) -->
+  <div style="position:absolute; top:24px; left:36px; z-index:2;">
+    <span style="font-family:'Permanent Marker',cursive; font-size:2.45em; color:#22d47a; text-shadow:0 0 13px #222,0 0 22px #22d47a; animation: graffitiGlow 2s infinite alternate;">
+      STWR
+    </span>
+  </div>
+  <!-- Sneakers-ikon -->
+  <div style="position:absolute; top:36px; right:34px;">
+    <svg width="58" height="36" viewBox="0 0 58 36">
+      <rect x="10" y="20" width="38" height="10" rx="5" fill="#17181b" stroke="#fff" stroke-width="2"/>
+      <ellipse cx="29" cy="30" rx="20" ry="6" fill="#fff" opacity="0.16"/>
+      <path d="M12,26 Q20,16 46,25" stroke="#22d47a" stroke-width="3" fill="none"/>
+      <circle cx="18" cy="29" r="2.8" fill="#22d47a" />
+      <circle cx="41" cy="29" r="2.8" fill="#22d47a" />
+    </svg>
+  </div>
+  <style>
+    @keyframes graffitiGlow {
+      0% { text-shadow:0 0 10px #111,0 0 22px #22d47a; color:#22d47a;}
+      100% { text-shadow:0 0 22px #2effaa,0 0 38px #fff; color:#a3ffd8;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:14px; margin-top:7px;">
+    <span style="font-size:2.1em; letter-spacing:0.10em;">🧢 👟 🎧 🏙️ 💥</span>
+  </div>
+  <h2 style="color:#22d47a; text-align:center; font-size:2.12em; margin:0 0 15px 0; text-shadow:0 0 15px #22d47a88;">
+    Streetwearprofil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#e0ffe9; margin:0 0 19px 0;">
+    <i>"Gatan är catwalken – stilen är min röst. Sneakers, hoodies och attitude."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:21px; justify-content:center; margin-bottom:24px;">
+    <div style="background:rgba(34,212,122,0.16); border:1.2px solid #22d47a; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #22d47a33;">
+      <b style="color:#22d47a;">🧢 Caps & Hoods</b><br/>
+      <span style="color:#fff;">Signaturplagg i varje outfit.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.10); border:1.2px solid #292929; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #aaa;">
+      <b style="color:#e0ffe9;">👟 Sneakerhead</b><br/>
+      <span style="color:#fff;">Drömmer om unika kicks och limited drops.</span>
+    </div>
+    <div style="background:rgba(10,12,24,0.20); border:1.2px solid #22d47a; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #22d47a33;">
+      <b style="color:#a3ffd8;">🏙️ Urban Flow</b><br/>
+      <span style="color:#fff;">Inspirerad av betong, konst och nattliv.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(34,212,122,0.14); color:#22d47a; padding:7px 16px; border-radius:13px; font-weight:600; box-shadow:0 0 6px #22d47a33;">
+      "Du behöver inte följa trender – skapa dem."
+    </span>
+  </p>
+  <div style="margin-top:21px; text-align:center;">
+    <span style="font-size:1.05em; color:#22d47a; letter-spacing:0.10em;">
+      #streetwear #urbanstyle #sneakers #hoodie
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(110deg, #17181b 65%, #22d47a 130%);
+  border-radius: 38px;
+  padding: 46px 24px 44px 24px;
+  margin: 44px auto 0 auto;
+  max-width: 870px;
+  min-height: 84vh;
+  color: #e0ffe9;
+  font-family: 'Oswald', 'Share Tech Mono', 'Courier New', monospace;
+  box-shadow: 0 0 60px #12f7bb77, 0 0 10px #2d2d2d;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Graffiti tag (blinking) -->
+  <div style="position:absolute; top:24px; left:36px; z-index:2;">
+    <span style="font-family:'Permanent Marker',cursive; font-size:2.45em; color:#22d47a; text-shadow:0 0 13px #222,0 0 22px #22d47a; animation: graffitiGlow 2s infinite alternate;">
+      STWR
+    </span>
+  </div>
+  <!-- Sneakers icon -->
+  <div style="position:absolute; top:36px; right:34px;">
+    <svg width="58" height="36" viewBox="0 0 58 36">
+      <rect x="10" y="20" width="38" height="10" rx="5" fill="#17181b" stroke="#fff" stroke-width="2"/>
+      <ellipse cx="29" cy="30" rx="20" ry="6" fill="#fff" opacity="0.16"/>
+      <path d="M12,26 Q20,16 46,25" stroke="#22d47a" stroke-width="3" fill="none"/>
+      <circle cx="18" cy="29" r="2.8" fill="#22d47a" />
+      <circle cx="41" cy="29" r="2.8" fill="#22d47a" />
+    </svg>
+  </div>
+  <style>
+    @keyframes graffitiGlow {
+      0% { text-shadow:0 0 10px #111,0 0 22px #22d47a; color:#22d47a;}
+      100% { text-shadow:0 0 22px #2effaa,0 0 38px #fff; color:#a3ffd8;}
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:14px; margin-top:7px;">
+    <span style="font-size:2.1em; letter-spacing:0.10em;">🧢 👟 🎧 🏙️ 💥</span>
+  </div>
+  <h2 style="color:#22d47a; text-align:center; font-size:2.12em; margin:0 0 15px 0; text-shadow:0 0 15px #22d47a88;">
+    Streetwear Profile
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#e0ffe9; margin:0 0 19px 0;">
+    <i>"The street is my runway – style is my voice. Sneakers, hoodies and attitude."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:21px; justify-content:center; margin-bottom:24px;">
+    <div style="background:rgba(34,212,122,0.16); border:1.2px solid #22d47a; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #22d47a33;">
+      <b style="color:#22d47a;">🧢 Caps & Hoods</b><br/>
+      <span style="color:#fff;">Signature pieces in every outfit.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.10); border:1.2px solid #292929; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #aaa;">
+      <b style="color:#e0ffe9;">👟 Sneakerhead</b><br/>
+      <span style="color:#fff;">Dreaming of unique kicks and limited drops.</span>
+    </div>
+    <div style="background:rgba(10,12,24,0.20); border:1.2px solid #22d47a; border-radius:16px; padding:14px 22px; min-width:138px; box-shadow:0 0 7px #22d47a33;">
+      <b style="color:#a3ffd8;">🏙️ Urban Flow</b><br/>
+      <span style="color:#fff;">Inspired by concrete, art, and nightlife.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(34,212,122,0.14); color:#22d47a; padding:7px 16px; border-radius:13px; font-weight:600; box-shadow:0 0 6px #22d47a33;">
+      "You don’t have to follow trends – create them."
+    </span>
+  </p>
+  <div style="margin-top:21px; text-align:center;">
+    <span style="font-size:1.05em; color:#22d47a; letter-spacing:0.10em;">
+      #streetwear #urbanstyle #sneakers #hoodie
+    </span>
+  </div>
+</div>`
       },
       hacker: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: radial-gradient(ellipse at 60% 60%, #0aff9c30 25%, #121718 90%);
+  border-radius: 36px;
+  padding: 44px 26px 44px 26px;
+  margin: 48px auto 0 auto;
+  max-width: 900px;
+  min-height: 84vh;
+  color: #b1ffcc;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Courier New', monospace;
+  box-shadow: 0 0 70px #10ffbc77, 0 0 16px #11a06e;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Matrix-kod (rörlig SVG) -->
+  <div style="position:absolute; left:0; top:0; width:100%; height:150px; pointer-events:none; z-index:1; opacity:0.80;">
+    <svg width="100%" height="150">
+      <defs>
+        <linearGradient id="matrixFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#52ffa1" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#121718" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g>
+        <text x="3%" y="28" font-size="24" font-family="monospace" fill="url(#matrixFade)">
+          <animate attributeName="y" from="28" to="148" dur="3.2s" repeatCount="indefinite"/>
+          01101100 100101 110011
+        </text>
+        <text x="40%" y="0" font-size="22" font-family="monospace" fill="url(#matrixFade)">
+          <animate attributeName="y" from="0" to="148" dur="2.8s" repeatCount="indefinite"/>
+          011011 100010 101100
+        </text>
+        <text x="77%" y="15" font-size="23" font-family="monospace" fill="url(#matrixFade)">
+          <animate attributeName="y" from="15" to="148" dur="2.9s" repeatCount="indefinite"/>
+          001110 011101
+        </text>
+      </g>
+    </svg>
+  </div>
+  <!-- Silhuett i hoodie (SVG) -->
+  <div style="position:absolute; right:28px; top:24px; z-index:2; opacity:0.70;">
+    <svg width="74" height="80" viewBox="0 0 74 80">
+      <ellipse cx="37" cy="40" rx="34" ry="36" fill="#1f3834" />
+      <ellipse cx="37" cy="45" rx="20" ry="24" fill="#16211d"/>
+      <circle cx="37" cy="38" r="13" fill="#242e26" />
+      <ellipse cx="37" cy="32" rx="9" ry="6.8" fill="#121c16"/>
+      <ellipse cx="29" cy="37" rx="3.7" ry="5.2" fill="#242e26"/>
+      <ellipse cx="45" cy="37" rx="3.7" ry="5.2" fill="#242e26"/>
+      <rect x="28" y="46" width="18" height="16" rx="7" fill="#222" />
+    </svg>
+  </div>
+  <!-- BLINKANDE kursor i Hacker-quote -->
+  <style>
+    @keyframes hacker-glow {
+      0% { text-shadow: 0 0 12px #0affb3; color: #0affb3;}
+      100% { text-shadow: 0 0 20px #00ff97,0 0 22px #fff; color:#a3ffd8;}
+    }
+    @keyframes blink-cursor {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:12px; margin-top:15px;">
+    <span style="font-size:2.1em; letter-spacing:0.11em;">💻 🟩 👤 🛡️ 🕶️</span>
+  </div>
+  <h2 style="color:#0affb3; text-align:center; font-size:2.10em; margin:0 0 18px 0; text-shadow:0 0 18px #10ffbc99;">
+    Hackerprofil
+  </h2>
+  <p style="font-size:1.15em; text-align:center; color:#b1ffcc; margin:0 0 22px 0;">
+    <i style="font-size:1.07em;">
+      "Kod är mitt modersmål, anonymitet mitt skydd.<span style="display:inline-block; width:16px; animation:blink-cursor 1s steps(2) infinite;">|</span>
+      Världen förändras rad för rad."
+    </i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:21px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(11,210,143,0.14); border:1.2px solid #0affb3; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #10ffbc22;">
+      <b style="color:#0affb3;">💻 Terminal Wizard</b><br/>
+      <span style="color:#fff;">Alltid redo för sudo och exploits.</span>
+    </div>
+    <div style="background:rgba(20,40,32,0.14); border:1.2px solid #232f2e; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #11ffcb22;">
+      <b style="color:#a3ffd8;">👤 Incognito</b><br/>
+      <span style="color:#fff;">Lämnar aldrig spår. VPN i blodet.</span>
+    </div>
+    <div style="background:rgba(0,0,0,0.11); border:1.2px solid #b1ffcc; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #b1ffcc33;">
+      <b style="color:#b1ffcc;">🛡️ Cybersecurity</b><br/>
+      <span style="color:#fff;">Letar sårbarheter, stärker system.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.10em;">
+    <span style="background:rgba(11,210,143,0.13); color:#0affb3; padding:8px 18px; border-radius:13px; font-weight:600; box-shadow:0 0 7px #0affb333;">
+      "Följ aldrig flocken – skapa egna vägar genom koden."
+    </span>
+  </p>
+  <div style="margin-top:25px; text-align:center;">
+    <span style="font-size:1.08em; color:#0affb3; letter-spacing:0.11em;">
+      #hackerlife #anonymitet #opensource #cyberpunk
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: radial-gradient(ellipse at 60% 60%, #0aff9c30 25%, #121718 90%);
+  border-radius: 36px;
+  padding: 44px 26px 44px 26px;
+  margin: 48px auto 0 auto;
+  max-width: 900px;
+  min-height: 84vh;
+  color: #b1ffcc;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Courier New', monospace;
+  box-shadow: 0 0 70px #10ffbc77, 0 0 16px #11a06e;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Matrix code (animated SVG) -->
+  <div style="position:absolute; left:0; top:0; width:100%; height:150px; pointer-events:none; z-index:1; opacity:0.80;">
+    <svg width="100%" height="150">
+      <defs>
+        <linearGradient id="matrixFadeEN" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#52ffa1" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#121718" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g>
+        <text x="3%" y="28" font-size="24" font-family="monospace" fill="url(#matrixFadeEN)">
+          <animate attributeName="y" from="28" to="148" dur="3.2s" repeatCount="indefinite"/>
+          01101100 100101 110011
+        </text>
+        <text x="40%" y="0" font-size="22" font-family="monospace" fill="url(#matrixFadeEN)">
+          <animate attributeName="y" from="0" to="148" dur="2.8s" repeatCount="indefinite"/>
+          011011 100010 101100
+        </text>
+        <text x="77%" y="15" font-size="23" font-family="monospace" fill="url(#matrixFadeEN)">
+          <animate attributeName="y" from="15" to="148" dur="2.9s" repeatCount="indefinite"/>
+          001110 011101
+        </text>
+      </g>
+    </svg>
+  </div>
+  <!-- Hoodie silhouette (SVG) -->
+  <div style="position:absolute; right:28px; top:24px; z-index:2; opacity:0.70;">
+    <svg width="74" height="80" viewBox="0 0 74 80">
+      <ellipse cx="37" cy="40" rx="34" ry="36" fill="#1f3834" />
+      <ellipse cx="37" cy="45" rx="20" ry="24" fill="#16211d"/>
+      <circle cx="37" cy="38" r="13" fill="#242e26" />
+      <ellipse cx="37" cy="32" rx="9" ry="6.8" fill="#121c16"/>
+      <ellipse cx="29" cy="37" rx="3.7" ry="5.2" fill="#242e26"/>
+      <ellipse cx="45" cy="37" rx="3.7" ry="5.2" fill="#242e26"/>
+      <rect x="28" y="46" width="18" height="16" rx="7" fill="#222" />
+    </svg>
+  </div>
+  <style>
+    @keyframes hacker-glow {
+      0% { text-shadow: 0 0 12px #0affb3; color: #0affb3;}
+      100% { text-shadow: 0 0 20px #00ff97,0 0 22px #fff; color:#a3ffd8;}
+    }
+    @keyframes blink-cursor {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+  <div style="text-align:center; margin-bottom:12px; margin-top:15px;">
+    <span style="font-size:2.1em; letter-spacing:0.11em;">💻 🟩 👤 🛡️ 🕶️</span>
+  </div>
+  <h2 style="color:#0affb3; text-align:center; font-size:2.10em; margin:0 0 18px 0; text-shadow:0 0 18px #10ffbc99;">
+    Hacker Profile
+  </h2>
+  <p style="font-size:1.15em; text-align:center; color:#b1ffcc; margin:0 0 22px 0;">
+    <i style="font-size:1.07em;">
+      "Code is my native tongue, anonymity my armor.<span style="display:inline-block; width:16px; animation:blink-cursor 1s steps(2) infinite;">|</span>
+      Changing the world, line by line."
+    </i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:21px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(11,210,143,0.14); border:1.2px solid #0affb3; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #10ffbc22;">
+      <b style="color:#0affb3;">💻 Terminal Wizard</b><br/>
+      <span style="color:#fff;">Always ready for sudo and exploits.</span>
+    </div>
+    <div style="background:rgba(20,40,32,0.14); border:1.2px solid #232f2e; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #11ffcb22;">
+      <b style="color:#a3ffd8;">👤 Incognito</b><br/>
+      <span style="color:#fff;">Never leaves a trace. VPN in the veins.</span>
+    </div>
+    <div style="background:rgba(0,0,0,0.11); border:1.2px solid #b1ffcc; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #b1ffcc33;">
+      <b style="color:#b1ffcc;">🛡️ Cybersecurity</b><br/>
+      <span style="color:#fff;">Seeks vulnerabilities, fortifies systems.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.10em;">
+    <span style="background:rgba(11,210,143,0.13); color:#0affb3; padding:8px 18px; border-radius:13px; font-weight:600; box-shadow:0 0 7px #0affb333;">
+      "Never follow the herd – forge your own path through the code."
+    </span>
+  </p>
+  <div style="margin-top:25px; text-align:center;">
+    <span style="font-size:1.08em; color:#0affb3; letter-spacing:0.11em;">
+      #hackerlife #anonymity #opensource #cyberpunk
+    </span>
+  </div>
+</div>`
       },
       darkacademia: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(125deg, #21231c 60%, #c7c1b5 100%);
+  border-radius: 36px;
+  padding: 44px 26px 44px 26px;
+  margin: 48px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  color: #eadfb7;
+  font-family: 'Merriweather', 'Fira Mono', 'Times New Roman', serif;
+  box-shadow: 0 0 70px #231c107a, 0 0 18px #a2a095;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Fladdrande ljus (SVG animation) -->
+  <div style="position:absolute; left:36px; top:28px; z-index:1;">
+    <svg width="60" height="80">
+      <ellipse cx="30" cy="60" rx="18" ry="8" fill="#3e3421" />
+      <rect x="20" y="24" width="20" height="38" rx="6" fill="#e8d8b6"/>
+      <ellipse cx="30" cy="25" rx="7" ry="12" fill="#f8f3da">
+        <animate attributeName="ry" values="12;17;12" dur="1.4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="30" cy="19" rx="3" ry="5" fill="#ffe7a0">
+        <animate attributeName="ry" values="5;8;5" dur="1.7s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+  <!-- Bokhög (SVG) -->
+  <div style="position:absolute; right:42px; bottom:24px; z-index:1;">
+    <svg width="68" height="50">
+      <rect x="4" y="36" width="60" height="12" rx="3" fill="#b7ab94"/>
+      <rect x="8" y="24" width="54" height="12" rx="3" fill="#7c6b56"/>
+      <rect x="12" y="12" width="46" height="12" rx="3" fill="#f4ecd6"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:15px;">
+    <span style="font-size:2em; letter-spacing:0.12em;">📚 🕯️ 🖋️ 🎩 🏛️</span>
+  </div>
+  <h2 style="color:#eadfb7; text-align:center; font-size:2.10em; margin:0 0 20px 0; text-shadow:0 0 14px #d4cc96;">
+    Dark Academia
+  </h2>
+  <p style="font-size:1.13em; text-align:center; color:#eadfb7; margin:0 0 22px 0;">
+    <i style="font-size:1.08em;">
+      "Midnatt bland böcker, pennspets och drömmar – kunskap är evigt och mysteriet är vårt ljus."
+    </i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:28px;">
+    <div style="background:rgba(60,49,32,0.12); border:1.2px solid #eadfb7; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #d4cc9622;">
+      <b style="color:#eadfb7;">🕯️ Nattstudier</b><br/>
+      <span style="color:#fff;">Finner inspiration i tystnaden och skuggorna.</span>
+    </div>
+    <div style="background:rgba(104,87,54,0.11); border:1.2px solid #b7ab94; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #b7ab9433;">
+      <b style="color:#b7ab94;">📚 Bokmal</b><br/>
+      <span style="color:#fff;">Samlar antika citat & olästa romaner.</span>
+    </div>
+    <div style="background:rgba(244,236,214,0.10); border:1.2px solid #f4ecd6; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #f4ecd622;">
+      <b style="color:#d6c98f;">🖋️ Poeten</b><br/>
+      <span style="color:#5e523f;">Skriver hemliga dikter i gamla anteckningsböcker.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(104,87,54,0.14); color:#eadfb7; padding:8px 16px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #eadfb733;">
+      "Klassisk visdom slocknar aldrig. Vi är nattens lärjungar."
+    </span>
+  </p>
+  <div style="margin-top:27px; text-align:center;">
+    <span style="font-size:1.07em; color:#eadfb7; letter-spacing:0.12em;">
+      #darkacademia #midnatt #mysterium #evigkunskap
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(125deg, #21231c 60%, #c7c1b5 100%);
+  border-radius: 36px;
+  padding: 44px 26px 44px 26px;
+  margin: 48px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  color: #eadfb7;
+  font-family: 'Merriweather', 'Fira Mono', 'Times New Roman', serif;
+  box-shadow: 0 0 70px #231c107a, 0 0 18px #a2a095;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Flickering candle (SVG animation) -->
+  <div style="position:absolute; left:36px; top:28px; z-index:1;">
+    <svg width="60" height="80">
+      <ellipse cx="30" cy="60" rx="18" ry="8" fill="#3e3421" />
+      <rect x="20" y="24" width="20" height="38" rx="6" fill="#e8d8b6"/>
+      <ellipse cx="30" cy="25" rx="7" ry="12" fill="#f8f3da">
+        <animate attributeName="ry" values="12;17;12" dur="1.4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="30" cy="19" rx="3" ry="5" fill="#ffe7a0">
+        <animate attributeName="ry" values="5;8;5" dur="1.7s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+  <!-- Book stack (SVG) -->
+  <div style="position:absolute; right:42px; bottom:24px; z-index:1;">
+    <svg width="68" height="50">
+      <rect x="4" y="36" width="60" height="12" rx="3" fill="#b7ab94"/>
+      <rect x="8" y="24" width="54" height="12" rx="3" fill="#7c6b56"/>
+      <rect x="12" y="12" width="46" height="12" rx="3" fill="#f4ecd6"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:15px;">
+    <span style="font-size:2em; letter-spacing:0.12em;">📚 🕯️ 🖋️ 🎩 🏛️</span>
+  </div>
+  <h2 style="color:#eadfb7; text-align:center; font-size:2.10em; margin:0 0 20px 0; text-shadow:0 0 14px #d4cc96;">
+    Dark Academia
+  </h2>
+  <p style="font-size:1.13em; text-align:center; color:#eadfb7; margin:0 0 22px 0;">
+    <i style="font-size:1.08em;">
+      "Midnight among books, ink and dreams – knowledge is eternal, and mystery our candlelight."
+    </i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:28px;">
+    <div style="background:rgba(60,49,32,0.12); border:1.2px solid #eadfb7; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #d4cc9622;">
+      <b style="color:#eadfb7;">🕯️ Night Studies</b><br/>
+      <span style="color:#fff;">Finds inspiration in silence and shadows.</span>
+    </div>
+    <div style="background:rgba(104,87,54,0.11); border:1.2px solid #b7ab94; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #b7ab9433;">
+      <b style="color:#b7ab94;">📚 Bookworm</b><br/>
+      <span style="color:#fff;">Collects antique quotes & unread novels.</span>
+    </div>
+    <div style="background:rgba(244,236,214,0.10); border:1.2px solid #f4ecd6; border-radius:17px; padding:14px 22px; min-width:143px; box-shadow:0 0 10px #f4ecd622;">
+      <b style="color:#d6c98f;">🖋️ Poet</b><br/>
+      <span style="color:#5e523f;">Writes secret poems in old notebooks.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(104,87,54,0.14); color:#eadfb7; padding:8px 16px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #eadfb733;">
+      "Classic wisdom never fades. We are the disciples of the night."
+    </span>
+  </p>
+  <div style="margin-top:27px; text-align:center;">
+    <span style="font-size:1.07em; color:#eadfb7; letter-spacing:0.12em;">
+      #darkacademia #midnight #mystery #eternalknowledge
+    </span>
+  </div>
+</div>`
       },
       pop: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #f52fa2 25%, #fff959 70%, #53e0ff 100%);
+  border-radius: 38px;
+  padding: 48px 30px 42px 30px;
+  margin: 44px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #2c1850;
+  font-family: 'Montserrat', 'Fira Mono', Arial, sans-serif;
+  box-shadow: 0 0 60px #e326d966, 0 0 10px #fff959aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Skivspelare med vinyl (SVG-animation) -->
+  <div style="position:absolute; left:26px; bottom:22px; z-index:2;">
+    <svg width="65" height="60" viewBox="0 0 65 60">
+      <ellipse cx="32.5" cy="30" rx="24" ry="24" fill="#fff959" stroke="#e326d9" stroke-width="5"/>
+      <circle cx="32.5" cy="30" r="18" fill="#f52fa2" stroke="#53e0ff" stroke-width="3"/>
+      <circle cx="32.5" cy="30" r="8" fill="#ffffff" stroke="#2c1850" stroke-width="1"/>
+      <circle cx="32.5" cy="30" r="3" fill="#e326d9">
+        <animateTransform attributeName="transform" type="rotate" values="0 32.5 30;360 32.5 30" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+  <!-- Färgglada musiknoter -->
+  <div style="position:absolute; right:36px; top:16px; z-index:2;">
+    <span style="font-size:2em;">
+      <span style="color:#f52fa2;">&#127925;</span>
+      <span style="color:#fff959;">&#127926;</span>
+      <span style="color:#53e0ff;">&#127925;</span>
+    </span>
+  </div>
+  <div style="text-align:center; margin-bottom:14px; margin-top:12px;">
+    <span style="font-size:2.3em; letter-spacing:0.15em;">🎤 💿 ✨ 🎶 🌟</span>
+  </div>
+  <h2 style="color:#f52fa2; text-align:center; font-size:2.15em; margin:0 0 16px 0; text-shadow:0 0 12px #fff8;">
+    POP Profil
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#2c1850; margin:0 0 18px 0;">
+    <i>"Färgstark, euforisk och alltid på refrängens topp – pop är livet på maxvolym!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:28px;">
+    <div style="background:rgba(245,47,162,0.12); border:1.3px solid #f52fa2; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #f52fa288;">
+      <b style="color:#f52fa2;">💿 Hitmakare</b><br/>
+      <span style="color:#2c1850;">Alltid redo att sjunga med i senaste hiten.</span>
+    </div>
+    <div style="background:rgba(255,249,89,0.13); border:1.3px solid #fff959; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #fff95977;">
+      <b style="color:#fff959;">✨ Pop-ikon</b><br/>
+      <span style="color:#2c1850;">Dansar som om ingen ser på!</span>
+    </div>
+    <div style="background:rgba(83,224,255,0.11); border:1.3px solid #53e0ff; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #53e0ff55;">
+      <b style="color:#53e0ff;">🎶 Karaoke Queen</b><br/>
+      <span style="color:#2c1850;">Varje kväll är en konsert på rummet.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(245,47,162,0.13); color:#f52fa2; padding:7px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #f52fa288;">
+      "Varje dag är en ny refräng. Pop never stops!"
+    </span>
+  </p>
+  <div style="margin-top:21px; text-align:center;">
+    <span style="font-size:1.05em; color:#f52fa2; letter-spacing:0.13em;">
+      #poplife #maxvolym #musikglädje #hitparad
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #f52fa2 25%, #fff959 70%, #53e0ff 100%);
+  border-radius: 38px;
+  padding: 48px 30px 42px 30px;
+  margin: 44px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #2c1850;
+  font-family: 'Montserrat', 'Fira Mono', Arial, sans-serif;
+  box-shadow: 0 0 60px #e326d966, 0 0 10px #fff959aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Record player with animated vinyl (SVG) -->
+  <div style="position:absolute; left:26px; bottom:22px; z-index:2;">
+    <svg width="65" height="60" viewBox="0 0 65 60">
+      <ellipse cx="32.5" cy="30" rx="24" ry="24" fill="#fff959" stroke="#e326d9" stroke-width="5"/>
+      <circle cx="32.5" cy="30" r="18" fill="#f52fa2" stroke="#53e0ff" stroke-width="3"/>
+      <circle cx="32.5" cy="30" r="8" fill="#ffffff" stroke="#2c1850" stroke-width="1"/>
+      <circle cx="32.5" cy="30" r="3" fill="#e326d9">
+        <animateTransform attributeName="transform" type="rotate" values="0 32.5 30;360 32.5 30" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+  <!-- Colorful musical notes -->
+  <div style="position:absolute; right:36px; top:16px; z-index:2;">
+    <span style="font-size:2em;">
+      <span style="color:#f52fa2;">&#127925;</span>
+      <span style="color:#fff959;">&#127926;</span>
+      <span style="color:#53e0ff;">&#127925;</span>
+    </span>
+  </div>
+  <div style="text-align:center; margin-bottom:14px; margin-top:12px;">
+    <span style="font-size:2.3em; letter-spacing:0.15em;">🎤 💿 ✨ 🎶 🌟</span>
+  </div>
+  <h2 style="color:#f52fa2; text-align:center; font-size:2.15em; margin:0 0 16px 0; text-shadow:0 0 12px #fff8;">
+    POP Profile
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#2c1850; margin:0 0 18px 0;">
+    <i>"Colorful, euphoric and always on the chorus – pop is life on max volume!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:28px;">
+    <div style="background:rgba(245,47,162,0.12); border:1.3px solid #f52fa2; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #f52fa288;">
+      <b style="color:#f52fa2;">💿 Hitmaker</b><br/>
+      <span style="color:#2c1850;">Always ready to sing along to the latest hit.</span>
+    </div>
+    <div style="background:rgba(255,249,89,0.13); border:1.3px solid #fff959; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #fff95977;">
+      <b style="color:#fff959;">✨ Pop Icon</b><br/>
+      <span style="color:#2c1850;">Dancing like nobody’s watching!</span>
+    </div>
+    <div style="background:rgba(83,224,255,0.11); border:1.3px solid #53e0ff; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #53e0ff55;">
+      <b style="color:#53e0ff;">🎶 Karaoke Queen</b><br/>
+      <span style="color:#2c1850;">Every night is a bedroom concert.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.09em;">
+    <span style="background:rgba(245,47,162,0.13); color:#f52fa2; padding:7px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #f52fa288;">
+      "Every day is a new chorus. Pop never stops!"
+    </span>
+  </p>
+  <div style="margin-top:21px; text-align:center;">
+    <span style="font-size:1.05em; color:#f52fa2; letter-spacing:0.13em;">
+      #poplife #maxvolume #musichappiness #hitparade
+    </span>
+  </div>
+</div>`
       },
       hiphop: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(110deg, #23272e 45%, #ffc857 100%);
+  border-radius: 40px;
+  padding: 50px 32px 40px 32px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #fff;
+  font-family: 'Bebas Neue', 'Share Tech Mono', Arial, monospace;
+  box-shadow: 0 0 65px #23272e88, 0 0 10px #ffc857aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Graffiti-Tagg med rörlig effekt -->
+  <div style="position:absolute; top:23px; left:25px;">
+    <span style="font-family:'Permanent Marker',cursive;font-size:2.15em;color:#ffc857;text-shadow:1px 2px 7px #000, 0 0 20px #23272e88;">
+      <span style="animation: graffiti-fade 2.8s infinite alternate;">HIPHOP</span>
+    </span>
+  </div>
+  <style>
+    @keyframes graffiti-fade {
+      0% { opacity: 0.7; filter: blur(2px);}
+      100% { opacity: 1; filter: blur(0);}
+    }
+    @keyframes boombox-move {
+      0% { transform: translateY(0);}
+      60% { transform: translateY(-8px);}
+      100% { transform: translateY(0);}
+    }
+  </style>
+  <!-- Boombox med animerad "dunk" -->
+  <div style="position:absolute; right:28px; bottom:22px;">
+    <svg width="70" height="42" viewBox="0 0 70 42" style="animation: boombox-move 1.7s infinite;">
+      <rect x="7" y="10" width="56" height="22" rx="6" fill="#23272e" stroke="#ffc857" stroke-width="3"/>
+      <circle cx="21" cy="21" r="7" fill="#ffc857" stroke="#fff" stroke-width="2"/>
+      <circle cx="49" cy="21" r="7" fill="#ffc857" stroke="#fff" stroke-width="2"/>
+      <rect x="30" y="16" width="10" height="10" rx="2" fill="#fff" stroke="#23272e" stroke-width="2"/>
+      <rect x="16" y="5" width="38" height="7" rx="2" fill="#ffc857" stroke="#fff" stroke-width="1"/>
+      <rect x="31" y="30" width="8" height="4" rx="1" fill="#fff"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:18px;">
+    <span style="font-size:2.2em; letter-spacing:0.12em;">🎤 🧢 🏙️ 🎧 🚦</span>
+  </div>
+  <h2 style="color:#ffc857; text-align:center; font-size:2.18em; margin:0 0 14px 0; text-shadow:0 0 12px #23272e;">
+    HIPHOP Profil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#fff; margin:0 0 19px 0;">
+    <i>"Rim som vapen, beats som hjärta – från betongen till stjärnorna."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(35,39,46,0.14); border:1.3px solid #ffc857; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85755;">
+      <b style="color:#ffc857;">🎤 MC</b><br/>
+      <span style="color:#fff;">Släpper bars som andra släpper stories.</span>
+    </div>
+    <div style="background:rgba(255,200,87,0.13); border:1.3px solid #fff; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85733;">
+      <b style="color:#fff;">🧢 Beatmaker</b><br/>
+      <span style="color:#23272e;">Trummar rytmen på bordet och i själen.</span>
+    </div>
+    <div style="background:rgba(35,39,46,0.15); border:1.3px solid #ffc857; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85755;">
+      <b style="color:#ffc857;">🎧 DJ</b><br/>
+      <span style="color:#fff;">Spinnar vinylen som ett vapen.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(255,200,87,0.15); color:#23272e; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #ffc85722;">
+      "Ingen respekt utan äkta flow."
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center;">
+    <span style="font-size:1.08em; color:#ffc857; letter-spacing:0.11em;">
+      #hiphoplife #beats #urbanvibes #mc
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(110deg, #23272e 45%, #ffc857 100%);
+  border-radius: 40px;
+  padding: 50px 32px 40px 32px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #fff;
+  font-family: 'Bebas Neue', 'Share Tech Mono', Arial, monospace;
+  box-shadow: 0 0 65px #23272e88, 0 0 10px #ffc857aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Graffiti Tag with animation -->
+  <div style="position:absolute; top:23px; left:25px;">
+    <span style="font-family:'Permanent Marker',cursive;font-size:2.15em;color:#ffc857;text-shadow:1px 2px 7px #000, 0 0 20px #23272e88;">
+      <span style="animation: graffiti-fade 2.8s infinite alternate;">HIPHOP</span>
+    </span>
+  </div>
+  <style>
+    @keyframes graffiti-fade {
+      0% { opacity: 0.7; filter: blur(2px);}
+      100% { opacity: 1; filter: blur(0);}
+    }
+    @keyframes boombox-move {
+      0% { transform: translateY(0);}
+      60% { transform: translateY(-8px);}
+      100% { transform: translateY(0);}
+    }
+  </style>
+  <!-- Boombox with bounce animation -->
+  <div style="position:absolute; right:28px; bottom:22px;">
+    <svg width="70" height="42" viewBox="0 0 70 42" style="animation: boombox-move 1.7s infinite;">
+      <rect x="7" y="10" width="56" height="22" rx="6" fill="#23272e" stroke="#ffc857" stroke-width="3"/>
+      <circle cx="21" cy="21" r="7" fill="#ffc857" stroke="#fff" stroke-width="2"/>
+      <circle cx="49" cy="21" r="7" fill="#ffc857" stroke="#fff" stroke-width="2"/>
+      <rect x="30" y="16" width="10" height="10" rx="2" fill="#fff" stroke="#23272e" stroke-width="2"/>
+      <rect x="16" y="5" width="38" height="7" rx="2" fill="#ffc857" stroke="#fff" stroke-width="1"/>
+      <rect x="31" y="30" width="8" height="4" rx="1" fill="#fff"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:18px;">
+    <span style="font-size:2.2em; letter-spacing:0.12em;">🎤 🧢 🏙️ 🎧 🚦</span>
+  </div>
+  <h2 style="color:#ffc857; text-align:center; font-size:2.18em; margin:0 0 14px 0; text-shadow:0 0 12px #23272e;">
+    HIPHOP Profile
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#fff; margin:0 0 19px 0;">
+    <i>"Rhymes as weapons, beats as the heart – from the concrete to the stars."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(35,39,46,0.14); border:1.3px solid #ffc857; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85755;">
+      <b style="color:#ffc857;">🎤 MC</b><br/>
+      <span style="color:#fff;">Dropping bars like stories on the street.</span>
+    </div>
+    <div style="background:rgba(255,200,87,0.13); border:1.3px solid #fff; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85733;">
+      <b style="color:#fff;">🧢 Beatmaker</b><br/>
+      <span style="color:#23272e;">Tapping the rhythm on the table and in the soul.</span>
+    </div>
+    <div style="background:rgba(35,39,46,0.15); border:1.3px solid #ffc857; border-radius:18px; padding:15px 23px; min-width:148px; box-shadow:0 0 8px #ffc85755;">
+      <b style="color:#ffc857;">🎧 DJ</b><br/>
+      <span style="color:#fff;">Spinning vinyl like a weapon.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(255,200,87,0.15); color:#23272e; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #ffc85722;">
+      "No respect without real flow."
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center;">
+    <span style="font-size:1.08em; color:#ffc857; letter-spacing:0.11em;">
+      #hiphoplife #beats #urbanvibes #mc
+    </span>
+  </div>
+</div>`
       },
       jazz: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #1e2635 65%, #c1b497 100%);
+  border-radius: 38px;
+  padding: 52px 32px 44px 32px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #f7eedc;
+  font-family: 'Share Tech Mono', 'Cormorant Garamond', 'Courier New', monospace;
+  box-shadow: 0 0 60px #a6956666, 0 0 10px #1e2635aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Jazz-nattmotiv -->
+  <div style="position:absolute; top:19px; left:30px;">
+    <span style="font-family:'Permanent Marker',cursive; font-size:2em; color:#f7eedc; text-shadow:0 0 12px #c1b49788;">
+      <span style="animation:jazz-shadow 2.6s infinite alternate;">JAZZ</span>
+    </span>
+  </div>
+  <style>
+    @keyframes jazz-shadow {
+      0% { text-shadow:0 0 12px #c1b49788; }
+      100% { text-shadow:0 0 28px #fffda1ee, 0 0 14px #000; }
+    }
+    @keyframes sax-move {
+      0% { transform: rotate(-7deg);}
+      60% { transform: rotate(6deg);}
+      100% { transform: rotate(-7deg);}
+    }
+    @keyframes light-reflect {
+      0% { opacity: 0.35;}
+      100% { opacity: 1;}
+    }
+  </style>
+  <!-- Animerad saxofon -->
+  <div style="position:absolute; right:38px; bottom:27px;">
+    <svg width="80" height="48" viewBox="0 0 80 48" style="animation:sax-move 2.2s infinite;">
+      <ellipse cx="68" cy="41" rx="10" ry="5" fill="#c1b497" opacity="0.35" style="animation:light-reflect 2.8s infinite alternate;"/>
+      <rect x="34" y="23" width="25" height="12" rx="7" fill="#efd271" stroke="#bba33c" stroke-width="2"/>
+      <rect x="20" y="11" width="32" height="16" rx="10" fill="#efd271" stroke="#bba33c" stroke-width="2"/>
+      <rect x="8" y="4" width="28" height="14" rx="10" fill="#ffe9a3" stroke="#bba33c" stroke-width="2"/>
+      <ellipse cx="47" cy="34" rx="4" ry="2.3" fill="#bba33c"/>
+      <ellipse cx="31" cy="18" rx="3" ry="2" fill="#bba33c"/>
+      <ellipse cx="18" cy="10" rx="2.5" ry="1.3" fill="#bba33c"/>
+      <ellipse cx="54" cy="41" rx="2" ry="1.1" fill="#a69566"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:18px;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🎷 🎺 🥁 🎶 ✨</span>
+  </div>
+  <h2 style="color:#ffd74d; text-align:center; font-size:2.14em; margin:0 0 15px 0; text-shadow:0 0 18px #efd27199;">
+    Jazzprofil
+  </h2>
+  <p style="font-size:1.1em; text-align:center; color:#f7eedc; margin:0 0 19px 0;">
+    <i>"När natten är ung och takten är fri – flyter livet som blå toner genom rökiga klubbar."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(225,215,113,0.12); border:1.3px solid #ffd74d; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #efd27155;">
+      <b style="color:#efd271;">🎷 Saxofonist</b><br/>
+      <span style="color:#f7eedc;">Improviserar känslan i varje solo.</span>
+    </div>
+    <div style="background:rgba(30,38,53,0.18); border:1.3px solid #a69566; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #1e263544;">
+      <b style="color:#ffd74d;">🥁 Swingmästare</b><br/>
+      <span style="color:#fff;">Låter rytmen leda vägen in i natten.</span>
+    </div>
+    <div style="background:rgba(193,180,151,0.13); border:1.3px solid #efd271; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #efd27133;">
+      <b style="color:#ffd74d;">🎺 Trumpetlirare</b><br/>
+      <span style="color:#fff;">Sätter tonen för alla jam sessions.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.14em;">
+    <span style="background:rgba(255,215,77,0.11); color:#232323; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #efd27122;">
+      "Allt handlar om känsla, inte bara takt."
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.08em; color:#efd271; letter-spacing:0.11em;">
+      #jazzvibes #blues #nightclub #improvisation
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #1e2635 65%, #c1b497 100%);
+  border-radius: 38px;
+  padding: 52px 32px 44px 32px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 82vh;
+  color: #f7eedc;
+  font-family: 'Share Tech Mono', 'Cormorant Garamond', 'Courier New', monospace;
+  box-shadow: 0 0 60px #a6956666, 0 0 10px #1e2635aa;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Jazz night theme -->
+  <div style="position:absolute; top:19px; left:30px;">
+    <span style="font-family:'Permanent Marker',cursive; font-size:2em; color:#f7eedc; text-shadow:0 0 12px #c1b49788;">
+      <span style="animation:jazz-shadow 2.6s infinite alternate;">JAZZ</span>
+    </span>
+  </div>
+  <style>
+    @keyframes jazz-shadow {
+      0% { text-shadow:0 0 12px #c1b49788; }
+      100% { text-shadow:0 0 28px #fffda1ee, 0 0 14px #000; }
+    }
+    @keyframes sax-move {
+      0% { transform: rotate(-7deg);}
+      60% { transform: rotate(6deg);}
+      100% { transform: rotate(-7deg);}
+    }
+    @keyframes light-reflect {
+      0% { opacity: 0.35;}
+      100% { opacity: 1;}
+    }
+  </style>
+  <!-- Animated saxophone -->
+  <div style="position:absolute; right:38px; bottom:27px;">
+    <svg width="80" height="48" viewBox="0 0 80 48" style="animation:sax-move 2.2s infinite;">
+      <ellipse cx="68" cy="41" rx="10" ry="5" fill="#c1b497" opacity="0.35" style="animation:light-reflect 2.8s infinite alternate;"/>
+      <rect x="34" y="23" width="25" height="12" rx="7" fill="#efd271" stroke="#bba33c" stroke-width="2"/>
+      <rect x="20" y="11" width="32" height="16" rx="10" fill="#efd271" stroke="#bba33c" stroke-width="2"/>
+      <rect x="8" y="4" width="28" height="14" rx="10" fill="#ffe9a3" stroke="#bba33c" stroke-width="2"/>
+      <ellipse cx="47" cy="34" rx="4" ry="2.3" fill="#bba33c"/>
+      <ellipse cx="31" cy="18" rx="3" ry="2" fill="#bba33c"/>
+      <ellipse cx="18" cy="10" rx="2.5" ry="1.3" fill="#bba33c"/>
+      <ellipse cx="54" cy="41" rx="2" ry="1.1" fill="#a69566"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:12px; margin-top:18px;">
+    <span style="font-size:2em; letter-spacing:0.10em;">🎷 🎺 🥁 🎶 ✨</span>
+  </div>
+  <h2 style="color:#ffd74d; text-align:center; font-size:2.14em; margin:0 0 15px 0; text-shadow:0 0 18px #efd27199;">
+    Jazz Profile
+  </h2>
+  <p style="font-size:1.1em; text-align:center; color:#f7eedc; margin:0 0 19px 0;">
+    <i>"When the night is young and the rhythm is free – life flows like blue notes through smoky clubs."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(225,215,113,0.12); border:1.3px solid #ffd74d; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #efd27155;">
+      <b style="color:#efd271;">🎷 Saxophonist</b><br/>
+      <span style="color:#f7eedc;">Improvising feeling into every solo.</span>
+    </div>
+    <div style="background:rgba(30,38,53,0.18); border:1.3px solid #a69566; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #1e263544;">
+      <b style="color:#ffd74d;">🥁 Swing Master</b><br/>
+      <span style="color:#fff;">Letting rhythm guide the night.</span>
+    </div>
+    <div style="background:rgba(193,180,151,0.13); border:1.3px solid #efd271; border-radius:17px; padding:14px 24px; min-width:146px; box-shadow:0 0 8px #efd27133;">
+      <b style="color:#ffd74d;">🎺 Trumpet Player</b><br/>
+      <span style="color:#fff;">Setting the tone for every jam session.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.14em;">
+    <span style="background:rgba(255,215,77,0.11); color:#232323; padding:8px 17px; border-radius:12px; font-weight:600; box-shadow:0 0 7px #efd27122;">
+      "It's all about the feel, not just the beat."
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.08em; color:#efd271; letter-spacing:0.11em;">
+      #jazzvibes #blues #nightclub #improvisation
+    </span>
+  </div>
+</div>`
       },
       disco: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #301a40 40%, #ff86ec 100%);
+  border-radius: 38px;
+  padding: 54px 36px 44px 36px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 83vh;
+  color: #fff0fa;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Courier New', monospace;
+  box-shadow: 0 0 60px #ff00cc66, 0 0 12px #301a4099;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animerad discokula -->
+  <div style="position:absolute; top:26px; left:50%; transform:translateX(-50%);">
+    <svg width="76" height="78" viewBox="0 0 76 78" style="animation:disco-spin 2.8s linear infinite;">
+      <defs>
+        <radialGradient id="shine" cx="55%" cy="40%" r="70%" fx="60%" fy="20%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="45%" stop-color="#ffbaff"/>
+          <stop offset="100%" stop-color="#4f3a7a"/>
+        </radialGradient>
+      </defs>
+      <circle cx="38" cy="39" r="34" fill="url(#shine)" stroke="#fff" stroke-width="4"/>
+      <g stroke="#fff" stroke-width="1.5">
+        <line x1="38" y1="5" x2="38" y2="73"/>
+        <line x1="5" y1="39" x2="71" y2="39"/>
+        <line x1="13" y1="13" x2="63" y2="63"/>
+        <line x1="13" y1="65" x2="63" y2="15"/>
+      </g>
+      <circle cx="25" cy="30" r="3" fill="#fff0fa" opacity="0.7"/>
+      <circle cx="52" cy="22" r="2.6" fill="#fff9ff" opacity="0.6"/>
+      <circle cx="55" cy="58" r="2" fill="#ffbaff" opacity="0.55"/>
+      <circle cx="34" cy="57" r="1.5" fill="#ffd0ff" opacity="0.65"/>
+    </svg>
+    <style>
+      @keyframes disco-spin {
+        0% { transform: translateX(-50%) rotate(0deg);}
+        100% { transform: translateX(-50%) rotate(360deg);}
+      }
+      @keyframes disco-glow {
+        0%,100% { filter: drop-shadow(0 0 8px #ff92fb); }
+        50% { filter: drop-shadow(0 0 24px #ffeaff); }
+      }
+      .disco-spot {
+        animation:disco-glow 1.3s infinite alternate;
+      }
+    </style>
+  </div>
+  <!-- Disco emojis och färger -->
+  <div style="text-align:center; margin-bottom:8px; margin-top:32px;">
+    <span style="font-size:2.15em; letter-spacing:0.11em;">🪩 💃 🕺 🎶 🌈</span>
+  </div>
+  <h2 style="color:#ffbaff; text-align:center; font-size:2.15em; margin:0 0 15px 0; text-shadow:0 0 18px #fff,0 0 7px #ff00cc;">
+    Disco-profil
+  </h2>
+  <p style="font-size:1.1em; text-align:center; color:#fff8fb; margin:0 0 21px 0;">
+    <i>"Golvet vibrerar, lamporna blinkar – här finns bara glädje och rytmen regerar!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(255,186,255,0.13); border:1.2px solid #ffbaff; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #ffbaff44;">
+      <b style="color:#ffbaff;">🪩 Discokungen</b><br/>
+      <span style="color:#fff;">Alltid först upp på dansgolvet.</span>
+    </div>
+    <div style="background:rgba(76,58,122,0.19); border:1.2px solid #00ffb8; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #00ffb877;">
+      <b style="color:#00ffb8;">💃 Stjärndansare</b><br/>
+      <span style="color:#fff;">Snurrar loss under discokulan.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.09); border:1.2px solid #fff0fa; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #ff00cc33;">
+      <b style="color:#fff0fa;">🎶 Funk & Groove</b><br/>
+      <span style="color:#fff;">Känner basen i hela kroppen.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(255,186,255,0.13); color:#ffbaff; padding:8px 17px; border-radius:14px; font-weight:600; box-shadow:0 0 7px #ffbaff33;">
+      "Dansgolvet är frihet – disco dör aldrig!"
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.08em; color:#ffbaff; letter-spacing:0.11em;">
+      #discofever #boogie #dansnatt #groovy
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #301a40 40%, #ff86ec 100%);
+  border-radius: 38px;
+  padding: 54px 36px 44px 36px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 83vh;
+  color: #fff0fa;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Courier New', monospace;
+  box-shadow: 0 0 60px #ff00cc66, 0 0 12px #301a4099;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated disco ball -->
+  <div style="position:absolute; top:26px; left:50%; transform:translateX(-50%);">
+    <svg width="76" height="78" viewBox="0 0 76 78" style="animation:disco-spin 2.8s linear infinite;">
+      <defs>
+        <radialGradient id="shine" cx="55%" cy="40%" r="70%" fx="60%" fy="20%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="45%" stop-color="#ffbaff"/>
+          <stop offset="100%" stop-color="#4f3a7a"/>
+        </radialGradient>
+      </defs>
+      <circle cx="38" cy="39" r="34" fill="url(#shine)" stroke="#fff" stroke-width="4"/>
+      <g stroke="#fff" stroke-width="1.5">
+        <line x1="38" y1="5" x2="38" y2="73"/>
+        <line x1="5" y1="39" x2="71" y2="39"/>
+        <line x1="13" y1="13" x2="63" y2="63"/>
+        <line x1="13" y1="65" x2="63" y2="15"/>
+      </g>
+      <circle cx="25" cy="30" r="3" fill="#fff0fa" opacity="0.7"/>
+      <circle cx="52" cy="22" r="2.6" fill="#fff9ff" opacity="0.6"/>
+      <circle cx="55" cy="58" r="2" fill="#ffbaff" opacity="0.55"/>
+      <circle cx="34" cy="57" r="1.5" fill="#ffd0ff" opacity="0.65"/>
+    </svg>
+    <style>
+      @keyframes disco-spin {
+        0% { transform: translateX(-50%) rotate(0deg);}
+        100% { transform: translateX(-50%) rotate(360deg);}
+      }
+      @keyframes disco-glow {
+        0%,100% { filter: drop-shadow(0 0 8px #ff92fb); }
+        50% { filter: drop-shadow(0 0 24px #ffeaff); }
+      }
+      .disco-spot {
+        animation:disco-glow 1.3s infinite alternate;
+      }
+    </style>
+  </div>
+  <!-- Disco emojis and colors -->
+  <div style="text-align:center; margin-bottom:8px; margin-top:32px;">
+    <span style="font-size:2.15em; letter-spacing:0.11em;">🪩 💃 🕺 🎶 🌈</span>
+  </div>
+  <h2 style="color:#ffbaff; text-align:center; font-size:2.15em; margin:0 0 15px 0; text-shadow:0 0 18px #fff,0 0 7px #ff00cc;">
+    Disco Profile
+  </h2>
+  <p style="font-size:1.1em; text-align:center; color:#fff8fb; margin:0 0 21px 0;">
+    <i>"The floor is shaking, the lights are flashing – joy rules and rhythm leads the way!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(255,186,255,0.13); border:1.2px solid #ffbaff; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #ffbaff44;">
+      <b style="color:#ffbaff;">🪩 Disco King</b><br/>
+      <span style="color:#fff;">Always the first one on the dancefloor.</span>
+    </div>
+    <div style="background:rgba(76,58,122,0.19); border:1.2px solid #00ffb8; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #00ffb877;">
+      <b style="color:#00ffb8;">💃 Star Dancer</b><br/>
+      <span style="color:#fff;">Spinning wild under the disco ball.</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.09); border:1.2px solid #fff0fa; border-radius:18px; padding:15px 25px; min-width:150px; box-shadow:0 0 8px #ff00cc33;">
+      <b style="color:#fff0fa;">🎶 Funk & Groove</b><br/>
+      <span style="color:#fff;">Feeling the bass all over your body.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(255,186,255,0.13); color:#ffbaff; padding:8px 17px; border-radius:14px; font-weight:600; box-shadow:0 0 7px #ffbaff33;">
+      "The dancefloor is freedom – disco never dies!"
+    </span>
+  </p>
+  <div style="margin-top:23px; text-align:center;">
+    <span style="font-size:1.08em; color:#ffbaff; letter-spacing:0.11em;">
+      #discofever #boogie #dancenight #groovy
+    </span>
+  </div>
+</div>`
       },
       metal: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #161616 60%, #3b0d11 100%);
+  border-radius: 36px;
+  padding: 54px 36px 48px 36px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 84vh;
+  color: #fff4ed;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Courier New', monospace;
+  box-shadow: 0 0 90px #d22d2d33, 0 0 14px #000a;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Rörlig blixt och eldskuggor -->
+  <div style="position:absolute; top:36px; left:46px; z-index:1;">
+    <svg width="80" height="46" viewBox="0 0 80 46">
+      <g>
+        <polyline points="24,2 38,28 26,28 56,44 44,18 56,18" 
+          fill="none" stroke="#ffd100" stroke-width="5" stroke-linejoin="round"
+          style="filter:drop-shadow(0 0 6px #fff700); animation:metalflash 1.8s infinite alternate;"/>
+      </g>
+      <style>
+        @keyframes metalflash {
+          0% { opacity:0.38; }
+          50% { opacity:1; }
+          100% { opacity:0.38; }
+        }
+      </style>
+    </svg>
+  </div>
+  <!-- Eld och glöd i bakgrunden -->
+  <div style="position:absolute; bottom:0; left:0; width:100%; height:70px; z-index:0; pointer-events:none;">
+    <svg width="100%" height="100%">
+      <defs>
+        <linearGradient id="fire" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#ef7e2d"/>
+          <stop offset="33%" stop-color="#ffd100"/>
+          <stop offset="100%" stop-color="#ff3740"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="50%" cy="60" rx="360" ry="45" fill="url(#fire)" opacity="0.52"/>
+    </svg>
+  </div>
+  <!-- Metal emojis -->
+  <div style="text-align:center; margin-bottom:10px; margin-top:38px;">
+    <span style="font-size:2.07em; letter-spacing:0.13em;">🤘 🎸 🔥 ⚡ 🦇</span>
+  </div>
+  <h2 style="color:#ffd100; text-align:center; font-size:2.18em; margin:0 0 17px 0; text-shadow:0 0 17px #fff10055,0 0 7px #ff3740;">
+    Metalprofil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#ffd1a6; margin:0 0 22px 0;">
+    <i>"Eld, riff och åska – varje dag är en moshpit för själen."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(239,126,45,0.13); border:1.2px solid #ffd100; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ffd10044;">
+      <b style="color:#ffd100;">🤘 Headbanger</b><br/>
+      <span style="color:#fff;">Rensar ur hjärnan i varje breakdown.</span>
+    </div>
+    <div style="background:rgba(44,23,35,0.19); border:1.2px solid #ef7e2d; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ef7e2d44;">
+      <b style="color:#ef7e2d;">🎸 Solomästare</b><br/>
+      <span style="color:#fff;">Snabbare än ljuset på strängarna.</span>
+    </div>
+    <div style="background:rgba(255,55,64,0.12); border:1.2px solid #ff3740; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ff374044;">
+      <b style="color:#ff3740;">🔥 Moshpit Hero</b><br/>
+      <span style="color:#fff;">Där energin blir eld.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.16em;">
+    <span style="background:rgba(255,209,0,0.13); color:#ffd100; padding:8px 19px; border-radius:14px; font-weight:600; box-shadow:0 0 7px #ffd10044;">
+      "Den som inte skriker ibland är aldrig riktigt fri."
+    </span>
+  </p>
+  <div style="margin-top:25px; text-align:center;">
+    <span style="font-size:1.1em; color:#ffd100; letter-spacing:0.10em;">
+      #metal4life #headbang #riffstorm #burnitdown
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #161616 60%, #3b0d11 100%);
+  border-radius: 36px;
+  padding: 54px 36px 48px 36px;
+  margin: 42px auto 0 auto;
+  max-width: 900px;
+  min-height: 84vh;
+  color: #fff4ed;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Courier New', monospace;
+  box-shadow: 0 0 90px #d22d2d33, 0 0 14px #000a;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated lightning and fire -->
+  <div style="position:absolute; top:36px; left:46px; z-index:1;">
+    <svg width="80" height="46" viewBox="0 0 80 46">
+      <g>
+        <polyline points="24,2 38,28 26,28 56,44 44,18 56,18" 
+          fill="none" stroke="#ffd100" stroke-width="5" stroke-linejoin="round"
+          style="filter:drop-shadow(0 0 6px #fff700); animation:metalflash 1.8s infinite alternate;"/>
+      </g>
+      <style>
+        @keyframes metalflash {
+          0% { opacity:0.38; }
+          50% { opacity:1; }
+          100% { opacity:0.38; }
+        }
+      </style>
+    </svg>
+  </div>
+  <!-- Fire and glow at the bottom -->
+  <div style="position:absolute; bottom:0; left:0; width:100%; height:70px; z-index:0; pointer-events:none;">
+    <svg width="100%" height="100%">
+      <defs>
+        <linearGradient id="fire" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#ef7e2d"/>
+          <stop offset="33%" stop-color="#ffd100"/>
+          <stop offset="100%" stop-color="#ff3740"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="50%" cy="60" rx="360" ry="45" fill="url(#fire)" opacity="0.52"/>
+    </svg>
+  </div>
+  <!-- Metal emojis -->
+  <div style="text-align:center; margin-bottom:10px; margin-top:38px;">
+    <span style="font-size:2.07em; letter-spacing:0.13em;">🤘 🎸 🔥 ⚡ 🦇</span>
+  </div>
+  <h2 style="color:#ffd100; text-align:center; font-size:2.18em; margin:0 0 17px 0; text-shadow:0 0 17px #fff10055,0 0 7px #ff3740;">
+    Metal Profile
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#ffd1a6; margin:0 0 22px 0;">
+    <i>"Fire, riffs, and thunder – every day is a moshpit for the soul."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(239,126,45,0.13); border:1.2px solid #ffd100; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ffd10044;">
+      <b style="color:#ffd100;">🤘 Headbanger</b><br/>
+      <span style="color:#fff;">Cleanses the mind in every breakdown.</span>
+    </div>
+    <div style="background:rgba(44,23,35,0.19); border:1.2px solid #ef7e2d; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ef7e2d44;">
+      <b style="color:#ef7e2d;">🎸 Solo Master</b><br/>
+      <span style="color:#fff;">Faster than light on the strings.</span>
+    </div>
+    <div style="background:rgba(255,55,64,0.12); border:1.2px solid #ff3740; border-radius:18px; padding:15px 25px; min-width:140px; box-shadow:0 0 8px #ff374044;">
+      <b style="color:#ff3740;">🔥 Moshpit Hero</b><br/>
+      <span style="color:#fff;">Where energy becomes fire.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.16em;">
+    <span style="background:rgba(255,209,0,0.13); color:#ffd100; padding:8px 19px; border-radius:14px; font-weight:600; box-shadow:0 0 7px #ffd10044;">
+      "Those who never scream are never truly free."
+    </span>
+  </p>
+  <div style="margin-top:25px; text-align:center;">
+    <span style="font-size:1.1em; color:#ffd100; letter-spacing:0.10em;">
+      #metal4life #headbang #riffstorm #burnitdown
+    </span>
+  </div>
+</div>`
       },
       edm: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(115deg, #0a043b 0%, #140e49 45%, #00ffea 100%);
+  border-radius: 38px;
+  padding: 48px 26px 40px 26px;
+  margin: 44px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #e0ffff;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Arial', monospace;
+  box-shadow: 0 0 90px #00fff966, 0 0 22px #1cffff66;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Rörlig neon laser i bakgrunden -->
+  <div style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;">
+    <svg width="100%" height="100%">
+      <defs>
+        <linearGradient id="neon1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00ffea" />
+          <stop offset="100%" stop-color="#fa00ff" />
+        </linearGradient>
+        <linearGradient id="neon2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fffa00" />
+          <stop offset="100%" stop-color="#00eaff" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="none"/>
+      <line x1="0" y1="0" x2="100%" y2="100%" stroke="url(#neon1)" stroke-width="12" opacity="0.19">
+        <animate attributeName="x2" values="100%;0;100%" dur="4.7s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="100%;0;100%" dur="4.7s" repeatCount="indefinite"/>
+      </line>
+      <line x1="100%" y1="0" x2="0" y2="100%" stroke="url(#neon2)" stroke-width="12" opacity="0.13">
+        <animate attributeName="x2" values="0;100%;0" dur="5.4s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="100%;0;100%" dur="5.4s" repeatCount="indefinite"/>
+      </line>
+    </svg>
+  </div>
+  <!-- EDM emojis -->
+  <div style="text-align:center; margin-bottom:16px; margin-top:34px;">
+    <span style="font-size:2.13em; letter-spacing:0.09em; filter: drop-shadow(0 0 16px #00fff9);">
+      🎧 🎛️ ✨ 🔊 🕺
+    </span>
+  </div>
+  <h2 style="color:#00ffe0; text-align:center; font-size:2.13em; margin:0 0 16px 0; text-shadow:0 0 14px #00ffe055,0 0 7px #ff5ff7;">
+    EDM-profil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#c5fefd; margin:0 0 19px 0;">
+    <i>"När basen slår, glömmer du tiden och världen dansar med dig."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(0,255,234,0.14); border:1.2px solid #00ffea; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #00fff977;">
+      <b style="color:#00ffea;">🔊 Bassdropper</b><br/>
+      <span style="color:#fff;">Låter marken vibrera på varje rave.</span>
+    </div>
+    <div style="background:rgba(250,0,255,0.13); border:1.2px solid #fa00ff; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #fa00ff77;">
+      <b style="color:#fa00ff;">🎛️ Beat Maker</b><br/>
+      <span style="color:#fff;">Skapar magi på mixern och dansgolvet.</span>
+    </div>
+    <div style="background:rgba(255,250,0,0.13); border:1.2px solid #fffa00; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #fffa0077;">
+      <b style="color:#fffa00;">🕺 Dancefloor Star</b><br/>
+      <span style="color:#fff;">Alltid mitt i neonregnet.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(0,255,234,0.11); color:#00ffea; padding:7px 16px; border-radius:13px; font-weight:600; box-shadow:0 0 8px #00ffe033;">
+      "Släpp taget – låt musiken styra dina steg!"
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center;">
+    <span style="font-size:1.08em; color:#00ffe0; letter-spacing:0.10em;">
+      #edmlife #bassdrop #raveon #neonwaves
+    </span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(115deg, #0a043b 0%, #140e49 45%, #00ffea 100%);
+  border-radius: 38px;
+  padding: 48px 26px 40px 26px;
+  margin: 44px auto 0 auto;
+  max-width: 880px;
+  min-height: 84vh;
+  color: #e0ffff;
+  font-family: 'Share Tech Mono', 'Orbitron', 'Arial', monospace;
+  box-shadow: 0 0 90px #00fff966, 0 0 22px #1cffff66;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Animated neon laser background -->
+  <div style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;">
+    <svg width="100%" height="100%">
+      <defs>
+        <linearGradient id="neon1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00ffea" />
+          <stop offset="100%" stop-color="#fa00ff" />
+        </linearGradient>
+        <linearGradient id="neon2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fffa00" />
+          <stop offset="100%" stop-color="#00eaff" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="none"/>
+      <line x1="0" y1="0" x2="100%" y2="100%" stroke="url(#neon1)" stroke-width="12" opacity="0.19">
+        <animate attributeName="x2" values="100%;0;100%" dur="4.7s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="100%;0;100%" dur="4.7s" repeatCount="indefinite"/>
+      </line>
+      <line x1="100%" y1="0" x2="0" y2="100%" stroke="url(#neon2)" stroke-width="12" opacity="0.13">
+        <animate attributeName="x2" values="0;100%;0" dur="5.4s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="100%;0;100%" dur="5.4s" repeatCount="indefinite"/>
+      </line>
+    </svg>
+  </div>
+  <!-- EDM emojis -->
+  <div style="text-align:center; margin-bottom:16px; margin-top:34px;">
+    <span style="font-size:2.13em; letter-spacing:0.09em; filter: drop-shadow(0 0 16px #00fff9);">
+      🎧 🎛️ ✨ 🔊 🕺
+    </span>
+  </div>
+  <h2 style="color:#00ffe0; text-align:center; font-size:2.13em; margin:0 0 16px 0; text-shadow:0 0 14px #00ffe055,0 0 7px #ff5ff7;">
+    EDM Profile
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#c5fefd; margin:0 0 19px 0;">
+    <i>"When the bass hits, you forget time – and the world dances with you."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:29px;">
+    <div style="background:rgba(0,255,234,0.14); border:1.2px solid #00ffea; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #00fff977;">
+      <b style="color:#00ffea;">🔊 Bassdropper</b><br/>
+      <span style="color:#fff;">Makes the ground vibrate at every rave.</span>
+    </div>
+    <div style="background:rgba(250,0,255,0.13); border:1.2px solid #fa00ff; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #fa00ff77;">
+      <b style="color:#fa00ff;">🎛️ Beat Maker</b><br/>
+      <span style="color:#fff;">Creates magic on the mixer and the dancefloor.</span>
+    </div>
+    <div style="background:rgba(255,250,0,0.13); border:1.2px solid #fffa00; border-radius:17px; padding:15px 21px; min-width:130px; box-shadow:0 0 8px #fffa0077;">
+      <b style="color:#fffa00;">🕺 Dancefloor Star</b><br/>
+      <span style="color:#fff;">Always in the middle of the neon rain.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.13em;">
+    <span style="background:rgba(0,255,234,0.11); color:#00ffea; padding:7px 16px; border-radius:13px; font-weight:600; box-shadow:0 0 8px #00ffe033;">
+      "Let go – let the music guide your steps!"
+    </span>
+  </p>
+  <div style="margin-top:24px; text-align:center;">
+    <span style="font-size:1.08em; color:#00ffe0; letter-spacing:0.10em;">
+      #edmlife #bassdrop #raveon #neonwaves
+    </span>
+  </div>
+</div>`
       },
       techno: {
         sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
