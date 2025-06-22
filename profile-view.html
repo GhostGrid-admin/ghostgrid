@@ -382,7 +382,7 @@
             <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
             <span>${lang === 'sv'
               ? 'Bli medlem och få exklusiva erbjudanden!'
-                    : 'Become a member and get exclusive offers!'}</span>
+              : 'Become a member and get exclusive offers!'}</span>
           </div>
         </div>
       </div>`;
@@ -429,17 +429,21 @@
       if (document.getElementById('pic-smile-count')) document.getElementById('pic-smile-count').textContent = picReactions.smile.length;
     }
 
+    // === Toggle-funktion ===
     async function setProfileReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
+      const alreadyReacted = profileReactions[type].includes(userId);
+
       // Ta bort användaren från alla reaktionslistor
       ["heart", "thumb", "smile"].forEach(t => {
         profileReactions[t] = profileReactions[t].filter(uidVal => uidVal !== userId);
       });
-      // Lägg till i ny reaktion om den inte redan var satt
-      if (!profileReactions[type].includes(userId)) {
+
+      // Lägg till i ny reaktion om användaren inte redan hade den (annars har vi tagit bort den)
+      if (!alreadyReacted) {
         profileReactions[type].push(userId);
       }
-      // Spara
+
       await updateDoc(profileRef, {
         heartUsers: profileReactions.heart,
         thumbUsers: profileReactions.thumb,
@@ -450,15 +454,16 @@
 
     async function setPicReaction(type) {
       if (!userId) { alert(lang === 'sv' ? "Du måste vara inloggad för att reagera!" : "You must be logged in to react!"); return; }
-      // Ta bort användaren från alla reaktionslistor
+      const alreadyReacted = picReactions[type].includes(userId);
+
       ["heart", "thumb", "smile"].forEach(t => {
         picReactions[t] = picReactions[t].filter(uidVal => uidVal !== userId);
       });
-      // Lägg till i ny reaktion om den inte redan var satt
-      if (!picReactions[type].includes(userId)) {
+
+      if (!alreadyReacted) {
         picReactions[type].push(userId);
       }
-      // Spara
+
       await updateDoc(profileRef, {
         picHeartUsers: picReactions.heart,
         picThumbUsers: picReactions.thumb,
