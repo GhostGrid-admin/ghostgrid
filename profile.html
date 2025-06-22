@@ -533,24 +533,651 @@
 </div>`
       },
       "80s": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #1a1e5a 0%, #56128c 55%, #ff52de 100%);
+  border-radius: 40px;
+  padding: 56px 32px 44px 32px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 100px #ff52de80, 0 0 28px #14ffe544;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 80-tals synthwave solnedgång + grid -->
+  <div style="width:100%; height:140px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="140" viewBox="0 0 900 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffe259"/>
+          <stop offset="100%" stop-color="#ff52de"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="450" cy="80" rx="95" ry="45" fill="url(#sunGrad)" opacity="0.92"/>
+      <g>
+        <rect x="0" y="110" width="900" height="3" fill="#00fff3"/>
+        <rect x="0" y="120" width="900" height="2" fill="#00fff3" opacity="0.5"/>
+        <rect x="0" y="130" width="900" height="1.5" fill="#00fff3" opacity="0.3"/>
+        <polyline points="0,140 150,110 300,130 450,115 600,130 750,110 900,140" fill="none" stroke="#00fff3" stroke-width="2"/>
+        <animateTransform attributeName="transform" type="translate" from="0 0" to="30 0" dur="5s" repeatCount="indefinite"/>
+      </g>
+    </svg>
+  </div>
+
+  <div style="text-align:center; margin-bottom: 16px; margin-top:90px; position:relative; z-index:1;">
+    <span style="font-size:2.6em; letter-spacing:0.05em; text-shadow:0 0 20px #14ffe5,0 0 8px #ff52de;">🕹️ 💾 🏄‍♂️ 🎸</span>
+  </div>
+  <h2 style="color:#14ffe5; text-align:center; margin-top:14px; font-size:2.15em;letter-spacing:0.09em; font-family:'Audiowide',cursive,monospace;text-shadow:0 0 15px #ff52de;">80-talsprofil</h2>
+  <p style="font-size:1.09em; text-align:center; color:#fff; margin:20px 0 30px 0; text-shadow:0 1px 12px #14ffe544;">
+    <i>"När världen blev neon – och varje dag var ett äventyr på skateboard, med synthar i lurarna."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center; margin-bottom:28px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(135deg,#18f6ffbb,#3d5afe77); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #00fff399;">
+      <b style="color:#ff52de;">🎸 Pop & Rock</b><br/>
+      <span style="color:#fff; text-shadow:0 0 4px #ff52de;">Elgitarr, stort hår och kassettband!</span>
+      <div style="margin-top:6px;color:#ffe259;">🌟</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#ff4ef488,#f7ff5788); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #ffe25999;">
+      <b style="color:#00fff3;">🕹️ Retro Tech</b><br/>
+      <span style="color:#fff; text-shadow:0 0 3px #14ffe5;">Arcadehallar, Nintendo & walkmans.</span>
+      <div style="margin-top:6px;color:#ff52de;">💾</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#6ee7ff99,#fed8ffcc); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #14ffe599;">
+      <b style="color:#ffe259;">🏄‍♂️ Summer Vibes</b><br/>
+      <span style="color:#fff; text-shadow:0 0 3px #ffe259;">Surf, färgstarka shorts & skateboards.</span>
+      <div style="margin-top:6px;color:#00fff3;">🛹</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em; margin-bottom:7px;">
+    <span style="background:#fff7fa33; color:#14ffe5; padding:7px 22px; border-radius:15px; box-shadow:0 0 9px #ff52de99;">
+      "Keep it cool – och låt neonljusen visa vägen!"
+    </span>
+  </p>
+  <!-- 80s rörlig triangel längst ner -->
+  <div style="margin-top:28px; text-align:center; height:54px;position:relative;">
+    <svg width="54" height="54" viewBox="0 0 54 54" style="vertical-align:middle;">
+      <polygon points="27,6 51,48 3,48" fill="#ff52de" stroke="#14ffe5" stroke-width="3">
+        <animate attributeName="points" 
+          values="27,6 51,48 3,48;27,12 48,45 6,45;27,6 51,48 3,48"
+          dur="2.2s" repeatCount="indefinite"/>
+      </polygon>
+      <circle cx="27" cy="33" r="7" fill="#00fff3" opacity="0.45"/>
+    </svg>
+    <span style="font-size:1.18em;color:#ff52de;vertical-align:middle;">🎶</span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #1a1e5a 0%, #56128c 55%, #ff52de 100%);
+  border-radius: 40px;
+  padding: 56px 32px 44px 32px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 100px #ff52de80, 0 0 28px #14ffe544;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 80s synthwave sunset + grid -->
+  <div style="width:100%; height:140px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="140" viewBox="0 0 900 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffe259"/>
+          <stop offset="100%" stop-color="#ff52de"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="450" cy="80" rx="95" ry="45" fill="url(#sunGrad)" opacity="0.92"/>
+      <g>
+        <rect x="0" y="110" width="900" height="3" fill="#00fff3"/>
+        <rect x="0" y="120" width="900" height="2" fill="#00fff3" opacity="0.5"/>
+        <rect x="0" y="130" width="900" height="1.5" fill="#00fff3" opacity="0.3"/>
+        <polyline points="0,140 150,110 300,130 450,115 600,130 750,110 900,140" fill="none" stroke="#00fff3" stroke-width="2"/>
+        <animateTransform attributeName="transform" type="translate" from="0 0" to="30 0" dur="5s" repeatCount="indefinite"/>
+      </g>
+    </svg>
+  </div>
+
+  <div style="text-align:center; margin-bottom: 16px; margin-top:90px; position:relative; z-index:1;">
+    <span style="font-size:2.6em; letter-spacing:0.05em; text-shadow:0 0 20px #14ffe5,0 0 8px #ff52de;">🕹️ 💾 🏄‍♂️ 🎸</span>
+  </div>
+  <h2 style="color:#14ffe5; text-align:center; margin-top:14px; font-size:2.15em;letter-spacing:0.09em; font-family:'Audiowide',cursive,monospace;text-shadow:0 0 15px #ff52de;">80s Profile</h2>
+  <p style="font-size:1.09em; text-align:center; color:#fff; margin:20px 0 30px 0; text-shadow:0 1px 12px #14ffe544;">
+    <i>"When the world turned neon – and every day was an adventure on a skateboard with synths in your headphones."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center; margin-bottom:28px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(135deg,#18f6ffbb,#3d5afe77); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #00fff399;">
+      <b style="color:#ff52de;">🎸 Pop & Rock</b><br/>
+      <span style="color:#fff; text-shadow:0 0 4px #ff52de;">Electric guitar, big hair & cassette tapes!</span>
+      <div style="margin-top:6px;color:#ffe259;">🌟</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#ff4ef488,#f7ff5788); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #ffe25999;">
+      <b style="color:#00fff3;">🕹️ Retro Tech</b><br/>
+      <span style="color:#fff; text-shadow:0 0 3px #14ffe5;">Arcades, Nintendo & walkmans.</span>
+      <div style="margin-top:6px;color:#ff52de;">💾</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#6ee7ff99,#fed8ffcc); border-radius:20px; padding:15px 23px; min-width:210px; box-shadow:0 0 8px #14ffe599;">
+      <b style="color:#ffe259;">🏄‍♂️ Summer Vibes</b><br/>
+      <span style="color:#fff; text-shadow:0 0 3px #ffe259;">Surf, colorful shorts & skateboards.</span>
+      <div style="margin-top:6px;color:#00fff3;">🛹</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em; margin-bottom:7px;">
+    <span style="background:#fff7fa33; color:#14ffe5; padding:7px 22px; border-radius:15px; box-shadow:0 0 9px #ff52de99;">
+      "Keep it cool – and let the neon lights show the way!"
+    </span>
+  </p>
+  <!-- Animated triangle bottom -->
+  <div style="margin-top:28px; text-align:center; height:54px;position:relative;">
+    <svg width="54" height="54" viewBox="0 0 54 54" style="vertical-align:middle;">
+      <polygon points="27,6 51,48 3,48" fill="#ff52de" stroke="#14ffe5" stroke-width="3">
+        <animate attributeName="points" 
+          values="27,6 51,48 3,48;27,12 48,45 6,45;27,6 51,48 3,48"
+          dur="2.2s" repeatCount="indefinite"/>
+      </polygon>
+      <circle cx="27" cy="33" r="7" fill="#00fff3" opacity="0.45"/>
+    </svg>
+    <span style="font-size:1.18em;color:#ff52de;vertical-align:middle;">🎶</span>
+  </div>
+</div>`
       },
       "90s": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #ffe8fd 0%, #92e7ff 55%, #ffe682 100%);
+  border-radius: 36px;
+  padding: 54px 30px 38px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 80px #e974ff88, 0 0 22px #ffd60066;
+  font-family: 'Comic Sans MS', 'Baloo 2', 'Share Tech Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 90-tals squiggle motiv + Gameboy -->
+  <div style="width:100%; height:72px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="72" viewBox="0 0 900 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 Q200 30 400 60 T900 45" stroke="#ea1fff" stroke-width="7" fill="none"/>
+      <circle cx="90" cy="41" r="12" fill="#22e8ff"/>
+      <circle cx="830" cy="53" r="16" fill="#ffd600"/>
+      <rect x="720" y="18" width="33" height="23" rx="6" fill="#a6ff41" stroke="#000" stroke-width="3"/>
+      <rect x="127" y="12" width="28" height="22" rx="6" fill="#ff90b7" stroke="#000" stroke-width="3"/>
+    </svg>
+  </div>
+
+  <div style="text-align:center; margin-bottom: 14px; margin-top:60px; position:relative; z-index:1;">
+    <span style="font-size:2.35em; letter-spacing:0.03em; text-shadow:0 0 12px #fd31ff,0 0 7px #22e8ff;">🕹️ 🦄 📺 🎨</span>
+  </div>
+  <h2 style="color:#ea1fff; text-align:center; margin-top:10px; font-size:2em; letter-spacing:0.08em; font-family:'Comic Sans MS','Baloo 2',cursive;">90-talsprofil</h2>
+  <p style="font-size:1.04em; text-align:center; color:#343a54; margin:16px 0 28px 0;">
+    <i>"När Tamagotchin pep, MTV stod på, och alla drömde om Gameboy och färgglada kläder."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(135deg,#f3e1ffbb,#e7ffd7aa); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #ea1fff77;">
+      <b style="color:#22e8ff;">🕹️ Spelglädje</b><br/>
+      <span style="color:#343a54;">Gameboy, Mario, Pokémon, Sega!</span>
+      <div style="margin-top:5px;color:#fd31ff;">🎮</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#ffe682bb,#ffe2e2aa); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #ffd60077;">
+      <b style="color:#ea1fff;">🎨 Lek & Pastell</b><br/>
+      <span style="color:#343a54;">Tamagotchi, kritor och slime.</span>
+      <div style="margin-top:5px;color:#ffd600;">🖍️</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#b3faffbb,#fff9e6bb); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #22e8ff77;">
+      <b style="color:#ffd600;">📺 TV-minnen</b><br/>
+      <span style="color:#343a54;">MTV, Nickelodeon, Spice Girls.</span>
+      <div style="margin-top:5px;color:#ea1fff;">📼</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.03em;">
+    <span style="background:#fffcff99; color:#ea1fff; padding:6px 17px; border-radius:12px;">
+      "Låt ingen sno din slime – och kom ihåg, Tamagotchin först!"
+    </span>
+  </p>
+  <!-- Animated squiggle bottom -->
+  <div style="margin-top:24px; text-align:center; height:40px;position:relative;">
+    <svg width="120" height="34" viewBox="0 0 120 34">
+      <path d="M2 17 Q30 2 60 17 T118 17" stroke="#ea1fff" stroke-width="5" fill="none">
+        <animate attributeName="d" 
+          values="M2 17 Q30 2 60 17 T118 17;M2 17 Q30 32 60 17 T118 17;M2 17 Q30 2 60 17 T118 17" 
+          dur="2.2s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+    <span style="font-size:1.16em;color:#22e8ff;vertical-align:middle;">💿</span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #ffe8fd 0%, #92e7ff 55%, #ffe682 100%);
+  border-radius: 36px;
+  padding: 54px 30px 38px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 80px #e974ff88, 0 0 22px #ffd60066;
+  font-family: 'Comic Sans MS', 'Baloo 2', 'Share Tech Mono', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow:hidden;
+">
+  <!-- 90s squiggle design + Gameboy -->
+  <div style="width:100%; height:72px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="72" viewBox="0 0 900 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 Q200 30 400 60 T900 45" stroke="#ea1fff" stroke-width="7" fill="none"/>
+      <circle cx="90" cy="41" r="12" fill="#22e8ff"/>
+      <circle cx="830" cy="53" r="16" fill="#ffd600"/>
+      <rect x="720" y="18" width="33" height="23" rx="6" fill="#a6ff41" stroke="#000" stroke-width="3"/>
+      <rect x="127" y="12" width="28" height="22" rx="6" fill="#ff90b7" stroke="#000" stroke-width="3"/>
+    </svg>
+  </div>
+
+  <div style="text-align:center; margin-bottom: 14px; margin-top:60px; position:relative; z-index:1;">
+    <span style="font-size:2.35em; letter-spacing:0.03em; text-shadow:0 0 12px #fd31ff,0 0 7px #22e8ff;">🕹️ 🦄 📺 🎨</span>
+  </div>
+  <h2 style="color:#ea1fff; text-align:center; margin-top:10px; font-size:2em; letter-spacing:0.08em; font-family:'Comic Sans MS','Baloo 2',cursive;">90s Profile</h2>
+  <p style="font-size:1.04em; text-align:center; color:#343a54; margin:16px 0 28px 0;">
+    <i>"When Tamagotchis beeped, MTV was on, and everyone dreamed of Gameboys and colorful clothes."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(135deg,#f3e1ffbb,#e7ffd7aa); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #ea1fff77;">
+      <b style="color:#22e8ff;">🕹️ Game Joy</b><br/>
+      <span style="color:#343a54;">Gameboy, Mario, Pokémon, Sega!</span>
+      <div style="margin-top:5px;color:#fd31ff;">🎮</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#ffe682bb,#ffe2e2aa); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #ffd60077;">
+      <b style="color:#ea1fff;">🎨 Fun & Pastel</b><br/>
+      <span style="color:#343a54;">Tamagotchi, crayons and slime.</span>
+      <div style="margin-top:5px;color:#ffd600;">🖍️</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#b3faffbb,#fff9e6bb); border-radius:18px; padding:15px 21px; min-width:200px; box-shadow:0 0 7px #22e8ff77;">
+      <b style="color:#ffd600;">📺 TV Memories</b><br/>
+      <span style="color:#343a54;">MTV, Nickelodeon, Spice Girls.</span>
+      <div style="margin-top:5px;color:#ea1fff;">📼</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.03em;">
+    <span style="background:#fffcff99; color:#ea1fff; padding:6px 17px; border-radius:12px;">
+      "Don’t let anyone steal your slime – and always check on your Tamagotchi first!"
+    </span>
+  </p>
+  <!-- Animated squiggle bottom -->
+  <div style="margin-top:24px; text-align:center; height:40px;position:relative;">
+    <svg width="120" height="34" viewBox="0 0 120 34">
+      <path d="M2 17 Q30 2 60 17 T118 17" stroke="#ea1fff" stroke-width="5" fill="none">
+        <animate attributeName="d" 
+          values="M2 17 Q30 2 60 17 T118 17;M2 17 Q30 32 60 17 T118 17;M2 17 Q30 2 60 17 T118 17" 
+          dur="2.2s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+    <span style="font-size:1.16em;color:#22e8ff;vertical-align:middle;">💿</span>
+  </div>
+</div>`
       },
       "y2k": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #d8e7ff 0%, #fff 60%, #c6bfff 100%);
+  border-radius: 40px;
+  padding: 58px 32px 38px 32px;
+  margin: 44px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 100px #b8d8ff77, 0 0 32px #6e40c988;
+  font-family: 'Trebuchet MS', 'Verdana', 'Arial', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow: hidden;
+">
+  <!-- Bling/Glitter-Animation Top -->
+  <div style="width:100%; height:60px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="60" viewBox="0 0 900 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="20" r="12" fill="#6e40c9"/>
+      <circle cx="180" cy="39" r="7" fill="#aafffc"/>
+      <circle cx="325" cy="30" r="10" fill="#fff69b"/>
+      <circle cx="720" cy="25" r="9" fill="#fbe8ff"/>
+      <rect x="820" y="13" width="24" height="19" rx="6" fill="#d1fffd" stroke="#6e40c9" stroke-width="2"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom: 18px; margin-top:54px; position:relative; z-index:1;">
+    <span style="font-size:2.4em; letter-spacing:0.02em; text-shadow:0 0 14px #b8d8ff, 0 0 7px #6e40c9;">💾 ✨ 👾 🖥️</span>
+  </div>
+  <h2 style="color:#6e40c9; text-align:center; margin-top:12px; font-size:2.13em; letter-spacing:0.06em; font-family:'Trebuchet MS','Verdana',sans-serif;">
+    Y2K-profil
+  </h2>
+  <p style="font-size:1.07em; text-align:center; color:#373d55; margin:15px 0 28px 0;">
+    <i>"SMS med T9, silverblå plast, MSN och pixelhjärtan – och alltid oro för Millennium-buggen!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(120deg,#e7e7ffcc,#cafffcaa); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #6e40c966;">
+      <b style="color:#6e40c9;">👾 Tech & Spel</b><br/>
+      <span style="color:#373d55;">Tamagotchi, Gameboy Color, SIMS & MSN Messenger.</span>
+      <div style="margin-top:6px;color:#ff87e1;">💾</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#d1fffdcc,#ffe2fbaa); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #b8d8ff88;">
+      <b style="color:#ff87e1;">✨ Bling & Silver</b><br/>
+      <span style="color:#373d55;">Glossy kläder, metallic-ögonskugga, glitternaglar.</span>
+      <div style="margin-top:6px;color:#fff69b;">🌟</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#fff7b3cc,#fff 88%); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #b6b6ff66;">
+      <b style="color:#b3c6ff;">🖥️ Internetvågen</b><br/>
+      <span style="color:#373d55;">MySpace, Lunarstorm, ringa upp internet.</span>
+      <div style="margin-top:6px;color:#6e40c9;">📡</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.05em;">
+    <span style="background:#f8faffb9; color:#6e40c9; padding:6px 19px; border-radius:15px;">
+      "Du är aldrig ensam – någon är alltid online!"
+    </span>
+  </p>
+  <!-- Pixelhjärtan och glitch -->
+  <div style="margin-top:28px; text-align:center; height:38px;">
+    <svg width="140" height="35" viewBox="0 0 140 35">
+      <rect x="6" y="6" width="10" height="10" fill="#ff87e1"/>
+      <rect x="22" y="12" width="10" height="10" fill="#6e40c9"/>
+      <rect x="38" y="7" width="10" height="10" fill="#fffc6c"/>
+      <rect x="54" y="14" width="10" height="10" fill="#87e1ff"/>
+      <rect x="70" y="9" width="10" height="10" fill="#d1fffd"/>
+      <rect x="102" y="12" width="10" height="10" fill="#6e40c9"/>
+      <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0" to="10 0" dur="2.7s" repeatCount="indefinite"/>
+    </svg>
+    <span style="font-size:1.24em;color:#6e40c9;vertical-align:middle;">❤️‍🔥</span>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #d8e7ff 0%, #fff 60%, #c6bfff 100%);
+  border-radius: 40px;
+  padding: 58px 32px 38px 32px;
+  margin: 44px auto 0 auto;
+  max-width: 900px;
+  min-height: 85vh;
+  box-shadow: 0 0 100px #b8d8ff77, 0 0 32px #6e40c988;
+  font-family: 'Trebuchet MS', 'Verdana', 'Arial', 'Courier New', monospace;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow: hidden;
+">
+  <!-- Bling/Glitter-Animation Top -->
+  <div style="width:100%; height:60px; position:absolute; left:0; top:0; z-index:0; pointer-events:none;">
+    <svg width="100%" height="60" viewBox="0 0 900 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="20" r="12" fill="#6e40c9"/>
+      <circle cx="180" cy="39" r="7" fill="#aafffc"/>
+      <circle cx="325" cy="30" r="10" fill="#fff69b"/>
+      <circle cx="720" cy="25" r="9" fill="#fbe8ff"/>
+      <rect x="820" y="13" width="24" height="19" rx="6" fill="#d1fffd" stroke="#6e40c9" stroke-width="2"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom: 18px; margin-top:54px; position:relative; z-index:1;">
+    <span style="font-size:2.4em; letter-spacing:0.02em; text-shadow:0 0 14px #b8d8ff, 0 0 7px #6e40c9;">💾 ✨ 👾 🖥️</span>
+  </div>
+  <h2 style="color:#6e40c9; text-align:center; margin-top:12px; font-size:2.13em; letter-spacing:0.06em; font-family:'Trebuchet MS','Verdana',sans-serif;">
+    Y2K Profile
+  </h2>
+  <p style="font-size:1.07em; text-align:center; color:#373d55; margin:15px 0 28px 0;">
+    <i>"Texting with T9, silver-blue plastic, MSN and pixel hearts – and always worrying about the Millennium Bug!"</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;">
+    <div style="background:linear-gradient(120deg,#e7e7ffcc,#cafffcaa); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #6e40c966;">
+      <b style="color:#6e40c9;">👾 Tech & Games</b><br/>
+      <span style="color:#373d55;">Tamagotchi, Gameboy Color, SIMS & MSN Messenger.</span>
+      <div style="margin-top:6px;color:#ff87e1;">💾</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#d1fffdcc,#ffe2fbaa); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #b8d8ff88;">
+      <b style="color:#ff87e1;">✨ Bling & Silver</b><br/>
+      <span style="color:#373d55;">Glossy outfits, metallic eyeshadow, glitter nails.</span>
+      <div style="margin-top:6px;color:#fff69b;">🌟</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#fff7b3cc,#fff 88%); border-radius:18px; padding:18px 22px; min-width:210px; box-shadow:0 0 10px #b6b6ff66;">
+      <b style="color:#b3c6ff;">🖥️ Internet Wave</b><br/>
+      <span style="color:#373d55;">MySpace, Lunarstorm, dial-up internet.</span>
+      <div style="margin-top:6px;color:#6e40c9;">📡</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.05em;">
+    <span style="background:#f8faffb9; color:#6e40c9; padding:6px 19px; border-radius:15px;">
+      "You’re never alone – someone is always online!"
+    </span>
+  </p>
+  <!-- Pixel hearts and glitch -->
+  <div style="margin-top:28px; text-align:center; height:38px;">
+    <svg width="140" height="35" viewBox="0 0 140 35">
+      <rect x="6" y="6" width="10" height="10" fill="#ff87e1"/>
+      <rect x="22" y="12" width="10" height="10" fill="#6e40c9"/>
+      <rect x="38" y="7" width="10" height="10" fill="#fffc6c"/>
+      <rect x="54" y="14" width="10" height="10" fill="#87e1ff"/>
+      <rect x="70" y="9" width="10" height="10" fill="#d1fffd"/>
+      <rect x="102" y="12" width="10" height="10" fill="#6e40c9"/>
+      <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0" to="10 0" dur="2.7s" repeatCount="indefinite"/>
+    </svg>
+    <span style="font-size:1.24em;color:#6e40c9;vertical-align:middle;">❤️‍🔥</span>
+  </div>
+</div>`
       },
       "2010s": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(120deg, #ffdde1 0%, #ee9ca7 100%);
+  border-radius: 38px;
+  padding: 54px 30px 36px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 82vh;
+  box-shadow: 0 0 60px #ff7eb977, 0 0 18px #f8b8d9;
+  font-family: 'Segoe UI', 'Arial', 'Trebuchet MS', sans-serif;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow: hidden;
+">
+  <div style="text-align:center; margin-bottom: 14px;">
+    <span style="font-size:2.2em; letter-spacing:0.06em; text-shadow:0 0 10px #ee9ca7, 0 0 8px #fff;">📱 ✨ 🤳 💬</span>
+  </div>
+  <h2 style="color:#e75480; text-align:center; margin-top:8px; font-size:2.13em; letter-spacing:0.04em;">
+    2010-talsprofil
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#434252; margin:14px 0 22px 0;">
+    <i>"#SelfieTime, första iPhonen, emoji-explosion och filter på allt."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:22px;">
+    <div style="background:linear-gradient(120deg,#fff3f7cc,#ffe4efcc); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #f8b8d966;">
+      <b style="color:#e75480;">🤳 Selfie-kultur</b><br/>
+      <span style="color:#434252;">Snapchat, duckface, tagga en vän!</span>
+      <div style="margin-top:4px; color:#f8b8d9;">💖</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#ffe6fa99,#d7fff899); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #ee9ca7;">
+      <b style="color:#a347e7;">📱 Smart life</b><br/>
+      <span style="color:#434252;">Appar, första iPhonen, likes & stories.</span>
+      <div style="margin-top:4px; color:#a347e7;">👍</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#fffecb88,#fff 88%); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #f6edb466;">
+      <b style="color:#f7b32b;">✨ Filter & Hashtags</b><br/>
+      <span style="color:#434252;">Rise, Valencia, #ThrowbackThursday.</span>
+      <div style="margin-top:4px; color:#f7b32b;">#️⃣</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.03em;">
+    <span style="background:#fff7fc; color:#e75480; padding:7px 16px; border-radius:13px; font-weight:bold;">
+      "Följ ditt flöde – och livet får alltid ett filter."
+    </span>
+  </p>
+  <!-- Polaroid-liknande ramar och likes -->
+  <div style="margin-top:24px; text-align:center; height:42px;">
+    <span style="font-size:1.22em; color:#e75480; vertical-align:middle;">❤️ 👍 😂 🙌</span>
+    <svg width="90" height="36" style="vertical-align:middle;">
+      <rect x="5" y="9" width="22" height="16" rx="4" fill="#fff" stroke="#e75480" stroke-width="2"/>
+      <rect x="33" y="7" width="22" height="18" rx="4" fill="#fff" stroke="#a347e7" stroke-width="2"/>
+      <rect x="61" y="11" width="22" height="14" rx="4" fill="#fff" stroke="#f7b32b" stroke-width="2"/>
+    </svg>
+  </div>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(120deg, #ffdde1 0%, #ee9ca7 100%);
+  border-radius: 38px;
+  padding: 54px 30px 36px 30px;
+  margin: 40px auto 0 auto;
+  max-width: 880px;
+  min-height: 82vh;
+  box-shadow: 0 0 60px #ff7eb977, 0 0 18px #f8b8d9;
+  font-family: 'Segoe UI', 'Arial', 'Trebuchet MS', sans-serif;
+  display: flex; flex-direction: column; justify-content: center; position: relative;
+  overflow: hidden;
+">
+  <div style="text-align:center; margin-bottom: 14px;">
+    <span style="font-size:2.2em; letter-spacing:0.06em; text-shadow:0 0 10px #ee9ca7, 0 0 8px #fff;">📱 ✨ 🤳 💬</span>
+  </div>
+  <h2 style="color:#e75480; text-align:center; margin-top:8px; font-size:2.13em; letter-spacing:0.04em;">
+    2010s Profile
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#434252; margin:14px 0 22px 0;">
+    <i>"#SelfieTime, first iPhone, emoji explosion and filters on everything."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:22px;">
+    <div style="background:linear-gradient(120deg,#fff3f7cc,#ffe4efcc); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #f8b8d966;">
+      <b style="color:#e75480;">🤳 Selfie culture</b><br/>
+      <span style="color:#434252;">Snapchat, duckface, tag a friend!</span>
+      <div style="margin-top:4px; color:#f8b8d9;">💖</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#ffe6fa99,#d7fff899); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #ee9ca7;">
+      <b style="color:#a347e7;">📱 Smart life</b><br/>
+      <span style="color:#434252;">Apps, first iPhone, likes & stories.</span>
+      <div style="margin-top:4px; color:#a347e7;">👍</div>
+    </div>
+    <div style="background:linear-gradient(120deg,#fffecb88,#fff 88%); border-radius:17px; padding:16px 20px; min-width:200px; box-shadow:0 0 10px #f6edb466;">
+      <b style="color:#f7b32b;">✨ Filters & Hashtags</b><br/>
+      <span style="color:#434252;">Rise, Valencia, #ThrowbackThursday.</span>
+      <div style="margin-top:4px; color:#f7b32b;">#️⃣</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.03em;">
+    <span style="background:#fff7fc; color:#e75480; padding:7px 16px; border-radius:13px; font-weight:bold;">
+      "Follow your feed – life always gets a filter."
+    </span>
+  </p>
+  <!-- Polaroid frames and likes -->
+  <div style="margin-top:24px; text-align:center; height:42px;">
+    <span style="font-size:1.22em; color:#e75480; vertical-align:middle;">❤️ 👍 😂 🙌</span>
+    <svg width="90" height="36" style="vertical-align:middle;">
+      <rect x="5" y="9" width="22" height="16" rx="4" fill="#fff" stroke="#e75480" stroke-width="2"/>
+      <rect x="33" y="7" width="22" height="18" rx="4" fill="#fff" stroke="#a347e7" stroke-width="2"/>
+      <rect x="61" y="11" width="22" height="14" rx="4" fill="#fff" stroke="#f7b32b" stroke-width="2"/>
+    </svg>
+  </div>
+</div>`
       },
       "2020s": {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: radial-gradient(ellipse at 70% 25%, #3fffd9 0%, #112031 80%);
+  border-radius: 40px;
+  padding: 58px 34px 44px 34px;
+  margin: 40px auto 0 auto;
+  max-width: 920px;
+  min-height: 80vh;
+  box-shadow: 0 0 80px #15f1ff88, 0 0 18px #c5c5c5;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+">
+  <!-- Neon Glow Ring -->
+  <div style="position:absolute; top:-64px; right:-64px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle,#3fffd9 40%,#0ff0fc00 100%); filter:blur(12px); opacity:0.5;"></div>
+  <!-- TikTok Wave -->
+  <div style="position:absolute; bottom:-48px; left:-40px; width:170px; height:90px; background:linear-gradient(135deg,#c471f5,#fa71cd 65%,#3fffd9); border-radius:60% 40% 60% 40%; filter:blur(8px); opacity:0.35;"></div>
+  
+  <div style="text-align:center; margin-bottom:16px;">
+    <span style="font-size:2.35em; text-shadow:0 0 14px #3fffd9, 0 0 8px #fff;">🎧 🦄 🕹️ 🌱 🏠</span>
+  </div>
+  <h2 style="color:#3fffd9; text-align:center; margin-top:8px; font-size:2.3em; letter-spacing:0.02em; text-shadow:0 0 12px #15f1ff;">
+    2020-talsprofil
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#eafff9; margin:15px 0 28px 0;">
+    <i>"Digital detox, TikTok-memes, klimatmedvetenhet och glow-up i hemmets trygghet."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:30px;">
+    <div style="background:rgba(24,40,63,0.85); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 22px #3fffd977,0 0 8px #fff4;">
+      <b style="color:#3fffd9;">🕹️ Gaming & Streams</b><br/>
+      <span style="color:#eafff9;">Among Us, Twitch, TikTok dance, Discord-vänner.</span>
+      <div style="margin-top:6px; color:#fff;">👾</div>
+    </div>
+    <div style="background:rgba(58,255,180,0.10); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 18px #3fffd9aa;">
+      <b style="color:#fa71cd;">🌱 Klimat & Care</b><br/>
+      <span style="color:#eafff9;">Elcyklar, plastbanta, vego, remote work, activism.</span>
+      <div style="margin-top:6px; color:#fa71cd;">🌍</div>
+    </div>
+    <div style="background:rgba(30,34,46,0.80); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 14px #c471f5bb;">
+      <b style="color:#c471f5;">🏠 Stay Home</b><br/>
+      <span style="color:#eafff9;">Zoom-fika, hemmagym, digitala quiz, cozy life.</span>
+      <div style="margin-top:6px; color:#c471f5;">🦄</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.04em;">
+    <span style="background:rgba(20,255,220,0.14); color:#3fffd9; padding:8px 18px; border-radius:16px; font-weight:600; box-shadow:0 0 8px #3fffd9;">
+      "Glow up – världen är både online och offline!"
+    </span>
+  </p>
+  <!-- Animated "Live" Dot & Hashtag Row -->
+  <div style="margin-top:26px; text-align:center;">
+    <span style="font-size:1.13em; color:#3fffd9; vertical-align:middle; letter-spacing:0.2em;">#StayHome #GlowUp #Vegan #TikTok #AmongUs</span>
+    <span style="display:inline-block; margin-left:10px; width:11px; height:11px; background:#fa71cd; border-radius:50%; box-shadow:0 0 12px #fa71cd; animation:liveGlow2020 1.2s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes liveGlow2020 {
+      from { box-shadow:0 0 8px #fa71cd, 0 0 0 #fa71cd; }
+      to { box-shadow:0 0 18px #fa71cd, 0 0 14px #fa71cd44; }
+    }
+  </style>
+</div>`,
+        en: `<div style="
+  background: radial-gradient(ellipse at 70% 25%, #3fffd9 0%, #112031 80%);
+  border-radius: 40px;
+  padding: 58px 34px 44px 34px;
+  margin: 40px auto 0 auto;
+  max-width: 920px;
+  min-height: 80vh;
+  box-shadow: 0 0 80px #15f1ff88, 0 0 18px #c5c5c5;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+">
+  <div style="position:absolute; top:-64px; right:-64px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle,#3fffd9 40%,#0ff0fc00 100%); filter:blur(12px); opacity:0.5;"></div>
+  <div style="position:absolute; bottom:-48px; left:-40px; width:170px; height:90px; background:linear-gradient(135deg,#c471f5,#fa71cd 65%,#3fffd9); border-radius:60% 40% 60% 40%; filter:blur(8px); opacity:0.35;"></div>
+  
+  <div style="text-align:center; margin-bottom:16px;">
+    <span style="font-size:2.35em; text-shadow:0 0 14px #3fffd9, 0 0 8px #fff;">🎧 🦄 🕹️ 🌱 🏠</span>
+  </div>
+  <h2 style="color:#3fffd9; text-align:center; margin-top:8px; font-size:2.3em; letter-spacing:0.02em; text-shadow:0 0 12px #15f1ff;">
+    2020s Profile
+  </h2>
+  <p style="font-size:1.09em; text-align:center; color:#eafff9; margin:15px 0 28px 0;">
+    <i>"Digital detox, TikTok memes, climate care and glowing up at home."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:23px; justify-content:center; margin-bottom:30px;">
+    <div style="background:rgba(24,40,63,0.85); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 22px #3fffd977,0 0 8px #fff4;">
+      <b style="color:#3fffd9;">🕹️ Gaming & Streams</b><br/>
+      <span style="color:#eafff9;">Among Us, Twitch, TikTok dance, Discord friends.</span>
+      <div style="margin-top:6px; color:#fff;">👾</div>
+    </div>
+    <div style="background:rgba(58,255,180,0.10); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 18px #3fffd9aa;">
+      <b style="color:#fa71cd;">🌱 Climate & Care</b><br/>
+      <span style="color:#eafff9;">E-bikes, low-plastic, vegan, remote work, activism.</span>
+      <div style="margin-top:6px; color:#fa71cd;">🌍</div>
+    </div>
+    <div style="background:rgba(30,34,46,0.80); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 14px #c471f5bb;">
+      <b style="color:#c471f5;">🏠 Stay Home</b><br/>
+      <span style="color:#eafff9;">Zoom coffee, home workouts, digital quizzes, cozy life.</span>
+      <div style="margin-top:6px; color:#c471f5;">🦄</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.04em;">
+    <span style="background:rgba(20,255,220,0.14); color:#3fffd9; padding:8px 18px; border-radius:16px; font-weight:600; box-shadow:0 0 8px #3fffd9;">
+      "Glow up – the world is both online and offline!"
+    </span>
+  </p>
+  <div style="margin-top:26px; text-align:center;">
+    <span style="font-size:1.13em; color:#3fffd9; vertical-align:middle; letter-spacing:0.2em;">#StayHome #GlowUp #Vegan #TikTok #AmongUs</span>
+    <span style="display:inline-block; margin-left:10px; width:11px; height:11px; background:#fa71cd; border-radius:50%; box-shadow:0 0 12px #fa71cd; animation:liveGlow2020 1.2s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes liveGlow2020 {
+      from { box-shadow:0 0 8px #fa71cd, 0 0 0 #fa71cd; }
+      to { box-shadow:0 0 18px #fa71cd, 0 0 14px #fa71cd44; }
+    }
+  </style>
+</div>`
       },
       goth: {
         sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
