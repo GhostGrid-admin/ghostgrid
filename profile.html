@@ -1180,11 +1180,203 @@
 </div>`
       },
       goth: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
-        en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
+        sv: `<div style="
+  background: linear-gradient(135deg, #18131a 60%, #2d1835 100%);
+  border-radius: 36px;
+  padding: 54px 34px 46px 34px;
+  margin: 40px auto 0 auto;
+  max-width: 920px;
+  min-height: 80vh;
+  box-shadow: 0 0 65px #b81e5b66, 0 0 15px #d4abff55;
+  color: #e0c7ff;
+  font-family: 'Spectral', 'Segoe UI', Arial, serif;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+">
+  <!-- Mån-glow -->
+  <div style="position:absolute; top:-48px; right:-52px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle, #fff8 50%, #c42cff33 100%); filter:blur(2px);"></div>
+  <!-- Svart ros-illustration -->
+  <div style="position:absolute; left:18px; bottom:16px;">
+    <svg width="70" height="70" viewBox="0 0 60 60" fill="none">
+      <ellipse cx="30" cy="48" rx="20" ry="8" fill="#19181d" fill-opacity="0.5"/>
+      <path d="M40 20 Q35 15 30 23 Q25 17 20 23 Q15 25 30 48 Q45 25 40 20" fill="#5a4363" stroke="#2d1835" stroke-width="2"/>
+      <circle cx="30" cy="23" r="9" fill="#2a1a2c" stroke="#9e2350" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <!-- Fladdermus-emoji -->
+  <div style="text-align:center; margin-bottom:10px;">
+    <span style="font-size:2.7em; text-shadow:0 0 24px #9e2350, 0 0 8px #fff;">🦇 🌹 🌑 🕯️</span>
+  </div>
+  <h2 style="color:#9e2350; text-align:center; font-size:2.2em; margin-top:10px; letter-spacing:0.05em; text-shadow:0 0 14px #9e235077;">
+    Goth-profil
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#dfd5e3; margin:16px 0 28px 0;">
+    <i>"Skuggor dansar på väggarna – mitt hjärta slår i takt med mörkrets poesi."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(46,17,52,0.77); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 16px #9e235077, 0 0 8px #fff2;">
+      <b style="color:#d34c8a;">🌑 Nattbarn</b><br/>
+      <span style="color:#e0c7ff;">Skriver dikter i stearinljusets sken, hör The Cure i hörlurarna.</span>
+      <div style="margin-top:8px; color:#fff;">🕯️</div>
+    </div>
+    <div style="background:rgba(23,17,35,0.80); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 14px #b81e5b77;">
+      <b style="color:#9e2350;">🌹 Svart Romantik</b><br/>
+      <span style="color:#e0c7ff;">Spets, sammet, bleka rosor och kärlek till det fördolda.</span>
+      <div style="margin-top:8px; color:#9e2350;">🌹</div>
+    </div>
+    <div style="background:rgba(44,23,53,0.60); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 18px #dfd5e377;">
+      <b style="color:#dfd5e3;">🦇 Fladdermusliv</b><br/>
+      <span style="color:#dfd5e3;">Nattpromenader, silverringar, gotisk litteratur.</span>
+      <div style="margin-top:8px; color:#e0c7ff;">🦇</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(156,35,80,0.18); color:#9e2350; padding:8px 20px; border-radius:16px; font-weight:600; box-shadow:0 0 8px #9e235088;">
+      "Jag bär natten som en krona, och rosenblad i min själ."
+    </span>
+  </p>
+  <!-- Animated flicker candle effect -->
+  <div style="margin-top:30px; text-align:center;">
+    <span style="font-size:1.18em; color:#d34c8a; vertical-align:middle; letter-spacing:0.18em;">
+      #Goth #ShadowLove #BlackRose #Nocturnal
+    </span>
+    <span style="display:inline-block; margin-left:12px; width:13px; height:13px; background:#fff7c5; border-radius:50%; box-shadow:0 0 22px #fbe5a1; animation:gothCandleFlicker 1s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes gothCandleFlicker {
+      from { box-shadow:0 0 10px #ffe8c4,0 0 2px #9e2350; }
+      to   { box-shadow:0 0 20px #fff7c5,0 0 14px #9e2350; }
+    }
+  </style>
+</div>`,
+        en: `<div style="
+  background: linear-gradient(135deg, #18131a 60%, #2d1835 100%);
+  border-radius: 36px;
+  padding: 54px 34px 46px 34px;
+  margin: 40px auto 0 auto;
+  max-width: 920px;
+  min-height: 80vh;
+  box-shadow: 0 0 65px #b81e5b66, 0 0 15px #d4abff55;
+  color: #e0c7ff;
+  font-family: 'Spectral', 'Segoe UI', Arial, serif;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+">
+  <div style="position:absolute; top:-48px; right:-52px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle, #fff8 50%, #c42cff33 100%); filter:blur(2px);"></div>
+  <div style="position:absolute; left:18px; bottom:16px;">
+    <svg width="70" height="70" viewBox="0 0 60 60" fill="none">
+      <ellipse cx="30" cy="48" rx="20" ry="8" fill="#19181d" fill-opacity="0.5"/>
+      <path d="M40 20 Q35 15 30 23 Q25 17 20 23 Q15 25 30 48 Q45 25 40 20" fill="#5a4363" stroke="#2d1835" stroke-width="2"/>
+      <circle cx="30" cy="23" r="9" fill="#2a1a2c" stroke="#9e2350" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:10px;">
+    <span style="font-size:2.7em; text-shadow:0 0 24px #9e2350, 0 0 8px #fff;">🦇 🌹 🌑 🕯️</span>
+  </div>
+  <h2 style="color:#9e2350; text-align:center; font-size:2.2em; margin-top:10px; letter-spacing:0.05em; text-shadow:0 0 14px #9e235077;">
+    Goth Profile
+  </h2>
+  <p style="font-size:1.12em; text-align:center; color:#dfd5e3; margin:16px 0 28px 0;">
+    <i>"Shadows dancing on the walls – my heart beats to the poetry of darkness."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-bottom:27px;">
+    <div style="background:rgba(46,17,52,0.77); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 16px #9e235077, 0 0 8px #fff2;">
+      <b style="color:#d34c8a;">🌑 Night Child</b><br/>
+      <span style="color:#e0c7ff;">Writing poetry by candlelight, The Cure in my headphones.</span>
+      <div style="margin-top:8px; color:#fff;">🕯️</div>
+    </div>
+    <div style="background:rgba(23,17,35,0.80); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 14px #b81e5b77;">
+      <b style="color:#9e2350;">🌹 Black Romance</b><br/>
+      <span style="color:#e0c7ff;">Lace, velvet, pale roses and love for all things hidden.</span>
+      <div style="margin-top:8px; color:#9e2350;">🌹</div>
+    </div>
+    <div style="background:rgba(44,23,53,0.60); border-radius:22px; padding:22px 28px; min-width:210px; box-shadow:0 0 18px #dfd5e377;">
+      <b style="color:#dfd5e3;">🦇 Bat Life</b><br/>
+      <span style="color:#dfd5e3;">Night walks, silver rings, gothic literature.</span>
+      <div style="margin-top:8px; color:#e0c7ff;">🦇</div>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.07em;">
+    <span style="background:rgba(156,35,80,0.18); color:#9e2350; padding:8px 20px; border-radius:16px; font-weight:600; box-shadow:0 0 8px #9e235088;">
+      "I wear the night as a crown, and rose petals in my soul."
+    </span>
+  </p>
+  <div style="margin-top:30px; text-align:center;">
+    <span style="font-size:1.18em; color:#d34c8a; vertical-align:middle; letter-spacing:0.18em;">
+      #Goth #ShadowLove #BlackRose #Nocturnal
+    </span>
+    <span style="display:inline-block; margin-left:12px; width:13px; height:13px; background:#fff7c5; border-radius:50%; box-shadow:0 0 22px #fbe5a1; animation:gothCandleFlicker 1s infinite alternate;"></span>
+  </div>
+  <style>
+    @keyframes gothCandleFlicker {
+      from { box-shadow:0 0 10px #ffe8c4,0 0 2px #9e2350; }
+      to   { box-shadow:0 0 20px #fff7c5,0 0 14px #9e2350; }
+    }
+  </style>
+</div>`
       },
       emo: {
-        sv: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50-talsprofil</h2><p>Jukebox, milkshake & rockabilly!</p></div>`,
+        sv: `<div style="
+  background: linear-gradient(120deg, #1a1b23 65%, #381741 100%);
+  border-radius: 36px;
+  padding: 46px 28px 42px 28px;
+  margin: 40px auto 0 auto;
+  max-width: 900px;
+  min-height: 78vh;
+  box-shadow: 0 0 60px #fc3e8a55, 0 0 8px #b3aaff88;
+  color: #e8defb;
+  font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(7px);
+">
+  <!-- Regndroppar + hjärta SVG -->
+  <div style="position:absolute; top:28px; right:28px;">
+    <svg width="64" height="64" viewBox="0 0 64 64">
+      <ellipse cx="32" cy="58" rx="19" ry="7" fill="#23152a" opacity="0.3"/>
+      <path d="M32 49 Q26 42 22 36 Q14 26 24 20 Q30 16 32 24 Q34 16 40 20 Q50 26 42 36 Q38 42 32 49" fill="#ff4b95" stroke="#3e2746" stroke-width="2"/>
+      <line x1="38" y1="15" x2="38" y2="7" stroke="#73a3ff" stroke-width="2" />
+      <ellipse cx="38" cy="5" rx="2" ry="3.2" fill="#73a3ff" opacity="0.8"/>
+      <line x1="26" y1="17" x2="26" y2="10" stroke="#73a3ff" stroke-width="2" />
+      <ellipse cx="26" cy="8.2" rx="2" ry="2.6" fill="#73a3ff" opacity="0.8"/>
+    </svg>
+  </div>
+  <div style="text-align:center; margin-bottom:16px;">
+    <span style="font-size:2.1em; letter-spacing:0.09em;">🖤 💔 ☔ 🎸</span>
+  </div>
+  <h2 style="color:#ff4b95; text-align:center; font-size:2.2em; margin:0 0 8px 0; letter-spacing:0.03em; text-shadow:0 0 13px #ff4b9588;">
+    Emo-profil
+  </h2>
+  <p style="font-size:1.11em; text-align:center; color:#fffaf8; margin:0 0 22px 0;">
+    <i>"Regnet faller på fönstret och hjärtat skriver låtar om natten."</i>
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:22px; justify-content:center; margin-bottom:25px;">
+    <div style="background:rgba(46,27,55,0.84); border-radius:20px; padding:18px 25px; min-width:185px; box-shadow:0 0 10px #ff4b9588;">
+      <b style="color:#ff4b95;">💔 Broken Hearted</b><br/>
+      <span style="color:#e8defb;">Skriver dagbok, lyssnar på My Chemical Romance, färgar luggen svart/rosa.</span>
+    </div>
+    <div style="background:rgba(27,19,36,0.82); border-radius:20px; padding:18px 25px; min-width:185px; box-shadow:0 0 10px #6c5be5;">
+      <b style="color:#79aaff;">☔ Regniga Dagar</b><br/>
+      <span style="color:#fff;">Allt blir bättre när det regnar, och ögon make-upen rinner.</span>
+    </div>
+    <div style="background:rgba(76,38,82,0.53); border-radius:20px; padding:18px 25px; min-width:185px; box-shadow:0 0 10px #ff4b9555;">
+      <b style="color:#fffaf8;">🎸 Musikräddning</b><br/>
+      <span style="color:#fffaf8;">Gitarr, converse, och drömmen om att stå på scenen.</span>
+    </div>
+  </div>
+  <p style="text-align:center; font-size:1.08em;">
+    <span style="background:rgba(255,75,149,0.19); color:#ff4b95; padding:8px 22px; border-radius:16px; font-weight:600; box-shadow:0 0 8px #ff4b9577;">
+      "Allt känns mer på riktigt i natten, och musiken räddar mig varje gång."
+    </span>
+  </p>
+  <!-- Emo doodle motiv -->
+  <div style="margin-top:26px; text-align:center;">
+    <span style="font-size:1.22em; color:#79aaff; letter-spacing:0.14em;">#emo #nightlyrics #crybaby #heartcore</span>
+    <span style="display:inline-block; margin-left:13px; width:16px; height:16px; background:#fff8; border-radius:3px; box-shadow:0 0 8px #fc3e8a; transform:rotate(-15deg);"></span>
+  </div>
+</div>`,
         en: `<div style="background:#ffe3ea; border-radius:30px; padding:44px 28px 38px 28px; margin:40px auto 0 auto; max-width:950px; box-shadow:0 0 80px #ff8cce88,0 0 12px #00d7ff66; font-family:'Fira Mono','Share Tech Mono','Courier New',monospace; min-height:85vh; display:flex; flex-direction:column; justify-content:center; position:relative;"><h2 style='color:#f8549a'>50s Profile</h2><p>Jukebox, milkshake & rockabilly!</p></div>`
       },
       vampyr: {
