@@ -189,193 +189,549 @@
       custom: "",
       "50s": {
   sv: `
-  <div style="
-  background: 
-    linear-gradient(140deg, #e0fcff 0%, #fff5fb 80%),
-    url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'><rect fill=\'%23c2f9e6\' fill-opacity=\'0.23\' x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\'/><rect x=\'0\' y=\'97%25\' width=\'100%25\' height=\'8%25\' fill=\'%23e4f1f7\'/><rect x=\'0\' y=\'97%25\' width=\'100%25\' height=\'4%25\' fill=\'%23fff3fa\'/><rect x=\'0\' y=\'100%25\' width=\'100%25\' height=\'4%25\' fill=\'%23e7e7fb\'/><rect x=\'0\' y=\'93%25\' width=\'100%25\' height=\'4%25\' fill=\'%23bae3ff\'/><rect x=\'0\' y=\'89%25\' width=\'100%25\' height=\'4%25\' fill=\'%23ffe3ea\'/></svg>') repeat-x;
-  border-radius: 38px;
-  padding: 54px 30px 44px 30px;
-  margin: 38px auto 0 auto;
-  max-width: 900px;
-  min-height: 85vh;
-  box-shadow: 0 0 80px #8ee4d966, 0 0 12px #bdb2ff66;
-  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
-  display: flex; flex-direction: column; justify-content: center; position: relative;
-">
-  <div style="text-align:center; margin-bottom: 18px;">
-    <span style="font-size:2.6em;">🎸 🍒 🍨 📺</span>
+  <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#fff0f6 0%,#fffbe3 70%,#ffcae3 100%);border-radius:36px;padding:56px 32px 44px 32px;margin:40px auto 0 auto;max-width:950px;box-shadow:0 0 90px #ff91ca44,0 0 14px #ffd6b977;font-family:'Fira Mono','Share Tech Mono','Courier New',monospace;min-height:92vh;display:flex;flex-direction:column;justify-content:center;color:#42314c;">
+
+  <style>
+    /* Neon text och jukebox-animation */
+    .fifties-neon {
+      font-family: 'Pacifico', cursive;
+      font-size:2.2em;
+      color:#ff57b1;
+      text-shadow:0 0 13px #fff,0 0 18px #ffbdf1,0 0 40px #ff57b1;
+      animation: neonflicker 1.7s infinite alternate;
+      letter-spacing:2.5px;
+      margin-bottom:10px;
+    }
+    @keyframes neonflicker { 0%{opacity:0.92;} 10%{opacity:1;} 15%{opacity:0.7;} 20%{opacity:1;} 100%{opacity:0.97;} }
+
+    /* Cadillac, milkshake, stjärnregn */
+    .fifties-cadillac {
+      position: absolute; left: 10%; bottom: 15px; width: 140px; opacity:0.87;
+      animation: cruise 5.5s ease-in-out infinite alternate;
+      z-index:2;
+    }
+    @keyframes cruise { 0%{left:7%;} 100%{left:65%;} }
+
+    .fifties-milkshake {
+      position: absolute; right: 4%; top: 44px; width: 65px; z-index:2;
+      animation: shakefloat 2.8s ease-in-out infinite alternate;
+    }
+    @keyframes shakefloat { 0%{top: 34px;} 100%{top: 66px;} }
+
+    .fifties-stars {
+      position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;
+    }
+    .fifties-star {
+      position:absolute;
+      width:16px;height:16px;
+      background:radial-gradient(circle,#fff9e7 80%,transparent 100%);
+      opacity:0.7;
+      border-radius:50%;
+      animation:starfall 6s linear infinite;
+    }
+    .fifties-star.s1 { left:17%;animation-delay:0s; }
+    .fifties-star.s2 { left:32%;animation-delay:2s; }
+    .fifties-star.s3 { left:48%;animation-delay:1.5s;}
+    .fifties-star.s4 { left:62%;animation-delay:0.7s;}
+    .fifties-star.s5 { left:79%;animation-delay:3.2s;}
+    @keyframes starfall { 0%{top:-16px;opacity:0.7;} 95%{opacity:0.3;} 100%{top:98%;opacity:0;} }
+
+    /* Blinkande jukebox */
+    .jukebox {
+      position:absolute;left:calc(50% - 43px);top:30px;width:86px;height:120px;z-index:2;
+      filter:drop-shadow(0 0 18px #ff57b155);
+    }
+    .jukebox-inner {
+      width:86px;height:120px;background:linear-gradient(120deg,#ffe0f0 50%,#ffeabf 100%);border-radius:36px 36px 18px 18px/60px 60px 12px 12px;border:4px solid #f8549a;position:relative;overflow:hidden;
+    }
+    .jukebox-glow {position:absolute;top:0;left:0;width:100%;height:100%;border-radius:inherit;box-shadow:0 0 28px #ff57b1cc,0 0 36px #ffeabf77 inset;}
+    .jukebox-disc {position:absolute;left:50%;top:41px;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:radial-gradient(circle,#e0e0e0 60%,#383838 80%,#b0b0b0 100%);border:2px solid #ffcae3;z-index:1;}
+    .jukebox-bar {position:absolute;bottom:14px;left:13px;width:60px;height:10px;border-radius:7px;background:#f8549a;box-shadow:0 0 7px #ff57b1;}
+    .jukebox-btn {position:absolute;bottom:5px;left:22px;width:11px;height:11px;border-radius:50%;background:#ffd041;box-shadow:0 0 6px #fffdba;animation:btnblink 1.2s infinite alternate;}
+    .jukebox-btn2 {left:47px;animation-delay:0.7s;}
+    @keyframes btnblink { 0%{opacity:0.68;} 60%{opacity:1;} 100%{opacity:0.8;} }
+  </style>
+
+  <!-- Bakgrund: stjärnregn -->
+  <div class="fifties-stars">
+    <div class="fifties-star s1"></div>
+    <div class="fifties-star s2"></div>
+    <div class="fifties-star s3"></div>
+    <div class="fifties-star s4"></div>
+    <div class="fifties-star s5"></div>
   </div>
-  <h2 style="color:#e04d7e; text-align:center; margin-top:8px; font-family:'Pacifico',cursive,monospace;font-size:2.5em;letter-spacing:0.06em;">50-talsprofil</h2>
-  <p style="font-size:1.17em; text-align:center; color:#464646; margin:18px 0 26px 0;">
+
+  <!-- Cadillac SVG -->
+  <svg class="fifties-cadillac" viewBox="0 0 210 90">
+    <rect x="0" y="48" width="180" height="25" rx="13" fill="#e1e1e1" />
+    <rect x="35" y="30" width="105" height="35" rx="16" fill="#ff57b1" />
+    <ellipse cx="30" cy="74" rx="14" ry="9" fill="#39387c" />
+    <ellipse cx="170" cy="74" rx="14" ry="9" fill="#39387c" />
+    <ellipse cx="30" cy="74" rx="7" ry="4.5" fill="#e1e1e1" />
+    <ellipse cx="170" cy="74" rx="7" ry="4.5" fill="#e1e1e1" />
+    <rect x="110" y="37" width="24" height="18" rx="6" fill="#fffbe3" />
+    <rect x="53" y="36" width="28" height="16" rx="7" fill="#fffbe3" />
+    <rect x="133" y="41" width="19" height="13" rx="5" fill="#ffeabf" />
+    <rect x="100" y="47" width="8" height="11" rx="3" fill="#ffcae3" />
+  </svg>
+
+  <!-- Milkshake SVG -->
+  <svg class="fifties-milkshake" viewBox="0 0 40 65">
+    <ellipse cx="20" cy="62" rx="14" ry="3" fill="#fff3e7"/>
+    <rect x="10" y="15" width="20" height="40" rx="10" fill="#fff" stroke="#ff57b1" stroke-width="2"/>
+    <ellipse cx="20" cy="15" rx="10" ry="8" fill="#ffeabf"/>
+    <rect x="17" y="8" width="6" height="13" rx="3" fill="#ff57b1"/>
+    <circle cx="20" cy="10" r="3" fill="#fff"/>
+    <rect x="22" y="0" width="2.2" height="13" rx="1" fill="#ffbdf1" />
+  </svg>
+
+  <!-- Blinkande jukebox -->
+  <div class="jukebox">
+    <div class="jukebox-inner">
+      <div class="jukebox-glow"></div>
+      <div class="jukebox-disc"></div>
+      <div class="jukebox-bar"></div>
+      <div class="jukebox-btn"></div>
+      <div class="jukebox-btn jukebox-btn2"></div>
+    </div>
+  </div>
+
+  <!-- NEONRUBRIK -->
+  <div class="fifties-neon">50-talsprofil</div>
+  <div style="text-align:center;font-size:1.14em;margin-bottom:14px;color:#68345e;">
     <i>"Dansar in i rock'n'rollens eviga natt – milkshaken i ena handen och drömmen om Cadillacen i den andra."</i>
-  </p>
-  <div style="display:flex; flex-wrap:wrap; gap:28px; justify-content:center; margin-bottom:30px;">
-    <div style="background:#e9faffdd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #c4e3e4bb;">
-      <b style="color:#14bba6;">🎸 Rockabilly</b><br/>
-      <span style="color:#434d52;">Brylkräm & svall, skinnjacka, Elvis på radion.</span>
-      <div style="margin-top:5px;color:#e04d7e;">&#10084;</div>
+  </div>
+
+  <!-- Bubbleboxes -->
+  <div style="margin:24px auto 16px auto;display:flex;flex-wrap:wrap;gap:28px;justify-content:center;z-index:2;position:relative;">
+    <div style="background:rgba(255, 244, 245, 0.83);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ff57b133;">
+      <b style="color:#ff57b1;">🎸 Rockabilly</b><br>
+      Brylkräm & svall, skinnjacka, Elvis på radion.<br>
+      <span style="color:#ff57b1;">&#10084;</span>
     </div>
-    <div style="background:#ffe6f9dd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #e1bff0bb;">
-      <b style="color:#d46bb6;">🍨 Diner Dreams</b><br/>
-      <span style="color:#434d52;">Jukebox, rosa barstolar & cherry milkshake.</span>
-      <div style="margin-top:5px;color:#67b0f9;">&#9733;</div>
+    <div style="background:rgba(255, 219, 238, 0.84);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ffeabf44;">
+      <b style="color:#d1a745;">🍨 Diner Dreams</b><br>
+      Jukebox, rosa barstolar & cherry milkshake.<br>
+      <span style="color:#d1a745;">&#9733;</span>
     </div>
-    <div style="background:#fffbeedd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #ffe09cbb;">
-      <b style="color:#f59f26;">🚗 Classic Wheels</b><br/>
-      <span style="color:#434d52;">Cruising Main Street – Cadillac & Chrome.</span>
-      <div style="margin-top:5px;color:#bb00ff;">&#128664;</div>
+    <div style="background:rgba(255, 241, 223, 0.89);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ffcae344;">
+      <b style="color:#39387c;">🚗 Classic Wheels</b><br>
+      Cruising Main Street – Cadillac & Chrome.<br>
+      <span style="color:#39387c;">&#128664;</span>
     </div>
   </div>
-  <p style="text-align:center; font-size:1.07em;">
-    <span style="background:#fff8fd; color:#e04d7e; padding:7px 20px; border-radius:14px; box-shadow:0 0 4px #fde5ed88;">
+
+  <p style="text-align:center;font-size:1.07em;">
+    <span style="background:#fff0f6cc;color:#ff57b1;padding:9px 27px;border-radius:16px;font-weight:bold;box-shadow:0 0 8px #ffd6b955;">
       "Lev varje dag som om jukeboxen aldrig slutar spela!"
     </span>
   </p>
-  <div style="margin-top:32px; text-align:center;">
-    <span style="font-size:1.5em; color:#e04d7e;">💋 💃 🎵 🍰 📺</span>
+
+  <div style="margin-top:28px;text-align:center;">
+    <span style="font-size:1.45em;color:#ff57b1;text-shadow:0 0 13px #ffbdf1bb;">
+      &#128139; &#127925; &#127856; &#128664;
+    </span>
   </div>
 </div>
   `,
   en: `
-  <div style="
-  background: 
-    linear-gradient(140deg, #e0fcff 0%, #fff5fb 80%),
-    url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'><rect fill=\'%23c2f9e6\' fill-opacity=\'0.23\' x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\'/><rect x=\'0\' y=\'97%25\' width=\'100%25\' height=\'8%25\' fill=\'%23e4f1f7\'/><rect x=\'0\' y=\'97%25\' width=\'100%25\' height=\'4%25\' fill=\'%23fff3fa\'/><rect x=\'0\' y=\'100%25\' width=\'100%25\' height=\'4%25\' fill=\'%23e7e7fb\'/><rect x=\'0\' y=\'93%25\' width=\'100%25\' height=\'4%25\' fill=\'%23bae3ff\'/><rect x=\'0\' y=\'89%25\' width=\'100%25\' height=\'4%25\' fill=\'%23ffe3ea\'/></svg>') repeat-x;
-  border-radius: 38px;
-  padding: 54px 30px 44px 30px;
-  margin: 38px auto 0 auto;
-  max-width: 900px;
-  min-height: 85vh;
-  box-shadow: 0 0 80px #8ee4d966, 0 0 12px #bdb2ff66;
-  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
-  display: flex; flex-direction: column; justify-content: center; position: relative;
-">
-  <div style="text-align:center; margin-bottom: 18px;">
-    <span style="font-size:2.6em;">🎸 🍒 🍨 📺</span>
+  <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#fff0f6 0%,#fffbe3 70%,#ffcae3 100%);border-radius:36px;padding:56px 32px 44px 32px;margin:40px auto 0 auto;max-width:950px;box-shadow:0 0 90px #ff91ca44,0 0 14px #ffd6b977;font-family:'Fira Mono','Share Tech Mono','Courier New',monospace;min-height:92vh;display:flex;flex-direction:column;justify-content:center;color:#42314c;">
+  <style>
+    .fifties-neon {
+      font-family: 'Pacifico', cursive;
+      font-size:2.2em;
+      color:#ff57b1;
+      text-shadow:0 0 13px #fff,0 0 18px #ffbdf1,0 0 40px #ff57b1;
+      animation: neonflicker 1.7s infinite alternate;
+      letter-spacing:2.5px;
+      margin-bottom:10px;
+    }
+    @keyframes neonflicker { 0%{opacity:0.92;} 10%{opacity:1;} 15%{opacity:0.7;} 20%{opacity:1;} 100%{opacity:0.97;} }
+
+    .fifties-cadillac {
+      position: absolute; left: 10%; bottom: 15px; width: 140px; opacity:0.87;
+      animation: cruise 5.5s ease-in-out infinite alternate;
+      z-index:2;
+    }
+    @keyframes cruise { 0%{left:7%;} 100%{left:65%;} }
+
+    .fifties-milkshake {
+      position: absolute; right: 4%; top: 44px; width: 65px; z-index:2;
+      animation: shakefloat 2.8s ease-in-out infinite alternate;
+    }
+    @keyframes shakefloat { 0%{top: 34px;} 100%{top: 66px;} }
+
+    .fifties-stars {
+      position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;
+    }
+    .fifties-star {
+      position:absolute;
+      width:16px;height:16px;
+      background:radial-gradient(circle,#fff9e7 80%,transparent 100%);
+      opacity:0.7;
+      border-radius:50%;
+      animation:starfall 6s linear infinite;
+    }
+    .fifties-star.s1 { left:17%;animation-delay:0s; }
+    .fifties-star.s2 { left:32%;animation-delay:2s; }
+    .fifties-star.s3 { left:48%;animation-delay:1.5s;}
+    .fifties-star.s4 { left:62%;animation-delay:0.7s;}
+    .fifties-star.s5 { left:79%;animation-delay:3.2s;}
+    @keyframes starfall { 0%{top:-16px;opacity:0.7;} 95%{opacity:0.3;} 100%{top:98%;opacity:0;} }
+
+    .jukebox {
+      position:absolute;left:calc(50% - 43px);top:30px;width:86px;height:120px;z-index:2;
+      filter:drop-shadow(0 0 18px #ff57b155);
+    }
+    .jukebox-inner {
+      width:86px;height:120px;background:linear-gradient(120deg,#ffe0f0 50%,#ffeabf 100%);border-radius:36px 36px 18px 18px/60px 60px 12px 12px;border:4px solid #f8549a;position:relative;overflow:hidden;
+    }
+    .jukebox-glow {position:absolute;top:0;left:0;width:100%;height:100%;border-radius:inherit;box-shadow:0 0 28px #ff57b1cc,0 0 36px #ffeabf77 inset;}
+    .jukebox-disc {position:absolute;left:50%;top:41px;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:radial-gradient(circle,#e0e0e0 60%,#383838 80%,#b0b0b0 100%);border:2px solid #ffcae3;z-index:1;}
+    .jukebox-bar {position:absolute;bottom:14px;left:13px;width:60px;height:10px;border-radius:7px;background:#f8549a;box-shadow:0 0 7px #ff57b1;}
+    .jukebox-btn {position:absolute;bottom:5px;left:22px;width:11px;height:11px;border-radius:50%;background:#ffd041;box-shadow:0 0 6px #fffdba;animation:btnblink 1.2s infinite alternate;}
+    .jukebox-btn2 {left:47px;animation-delay:0.7s;}
+    @keyframes btnblink { 0%{opacity:0.68;} 60%{opacity:1;} 100%{opacity:0.8;} }
+  </style>
+
+  <div class="fifties-stars">
+    <div class="fifties-star s1"></div>
+    <div class="fifties-star s2"></div>
+    <div class="fifties-star s3"></div>
+    <div class="fifties-star s4"></div>
+    <div class="fifties-star s5"></div>
   </div>
-  <h2 style="color:#e04d7e; text-align:center; margin-top:8px; font-family:'Pacifico',cursive,monospace;font-size:2.5em;letter-spacing:0.06em;">50s Profile</h2>
-  <p style="font-size:1.17em; text-align:center; color:#464646; margin:18px 0 26px 0;">
+  <svg class="fifties-cadillac" viewBox="0 0 210 90">
+    <rect x="0" y="48" width="180" height="25" rx="13" fill="#e1e1e1" />
+    <rect x="35" y="30" width="105" height="35" rx="16" fill="#ff57b1" />
+    <ellipse cx="30" cy="74" rx="14" ry="9" fill="#39387c" />
+    <ellipse cx="170" cy="74" rx="14" ry="9" fill="#39387c" />
+    <ellipse cx="30" cy="74" rx="7" ry="4.5" fill="#e1e1e1" />
+    <ellipse cx="170" cy="74" rx="7" ry="4.5" fill="#e1e1e1" />
+    <rect x="110" y="37" width="24" height="18" rx="6" fill="#fffbe3" />
+    <rect x="53" y="36" width="28" height="16" rx="7" fill="#fffbe3" />
+    <rect x="133" y="41" width="19" height="13" rx="5" fill="#ffeabf" />
+    <rect x="100" y="47" width="8" height="11" rx="3" fill="#ffcae3" />
+  </svg>
+  <svg class="fifties-milkshake" viewBox="0 0 40 65">
+    <ellipse cx="20" cy="62" rx="14" ry="3" fill="#fff3e7"/>
+    <rect x="10" y="15" width="20" height="40" rx="10" fill="#fff" stroke="#ff57b1" stroke-width="2"/>
+    <ellipse cx="20" cy="15" rx="10" ry="8" fill="#ffeabf"/>
+    <rect x="17" y="8" width="6" height="13" rx="3" fill="#ff57b1"/>
+    <circle cx="20" cy="10" r="3" fill="#fff"/>
+    <rect x="22" y="0" width="2.2" height="13" rx="1" fill="#ffbdf1" />
+  </svg>
+  <div class="jukebox">
+    <div class="jukebox-inner">
+      <div class="jukebox-glow"></div>
+      <div class="jukebox-disc"></div>
+      <div class="jukebox-bar"></div>
+      <div class="jukebox-btn"></div>
+      <div class="jukebox-btn jukebox-btn2"></div>
+    </div>
+  </div>
+  <div class="fifties-neon">50s Profile</div>
+  <div style="text-align:center;font-size:1.14em;margin-bottom:14px;color:#68345e;">
     <i>"Stepping into the endless night of rock'n'roll – milkshake in one hand and a dream of a Cadillac in the other."</i>
-  </p>
-  <div style="display:flex; flex-wrap:wrap; gap:28px; justify-content:center; margin-bottom:30px;">
-    <div style="background:#e9faffdd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #c4e3e4bb;">
-      <b style="color:#14bba6;">🎸 Rockabilly</b><br/>
-      <span style="color:#434d52;">Pomade & quiff, leather jacket, Elvis on the radio.</span>
-      <div style="margin-top:5px;color:#e04d7e;">&#10084;</div>
+  </div>
+  <div style="margin:24px auto 16px auto;display:flex;flex-wrap:wrap;gap:28px;justify-content:center;z-index:2;position:relative;">
+    <div style="background:rgba(255, 244, 245, 0.83);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ff57b133;">
+      <b style="color:#ff57b1;">🎸 Rockabilly</b><br>
+      Pomade & quiff, leather jacket, Elvis on the radio.<br>
+      <span style="color:#ff57b1;">&#10084;</span>
     </div>
-    <div style="background:#ffe6f9dd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #e1bff0bb;">
-      <b style="color:#d46bb6;">🍨 Diner Dreams</b><br/>
-      <span style="color:#434d52;">Jukebox, pink barstools & cherry milkshake.</span>
-      <div style="margin-top:5px;color:#67b0f9;">&#9733;</div>
+    <div style="background:rgba(255, 219, 238, 0.84);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ffeabf44;">
+      <b style="color:#d1a745;">🍨 Diner Dreams</b><br>
+      Jukebox, pink barstools & cherry milkshake.<br>
+      <span style="color:#d1a745;">&#9733;</span>
     </div>
-    <div style="background:#fffbeedd; border-radius:18px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #ffe09cbb;">
-      <b style="color:#f59f26;">🚗 Classic Wheels</b><br/>
-      <span style="color:#434d52;">Cruising Main Street – Cadillac & Chrome.</span>
-      <div style="margin-top:5px;color:#bb00ff;">&#128664;</div>
+    <div style="background:rgba(255, 241, 223, 0.89);border-radius:17px;padding:18px 30px;box-shadow:0 0 8px #ffcae344;">
+      <b style="color:#39387c;">🚗 Classic Wheels</b><br>
+      Cruising Main Street – Cadillac & Chrome.<br>
+      <span style="color:#39387c;">&#128664;</span>
     </div>
   </div>
-  <p style="text-align:center; font-size:1.07em;">
-    <span style="background:#fff8fd; color:#e04d7e; padding:7px 20px; border-radius:14px; box-shadow:0 0 4px #fde5ed88;">
+  <p style="text-align:center;font-size:1.07em;">
+    <span style="background:#fff0f6cc;color:#ff57b1;padding:9px 27px;border-radius:16px;font-weight:bold;box-shadow:0 0 8px #ffd6b955;">
       "Live every day as if the jukebox never stops playing!"
     </span>
   </p>
-  <div style="margin-top:32px; text-align:center;">
-    <span style="font-size:1.5em; color:#e04d7e;">💋 💃 🎵 🍰 📺</span>
+  <div style="margin-top:28px;text-align:center;">
+    <span style="font-size:1.45em;color:#ff57b1;text-shadow:0 0 13px #ffbdf1bb;">
+      &#128139; &#127925; &#127856; &#128664;
+    </span>
   </div>
 </div>
   `
 },
       "60s": {
-        sv: `<div style="
-  background:
-    radial-gradient(circle at 15% 20%, #ffeebd 0%, #f6c2ff 47%, #fff 100%),
-    url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'><ellipse cx=\'15%25\' cy=\'14%25\' rx=\'84\' ry=\'37\' fill=\'%23ffe170\' fill-opacity=\'0.16\'/><ellipse cx=\'75%25\' cy=\'24%25\' rx=\'120\' ry=\'44\' fill=\'%23b7fdbb\' fill-opacity=\'0.13\'/><ellipse cx=\'22%25\' cy=\'83%25\' rx=\'90\' ry=\'34\' fill=\'%23ffcbf9\' fill-opacity=\'0.14\'/><ellipse cx=\'80%25\' cy=\'85%25\' rx=\'120\' ry=\'37\' fill=\'%23ffedae\' fill-opacity=\'0.15\'/></svg>');
-  border-radius: 44px;
-  padding: 58px 32px 48px 32px;
-  margin: 38px auto 0 auto;
-  max-width: 900px;
-  min-height: 85vh;
-  box-shadow: 0 0 80px #d1a3fff0, 0 0 12px #70f9dd77;
-  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
-  display: flex; flex-direction: column; justify-content: center; position: relative;
-">
-  <div style="text-align:center; margin-bottom: 16px;">
-    <span style="font-size:2.6em;">🌸 🎷 ☮️ 🦋</span>
+        sv: `<div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#ffe7ff 0%,#e4ffef 65%,#d0d8ff 100%);border-radius:38px;padding:58px 34px 42px 34px;margin:40px auto 0 auto;max-width:960px;box-shadow:0 0 100px #b2ffb866,0 0 22px #adbeff44;font-family:'Fira Mono','Share Tech Mono','Courier New',monospace;min-height:92vh;display:flex;flex-direction:column;justify-content:center;color:#2b4241;">
+
+  <style>
+    /* Psykedelisk bakgrunds-våg */
+    .sixties-bg {
+      position:absolute;z-index:1;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden;
+    }
+    .sixties-wave {
+      position:absolute;width:160%;height:180px;top:-24px;left:-18%;background:linear-gradient(90deg,#fceabb 0%,#f8bfa8 60%,#b1c2fa 100%);border-radius:100% 60% 70% 130%/100% 70% 120% 60%;opacity:0.63;
+      animation: sixtieswave 11s linear infinite alternate;
+      filter:blur(5px);
+    }
+    @keyframes sixtieswave { 0%{left:-18%;} 100%{left:12%;} }
+
+    /* Rörliga blommor */
+    .flower {
+      position:absolute;width:45px;height:45px;z-index:2;opacity:0.82;
+      animation: flowerfloat 8s linear infinite alternate;
+    }
+    .flower.f1 { left:7%; top:24%; animation-delay:0s;}
+    .flower.f2 { left:28%; top:9%; animation-delay:1.7s;}
+    .flower.f3 { left:63%; top:10%; animation-delay:3.3s;}
+    .flower.f4 { left:85%; top:26%; animation-delay:5.2s;}
+    .flower.f5 { left:43%; top:32%; animation-delay:2.2s;}
+    @keyframes flowerfloat { 0%{transform:translateY(0) rotate(0);} 100%{transform:translateY(34px) rotate(38deg);} }
+
+    /* Discokula */
+    .disco-ball {
+      position:absolute;left:calc(50% - 32px);top:35px;width:64px;height:64px;z-index:2;
+      animation:discorotate 3.5s linear infinite;
+      filter:drop-shadow(0 0 20px #e3ecfdcc);
+    }
+    @keyframes discorotate { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
+
+    /* Hippie-van */
+    .sixties-van {
+      position:absolute;left:14%;bottom:12px;width:125px;opacity:0.91;z-index:2;
+      animation:vanmove 5.5s ease-in-out infinite alternate;
+    }
+    @keyframes vanmove { 0%{left:14%;} 100%{left:60%;} }
+
+    /* Peace-symboler */
+    .peace {
+      position:absolute;font-size:2.1em;z-index:1;opacity:0.49;
+      animation:peacefloat 8s infinite alternate;
+    }
+    .peace.p1 {left:18%;top:73%;animation-delay:0s;}
+    .peace.p2 {left:72%;top:65%;animation-delay:3s;}
+    .peace.p3 {left:48%;top:81%;animation-delay:5.5s;}
+    @keyframes peacefloat { 0%{transform:translateY(0);} 100%{transform:translateY(-18px);} }
+
+    /* Rubrik- och textdekor */
+    .sixties-groovy {
+      font-family:'Pacifico',cursive;
+      font-size:2.1em;
+      color:#ff87ce;
+      text-shadow:0 0 12px #fff2,0 0 16px #b1c2fa,0 0 24px #00d6b1cc;
+      letter-spacing:3px;
+      animation: sixtiesglow 1.7s infinite alternate;
+      margin-bottom:8px;
+    }
+    @keyframes sixtiesglow {0%{text-shadow:0 0 6px #fceabb;}100%{text-shadow:0 0 22px #ff87cebb;}}
+
+  </style>
+
+  <!-- Psykedelisk bakgrund -->
+  <div class="sixties-bg">
+    <div class="sixties-wave"></div>
+    <span class="peace p1">&#9774;</span>
+    <span class="peace p2">&#9774;</span>
+    <span class="peace p3">&#9774;</span>
+    <!-- Blommor -->
+    <svg class="flower f1" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#ffdb4d"/><circle cx="8" cy="22.5" r="7" fill="#ff76a1"/><circle cx="37" cy="22.5" r="7" fill="#9ed8ff"/><circle cx="22.5" cy="8" r="7" fill="#8cffbb"/><circle cx="22.5" cy="37" r="7" fill="#fd92e2"/></svg>
+    <svg class="flower f2" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#8cffbb"/><circle cx="8" cy="22.5" r="7" fill="#ffdb4d"/><circle cx="37" cy="22.5" r="7" fill="#fd92e2"/><circle cx="22.5" cy="8" r="7" fill="#9ed8ff"/><circle cx="22.5" cy="37" r="7" fill="#ff76a1"/></svg>
+    <svg class="flower f3" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#9ed8ff"/><circle cx="8" cy="22.5" r="7" fill="#fd92e2"/><circle cx="37" cy="22.5" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="8" r="7" fill="#ff76a1"/><circle cx="22.5" cy="37" r="7" fill="#8cffbb"/></svg>
+    <svg class="flower f4" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#fd92e2"/><circle cx="8" cy="22.5" r="7" fill="#8cffbb"/><circle cx="37" cy="22.5" r="7" fill="#ff76a1"/><circle cx="22.5" cy="8" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="37" r="7" fill="#9ed8ff"/></svg>
+    <svg class="flower f5" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#ff76a1"/><circle cx="8" cy="22.5" r="7" fill="#fd92e2"/><circle cx="37" cy="22.5" r="7" fill="#8cffbb"/><circle cx="22.5" cy="8" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="37" r="7" fill="#9ed8ff"/></svg>
   </div>
-  <h2 style="color:#9655fc; text-align:center; margin-top:8px; font-family:'Pacifico',cursive,monospace;font-size:2.4em;letter-spacing:0.04em;">60-talsprofil</h2>
-  <p style="font-size:1.13em; text-align:center; color:#4a2769; margin:18px 0 26px 0;">
-    <i>"Färger, kärlek och rytmer – dansar genom livet med hjärtat fullt av peace & love."</i>
-  </p>
-  <div style="display:flex; flex-wrap:wrap; gap:28px; justify-content:center; margin-bottom:30px;">
-    <div style="background:#fff2e6dd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #fed19fbb;">
-      <b style="color:#ffa343;">🌼 Flower Power</b><br/>
-      <span style="color:#3a3d3f;">Blommiga kläder, långt hår, peace-symboler.</span>
-      <div style="margin-top:5px;color:#ff6ba5;">✌️</div>
+
+  <!-- Discokula -->
+  <svg class="disco-ball" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="#fff" stroke="#c3b8f7" stroke-width="3"/>
+    <rect x="12" y="18" width="40" height="7" rx="2.5" fill="#d8caff" />
+    <rect x="14" y="27" width="36" height="8" rx="2.5" fill="#f6ecff" />
+    <rect x="13" y="39" width="38" height="7" rx="2.5" fill="#f9dbff" />
+    <rect x="25" y="7" width="14" height="7" rx="2.5" fill="#ecf8e7" />
+    <rect x="19" y="50" width="24" height="7" rx="2.5" fill="#f6fddb" />
+  </svg>
+
+  <!-- Hippie-van -->
+  <svg class="sixties-van" viewBox="0 0 150 62">
+    <rect x="12" y="20" width="120" height="34" rx="14" fill="#66efc4"/>
+    <rect x="30" y="18" width="72" height="22" rx="10" fill="#fff" />
+    <rect x="104" y="33" width="19" height="11" rx="4" fill="#ffd2e7" />
+    <circle cx="36" cy="54" r="9" fill="#fbe352" />
+    <circle cx="117" cy="54" r="9" fill="#fbe352" />
+    <circle cx="36" cy="54" r="5" fill="#fff" />
+    <circle cx="117" cy="54" r="5" fill="#fff" />
+    <ellipse cx="45" cy="38" rx="4" ry="4" fill="#b1c2fa"/>
+    <ellipse cx="122" cy="38" rx="4" ry="4" fill="#ff76a1"/>
+    <rect x="61" y="48" width="30" height="8" rx="4" fill="#ff87ce" />
+    <ellipse cx="36" cy="31" rx="7" ry="7" fill="#8cffbb"/>
+    <ellipse cx="117" cy="31" rx="7" ry="7" fill="#9ed8ff"/>
+  </svg>
+
+  <!-- Rubrik -->
+  <div class="sixties-groovy">60-talsprofil</div>
+  <div style="text-align:center;font-size:1.11em;margin-bottom:15px;color:#418655;">
+    <i>"Flower power, peace & groovy disco – friheten blommar och musiken snurrar under discokulan."</i>
+  </div>
+
+  <!-- Bubbla/boxar -->
+  <div style="margin:24px auto 14px auto;display:flex;flex-wrap:wrap;gap:28px;justify-content:center;z-index:2;position:relative;">
+    <div style="background:rgba(255,255,255,0.84);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #a6ffd177;">
+      <b style="color:#ff87ce;">🌼 Flower Power</b><br>
+      Blommor, frihet & "peace"-tecken.<br>
+      <span style="color:#ff87ce;">&#9774;</span>
     </div>
-    <div style="background:#ecffe9dd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #b8e6c9bb;">
-      <b style="color:#11b97f;">🦋 Psykedeliskt</b><br/>
-      <span style="color:#3a3d3f;">Färgexplosioner, spiraler & frihet i själen.</span>
-      <div style="margin-top:5px;color:#5e99ff;">🌀</div>
+    <div style="background:rgba(245,255,247,0.82);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #ecffa777;">
+      <b style="color:#66efc4;">🚐 Hippie-van</b><br>
+      Resor, äventyr & samlade vänner.<br>
+      <span style="color:#66efc4;">&#128664;</span>
     </div>
-    <div style="background:#f4ebffdd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #cca4ffbb;">
-      <b style="color:#9655fc;">🎤 Pop & Soul</b><br/>
-      <span style="color:#3a3d3f;">Beatles, Motown och dans i minikjol.</span>
-      <div style="margin-top:5px;color:#ffde70;">🎶</div>
+    <div style="background:rgba(222,221,255,0.81);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #c3b8f777;">
+      <b style="color:#b1c2fa;">💿 Disco Vibe</b><br>
+      Dansgolv, discokula & färgade lampor.<br>
+      <span style="color:#b1c2fa;">&#128131;</span>
     </div>
   </div>
-  <p style="text-align:center; font-size:1.08em;">
-    <span style="background:#fcf9ff; color:#9655fc; padding:7px 22px; border-radius:15px; box-shadow:0 0 4px #e0caff88;">
-      "Tänk fritt, älska mer och låt färgerna leda vägen!"
+
+  <p style="text-align:center;font-size:1.07em;">
+    <span style="background:#f5fff6cc;color:#63c79d;padding:10px 29px;border-radius:15px;font-weight:bold;box-shadow:0 0 8px #e5fffa99;">
+      "Känn musiken – sprid kärleken!"
     </span>
   </p>
-  <div style="margin-top:32px; text-align:center;">
-    <span style="font-size:1.5em; color:#ffa343;">✌️ 🌈 🎧 🌻 🦄</span>
+
+  <div style="margin-top:28px;text-align:center;">
+    <span style="font-size:1.45em;color:#b1c2fa;text-shadow:0 0 15px #a6ffd1bb;">
+      &#9774; &#127926; &#127925; &#128664;
+    </span>
   </div>
 </div>`,
-        en: `<div style="
-  background:
-    radial-gradient(circle at 15% 20%, #ffeebd 0%, #f6c2ff 47%, #fff 100%),
-    url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'><ellipse cx=\'15%25\' cy=\'14%25\' rx=\'84\' ry=\'37\' fill=\'%23ffe170\' fill-opacity=\'0.16\'/><ellipse cx=\'75%25\' cy=\'24%25\' rx=\'120\' ry=\'44\' fill=\'%23b7fdbb\' fill-opacity=\'0.13\'/><ellipse cx=\'22%25\' cy=\'83%25\' rx=\'90\' ry=\'34\' fill=\'%23ffcbf9\' fill-opacity=\'0.14\'/><ellipse cx=\'80%25\' cy=\'85%25\' rx=\'120\' ry=\'37\' fill=\'%23ffedae\' fill-opacity=\'0.15\'/></svg>');
-  border-radius: 44px;
-  padding: 58px 32px 48px 32px;
-  margin: 38px auto 0 auto;
-  max-width: 900px;
-  min-height: 85vh;
-  box-shadow: 0 0 80px #d1a3fff0, 0 0 12px #70f9dd77;
-  font-family: 'Fira Mono', 'Share Tech Mono', 'Courier New', monospace;
-  display: flex; flex-direction: column; justify-content: center; position: relative;
-">
-  <div style="text-align:center; margin-bottom: 16px;">
-    <span style="font-size:2.6em;">🌸 🎷 ☮️ 🦋</span>
+        en: `<div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#ffe7ff 0%,#e4ffef 65%,#d0d8ff 100%);border-radius:38px;padding:58px 34px 42px 34px;margin:40px auto 0 auto;max-width:960px;box-shadow:0 0 100px #b2ffb866,0 0 22px #adbeff44;font-family:'Fira Mono','Share Tech Mono','Courier New',monospace;min-height:92vh;display:flex;flex-direction:column;justify-content:center;color:#2b4241;">
+
+  <style>
+    .sixties-bg {
+      position:absolute;z-index:1;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden;
+    }
+    .sixties-wave {
+      position:absolute;width:160%;height:180px;top:-24px;left:-18%;background:linear-gradient(90deg,#fceabb 0%,#f8bfa8 60%,#b1c2fa 100%);border-radius:100% 60% 70% 130%/100% 70% 120% 60%;opacity:0.63;
+      animation: sixtieswave 11s linear infinite alternate;
+      filter:blur(5px);
+    }
+    @keyframes sixtieswave { 0%{left:-18%;} 100%{left:12%;} }
+
+    .flower {
+      position:absolute;width:45px;height:45px;z-index:2;opacity:0.82;
+      animation: flowerfloat 8s linear infinite alternate;
+    }
+    .flower.f1 { left:7%; top:24%; animation-delay:0s;}
+    .flower.f2 { left:28%; top:9%; animation-delay:1.7s;}
+    .flower.f3 { left:63%; top:10%; animation-delay:3.3s;}
+    .flower.f4 { left:85%; top:26%; animation-delay:5.2s;}
+    .flower.f5 { left:43%; top:32%; animation-delay:2.2s;}
+    @keyframes flowerfloat { 0%{transform:translateY(0) rotate(0);} 100%{transform:translateY(34px) rotate(38deg);} }
+
+    .disco-ball {
+      position:absolute;left:calc(50% - 32px);top:35px;width:64px;height:64px;z-index:2;
+      animation:discorotate 3.5s linear infinite;
+      filter:drop-shadow(0 0 20px #e3ecfdcc);
+    }
+    @keyframes discorotate { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
+
+    .sixties-van {
+      position:absolute;left:14%;bottom:12px;width:125px;opacity:0.91;z-index:2;
+      animation:vanmove 5.5s ease-in-out infinite alternate;
+    }
+    @keyframes vanmove { 0%{left:14%;} 100%{left:60%;} }
+
+    .peace {
+      position:absolute;font-size:2.1em;z-index:1;opacity:0.49;
+      animation:peacefloat 8s infinite alternate;
+    }
+    .peace.p1 {left:18%;top:73%;animation-delay:0s;}
+    .peace.p2 {left:72%;top:65%;animation-delay:3s;}
+    .peace.p3 {left:48%;top:81%;animation-delay:5.5s;}
+    @keyframes peacefloat { 0%{transform:translateY(0);} 100%{transform:translateY(-18px);} }
+
+    .sixties-groovy {
+      font-family:'Pacifico',cursive;
+      font-size:2.1em;
+      color:#ff87ce;
+      text-shadow:0 0 12px #fff2,0 0 16px #b1c2fa,0 0 24px #00d6b1cc;
+      letter-spacing:3px;
+      animation: sixtiesglow 1.7s infinite alternate;
+      margin-bottom:8px;
+    }
+    @keyframes sixtiesglow {0%{text-shadow:0 0 6px #fceabb;}100%{text-shadow:0 0 22px #ff87cebb;}}
+
+  </style>
+
+  <div class="sixties-bg">
+    <div class="sixties-wave"></div>
+    <span class="peace p1">&#9774;</span>
+    <span class="peace p2">&#9774;</span>
+    <span class="peace p3">&#9774;</span>
+    <svg class="flower f1" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#ffdb4d"/><circle cx="8" cy="22.5" r="7" fill="#ff76a1"/><circle cx="37" cy="22.5" r="7" fill="#9ed8ff"/><circle cx="22.5" cy="8" r="7" fill="#8cffbb"/><circle cx="22.5" cy="37" r="7" fill="#fd92e2"/></svg>
+    <svg class="flower f2" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#8cffbb"/><circle cx="8" cy="22.5" r="7" fill="#ffdb4d"/><circle cx="37" cy="22.5" r="7" fill="#fd92e2"/><circle cx="22.5" cy="8" r="7" fill="#9ed8ff"/><circle cx="22.5" cy="37" r="7" fill="#ff76a1"/></svg>
+    <svg class="flower f3" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#9ed8ff"/><circle cx="8" cy="22.5" r="7" fill="#fd92e2"/><circle cx="37" cy="22.5" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="8" r="7" fill="#ff76a1"/><circle cx="22.5" cy="37" r="7" fill="#8cffbb"/></svg>
+    <svg class="flower f4" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#fd92e2"/><circle cx="8" cy="22.5" r="7" fill="#8cffbb"/><circle cx="37" cy="22.5" r="7" fill="#ff76a1"/><circle cx="22.5" cy="8" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="37" r="7" fill="#9ed8ff"/></svg>
+    <svg class="flower f5" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="9" fill="#ff76a1"/><circle cx="8" cy="22.5" r="7" fill="#fd92e2"/><circle cx="37" cy="22.5" r="7" fill="#8cffbb"/><circle cx="22.5" cy="8" r="7" fill="#ffdb4d"/><circle cx="22.5" cy="37" r="7" fill="#9ed8ff"/></svg>
   </div>
-  <h2 style="color:#9655fc; text-align:center; margin-top:8px; font-family:'Pacifico',cursive,monospace;font-size:2.4em;letter-spacing:0.04em;">60s Profile</h2>
-  <p style="font-size:1.13em; text-align:center; color:#4a2769; margin:18px 0 26px 0;">
-    <i>"Colors, love, and rhythm – dancing through life with a heart full of peace & love."</i>
-  </p>
-  <div style="display:flex; flex-wrap:wrap; gap:28px; justify-content:center; margin-bottom:30px;">
-    <div style="background:#fff2e6dd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #fed19fbb;">
-      <b style="color:#ffa343;">🌼 Flower Power</b><br/>
-      <span style="color:#3a3d3f;">Floral clothes, long hair, peace symbols.</span>
-      <div style="margin-top:5px;color:#ff6ba5;">✌️</div>
+
+  <svg class="disco-ball" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="#fff" stroke="#c3b8f7" stroke-width="3"/>
+    <rect x="12" y="18" width="40" height="7" rx="2.5" fill="#d8caff" />
+    <rect x="14" y="27" width="36" height="8" rx="2.5" fill="#f6ecff" />
+    <rect x="13" y="39" width="38" height="7" rx="2.5" fill="#f9dbff" />
+    <rect x="25" y="7" width="14" height="7" rx="2.5" fill="#ecf8e7" />
+    <rect x="19" y="50" width="24" height="7" rx="2.5" fill="#f6fddb" />
+  </svg>
+
+  <svg class="sixties-van" viewBox="0 0 150 62">
+    <rect x="12" y="20" width="120" height="34" rx="14" fill="#66efc4"/>
+    <rect x="30" y="18" width="72" height="22" rx="10" fill="#fff" />
+    <rect x="104" y="33" width="19" height="11" rx="4" fill="#ffd2e7" />
+    <circle cx="36" cy="54" r="9" fill="#fbe352" />
+    <circle cx="117" cy="54" r="9" fill="#fbe352" />
+    <circle cx="36" cy="54" r="5" fill="#fff" />
+    <circle cx="117" cy="54" r="5" fill="#fff" />
+    <ellipse cx="45" cy="38" rx="4" ry="4" fill="#b1c2fa"/>
+    <ellipse cx="122" cy="38" rx="4" ry="4" fill="#ff76a1"/>
+    <rect x="61" y="48" width="30" height="8" rx="4" fill="#ff87ce" />
+    <ellipse cx="36" cy="31" rx="7" ry="7" fill="#8cffbb"/>
+    <ellipse cx="117" cy="31" rx="7" ry="7" fill="#9ed8ff"/>
+  </svg>
+
+  <div class="sixties-groovy">60s Profile</div>
+  <div style="text-align:center;font-size:1.11em;margin-bottom:15px;color:#418655;">
+    <i>"Flower power, peace & groovy disco – freedom blossoms and the music spins under the disco ball."</i>
+  </div>
+  <div style="margin:24px auto 14px auto;display:flex;flex-wrap:wrap;gap:28px;justify-content:center;z-index:2;position:relative;">
+    <div style="background:rgba(255,255,255,0.84);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #a6ffd177;">
+      <b style="color:#ff87ce;">🌼 Flower Power</b><br>
+      Flowers, freedom & "peace" signs.<br>
+      <span style="color:#ff87ce;">&#9774;</span>
     </div>
-    <div style="background:#ecffe9dd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #b8e6c9bb;">
-      <b style="color:#11b97f;">🦋 Psychedelic</b><br/>
-      <span style="color:#3a3d3f;">Color explosions, spirals & soul freedom.</span>
-      <div style="margin-top:5px;color:#5e99ff;">🌀</div>
+    <div style="background:rgba(245,255,247,0.82);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #ecffa777;">
+      <b style="color:#66efc4;">🚐 Hippie Van</b><br>
+      Journeys, adventure & friends on board.<br>
+      <span style="color:#66efc4;">&#128664;</span>
     </div>
-    <div style="background:#f4ebffdd; border-radius:19px; padding:18px 24px; min-width:220px; box-shadow:0 0 8px #cca4ffbb;">
-      <b style="color:#9655fc;">🎤 Pop & Soul</b><br/>
-      <span style="color:#3a3d3f;">The Beatles, Motown and miniskirt dancing.</span>
-      <div style="margin-top:5px;color:#ffde70;">🎶</div>
+    <div style="background:rgba(222,221,255,0.81);border-radius:16px;padding:17px 30px;box-shadow:0 0 10px #c3b8f777;">
+      <b style="color:#b1c2fa;">💿 Disco Vibe</b><br>
+      Dancefloor, disco ball & colored lights.<br>
+      <span style="color:#b1c2fa;">&#128131;</span>
     </div>
   </div>
-  <p style="text-align:center; font-size:1.08em;">
-    <span style="background:#fcf9ff; color:#9655fc; padding:7px 22px; border-radius:15px; box-shadow:0 0 4px #e0caff88;">
-      "Think free, love more and let the colors guide your way!"
+  <p style="text-align:center;font-size:1.07em;">
+    <span style="background:#f5fff6cc;color:#63c79d;padding:10px 29px;border-radius:15px;font-weight:bold;box-shadow:0 0 8px #e5fffa99;">
+      "Feel the music – spread the love!"
     </span>
   </p>
-  <div style="margin-top:32px; text-align:center;">
-    <span style="font-size:1.5em; color:#ffa343;">✌️ 🌈 🎧 🌻 🦄</span>
+  <div style="margin-top:28px;text-align:center;">
+    <span style="font-size:1.45em;color:#b1c2fa;text-shadow:0 0 15px #a6ffd1bb;">
+      &#9774; &#127926; &#127925; &#128664;
+    </span>
   </div>
 </div>`
       },
