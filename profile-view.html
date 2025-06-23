@@ -85,25 +85,26 @@
       padding: 0 12px;
     }
     #profile-output {
-      width: 100%;
-      max-width: 700px;
+      width: 98vw;
+      max-width: 1300px;
+      min-width: 290px;
       min-height: 340px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
       margin: 0 auto;
+      box-sizing: border-box;
       transition: box-shadow 0.3s;
       box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
       border-radius: 28px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
-      padding: 38px 22px;
-      position: relative;
+      padding: 44px 18px 38px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
     @media (min-width: 900px) {
       #profile-output {
         width: 75vw;
-        max-width: 1400px;
+        min-width: 520px;
       }
     }
     .profile-picture {
@@ -111,20 +112,32 @@
       height: 135px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 10px;
+      margin: 0 auto 12px auto;
       box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
       border: 3px solid #0ff;
       background: #111;
       display: block;
     }
+    .profile-username-label {
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 0;
+      font-size: 1.07em;
+      color: #fff;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 5px #00ffcc, 0 0 7px #8000ff;
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      user-select: none;
+    }
     .profile-username-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
       width: 100%;
       margin-bottom: 2px;
-      margin-top: 16px;
+      margin-top: 7px;
     }
     .profile-username-box {
       background: #fff;
@@ -150,7 +163,6 @@
       background: #171c19;
       transition: box-shadow .23s;
       box-shadow: 0 0 10px #19ff19b0, 0 0 32px #19ff1990;
-      position: relative;
     }
     .ghostgrid-message-link:focus,
     .ghostgrid-message-link:active {
@@ -181,29 +193,27 @@
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
     .user-id-label {
+      margin: 7px 0 0 0;
       color: #bbfff5;
-      font-size: 0.95em;
-      margin: 5px 0 2px 0;
+      font-size: 0.98em;
       text-align: center;
-      letter-spacing: 0.6px;
-      opacity: 0.80;
       font-family: 'Courier New', monospace;
-      font-weight: 600;
+      opacity: 0.82;
+      letter-spacing: 0.7px;
       user-select: none;
-      display: block;
     }
     .user-id {
       color: #bbfff5;
       font-size: 0.95em;
-      margin: 0 0 16px 0;
+      margin: 1px 0 18px 0;
       text-align: center;
       letter-spacing: 0.8px;
       opacity: 0.69;
       user-select: all;
       font-family: 'Courier New', monospace;
       word-break: break-all;
-      display: block;
     }
+    /* Resten av din CSS ... */
     .pic-reactions, .profile-reactions {
       margin-top: 12px;
       display: flex;
@@ -366,13 +376,16 @@
         profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
       }
 
-      // ANVÄNDARNAMN + MEDDELANDEIKON (i samma rad/box)
+      // "Användarnamn:" label centrerat under profilbilden
+      profileHtml += `<div class="profile-username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</div>`;
+
+      // ANVÄNDARNAMN + MEDDELANDEIKON (i samma rad/box, centrerad)
       profileHtml += `<div class="profile-username-row">
         <span class="profile-username-box">${showUsername}</span>`;
       if (userId) {
         if (userId === uid) {
           profileHtml += `
-            <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden">
+            <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden" style="position:relative;">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -382,7 +395,7 @@
             </a>`;
         } else {
           profileHtml += `
-            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande">
+            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande" style="position:relative;">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -393,37 +406,15 @@
       }
       profileHtml += `</div>`;
 
-      // ANVÄNDAR-ID (liten text under boxen)
-      profileHtml += `<span class="user-id-label">Användar-ID:</span><span class="user-id" id="userIdTxt">${uid}</span>`;
+      // ANVÄNDAR-ID (label + liten text under boxen)
+      profileHtml += `<div class="user-id-label">${lang === "sv" ? "Användar-ID:" : "User ID:"}</div>`;
+      profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
 
       // PROFILKOD + RESTEN
       profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
-      profileHtml += `
-        <div class="profile-reactions">
-          <div>${lang === 'sv' ? 'Gilla hela profilen:' : 'React to profile:'}</div>
-          <button class="reaction-btn" id="like-heart" title="❤️">❤️</button>
-          <span class="reaction-count" id="count-heart">${profileReactions.heart.length}</span>
-          <button class="reaction-btn" id="like-thumb" title="👍">👍</button>
-          <span class="reaction-count" id="count-thumb">${profileReactions.thumb.length}</span>
-          <button class="reaction-btn" id="like-smile" title="😄">😄</button>
-          <span class="reaction-count" id="count-smile">${profileReactions.smile.length}</span>
-        </div>
-        <div class="ads-wrapper">
-          <div class="ad-left">
-            <img src="https://dummyimage.com/60x60/8000ff/fff&text=Ad+1" alt="Ad1">
-            <span>${lang === 'sv'
-              ? 'Vill du annonsera här? Kontakta admin!'
-              : 'Want to advertise here? Contact admin!'}</span>
-          </div>
-          <div class="ad-right">
-            <img src="https://dummyimage.com/60x60/00ffcc/fff&text=Ad+2" alt="Ad2">
-            <span>${lang === 'sv'
-              ? 'Bli medlem och få exklusiva erbjudanden!'
-              : 'Become a member and get exclusive offers!'}</span>
-          </div>
-        </div>
-      </div>`;
+      profileHtml += `</div>`;
+
       profileOut.innerHTML = profileHtml;
 
       updateReactionUI();
