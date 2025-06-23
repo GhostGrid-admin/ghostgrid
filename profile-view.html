@@ -100,14 +100,31 @@
       padding: 38px 22px;
       position: relative;
     }
-    /* Användarnamn kvadrat */
+    @media (min-width: 900px) {
+      #profile-output {
+        width: 75vw;
+        max-width: 1400px;
+      }
+    }
+    .profile-picture {
+      width: 135px;
+      height: 135px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
+      border: 3px solid #0ff;
+      background: #111;
+      display: block;
+    }
     .profile-username-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       width: 100%;
       margin-bottom: 2px;
+      margin-top: 16px;
     }
     .profile-username-box {
       background: #fff;
@@ -163,18 +180,30 @@
       0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
+    .user-id-label {
+      color: #bbfff5;
+      font-size: 0.95em;
+      margin: 5px 0 2px 0;
+      text-align: center;
+      letter-spacing: 0.6px;
+      opacity: 0.80;
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      user-select: none;
+      display: block;
+    }
     .user-id {
       color: #bbfff5;
       font-size: 0.95em;
-      margin: 5px 0 16px 0;
+      margin: 0 0 16px 0;
       text-align: center;
       letter-spacing: 0.8px;
       opacity: 0.69;
       user-select: all;
       font-family: 'Courier New', monospace;
       word-break: break-all;
+      display: block;
     }
-    /* Resten av din CSS ... */
     .pic-reactions, .profile-reactions {
       margin-top: 12px;
       display: flex;
@@ -365,9 +394,9 @@
       profileHtml += `</div>`;
 
       // ANVÄNDAR-ID (liten text under boxen)
-      profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
+      profileHtml += `<span class="user-id-label">Användar-ID:</span><span class="user-id" id="userIdTxt">${uid}</span>`;
 
-      // PROFILKOD + REAKTIONER + REKLAM
+      // PROFILKOD + RESTEN
       profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
       profileHtml += `
