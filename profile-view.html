@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
@@ -98,21 +98,38 @@
       border-radius: 28px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
       padding: 38px 22px;
+      position: relative;
     }
-    /* ---- DESKTOP: 70% AV BREDDEN ---- */
-    @media (min-width: 651px) {
-      #profile-output {
-        width: 70vw;
-        max-width: 1600px;
-      }
+    /* Användarnamn kvadrat */
+    .profile-username-box {
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1c1833e6;
+      border: 2px solid #00ffcc;
+      box-shadow: 0 0 18px #00ffccbb, 0 0 8px #8000ff77;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.45em;
+      letter-spacing: 2px;
+      border-radius: 16px;
+      padding: 11px 36px;
+      min-width: 180px;
+      text-align: center;
+      z-index: 10;
+      user-select: text;
+      pointer-events: none;
     }
-    /* Mobilanpassning – ingen förändring från tidigare */
+    /* Profilbild + meddelandeikon */
     .profile-picture-wrapper {
       width: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       position: relative;
+      margin-top: 80px;
     }
     .profile-picture {
       width: 135px;
@@ -127,8 +144,9 @@
     }
     .ghostgrid-message-icon-wrap {
       position: absolute;
-      bottom: 0; right: 0;
-      z-index: 3;
+      top: 10px;
+      right: 12px;
+      z-index: 30;
       display: flex;
       align-items: center;
     }
@@ -316,6 +334,7 @@
         return;
       }
       const data = snap.data();
+      const showUsername = (data.nickname || data.username || "Okänd användare");
       profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
       profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
       profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
@@ -323,13 +342,18 @@
       picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
       let profileHtml = '';
+
+      // ANVÄNDARNAMN ÖVERST
+      profileHtml += `<div class="profile-username-box">${showUsername}</div>`;
+
       // PROFILBILD + REAKTIONER + MEDDELANDE-IKON
       if (data.profilePicUrl) {
         profileHtml += `<div class="profile-picture-wrapper">
           <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+        // Meddelandesymbol alltid synlig uppe till höger
         if (userId) {
-          // Meddelandesymbol på egen profil (med badge) - annars utan badge
           if (userId === uid) {
+            // Egen profil: badge för olästa
             profileHtml += `
               <span class="ghostgrid-message-icon-wrap">
                 <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden">
@@ -342,7 +366,7 @@
                 </a>
               </span>`;
           } else {
-            // Meddelandesymbol på annans profil, ingen badge
+            // Annans profil: ingen badge
             profileHtml += `
               <span class="ghostgrid-message-icon-wrap">
                 <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande">
