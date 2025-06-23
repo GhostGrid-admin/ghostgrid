@@ -101,62 +101,39 @@
       position: relative;
     }
     /* Användarnamn kvadrat */
-    .profile-username-box {
-      position: absolute;
-      top: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1c1833e6;
-      border: 2px solid #00ffcc;
-      box-shadow: 0 0 18px #00ffccbb, 0 0 8px #8000ff77;
-      color: #fff;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      font-size: 1.45em;
-      letter-spacing: 2px;
-      border-radius: 16px;
-      padding: 11px 36px;
-      min-width: 180px;
-      text-align: center;
-      z-index: 10;
-      user-select: text;
-      pointer-events: none;
-    }
-    /* Profilbild + meddelandeikon */
-    .profile-picture-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      position: relative;
-      margin-top: 80px;
-    }
-    .profile-picture {
-      width: 135px;
-      height: 135px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 10px;
-      box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
-      border: 3px solid #0ff;
-      background: #111;
-      display: block;
-    }
-    .ghostgrid-message-icon-wrap {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      z-index: 30;
+    .profile-username-row {
       display: flex;
       align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+    .profile-username-box {
+      background: #fff;
+      color: #181f21;
+      padding: 13px 32px;
+      border-radius: 16px;
+      font-size: 2em;
+      font-weight: bold;
+      min-width: 140px;
+      box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
+      letter-spacing: 0.5px;
+      text-align: center;
+      display: inline-block;
+      border: 2.2px solid #00ffcc;
+      font-family: 'Courier New', monospace;
+      user-select: text;
     }
     .ghostgrid-message-link {
-      position: relative;
-      display: inline-block;
+      margin-left: 10px;
+      display: inline-flex;
+      align-items: center;
       border-radius: 50%;
       background: #171c19;
       transition: box-shadow .23s;
       box-shadow: 0 0 10px #19ff19b0, 0 0 32px #19ff1990;
+      position: relative;
     }
     .ghostgrid-message-link:focus,
     .ghostgrid-message-link:active {
@@ -186,6 +163,18 @@
       0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
+    .user-id {
+      color: #bbfff5;
+      font-size: 0.95em;
+      margin: 5px 0 16px 0;
+      text-align: center;
+      letter-spacing: 0.8px;
+      opacity: 0.69;
+      user-select: all;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+    }
+    /* Resten av din CSS ... */
     .pic-reactions, .profile-reactions {
       margin-top: 12px;
       display: flex;
@@ -343,54 +332,41 @@
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
       let profileHtml = '';
 
-      // ANVÄNDARNAMN ÖVERST
-      profileHtml += `<div class="profile-username-box">${showUsername}</div>`;
-
-      // PROFILBILD + REAKTIONER + MEDDELANDE-IKON
+      // PROFILBILD ÖVERST
       if (data.profilePicUrl) {
-        profileHtml += `<div class="profile-picture-wrapper">
-          <img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
-        // Meddelandesymbol alltid synlig uppe till höger
-        if (userId) {
-          if (userId === uid) {
-            // Egen profil: badge för olästa
-            profileHtml += `
-              <span class="ghostgrid-message-icon-wrap">
-                <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden">
-                  <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                    <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-                    <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  ${unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
-                </a>
-              </span>`;
-          } else {
-            // Annans profil: ingen badge
-            profileHtml += `
-              <span class="ghostgrid-message-icon-wrap">
-                <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande">
-                  <svg viewBox="0 0 54 54" width="46" height="46" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                    <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-                    <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </span>`;
-          }
-        }
-        profileHtml += `</div>
-          <div class="pic-reactions">
-            <div>${lang === 'sv' ? 'Lämna en reaktion på profilbilden:' : 'React to profile picture:'}</div>
-            <button class="reaction-btn" id="pic-heart" title="❤️">❤️</button>
-            <span id="pic-heart-count">${picReactions.heart.length}</span>
-            <button class="reaction-btn" id="pic-thumb" title="👍">👍</button>
-            <span id="pic-thumb-count">${picReactions.thumb.length}</span>
-            <button class="reaction-btn" id="pic-smile" title="😄">😄</button>
-            <span id="pic-smile-count">${picReactions.smile.length}</span>
-          </div>
-        `;
+        profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
       }
+
+      // ANVÄNDARNAMN + MEDDELANDEIKON (i samma rad/box)
+      profileHtml += `<div class="profile-username-row">
+        <span class="profile-username-box">${showUsername}</span>`;
+      if (userId) {
+        if (userId === uid) {
+          profileHtml += `
+            <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden">
+              <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              ${unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+            </a>`;
+        } else {
+          profileHtml += `
+            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande">
+              <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>`;
+        }
+      }
+      profileHtml += `</div>`;
+
+      // ANVÄNDAR-ID (liten text under boxen)
+      profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
+
       // PROFILKOD + REAKTIONER + REKLAM
       profileHtml += `<div class="profile-code-wrapper">`;
       profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
