@@ -16,7 +16,6 @@
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
     @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-
     nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
     .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
     .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
@@ -34,7 +33,6 @@
       .hamburger { display: flex; }
     }
     @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
-
     .friends-main { margin: 0 auto 0 auto; max-width: 550px; padding: 0 5vw; }
     .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 550px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0;}
     .section-title { font-size: 1.6em; color: #00ffd9; text-align: center; margin-bottom: 15px; letter-spacing: 0.04em; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold;}
@@ -114,11 +112,25 @@
       <div id="blockedUsers"></div>
     </div>
   </div>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  
+    // --- FIREBASE INIT ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.appspot.com",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script>
     // --- SIDBANNER LOGIK & NAVBAR ---
     const banners = [
       { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
@@ -186,19 +198,6 @@
     }
     applyTranslations();
 
-    // --- FIREBASE INIT ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.appspot.com",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
     // --- FRIEND/BLOCK LOGIC ---
     let currentUser, currentUid, currentNickname;
 
@@ -206,6 +205,21 @@
     function confirmBox(msg) {
       return new Promise(resolve => {
         if (confirm(msg)) resolve(true); else resolve(false);
+      });
+    }
+
+    // --- AUTH CHECK ---
+    function authCheck() {
+      return new Promise(res => {
+        onAuthStateChanged(auth, async user => {
+          if (!user) return location.href = "login.html";
+          currentUser = user;
+          currentUid = user.uid;
+          // Hämta nickname
+          const snap = await getDoc(doc(db, "users", currentUid));
+          currentNickname = snap.exists() ? (snap.data().nickname || "") : user.email;
+          res();
+        });
       });
     }
 
@@ -228,33 +242,18 @@
       return row;
     }
 
-    // --- AUTH CHECK ---
-    async function authCheck() {
-      return new Promise(res => {
-        auth.onAuthStateChanged(async user => {
-          if (!user) return location.href = "login.html";
-          currentUser = user;
-          currentUid = user.uid;
-          // Hämta nickname
-          const snap = await db.collection("users").doc(currentUid).get();
-          currentNickname = snap.exists ? (snap.data().nickname || "") : user.email;
-          res();
-        });
-      });
-    }
-
     // --- FRIENDS ---
     async function renderFriends() {
       const list = document.getElementById("friendList");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("users").doc(currentUid).get();
+      const snap = await getDoc(doc(db, "users", currentUid));
       const data = snap.data();
       const friends = Array.isArray(data.friends) ? data.friends : [];
       if (!friends.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_friends")}</div>`; return; }
       list.innerHTML = "";
       for (let friendUid of friends) {
-        const fSnap = await db.collection("users").doc(friendUid).get();
-        if (!fSnap.exists) continue;
+        const fSnap = await getDoc(doc(db, "users", friendUid));
+        if (!fSnap.exists()) continue;
         const user = { uid: friendUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Meddelande-knapp
         const msgBtn = document.createElement("button");
@@ -266,11 +265,11 @@
         remBtn.textContent = t("remove");
         remBtn.onclick = async () => {
           if (await confirmBox(t("confirm_remove"))) {
-            await db.collection("users").doc(currentUid).update({
-              friends: firebase.firestore.FieldValue.arrayRemove(friendUid)
+            await updateDoc(doc(db, "users", currentUid), {
+              friends: arrayRemove(friendUid)
             });
-            await db.collection("users").doc(friendUid).update({
-              friends: firebase.firestore.FieldValue.arrayRemove(currentUid)
+            await updateDoc(doc(db, "users", friendUid), {
+              friends: arrayRemove(currentUid)
             });
             renderAll();
           }
@@ -280,8 +279,8 @@
         blockBtn.textContent = t("block");
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
-            await db.collection("users").doc(currentUid).update({
-              blocked: firebase.firestore.FieldValue.arrayUnion(friendUid)
+            await updateDoc(doc(db, "users", currentUid), {
+              blocked: arrayUnion(friendUid)
             });
             renderAll();
           }
@@ -294,25 +293,25 @@
     async function renderRequests() {
       const list = document.getElementById("incomingRequests");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("users").doc(currentUid).get();
+      const snap = await getDoc(doc(db, "users", currentUid));
       const reqs = Array.isArray(snap.data().friendRequests) ? snap.data().friendRequests : [];
       if (!reqs.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_requests")}</div>`; return; }
       list.innerHTML = "";
       for (let rUid of reqs) {
-        const fSnap = await db.collection("users").doc(rUid).get();
-        if (!fSnap.exists) continue;
+        const fSnap = await getDoc(doc(db, "users", rUid));
+        if (!fSnap.exists()) continue;
         const user = { uid: rUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Acceptera
         const accBtn = document.createElement("button");
         accBtn.textContent = t("accept");
         accBtn.onclick = async () => {
           // Lägg till på båda
-          await db.collection("users").doc(currentUid).update({
-            friends: firebase.firestore.FieldValue.arrayUnion(rUid),
-            friendRequests: firebase.firestore.FieldValue.arrayRemove(rUid)
+          await updateDoc(doc(db, "users", currentUid), {
+            friends: arrayUnion(rUid),
+            friendRequests: arrayRemove(rUid)
           });
-          await db.collection("users").doc(rUid).update({
-            friends: firebase.firestore.FieldValue.arrayUnion(currentUid)
+          await updateDoc(doc(db, "users", rUid), {
+            friends: arrayUnion(currentUid)
           });
           renderAll();
         };
@@ -320,8 +319,8 @@
         const decBtn = document.createElement("button");
         decBtn.textContent = t("decline");
         decBtn.onclick = async () => {
-          await db.collection("users").doc(currentUid).update({
-            friendRequests: firebase.firestore.FieldValue.arrayRemove(rUid)
+          await updateDoc(doc(db, "users", currentUid), {
+            friendRequests: arrayRemove(rUid)
           });
           renderAll();
         };
@@ -333,21 +332,21 @@
     async function renderBlocked() {
       const list = document.getElementById("blockedUsers");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("users").doc(currentUid).get();
+      const snap = await getDoc(doc(db, "users", currentUid));
       const blocked = Array.isArray(snap.data().blocked) ? snap.data().blocked : [];
       if (!blocked.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_blocked")}</div>`; return; }
       list.innerHTML = "";
       for (let bUid of blocked) {
-        const fSnap = await db.collection("users").doc(bUid).get();
-        if (!fSnap.exists) continue;
+        const fSnap = await getDoc(doc(db, "users", bUid));
+        if (!fSnap.exists()) continue;
         const user = { uid: bUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Avblockera
         const unblockBtn = document.createElement("button");
         unblockBtn.textContent = t("unblock");
         unblockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_unblock"))) {
-            await db.collection("users").doc(currentUid).update({
-              blocked: firebase.firestore.FieldValue.arrayRemove(bUid)
+            await updateDoc(doc(db, "users", currentUid), {
+              blocked: arrayRemove(bUid)
             });
             renderAll();
           }
@@ -362,15 +361,15 @@
       let resultsDiv = document.getElementById("searchResults");
       if (!val || val.length < 2) { resultsDiv.innerHTML = ""; return; }
       // Sök på nickname eller id
-      const q = await db.collection("users").get();
+      const qSnap = await getDocs(collection(db, "users"));
       let hits = [];
-      q.forEach(doc => {
-        if (doc.id === currentUid) return;
-        let data = doc.data();
+      qSnap.forEach(docu => {
+        if (docu.id === currentUid) return;
+        let data = docu.data();
         let match = false;
         if (data.nickname && data.nickname.toLowerCase().includes(val)) match = true;
-        if (doc.id === val) match = true;
-        if (match) hits.push({ uid: doc.id, nickname: data.nickname || data.displayName || "?" });
+        if (docu.id === val) match = true;
+        if (match) hits.push({ uid: docu.id, nickname: data.nickname || data.displayName || "?" });
       });
       if (!hits.length) { resultsDiv.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_results")}</div>`; return; }
       resultsDiv.innerHTML = "";
@@ -380,8 +379,8 @@
         addBtn.textContent = t("add_friend");
         addBtn.onclick = async () => {
           // Skicka förfrågan
-          await db.collection("users").doc(user.uid).update({
-            friendRequests: firebase.firestore.FieldValue.arrayUnion(currentUid)
+          await updateDoc(doc(db, "users", user.uid), {
+            friendRequests: arrayUnion(currentUid)
           });
           alert(t("friend_request"));
         };
@@ -393,8 +392,8 @@
         blockBtn.textContent = t("block");
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
-            await db.collection("users").doc(currentUid).update({
-              blocked: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            await updateDoc(doc(db, "users", currentUid), {
+              blocked: arrayUnion(user.uid)
             });
             renderAll();
           }
