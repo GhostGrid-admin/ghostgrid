@@ -236,7 +236,7 @@
           currentUser = user;
           currentUid = user.uid;
           // Hämta nickname
-          const snap = await db.collection("profiles").doc(currentUid).get();
+          const snap = await db.collection("users").doc(currentUid).get();
           currentNickname = snap.exists ? (snap.data().nickname || "") : user.email;
           res();
         });
@@ -247,15 +247,15 @@
     async function renderFriends() {
       const list = document.getElementById("friendList");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("profiles").doc(currentUid).get();
+      const snap = await db.collection("users").doc(currentUid).get();
       const data = snap.data();
       const friends = Array.isArray(data.friends) ? data.friends : [];
       if (!friends.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_friends")}</div>`; return; }
       list.innerHTML = "";
-      for (let friend of friends) {
-        const fSnap = await db.collection("profiles").doc(friend.uid).get();
+      for (let friendUid of friends) {
+        const fSnap = await db.collection("users").doc(friendUid).get();
         if (!fSnap.exists) continue;
-        const user = { uid: friend.uid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
+        const user = { uid: friendUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Meddelande-knapp
         const msgBtn = document.createElement("button");
         msgBtn.className = "icon-btn"; msgBtn.title = t("message");
@@ -266,11 +266,11 @@
         remBtn.textContent = t("remove");
         remBtn.onclick = async () => {
           if (await confirmBox(t("confirm_remove"))) {
-            await db.collection("profiles").doc(currentUid).update({
-              friends: firebase.firestore.FieldValue.arrayRemove({ uid: user.uid })
+            await db.collection("users").doc(currentUid).update({
+              friends: firebase.firestore.FieldValue.arrayRemove(friendUid)
             });
-            await db.collection("profiles").doc(user.uid).update({
-              friends: firebase.firestore.FieldValue.arrayRemove({ uid: currentUid })
+            await db.collection("users").doc(friendUid).update({
+              friends: firebase.firestore.FieldValue.arrayRemove(currentUid)
             });
             renderAll();
           }
@@ -280,8 +280,8 @@
         blockBtn.textContent = t("block");
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
-            await db.collection("profiles").doc(currentUid).update({
-              blocked: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            await db.collection("users").doc(currentUid).update({
+              blocked: firebase.firestore.FieldValue.arrayUnion(friendUid)
             });
             renderAll();
           }
@@ -294,12 +294,12 @@
     async function renderRequests() {
       const list = document.getElementById("incomingRequests");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("profiles").doc(currentUid).get();
+      const snap = await db.collection("users").doc(currentUid).get();
       const reqs = Array.isArray(snap.data().friendRequests) ? snap.data().friendRequests : [];
       if (!reqs.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_requests")}</div>`; return; }
       list.innerHTML = "";
       for (let rUid of reqs) {
-        const fSnap = await db.collection("profiles").doc(rUid).get();
+        const fSnap = await db.collection("users").doc(rUid).get();
         if (!fSnap.exists) continue;
         const user = { uid: rUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Acceptera
@@ -307,12 +307,12 @@
         accBtn.textContent = t("accept");
         accBtn.onclick = async () => {
           // Lägg till på båda
-          await db.collection("profiles").doc(currentUid).update({
-            friends: firebase.firestore.FieldValue.arrayUnion({ uid: rUid }),
+          await db.collection("users").doc(currentUid).update({
+            friends: firebase.firestore.FieldValue.arrayUnion(rUid),
             friendRequests: firebase.firestore.FieldValue.arrayRemove(rUid)
           });
-          await db.collection("profiles").doc(rUid).update({
-            friends: firebase.firestore.FieldValue.arrayUnion({ uid: currentUid })
+          await db.collection("users").doc(rUid).update({
+            friends: firebase.firestore.FieldValue.arrayUnion(currentUid)
           });
           renderAll();
         };
@@ -320,7 +320,7 @@
         const decBtn = document.createElement("button");
         decBtn.textContent = t("decline");
         decBtn.onclick = async () => {
-          await db.collection("profiles").doc(currentUid).update({
+          await db.collection("users").doc(currentUid).update({
             friendRequests: firebase.firestore.FieldValue.arrayRemove(rUid)
           });
           renderAll();
@@ -333,12 +333,12 @@
     async function renderBlocked() {
       const list = document.getElementById("blockedUsers");
       list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
-      const snap = await db.collection("profiles").doc(currentUid).get();
+      const snap = await db.collection("users").doc(currentUid).get();
       const blocked = Array.isArray(snap.data().blocked) ? snap.data().blocked : [];
       if (!blocked.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_blocked")}</div>`; return; }
       list.innerHTML = "";
       for (let bUid of blocked) {
-        const fSnap = await db.collection("profiles").doc(bUid).get();
+        const fSnap = await db.collection("users").doc(bUid).get();
         if (!fSnap.exists) continue;
         const user = { uid: bUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
         // Avblockera
@@ -346,7 +346,7 @@
         unblockBtn.textContent = t("unblock");
         unblockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_unblock"))) {
-            await db.collection("profiles").doc(currentUid).update({
+            await db.collection("users").doc(currentUid).update({
               blocked: firebase.firestore.FieldValue.arrayRemove(bUid)
             });
             renderAll();
@@ -362,7 +362,7 @@
       let resultsDiv = document.getElementById("searchResults");
       if (!val || val.length < 2) { resultsDiv.innerHTML = ""; return; }
       // Sök på nickname eller id
-      const q = await db.collection("profiles").get();
+      const q = await db.collection("users").get();
       let hits = [];
       q.forEach(doc => {
         if (doc.id === currentUid) return;
@@ -380,7 +380,7 @@
         addBtn.textContent = t("add_friend");
         addBtn.onclick = async () => {
           // Skicka förfrågan
-          await db.collection("profiles").doc(user.uid).update({
+          await db.collection("users").doc(user.uid).update({
             friendRequests: firebase.firestore.FieldValue.arrayUnion(currentUid)
           });
           alert(t("friend_request"));
@@ -393,7 +393,7 @@
         blockBtn.textContent = t("block");
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
-            await db.collection("profiles").doc(currentUid).update({
+            await db.collection("users").doc(currentUid).update({
               blocked: firebase.firestore.FieldValue.arrayUnion(user.uid)
             });
             renderAll();
