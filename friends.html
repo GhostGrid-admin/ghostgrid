@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -5,7 +6,6 @@
   <title>GhostGrid – Vänner</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Ditt tema och layout – samma som tidigare! */
     body {
       background: #0a0a0a;
       color: #e0ffff;
@@ -16,26 +16,324 @@
       position: relative;
       overflow-x: hidden;
     }
-    /* ... (Behåll resten av CSS:en här från din kod!) ... */
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 136px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
+    }
+    .side-banner {
+      position: fixed;
+      top: 87px;
+      bottom: 0;
+      width: 136px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 120px;
+      height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+      min-height: 200px;
+    }
+    .side-banner.left { left: 0; }
+    .side-banner.right { right: 0; }
+    @media (max-width: 1100px) {
+      .side-banner, .glow-left, .glow-right { width: 65px; }
+      .side-banner .banner-inner { width: 57px; }
+    }
+    @media (max-width: 700px) {
+      .side-banner, .glow-left, .glow-right { display: none; }
+    }
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+      transition: top 0.3s;
+    }
+    .nav-content {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+      text-align: center;
+    }
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .search-container {
+      width: 210px;
+      display: flex;
+      justify-content: center;
+      margin-left: 12px;
+    }
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.05em;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 8px;
+      color: #fff;
+      box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
+      text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
+      width: 100%;
+      max-width: 230px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    @media (max-width: 700px) {
+      .nav-content {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        left: 0; right: 0; top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+      }
+      .nav-content.show { display: flex; }
+      .nav-content a {
+        padding: 18px 10px;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+      }
+      .search-container {
+        margin: 10px auto 0 auto;
+        width: 90vw;
+      }
+      .search-container input {
+        width: 100%;
+        max-width: 100vw;
+      }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+    }
+    .friends-main {
+      margin: 0 auto 0 auto;
+      max-width: 550px;
+      padding: 0 5vw;
+    }
+    .wall-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 30px 20px 22px 20px;
+      margin: 36px auto 32px auto;
+      max-width: 550px;
+      background-color: rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 15px #00ffcc33;
+      position: relative;
+      z-index: 2;
+      min-width: 0;
+    }
+    .section-title {
+      font-size: 1.6em;
+      color: #00ffd9;
+      text-align: center;
+      margin-bottom: 15px;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
+      font-weight: bold;
+    }
+    .friend-row, .result-row, .request-row, .blocked-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid #183;
+      font-size: 1.15em;
+    }
+    .friend-row:last-child,
+    .result-row:last-child,
+    .request-row:last-child,
+    .blocked-row:last-child {
+      border-bottom: none;
+    }
+    .friend-actions button,
+    .result-actions button,
+    .request-actions button,
+    .blocked-actions button {
+      background: #181f26;
+      color: #0ff;
+      border: 1.5px solid #00ffcc;
+      border-radius: 8px;
+      padding: 6px 13px;
+      font-family: inherit;
+      font-size: 0.97em;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: 0.2s;
+    }
+    .friend-actions button:hover,
+    .result-actions button:hover,
+    .request-actions button:hover,
+    .blocked-actions button:hover {
+      background: #00ffcc;
+      color: #181f26;
+    }
+    .icon-btn {
+      background: none !important;
+      border: none !important;
+      font-size: 1.18em;
+      color: #00ffcc;
+      cursor: pointer;
+      margin: 0 3px;
+    }
+    .icon-btn:hover { color: #00ffd9; }
+    .search-friends-box {
+      padding: 20px 0 13px 0;
+      text-align: center;
+    }
+    .search-friends-box input {
+      padding: 10px 17px;
+      font-size: 1.19em;
+      border-radius: 10px;
+      border: 2px solid #00ffcc;
+      background: #111;
+      color: #fff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      width: 94%;
+      max-width: 320px;
+      margin-bottom: 5px;
+    }
+    @media (max-width: 700px) {
+      .wall-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
+      .friends-main { max-width: 99vw; }
+    }
   </style>
 </head>
 <body>
-  <!-- ... (Behåll banners/nav/layout som innan) ... -->
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="side-banner left">
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <div class="side-banner right">
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-content" id="navMenu">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="store.html" data-i18n="store">Store</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <div class="search-container">
+        <input type="text" placeholder="" id="searchInput" />
+      </div>
+    </div>
+  </nav>
   <div class="friends-main">
-    <div id="authStatus" style="color:#ff4caa;font-size:1.15em;text-align:center;margin-bottom:18px"></div>
+    <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
       <div class="section-title" data-i18n="search_friends">Sök användare eller användar-ID</div>
-      <input type="text" id="friendSearch" placeholder="Användarnamn eller användar-ID..." autocomplete="off"/>
+      <input type="text" id="friendSearch" placeholder="Användarnamn eller användar-ID..." autocomplete="off" />
       <div id="searchResults"></div>
     </div>
+    <!-- DINA VÄNNER -->
     <div class="wall-box">
       <div class="section-title" data-i18n="your_friends">Dina vänner</div>
       <div id="friendList"></div>
     </div>
+    <!-- INKOMMANDE FÖRFRÅGNINGAR -->
     <div class="wall-box">
       <div class="section-title" data-i18n="incoming_requests">Inkommande vänförfrågningar</div>
       <div id="incomingRequests"></div>
     </div>
+    <!-- BLOCKERADE -->
     <div class="wall-box">
       <div class="section-title" data-i18n="blocked">Blockerade användare</div>
       <div id="blockedUsers"></div>
@@ -69,25 +367,155 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ----------- DEBUG: Visa auth-status --------
-    const authStatusDiv = document.getElementById("authStatus");
-
-    // ----------- TRANSLATIONS/UTILS -----------
-    const translations = {
-      sv: { forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
-        search_friends: "Sök användare eller användar-ID", your_friends: "Dina vänner", incoming_requests: "Inkommande vänförfrågningar",
-        blocked: "Blockerade användare", add_friend: "Lägg till vän", message: "Meddela", block: "Blockera", unblock: "Avblockera",
-        remove: "Ta bort vän", confirm_remove: "Ta bort vän?", confirm_block: "Blockera användaren?", confirm_unblock: "Avblockera användaren?",
-        accept: "Acceptera", decline: "Neka", confirm: "Ja", cancel: "Nej", friend_request: "skickade vänförfrågan.",
-        no_friends: "Du har inga vänner ännu.", no_results: "Inga användare hittades.", no_requests: "Inga inkommande förfrågningar.",
-        no_blocked: "Du har inte blockerat någon.", me: "Du själv"
+    // --- SIDBANNER LOGIK & NAVBAR ---
+    const banners = [
+      {
+        left: {
+          src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1",
+          alt: "Reklam Banner 1",
+          url: "#",
+        },
+        right: {
+          src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2",
+          alt: "Reklam Banner 2",
+          url: "#",
+        },
       },
-      en: { forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
-        search_friends: "Search users or user ID", your_friends: "Your friends", incoming_requests: "Incoming friend requests",
-        blocked: "Blocked users", add_friend: "Add friend", message: "Message", block: "Block", unblock: "Unblock", remove: "Remove friend",
-        confirm_remove: "Remove friend?", confirm_block: "Block this user?", confirm_unblock: "Unblock this user?", accept: "Accept",
-        decline: "Decline", confirm: "Yes", cancel: "No", friend_request: "sent a friend request.", no_friends: "You have no friends yet.",
-        no_results: "No users found.", no_requests: "No incoming requests.", no_blocked: "You haven't blocked anyone.", me: "You"
+      {
+        left: {
+          src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!",
+          alt: "Bli medlem",
+          url: "register.html",
+        },
+        right: {
+          src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här",
+          alt: "Annonsera",
+          url: "#",
+        },
+      },
+    ];
+    let bannerIndex = 0;
+    function updateBanners() {
+      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
+      document.getElementById("leftBannerImg").src = left.src;
+      document.getElementById("leftBannerImg").alt = left.alt;
+      document.getElementById("leftBannerLink").href = left.url;
+      document.getElementById("rightBannerImg").src = right.src;
+      document.getElementById("rightBannerImg").alt = right.alt;
+      document.getElementById("rightBannerLink").href = right.url;
+    }
+    updateBanners();
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
+
+    // --- NAV ---
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const navMenu = document.getElementById("navMenu");
+    hamburgerBtn.addEventListener("click", function () {
+      navMenu.classList.toggle("show");
+    });
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("show");
+      });
+    });
+
+    // --- NAV-SÖK ---
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      searchInput.placeholder =
+        localStorage.lang === "en"
+          ? "Search the whole site..."
+          : "Sök på hela sidan...";
+      if (searchInput) {
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query.length >= 2)
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+          }
+        });
+      }
+    });
+
+    // --- NAVBAR HIDE VID SCROLL ---
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector(".navbar");
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add("hide-navbar");
+        } else {
+          navbar.classList.remove("hide-navbar");
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
+
+    // --- TRANSLATIONS ---
+    const translations = {
+      sv: {
+        forum: "Forum",
+        store: "Butik",
+        wall: "Väggen",
+        upload: "Ladda upp",
+        profile: "Profil",
+        friends: "Vänner",
+        search_friends: "Sök användare eller användar-ID",
+        your_friends: "Dina vänner",
+        incoming_requests: "Inkommande vänförfrågningar",
+        blocked: "Blockerade användare",
+        add_friend: "Lägg till vän",
+        message: "Meddela",
+        block: "Blockera",
+        unblock: "Avblockera",
+        remove: "Ta bort vän",
+        confirm_remove: "Ta bort vän?",
+        confirm_block: "Blockera användaren?",
+        confirm_unblock: "Avblockera användaren?",
+        accept: "Acceptera",
+        decline: "Neka",
+        confirm: "Ja",
+        cancel: "Nej",
+        friend_request: "skickade vänförfrågan.",
+        no_friends: "Du har inga vänner ännu.",
+        no_results: "Inga användare hittades.",
+        no_requests: "Inga inkommande förfrågningar.",
+        no_blocked: "Du har inte blockerat någon.",
+        me: "Du själv",
+      },
+      en: {
+        forum: "Forum",
+        store: "Store",
+        wall: "Wall",
+        upload: "Upload",
+        profile: "Profile",
+        friends: "Friends",
+        search_friends: "Search users or user ID",
+        your_friends: "Your friends",
+        incoming_requests: "Incoming friend requests",
+        blocked: "Blocked users",
+        add_friend: "Add friend",
+        message: "Message",
+        block: "Block",
+        unblock: "Unblock",
+        remove: "Remove friend",
+        confirm_remove: "Remove friend?",
+        confirm_block: "Block this user?",
+        confirm_unblock: "Unblock this user?",
+        accept: "Accept",
+        decline: "Decline",
+        confirm: "Yes",
+        cancel: "No",
+        friend_request: "sent a friend request.",
+        no_friends: "You have no friends yet.",
+        no_results: "No users found.",
+        no_requests: "No incoming requests.",
+        no_blocked: "You haven't blocked anyone.",
+        me: "You",
       },
     };
     function t(key) {
@@ -102,7 +530,7 @@
     }
     applyTranslations();
 
-    // ----------- FRIENDS LOGIC -----------
+    // --- FRIEND/BLOCK LOGIC ---
     let currentUser, currentUid, currentNickname;
 
     function confirmBox(msg) {
@@ -112,28 +540,22 @@
       });
     }
 
-    // ----------- AUTH CHECK + DEBUG -----------
+    // --- AUTH CHECK ---
     function authCheck() {
-      return new Promise((res, rej) => {
+      return new Promise((res) => {
         onAuthStateChanged(auth, async (user) => {
-          if (!user) {
-            authStatusDiv.textContent = "Du är INTE inloggad på Firebase! Ladda om sidan och logga in.";
-            setTimeout(() => { location.href = "login.html"; }, 1800);
-            rej("Ej inloggad");
-          } else {
-            currentUser = user;
-            currentUid = user.uid;
-            authStatusDiv.textContent = "Inloggad som: " + (user.email || user.uid);
-            // Hämta nickname
-            const snap = await getDoc(doc(db, "users", currentUid));
-            currentNickname = snap.exists() ? snap.data().nickname || "" : user.email;
-            res();
-          }
+          if (!user) return (location.href = "login.html");
+          currentUser = user;
+          currentUid = user.uid;
+          // Hämta nickname
+          const snap = await getDoc(doc(db, "users", currentUid));
+          currentNickname = snap.exists() ? snap.data().nickname || "" : user.email;
+          res();
         });
       });
     }
 
-    // ----------- ALL RENDER ---------
+    // --- Render friend list, requests, blocked, search ---
     async function renderAll() {
       await authCheck();
       await renderFriends();
@@ -154,6 +576,7 @@
       return row;
     }
 
+    // --- FRIENDS ---
     async function renderFriends() {
       const list = document.getElementById("friendList");
       list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
@@ -206,6 +629,7 @@
       }
     }
 
+    // --- INKOMMANDE REQUESTS ---
     async function renderRequests() {
       const list = document.getElementById("incomingRequests");
       list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
@@ -249,6 +673,7 @@
       }
     }
 
+    // --- BLOCKERADE ANVÄNDARE ---
     async function renderBlocked() {
       const list = document.getElementById("blockedUsers");
       list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
@@ -339,12 +764,11 @@
       function tryRender() {
         if (auth.currentUser) {
           renderAll();
-        } else if (tries < 18) {
-          authStatusDiv.textContent = "Väntar på att auth ska bli klar... (" + (tries+1) + ")";
-          setTimeout(tryRender, 180);
+        } else if (tries < 15) {
+          setTimeout(tryRender, 150);
           tries++;
         } else {
-          authStatusDiv.textContent = "Inloggning kunde inte verifieras. Logga ut och in igen!";
+          alert("Inloggning kunde inte verifieras. Ladda om sidan.");
         }
       }
       tryRender();
