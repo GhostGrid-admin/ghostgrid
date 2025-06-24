@@ -273,14 +273,19 @@
     let userMap = {};
 
     // Emojis som valts
-    const emojis = [
-      { emoji: "👍", key: "thumbsup" }, { emoji: "👎", key: "thumbsdown" },
-      { emoji: "🙂", key: "smile" }, { emoji: "😃", key: "bigsmile" },
-      { emoji: "😂", key: "laugh" }, { emoji: "😕", key: "confused" },
-      { emoji: "🙁", key: "sad" }, { emoji: "😢", key: "cry" },
-      { emoji: "😡", key: "angry" }, { emoji: "😳", key: "embarrassed" }, { emoji: "😇", key: "angel" }
+const emojis = [
+      { emoji: "👍", key: "thumbsup" },
+      { emoji: "😂", key: "laugh" },
+      { emoji: "😃", key: "bigsmile" },
+      { emoji: "🙂", key: "smile" },
+      { emoji: "😇", key: "angel" },
+      { emoji: "😳", key: "embarrassed" },
+      { emoji: "😕", key: "confused" },
+      { emoji: "🙁", key: "sad" },
+      { emoji: "😢", key: "cry" },
+      { emoji: "😡", key: "angry" },
+      { emoji: "👎", key: "thumbsdown" }
     ];
-
     async function fetchUsers() {
       const snap = await db.collection("profiles").get();
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
