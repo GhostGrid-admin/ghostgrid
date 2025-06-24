@@ -317,29 +317,24 @@
     </div>
   </nav>
   <div class="friends-main">
-    <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
       <div class="section-title" data-i18n="search_friends">Sök användare eller användar-ID</div>
       <input type="text" id="friendSearch" placeholder="Användarnamn eller användar-ID..." autocomplete="off" />
       <div id="searchResults"></div>
     </div>
-    <!-- DINA VÄNNER -->
     <div class="wall-box">
       <div class="section-title" data-i18n="your_friends">Dina vänner</div>
       <div id="friendList"></div>
     </div>
-    <!-- INKOMMANDE FÖRFRÅGNINGAR -->
     <div class="wall-box">
       <div class="section-title" data-i18n="incoming_requests">Inkommande vänförfrågningar</div>
       <div id="incomingRequests"></div>
     </div>
-    <!-- BLOCKERADE -->
     <div class="wall-box">
       <div class="section-title" data-i18n="blocked">Blockerade användare</div>
       <div id="blockedUsers"></div>
     </div>
   </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
@@ -540,29 +535,12 @@
       });
     }
 
-    // --- AUTH CHECK ---
-    function authCheck() {
-      return new Promise((res) => {
-        onAuthStateChanged(auth, async (user) => {
-          if (!user) return (location.href = "login.html");
-          currentUser = user;
-          currentUid = user.uid;
-          // Hämta nickname
-          const snap = await getDoc(doc(db, "users", currentUid));
-          currentNickname = snap.exists() ? snap.data().nickname || "" : user.email;
-          res();
-        });
-      });
-    }
-
-    // --- Render friend list, requests, blocked, search ---
+    // --- RENDER OCH AUTH LOGIK ---
     async function renderAll() {
-      await authCheck();
       await renderFriends();
       await renderRequests();
       await renderBlocked();
     }
-
     function createUserRow(user, actions = [], note = "") {
       let row = document.createElement("div");
       row.className = "friend-row";
@@ -758,20 +736,24 @@
       }
     });
 
-    // --- AUTOINIT ---
+    // --- AUTOINIT – ALLT VÄNTAR PÅ AUTH ---
     window.onload = function () {
-      let tries = 0;
-      function tryRender() {
-        if (auth.currentUser) {
-          renderAll();
-        } else if (tries < 15) {
-          setTimeout(tryRender, 150);
-          tries++;
-        } else {
-          alert("Inloggning kunde inte verifieras. Ladda om sidan.");
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          alert("Inloggning kunde inte verifieras. Logga ut och in igen!");
+          window.location.href = "login.html";
+          return;
         }
-      }
-      tryRender();
+        currentUser = user;
+        currentUid = user.uid;
+        try {
+          const snap = await getDoc(doc(db, "users", currentUid));
+          currentNickname = snap.exists() ? snap.data().nickname || user.email : user.email;
+        } catch {
+          currentNickname = user.email;
+        }
+        renderAll();
+      });
     };
   </script>
 </body>
