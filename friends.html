@@ -2,63 +2,87 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vänner – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: #090010; color: #00ff90; font-family: 'Courier New', monospace; margin: 0; padding-top: 85px; }
-    .navbar { background: #000; border-bottom: 2px solid #00ffcc; box-shadow: 0 0 20px #bb00ff; position: fixed; width: 100%; top: 0; left: 0; z-index: 2000; display: flex; justify-content: center;}
-    .nav-content { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; justify-content: center; max-width: 1150px; width: 100%; transition: max-height 0.3s;}
-    .nav-content a { color: #fff; text-decoration: none; font-size: 1.18em; border-radius: 6px; padding: 8px 16px; font-weight: 700; background: transparent; text-shadow: 0 0 11px #00ffcc, 0 0 7px #bb00ff; transition: 0.18s;}
-    .nav-content a:hover { color: #0ff; background: #191931; box-shadow: 0 0 14px #00ffcc88, 0 0 7px #bb00ff99; }
-    .search-container { margin-left: 25px; }
-    .search-container input {
-      padding: 9px 16px; font-size: 1.07em; background: #111; border: 2px solid #00ffcc;
-      border-radius: 9px; color: #fff; box-shadow: 0 0 10px #7b00ff, 0 0 2px #00ffcc; width: 190px;
+    body { background: #0a0a0a; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; padding-top: 85px; min-height: 100vh; }
+    .glow-left, .glow-right { position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0; }
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);}
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);}
+    nav.navbar {
+      background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0;
+      position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff;
+      display: flex; justify-content: center;
     }
-    .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; width: 44px; height: 44px; margin-left: 18px; cursor: pointer; }
-    .hamburger span { width: 31px; height: 4px; margin: 3.5px 0; background: #00ffcc; border-radius: 2px; transition: all 0.3s; }
-    @media (max-width: 800px) {
-      .nav-content { flex-direction: column; gap: 11px; max-height: 0; overflow: hidden; width: 100vw; background: #181f26; position: fixed; left: 0; top: 61px; z-index: 2020; padding-bottom: 16px;}
-      .nav-content.show { max-height: 500px; box-shadow: 0 5px 25px #00ffcc77; }
-      .search-container { margin-left: 0; margin-top: 12px; }
+    .nav-content {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center;
+    }
+    .nav-content a {
+      color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;
+    }
+    .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
+    .search-container { width: 240px; display: flex; justify-content: center; margin-left: 12px; }
+    .search-container input {
+      padding: 8px 14px; font-size: 1.05em; background-color: #111; border: 2px solid #00ffcc; border-radius: 8px;
+      color: #fff; box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc; width: 100%; max-width: 230px;
+    }
+    .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
+    .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
+    @media (max-width: 700px) {
+      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
+      .nav-content.show { display: flex; }
+      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
+      .search-container { margin: 10px auto 0 auto; width: 90vw; }
+      .search-container input { width: 100%; max-width: 100vw;}
       .hamburger { display: flex; }
     }
-    .friends-container { max-width: 620px; margin: 35px auto; padding: 22px 7px; }
-    h2 { color: #00ffb6; text-align: center; margin-bottom: 15px; letter-spacing: 1.2px;}
-    .friend-card, .search-result, .block-card {
-      background: #111c; border: 1px solid #00ff88; border-radius: 9px;
-      padding: 15px; margin-bottom: 16px; box-shadow: 0 0 10px #00ff88a0;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    .friends-container { max-width: 850px; margin: 40px auto 20px auto; padding: 0 10px 30px 10px; }
+    .section-box {
+      background: rgba(15,20,27,0.96); border: 2px solid #00ffcc; border-radius: 16px;
+      box-shadow: 0 0 30px #00ffcc33, 0 0 8px #7b00ff88; margin-bottom: 38px; padding: 24px 18px 16px 18px;
     }
-    .friend-info, .search-info, .block-info { font-size: 1.08em; }
-    .icon-btn {
-      display: inline-flex; align-items: center; background: none; border: none; cursor: pointer; margin-left: 5px;
-      font-size: 1.3em; color: #00ff88; transition: color .19s;
+    .section-title {
+      color: #00ffcc; font-size: 1.35em; font-weight: bold; margin-bottom: 17px; letter-spacing: 0.01em; text-align:center; text-shadow: 0 2px 12px #222, 0 1px 0 #fff2;
     }
-    .icon-btn:hover { color: #0ff; }
-    .action-btn {
-      margin-left: 9px; padding: 6px 11px; background: #00ff88; color: #141919;
-      border: none; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 1em;
-      font-weight: 600; transition: background 0.18s;
+    .friend-card, .search-result, .blocked-card {
+      background: rgba(0, 0, 0, 0.80); border: 1.5px solid #00ffcc;
+      padding: 13px 13px 7px 13px; margin-bottom: 16px; border-radius: 9px;
+      box-shadow: 0 0 10px #00ffcc22; display:flex; align-items:center; justify-content:space-between;
     }
-    .action-btn:hover { background: #00dbaa; }
-    .confirm-dialog {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000b; display: flex; align-items: center; justify-content: center; z-index: 99999;
+    .friend-actions button, .search-actions button, .blocked-actions button {
+      margin-left: 10px; margin-bottom: 5px; padding: 6px 13px;
+      background-color: #00ffcc; color: #000; border: none; border-radius: 6px;
+      cursor: pointer; font-family: 'Courier New', monospace; font-size: 1em; font-weight: bold;
+      box-shadow: 0 0 6px #00ffcc99; transition: filter 0.15s;
     }
-    .confirm-box {
-      background: #121c24; border-radius: 18px; padding: 32px 38px; box-shadow: 0 0 42px #00ffd922; text-align: center; color: #fff;
+    .friend-actions button:hover, .search-actions button:hover, .blocked-actions button:hover {
+      filter: brightness(1.2) drop-shadow(0 0 6px #00ffcc);
     }
-    .confirm-box button { margin: 0 18px; }
-    @media (max-width: 600px) { .friends-container { padding: 8px 2vw; } .friend-card, .search-result, .block-card { flex-direction: column; align-items: flex-start; gap: 7px; } }
+    .msg-icon {
+      color: #00ffcc; background: #181f26; border-radius: 50%; padding: 7px; margin-right: 5px;
+      font-size: 1.16em; box-shadow: 0 0 8px #00ffcc77, 0 0 2px #7b00ff;
+      display:inline-block; vertical-align:middle; transition: box-shadow 0.2s;
+    }
+    .msg-icon:hover { background:#00ffcc; color:#000; box-shadow:0 0 14px #00ffcccc; }
+    .info-id { color:#66ffcc; font-size:0.95em; margin-left:6px;}
+    @media (max-width: 900px) {.friends-container { max-width: 99vw; } }
+    @media (max-width: 700px) {.section-box { padding: 10px 5vw 7px 5vw; } }
   </style>
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" tabindex="0" aria-label="Meny">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
-    <div class="nav-content" id="navLinks">
+    <div class="nav-content" id="navMenu">
       <a href="forum.html" data-i18n="forum">Forum</a>
       <a href="store.html" data-i18n="store">Butik</a>
       <a href="wall.html" data-i18n="wall">Väggen</a>
@@ -66,230 +90,276 @@
       <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
       <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Sök på användarnamn eller ID..." />
+        <input type="text" id="searchInput" placeholder="Sök på användarnamn eller ID..." autocomplete="off"/>
       </div>
     </div>
   </nav>
-
   <div class="friends-container">
-    <h2 data-i18n="your_friends">Dina vänner</h2>
-    <div id="friendList"></div>
-    <h2 data-i18n="friend_requests">Inkommande vänförfrågningar</h2>
-    <div id="incomingRequests"></div>
-    <h2 data-i18n="search_results">Sökresultat</h2>
-    <div id="searchResults"></div>
-    <h2 data-i18n="blocked">Blockerade användare</h2>
-    <div id="blockList"></div>
+    <div class="section-box">
+      <div class="section-title" data-i18n="your_friends">Dina vänner</div>
+      <div id="friendList"></div>
+    </div>
+    <div class="section-box">
+      <div class="section-title" data-i18n="incoming_requests">Inkommande vänförfrågningar</div>
+      <div id="incomingRequests"></div>
+    </div>
+    <div class="section-box">
+      <div class="section-title" data-i18n="search_results">Sökresultat</div>
+      <div id="searchResults"></div>
+    </div>
+    <div class="section-box">
+      <div class="section-title" data-i18n="blocked_users">Blockerade användare</div>
+      <div id="blockedList"></div>
+    </div>
   </div>
-  <div id="confirmDialog" style="display:none;"></div>
-  <script type="module">
-    // ====== FIREBASE INIT ======
-    import { db, auth } from "./scripts/firebase-init.js";
-    import {
-      collection, doc, getDoc, getDocs, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, query, where
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    // ====== TRANSLATIONS ======
-    const translations = {
-      sv: {
-        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
-        your_friends: "Dina vänner", friend_requests: "Inkommande vänförfrågningar", search_results: "Sökresultat", blocked: "Blockerade användare",
-        search_placeholder: "Sök på användarnamn eller ID...",
-        add_friend: "Lägg till vän", message: "Meddela", accept: "Acceptera", decline: "Neka", incoming_request: "skickade en förfrågan.",
-        request_sent: "Vänförfrågan skickad till", remove_friend: "Ta bort vän", friend_removed: "Vän borttagen.",
-        already_friend: "Redan vän", myself: "Detta är du.", block: "Blockera", unblock: "Avblockera",
-        blocked_you: "Du har blockerat denna användare.", remove_block: "Avblockera", confirm_remove_friend: "Ta bort vän?", confirm_block: "Blockera användaren?", confirm_unblock: "Avblockera användaren?", confirm: "Ja", cancel: "Nej", add_back: "Lägg till igen"
-      },
-      en: {
-        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
-        your_friends: "Your friends", friend_requests: "Incoming friend requests", search_results: "Search results", blocked: "Blocked users",
-        search_placeholder: "Search username or ID...",
-        add_friend: "Add friend", message: "Message", accept: "Accept", decline: "Decline", incoming_request: "sent you a friend request.",
-        request_sent: "Friend request sent to", remove_friend: "Remove friend", friend_removed: "Friend removed.",
-        already_friend: "Already friends", myself: "This is you.", block: "Block", unblock: "Unblock",
-        blocked_you: "You have blocked this user.", remove_block: "Unblock", confirm_remove_friend: "Remove friend?", confirm_block: "Block user?", confirm_unblock: "Unblock user?", confirm: "Yes", cancel: "No", add_back: "Add back"
-      }
-    };
-    function t(key) {
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      return translations[lang][key] || key;
+<script>
+  // --- SPRÅKSTÖD ---
+  const translations = {
+    sv: {
+      forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
+      your_friends: "Dina vänner", incoming_requests: "Inkommande vänförfrågningar",
+      search_results: "Sökresultat", blocked_users: "Blockerade användare",
+      add_friend: "Lägg till vän", remove_friend: "Ta bort vän", unblock: "Återlägg vän",
+      message: "Meddela", block: "Blockera", blocked: "Blockerad", confirm_remove: "Ta bort vän?", confirm_unblock: "Återlägg vän?",
+      confirm_block: "Blockera användaren?", yes: "Ja", no: "Nej", no_friends: "Du har inga vänner än.",
+      incoming_from: "skickade en förfrågan.", accept: "Acceptera", decline: "Neka",
+      request_sent: "Vänförfrågan skickad!", self_friend: "Det är du!"
+    },
+    en: {
+      forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
+      your_friends: "Your Friends", incoming_requests: "Incoming Friend Requests",
+      search_results: "Search Results", blocked_users: "Blocked Users",
+      add_friend: "Add Friend", remove_friend: "Remove Friend", unblock: "Unblock",
+      message: "Message", block: "Block", blocked: "Blocked", confirm_remove: "Remove friend?", confirm_unblock: "Unblock user?",
+      confirm_block: "Block this user?", yes: "Yes", no: "No", no_friends: "No friends yet.",
+      incoming_from: "sent a request.", accept: "Accept", decline: "Decline",
+      request_sent: "Friend request sent!", self_friend: "That's you!"
     }
-    function applyTranslations() {
-      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
-      document.getElementById("searchInput").placeholder = t("search_placeholder");
-      document.title = "GhostGrid – " + t("friends");
+  };
+  function t(key) {
+    const lang = localStorage.lang === "en" ? "en" : "sv";
+    return translations[lang][key] || key;
+  }
+  function applyTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+    document.title = "GhostGrid – " + t("friends");
+  }
+  applyTranslations();
+
+  // --- FIREBASE ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+    authDomain: "ghostgrid-fb278.firebaseapp.com",
+    projectId: "ghostgrid-fb278",
+    storageBucket: "ghostgrid-fb278.appspot.com",
+    messagingSenderId: "283208202937",
+    appId: "1:283208202937:web:11c0cea81fd81a31163968"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  // --- MENY & HAMBURGER ---
+  document.getElementById('hamburgerBtn').onclick = function () {
+    document.getElementById('navMenu').classList.toggle('show');
+  };
+  document.querySelectorAll('.nav-content a').forEach(link => {
+    link.onclick = () => document.getElementById('navMenu').classList.remove('show');
+  });
+
+  // --- DYNAMISKA FUNKTIONER ---
+  let currentUserId = null, currentUsername = "";
+  let friends = [], blocked = [], incoming = [];
+
+  auth.onAuthStateChanged(async user => {
+    if (!user) return location.href = "login.html";
+    currentUserId = user.uid;
+    const userRef = db.collection("users").doc(currentUserId);
+
+    // 1. Hämta egen info
+    const userSnap = await userRef.get();
+    if (userSnap.exists) {
+      currentUsername = userSnap.data().username || "";
+      friends = userSnap.data().friends || [];
+      blocked = userSnap.data().blocked || [];
     }
-    applyTranslations();
-    // ====== HAMBURGER ======
-    const hamburgerBtn = document.getElementById("hamburgerBtn");
-    const navLinks = document.getElementById("navLinks");
-    hamburgerBtn.addEventListener("click", () => navLinks.classList.toggle("show"));
-    navLinks.querySelectorAll('a').forEach(a => a.onclick = () => navLinks.classList.remove("show"));
-    // ====== LOGIC ======
-    const friendList = document.getElementById("friendList");
-    const blockList = document.getElementById("blockList");
-    const searchInput = document.getElementById("searchInput");
-    const searchResults = document.getElementById("searchResults");
-    const incomingDiv = document.getElementById("incomingRequests");
-    const confirmDialog = document.getElementById("confirmDialog");
-    let currentUserId = null;
-    let currentUsername = "";
-    let myFriends = [], myBlocked = [];
-    function confirmBox(message, yesFn) {
-      confirmDialog.innerHTML = `<div class="confirm-dialog">
-        <div class="confirm-box">
-          <div style="margin-bottom:22px">${message}</div>
-          <button class="action-btn" id="yesBtn">${t("confirm")}</button>
-          <button class="action-btn" id="noBtn">${t("cancel")}</button>
-        </div>
-      </div>`;
-      confirmDialog.style.display = "";
-      document.getElementById("yesBtn").onclick = () => { confirmDialog.style.display = "none"; yesFn(); };
-      document.getElementById("noBtn").onclick = () => { confirmDialog.style.display = "none"; };
-    }
-    // ==== ON AUTH ====
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) return location.href = "login.html";
-      currentUserId = user.uid;
-      // Get own username, friends & blocklist
-      const meDoc = await getDoc(doc(db, "users", currentUserId));
-      if (meDoc.exists()) {
-        currentUsername = meDoc.data().username;
-        myFriends = meDoc.data().friends || [];
-        myBlocked = meDoc.data().blocked || [];
-      }
-      renderFriends();
-      renderBlocks();
-      renderRequests();
-    });
-    // ==== RENDER FRIENDS ====
-    async function renderFriends() {
-      friendList.innerHTML = "";
-      for (let f of myFriends) {
-        // Get friend's username if not present
-        let username = f.username || (await getDoc(doc(db, "users", f.id))).data()?.username || f.id;
-        let el = document.createElement("div");
-        el.className = "friend-card";
-        el.innerHTML = `
-          <span class="friend-info"><b>${username}</b> <span style="font-size:0.93em;opacity:0.65;">(${f.id})</span></span>
-          <span>
-            <button class="icon-btn" title="${t("message")}" onclick="alert('Meddelanden kommer!')">
-              <svg width="25" height="25" viewBox="0 0 54 54"><rect x="2.5" y="6.5" rx="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/><polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round"/></svg>
-            </button>
-            <button class="action-btn" onclick="window.confirmRemoveFriend('${f.id}','${username}')">${t("remove_friend")}</button>
-            <button class="action-btn" onclick="window.confirmBlockFriend('${f.id}','${username}')">${t("block")}</button>
+
+    // 2. Visa vänner
+    showFriends();
+
+    // 3. Visa inkommande vänförfrågningar
+    db.collection("users").doc(currentUserId).collection("friendRequests").get().then(requestSnap => {
+      incoming = [];
+      document.getElementById("incomingRequests").innerHTML = "";
+      requestSnap.forEach(docSnap => {
+        incoming.push({ id: docSnap.id, username: docSnap.data().username });
+        const div = document.createElement("div");
+        div.classList.add("friend-card");
+        div.innerHTML = `
+          <span><strong>${escapeHTML(docSnap.data().username)}</strong> <span class="info-id">${docSnap.id}</span> <span style="color:#99ffcc">${t("incoming_from")}</span></span>
+          <span class="friend-actions">
+            <button onclick="acceptRequest('${docSnap.id}','${escapeJS(docSnap.data().username)}')">${t("accept")}</button>
+            <button onclick="declineRequest('${docSnap.id}')">${t("decline")}</button>
           </span>
         `;
-        friendList.appendChild(el);
-      }
-    }
-    // ==== RENDER BLOCKS ====
-    async function renderBlocks() {
-      blockList.innerHTML = "";
-      for (let b of myBlocked) {
-        let username = b.username || (await getDoc(doc(db, "users", b.id))).data()?.username || b.id;
-        let el = document.createElement("div");
-        el.className = "block-card";
-        el.innerHTML = `
-          <span class="block-info"><b>${username}</b> <span style="font-size:0.93em;opacity:0.65;">(${b.id})</span></span>
-          <span>
-            <button class="action-btn" onclick="window.confirmUnblock('${b.id}','${username}')">${t("unblock")}</button>
-          </span>
-        `;
-        blockList.appendChild(el);
-      }
-    }
-    // ==== FRIEND REQUESTS ====
-    async function renderRequests() {
-      incomingDiv.innerHTML = "";
-      const reqSnap = await getDocs(collection(db, "users", currentUserId, "friendRequests"));
-      reqSnap.forEach((docSnap) => {
-        const fromId = docSnap.id;
-        const fromData = docSnap.data();
-        let el = document.createElement("div");
-        el.className = "friend-card";
-        el.innerHTML = `
-          <span class="friend-info"><b>${fromData.username || fromId}</b> <span style="font-size:0.93em;opacity:0.65;">(${fromId})</span> ${t("incoming_request")}</span>
-          <span>
-            <button class="action-btn" onclick="window.acceptRequest('${fromId}','${fromData.username||fromId}')">${t("accept")}</button>
-            <button class="action-btn" onclick="window.declineRequest('${fromId}')">${t("decline")}</button>
-          </span>
-        `;
-        incomingDiv.appendChild(el);
-      });
-    }
-    // ==== SEARCH ====
-    searchInput.addEventListener("input", async () => {
-      const search = searchInput.value.trim().toLowerCase();
-      searchResults.innerHTML = "";
-      if (!search || search.length < 2) return;
-      // Sök både på username och id
-      const q = query(collection(db, "users"));
-      const snapshot = await getDocs(q);
-      snapshot.forEach(docSnap => {
-        if (docSnap.id === currentUserId) return;
-        const data = docSnap.data();
-        let found = data.username?.toLowerCase().includes(search) || docSnap.id === search;
-        // Visa inte vänner eller blockade
-        if (found && !myFriends.some(f=>f.id===docSnap.id) && !myBlocked.some(b=>b.id===docSnap.id)) {
-          let el = document.createElement("div");
-          el.className = "search-result";
-          el.innerHTML = `
-            <span class="search-info"><b>${data.username}</b> <span style="font-size:0.93em;opacity:0.65;">(${docSnap.id})</span></span>
-            <span>
-              <button class="icon-btn" title="${t("message")}" onclick="alert('Meddelanden kommer!')">
-                <svg width="25" height="25" viewBox="0 0 54 54"><rect x="2.5" y="6.5" rx="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/><polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round"/></svg>
-              </button>
-              <button class="action-btn" onclick="window.sendFriendRequest('${docSnap.id}','${data.username}')">${t("add_friend")}</button>
-              <button class="action-btn" onclick="window.confirmBlockFriend('${docSnap.id}','${data.username}')">${t("block")}</button>
-            </span>
-          `;
-          searchResults.appendChild(el);
-        }
+        document.getElementById("incomingRequests").appendChild(div);
       });
     });
-    // ==== GLOBAL FUNCTIONS ====
-    window.sendFriendRequest = async (receiverId, receiverUsername) => {
-      if (!currentUserId) return;
-      await setDoc(doc(db, "users", receiverId, "friendRequests", currentUserId), {
-        username: currentUsername, timestamp: serverTimestamp()
+
+    // 4. Visa blockerade
+    showBlocked();
+
+    // 5. Sökfunktion
+    document.getElementById("searchInput").addEventListener("input", doSearch);
+  });
+
+  // --- Visa vänner ---
+  function showFriends() {
+    const el = document.getElementById("friendList");
+    el.innerHTML = "";
+    if (!friends.length) return el.innerHTML = `<div style="text-align:center">${t("no_friends")}</div>`;
+    friends.forEach(friend => {
+      const div = document.createElement("div");
+      div.className = "friend-card";
+      div.innerHTML = `
+        <span>
+          <strong>${escapeHTML(friend.username)}</strong>
+          <span class="info-id">${friend.id}</span>
+        </span>
+        <span class="friend-actions">
+          <span class="msg-icon" title="${t("message")}" onclick="alert('Meddelandefunktion kommer snart!')">&#9993;</span>
+          <button onclick="confirmRemove('${friend.id}','${escapeJS(friend.username)}')">${t("remove_friend")}</button>
+          <button onclick="blockUser('${friend.id}','${escapeJS(friend.username)}')">${t("block")}</button>
+        </span>
+      `;
+      el.appendChild(div);
+    });
+  }
+  // --- Visa blockerade användare
+  function showBlocked() {
+    const el = document.getElementById("blockedList");
+    el.innerHTML = "";
+    if (!blocked.length) return;
+    blocked.forEach(user => {
+      const div = document.createElement("div");
+      div.className = "blocked-card";
+      div.innerHTML = `
+        <span>
+          <strong>${escapeHTML(user.username)}</strong>
+          <span class="info-id">${user.id}</span>
+        </span>
+        <span class="blocked-actions">
+          <button onclick="unblockUser('${user.id}','${escapeJS(user.username)}')">${t("unblock")}</button>
+        </span>
+      `;
+      el.appendChild(div);
+    });
+  }
+
+  // --- SÖKFUNKTION ---
+  async function doSearch() {
+    const search = document.getElementById("searchInput").value.trim().toLowerCase();
+    const el = document.getElementById("searchResults");
+    el.innerHTML = "";
+    if (!search || search.length < 2) return;
+    // Sök på användarnamn
+    const nameQuery = db.collection("users").where("username", ">=", search).where("username", "<=", search + "\uf8ff");
+    const nameSnap = await nameQuery.get();
+    // Sök på ID
+    const idSnap = await db.collection("users").doc(search).get();
+    let found = {};
+    nameSnap.forEach(docSnap => {
+      if (docSnap.id === currentUserId) return;
+      found[docSnap.id] = docSnap.data();
+    });
+    if (idSnap.exists && idSnap.id !== currentUserId) {
+      found[idSnap.id] = idSnap.data();
+    }
+    Object.entries(found).forEach(([uid, data]) => {
+      // Kolla block
+      const isBlocked = blocked.find(x => x.id === uid);
+      const isFriend = friends.find(x => x.id === uid);
+      const div = document.createElement("div");
+      div.className = "search-result";
+      div.innerHTML = `
+        <span>
+          <strong>${escapeHTML(data.username)}</strong>
+          <span class="info-id">${uid}</span>
+        </span>
+        <span class="search-actions">
+          <span class="msg-icon" title="${t("message")}" onclick="alert('Meddelandefunktion kommer snart!')">&#9993;</span>
+          ${isFriend
+            ? `<button disabled>${t("add_friend")}</button>`
+            : isBlocked
+              ? `<button onclick="unblockUser('${uid}','${escapeJS(data.username)}')">${t("unblock")}</button>`
+              : `<button onclick="sendFriendRequest('${uid}','${escapeJS(data.username)}')">${t("add_friend")}</button>`
+          }
+          <button onclick="blockUser('${uid}','${escapeJS(data.username)}')">${t("block")}</button>
+        </span>
+      `;
+      el.appendChild(div);
+    });
+  }
+
+  // --- HANDELARE ---
+  window.sendFriendRequest = async function(receiverId, receiverUsername) {
+    if (!currentUserId) return;
+    await db.collection("users").doc(receiverId).collection("friendRequests").doc(currentUserId).set({
+      username: currentUsername, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    alert(t("request_sent"));
+  };
+  window.acceptRequest = async function(fromId, fromUsername) {
+    // Lägg till hos båda
+    await db.collection("users").doc(currentUserId).update({
+      friends: firebase.firestore.FieldValue.arrayUnion({ id: fromId, username: fromUsername })
+    });
+    await db.collection("users").doc(fromId).update({
+      friends: firebase.firestore.FieldValue.arrayUnion({ id: currentUserId, username: currentUsername })
+    });
+    // Ta bort förfrågan
+    await db.collection("users").doc(currentUserId).collection("friendRequests").doc(fromId).delete();
+    location.reload();
+  };
+  window.declineRequest = async function(fromId) {
+    await db.collection("users").doc(currentUserId).collection("friendRequests").doc(fromId).delete();
+    location.reload();
+  };
+  window.confirmRemove = function(friendId, friendUsername) {
+    if (confirm(t("confirm_remove"))) removeFriend(friendId, friendUsername);
+  };
+  async function removeFriend(friendId, friendUsername) {
+    // Ta bort vän från båda profiler (enklaste varianten)
+    await db.collection("users").doc(currentUserId).update({
+      friends: firebase.firestore.FieldValue.arrayRemove({ id: friendId, username: friendUsername })
+    });
+    await db.collection("users").doc(friendId).get().then(docSnap => {
+      const theirData = docSnap.data();
+      if (!theirData) return;
+      db.collection("users").doc(friendId).update({
+        friends: firebase.firestore.FieldValue.arrayRemove({ id: currentUserId, username: currentUsername })
       });
-      alert(`${t("request_sent")} ${receiverUsername}!`);
-    };
-    window.acceptRequest = async (fromId, fromUsername) => {
-      await updateDoc(doc(db, "users", currentUserId), { friends: arrayUnion({ id: fromId, username: fromUsername }) });
-      await updateDoc(doc(db, "users", fromId), { friends: arrayUnion({ id: currentUserId, username: currentUsername }) });
-      await deleteDoc(doc(db, "users", currentUserId, "friendRequests", fromId));
-      location.reload();
-    };
-    window.declineRequest = async (fromId) => {
-      await deleteDoc(doc(db, "users", currentUserId, "friendRequests", fromId));
-      renderRequests();
-    };
-    window.confirmRemoveFriend = (id, username) => {
-      confirmBox(`${t("confirm_remove_friend")}<br>${username}?`, async ()=>{
-        await updateDoc(doc(db, "users", currentUserId), { friends: myFriends.filter(f=>f.id!==id) });
-        // (ej permanent: man kan återlägga, så bara ta bort från friends)
-        location.reload();
-      });
-    };
-    window.confirmBlockFriend = (id, username) => {
-      confirmBox(`${t("confirm_block")}<br>${username}?`, async ()=>{
-        await updateDoc(doc(db, "users", currentUserId), {
-          blocked: arrayUnion({ id, username }),
-          friends: myFriends.filter(f=>f.id!==id)
-        });
-        location.reload();
-      });
-    };
-    window.confirmUnblock = (id, username) => {
-      confirmBox(`${t("confirm_unblock")}<br>${username}?`, async ()=>{
-        await updateDoc(doc(db, "users", currentUserId), {
-          blocked: myBlocked.filter(b=>b.id!==id)
-        });
-        location.reload();
-      });
-    };
-  </script>
+    });
+    location.reload();
+  }
+  window.blockUser = async function(uid, username) {
+    if (!confirm(t("confirm_block"))) return;
+    // Ta bort från vänner, lägg till i blocklistan
+    await db.collection("users").doc(currentUserId).update({
+      friends: firebase.firestore.FieldValue.arrayRemove({ id: uid, username }),
+      blocked: firebase.firestore.FieldValue.arrayUnion({ id: uid, username })
+    });
+    location.reload();
+  };
+  window.unblockUser = async function(uid, username) {
+    if (!confirm(t("confirm_unblock"))) return;
+    await db.collection("users").doc(currentUserId).update({
+      blocked: firebase.firestore.FieldValue.arrayRemove({ id: uid, username })
+    });
+    location.reload();
+  };
+  function escapeHTML(str) { return (str||"").replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+  function escapeJS(str) { return (str||"").replace(/'/g, "\\'"); }
+</script>
 </body>
 </html>
