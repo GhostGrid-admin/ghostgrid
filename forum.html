@@ -17,31 +17,25 @@
     @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
 
-    /* NavBar & Hamburger */
     nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
     .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
     .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
     .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
-    .search-container { width: 210px; display: flex; justify-content: center; margin-left: 12px;}
-    .search-container input { padding: 8px 14px; font-size: 1.05em; background-color: #111; border: 2px solid #00ffcc; border-radius: 8px; color: #fff; box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc; text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc; width: 100%; max-width: 230px;}
     .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
     .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
     @media (max-width: 700px) {
       .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
       .nav-content.show { display: flex; }
       .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
-      .search-container { margin: 10px auto 0 auto; width: 90vw; }
-      .search-container input { width: 100%; max-width: 100vw;}
       .hamburger { display: flex; }
     }
     @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
 
-    /* Forum Main Content */
     .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
     .forum-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
 
     .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
-    .thread-form input, .thread-form textarea { padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; }
+    .thread-form input, .thread-form textarea { width: 100%; padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; box-sizing: border-box;}
     .thread-form button { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 9px 0; border-radius: 7px; font-size: 1.13em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer; margin-top: 3px; }
     .thread-list { margin-top: 12px; }
     .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22; }
@@ -67,13 +61,7 @@
     .comment-actions a:hover { color: #00ffcc; }
     .thread-delete-btn { background: none; border: none; color: #fa99bb; font-weight: bold; font-size: 1em; cursor: pointer;}
     .thread-delete-btn:hover { color: #ff0055;}
-    /* AI BOTTEN */
-    .ai-footer { display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 70px; margin: 60px 0 28px 0;}
-    .ai-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start;}
-    .ai-avatar { display: flex; align-items: center; justify-content: center; width: 85px; height: 85px; border-radius: 44px; background: #181f26; box-shadow: 0 0 15px #00ffcc55;}
-    .ai-label { font-size: 1.11em; font-weight: bold; color: #00ffcc; margin-top: 6px;}
-    .ai-info { font-size: 1.04em; color: #bbffee; margin-top: 6px; text-align: center; max-width: 220px;}
-    @media (max-width: 900px) { .ai-footer { flex-direction: column; gap: 36px; margin-top: 48px; } .side-banner, .glow-left, .glow-right { display: none; } }
+    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
     @media (max-width: 700px) { .forum-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
   <!-- FIREBASE SDK -->
@@ -86,7 +74,7 @@
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
       projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.firebasestorage.app",
+      storageBucket: "ghostgrid-fb278.appspot.com",
       messagingSenderId: "283208202937",
       appId: "1:283208202937:web:11c0cea81fd81a31163968",
       measurementId: "G-B0WCKJCNT9"
@@ -124,9 +112,7 @@
       <a href="upload.html" data-i18n="upload">Ladda upp</a>
       <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
-      <div class="search-container">
-        <input type="text" placeholder="" id="searchInput" />
-      </div>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
     </div>
   </nav>
 
@@ -140,48 +126,6 @@
     <div id="threadList" class="thread-list"></div>
   </div>
 
-  <!-- AI-footer längst ner -->
-  <div class="ai-footer">
-    <div class="ai-block">
-      <a href="ghost.html" class="ai-avatar">
-        <!-- Ghost-bild SVG exakt som innan -->
-        <svg width="68" height="68" viewBox="0 0 56 56" fill="none">
-          <ellipse cx="28" cy="32" rx="16" ry="19" fill="#131b20" stroke="#00ffcc" stroke-width="3"/>
-          <ellipse cx="22" cy="32" rx="3.5" ry="3" fill="#fff"/>
-          <ellipse cx="34" cy="32" rx="3.5" ry="3" fill="#fff"/>
-          <rect x="19.5" y="39" width="17" height="6" rx="3" fill="#232d38"/>
-          <rect x="15.5" y="26" width="25" height="11" rx="11" fill="none" stroke="#00ffcc" stroke-width="1"/>
-        </svg>
-      </a>
-      <div class="ai-label">Ghost</div>
-      <div class="ai-info" id="ghostDesc">
-        Jag är Ghost, din tekniska support och guide på GhostGrid.<br>Fråga mig om allt tekniskt eller hur du använder plattformen.
-      </div>
-    </div>
-    <div class="ai-block">
-      <a href="glow.html" class="ai-avatar">
-        <svg width="68" height="68" viewBox="0 0 64 64" fill="none">
-          <ellipse cx="32" cy="36" rx="14" ry="16" fill="#fffbe8" stroke="#ffe700" stroke-width="2"/>
-          <path d="M26 44 Q32 48 38 44" stroke="#ffcc1a" stroke-width="2" fill="none"/>
-          <ellipse cx="27" cy="36" rx="2" ry="2.5" fill="#555"/>
-          <ellipse cx="37" cy="36" rx="2" ry="2.5" fill="#555"/>
-          <g>
-            <circle cx="14" cy="28" r="2" fill="#ffe700" opacity="0.7"/>
-            <circle cx="48" cy="20" r="1.7" fill="#ffed60" opacity="0.5"/>
-            <circle cx="52" cy="40" r="1.3" fill="#fff780" opacity="0.7"/>
-            <circle cx="36" cy="17" r="1.1" fill="#fffbc0" opacity="0.6"/>
-            <circle cx="18" cy="50" r="1.2" fill="#fffdd2" opacity="0.5"/>
-            <circle cx="28" cy="14" r="1.3" fill="#fff780" opacity="0.7"/>
-          </g>
-        </svg>
-      </a>
-      <div class="ai-label">Glow</div>
-      <div class="ai-info" id="glowDesc">
-        Jag är Glow – när du vill ha en vän, prata, få stöd eller bara ha någon som lyssnar. Du är alltid välkommen att skriva till mig!
-      </div>
-    </div>
-  </div>
-  <!-- Resten av JS och översättning/kommentar/reaction/logik --->
   <script>
     // --- SIDBANNER ROTATION ---
     const banners = [
@@ -202,21 +146,6 @@
     hamburgerBtn.addEventListener('click', function() { navMenu.classList.toggle('show'); });
     navMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('show'); }); });
 
-    // --- SÖK ---
-    document.addEventListener("DOMContentLoaded", () => {
-      const searchInput = document.getElementById("searchInput");
-      searchInput.placeholder = (localStorage.lang === "en" ? "Search the whole site..." : "Sök på hela sidan...");
-      if (searchInput) {
-        searchInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            const query = searchInput.value.trim();
-            if (query.length >= 2) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-          }
-        });
-      }
-    });
-
     // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
@@ -230,7 +159,7 @@
     // --- TRANSLATIONS ---
     const translations = {
       sv: {
-        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
+        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
         forum_title: "Forum",
         thread_title: "Titel på tråd...", thread_desc: "Beskrivning...", add_thread: "Skapa ny tråd",
         post_placeholder: "Skriv ett inlägg...",
@@ -242,7 +171,7 @@
         add_post: "Lägg till inlägg", post: "Inlägg", delete_thread: "Ta bort tråd", delete_thread_confirm: "Vill du verkligen ta bort tråden?"
       },
       en: {
-        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
+        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow",
         forum_title: "Forum",
         thread_title: "Thread title...", thread_desc: "Description...", add_thread: "Create new thread",
         post_placeholder: "Write a post...",
@@ -271,9 +200,7 @@
     // --- FIREBASE LOGIK ---
     let currentUser = null;
     let userMap = {};
-
-    // Emojis som valts
-const emojis = [
+    const emojis = [
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
       { emoji: "😃", key: "bigsmile" },
@@ -286,12 +213,12 @@ const emojis = [
       { emoji: "😡", key: "angry" },
       { emoji: "👎", key: "thumbsdown" }
     ];
+
     async function fetchUsers() {
       const snap = await db.collection("profiles").get();
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
 
-    // Ladda trådar
     async function loadThreads() {
       await fetchUsers();
       const q = await db.collection("threads").orderBy("createdAt", "desc").get();
@@ -300,7 +227,6 @@ const emojis = [
       addThreadListeners(threads);
     }
 
-    // Rendera en tråd
     function renderThread(thread) {
       return `<div class="thread" data-threadid="${thread.id}">
         <div class="thread-header">
@@ -316,13 +242,11 @@ const emojis = [
       </div>`;
     }
 
-    // Escape för HTML
     function escapeHTML(str) {
       if (!str) return "";
       return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
     }
 
-    // Lägg till listeners på alla trådar/inlägg
     function addThreadListeners(threads) {
       threads.forEach(thread => {
         loadPosts(thread.id);
@@ -353,7 +277,6 @@ const emojis = [
       });
     }
 
-    // Ladda och rendera inlägg i tråd
     async function loadPosts(threadId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
       const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -362,7 +285,6 @@ const emojis = [
       posts.forEach(post => addPostListeners(threadId, post));
     }
 
-    // Rendera inlägg med reaktioner och kommentarer
     function renderPost(threadId, post) {
       const name = userMap[post.user] || t("guest");
       return `<div class="post" data-postid="${post.id}">
@@ -381,7 +303,6 @@ const emojis = [
       </div>`;
     }
 
-    // Lägg till event på post/kommentar
     function addPostListeners(threadId, post) {
       // Reaktioner på inlägg
       document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
@@ -419,7 +340,6 @@ const emojis = [
       };
     }
 
-    // Visa emoji-sammanfattning på post
     async function renderPostReactions(threadId, postId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
       const reactions = q.docs.map(doc => doc.data());
@@ -430,7 +350,6 @@ const emojis = [
         Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
     }
 
-    // --- KOMMENTARER & subkommentarer
     async function loadComments(threadId, postId, parentId, containerId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
         .where("parent", "==", parentId).orderBy("createdAt", "asc").get();
@@ -497,7 +416,6 @@ const emojis = [
       loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
     }
 
-    // --- Skapa ny tråd
     document.getElementById("threadForm").onsubmit = async function(e) {
       e.preventDefault();
       if (!currentUser) { alert(t("login_to_comment")); return; }
@@ -512,7 +430,6 @@ const emojis = [
       loadThreads();
     }
 
-    // --- Inloggning
     auth.onAuthStateChanged(user => {
       currentUser = user;
       loadThreads();
