@@ -86,69 +86,66 @@
     }
     #profile-output {
       width: 100%;
-      max-width: 1300px;
+      max-width: 1350px;
       min-width: 290px;
-      margin: 30px auto 0 auto;
+      min-height: 340px;
+      margin: 0 auto;
       box-sizing: border-box;
       transition: box-shadow 0.3s;
       box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
       border-radius: 28px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
-      padding: 38px 18px 24px 18px;
+      padding: 36px 18px 38px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
     }
-    @media (min-width: 900px) {
-      #profile-output {
-        width: 75vw;
-        min-width: 520px;
-      }
+    @media (min-width: 1100px) {
+      #profile-output { width: 75vw; max-width: 1600px; }
     }
-    @media (max-width: 650px) {
-      #profile-output { width: 98vw; max-width: 700px; }
+    @media (max-width: 900px) {
+      #profile-output { width: 95vw; max-width: 860px; }
     }
-    /* --- Profilbild --- */
+    @media (max-width: 600px) {
+      #profile-output { width: 99vw; max-width: 100vw; padding: 8px 2vw; }
+    }
     .profile-picture {
-      width: 135px;
-      height: 135px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 13px auto;
+      margin: 0 auto 9px auto;
       box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
       border: 3px solid #0ff;
       background: #111;
       display: block;
     }
-    /* --- Användarnamn + meddelandeikon rad --- */
-    .username-row {
+    .username-label {
+      text-align: center;
+      margin: 0 auto 2px auto;
+      color: #fff;
+      font-size: 1.15em;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 0 4px #1effe5;
+      margin-top: 4px;
+    }
+    .profile-username-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 6px;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-    .username-label {
-      font-size: 1.04em;
-      color: #00ffcc;
-      margin-bottom: 0;
-      margin-right: 0;
-      margin-left: 0;
-      margin-top: 2px;
-      text-align: center;
-      width: 100%;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.4px;
+      gap: 18px;
+      margin: 0 auto;
+      width: fit-content;
     }
     .profile-username-box {
       background: #fff;
-      color: #222;
-      padding: 12px 30px;
+      color: #181f21;
+      padding: 13px 32px;
       border-radius: 16px;
-      font-size: 1.7em;
+      font-size: 2em;
       font-weight: bold;
       min-width: 140px;
       box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
@@ -158,20 +155,15 @@
       border: 2.2px solid #00ffcc;
       font-family: 'Courier New', monospace;
       user-select: text;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
     }
     .ghostgrid-message-link {
-      margin-left: 24px;
+      margin-left: 10px;
       display: inline-flex;
       align-items: center;
       border-radius: 50%;
       background: #171c19;
       transition: box-shadow .23s;
       box-shadow: 0 0 10px #19ff19b0, 0 0 32px #19ff1990;
-      position: relative;
-      z-index: 2;
     }
     .ghostgrid-message-link:focus,
     .ghostgrid-message-link:active {
@@ -201,41 +193,36 @@
       0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
-    .user-id-label {
-      color: #00ffcc;
-      font-size: 0.99em;
-      margin-top: 14px;
-      margin-bottom: 1px;
+    .userid-label {
+      margin-top: 12px;
       text-align: center;
-      letter-spacing: 0.1px;
+      color: #44fcff;
+      font-size: 1.02em;
       font-family: 'Courier New', monospace;
-      width: 100%;
-      display: block;
+      letter-spacing: 0.8px;
+      font-weight: bold;
+      opacity: 0.8;
     }
     .user-id {
       color: #bbfff5;
-      font-size: 0.97em;
-      margin: 2px 0 16px 0;
+      font-size: 0.98em;
+      margin: 1px 0 6px 0;
       text-align: center;
       letter-spacing: 0.8px;
       opacity: 0.69;
       user-select: all;
       font-family: 'Courier New', monospace;
       word-break: break-all;
-      width: 100%;
-      display: block;
     }
     .profile-code-wrapper {
+      margin-top: 2px !important;
       width: 100%;
-      margin-top: 10px;
-      margin-bottom: 0;
-      text-align: center;
     }
-    /* Responsivt: mindre padding/marginaler på mobil */
-    @media (max-width: 650px) {
-      .profile-username-box { font-size: 1.11em; padding: 8px 14px; }
-      .ghostgrid-message-link { margin-left: 10px; }
-      #profile-output { padding: 18px 2vw 8vw 2vw; }
+    @media (max-width: 600px) {
+      .profile-username-box { font-size: 1.1em; padding: 9px 12px; min-width: 85px;}
+      .profile-picture { width: 80px; height: 80px;}
+      .profile-username-row { gap: 10px;}
+      .ghostgrid-message-link svg { width: 32px !important; height: 32px !important;}
     }
   </style>
 </head>
@@ -318,14 +305,23 @@
       return total;
     }
 
+    // --- Översättning (till svenska/engelska) ---
+    function t(key) {
+      const dict = {
+        'username': { sv: "Användarnamn:", en: "Username:" },
+        'userid':   { sv: "Användar-id:",  en: "User ID:"   }
+      };
+      return dict[key][lang] || key;
+    }
+
     async function renderProfile() {
       const snap = await getDoc(profileRef);
       if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">${lang === "sv" ? "Ingen profil hittades." : "No profile found."}</div>`;
+        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
         return;
       }
       const data = snap.data();
-      const showUsername = (data.nickname || data.username || (lang === "sv" ? "Okänd användare" : "Unknown user"));
+      const showUsername = (data.nickname || data.username || "Okänd användare");
       profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
       profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
       profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
@@ -334,21 +330,21 @@
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
       let profileHtml = '';
 
-      // --- PROFILBILD ---
+      // --- 1. PROFILBILD ---
       if (data.profilePicUrl) {
         profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
       }
 
-      // --- "Användarnamn:" label ---
-      profileHtml += `<div class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</div>`;
+      // --- 2. Användarnamn-label (översatt) ---
+      profileHtml += `<div class="username-label">${t('username')}</div>`;
 
-      // --- ANVÄNDARNAMN + MEDDELANDEIKON ---
-      profileHtml += `<div class="username-row">
+      // --- 3. RAD: användarnamn (centrerad) + meddelandeikon höger om rutan ---
+      profileHtml += `<div class="profile-username-row">
         <span class="profile-username-box">${showUsername}</span>`;
       if (userId) {
         if (userId === uid) {
           profileHtml += `
-            <a href="messages.html" class="ghostgrid-message-link" title="${lang === "sv" ? "Meddelanden" : "Messages"}">
+            <a href="messages.html" class="ghostgrid-message-link" title="Meddelanden" style="margin-left:16px;">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -358,7 +354,7 @@
             </a>`;
         } else {
           profileHtml += `
-            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="${lang === "sv" ? "Skicka meddelande" : "Send message"}">
+            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Skicka meddelande" style="margin-left:16px;">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -369,13 +365,13 @@
       }
       profileHtml += `</div>`;
 
-      // --- ANVÄNDAR-ID (nära profilkoden) ---
-      profileHtml += `<span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User ID:"}</span>
-      <span class="user-id" id="userIdTxt">${uid}</span>`;
+      // --- 4. Användar-id (översatt, mindre avstånd) ---
+      profileHtml += `<div class="userid-label">${t('userid')}</div>`;
+      profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
 
-      // --- PROFILKOD + REAKTIONER + REKLAM ---
+      // --- 5. PROFILKOD + RESTEN ---
       profileHtml += `<div class="profile-code-wrapper">`;
-      profileHtml += data.profileCode || `<p style='color:red'>${lang === "sv" ? "Ingen profilkod sparad." : "No profile code saved."}</p>`;
+      profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
       profileHtml += `</div>`;
 
       profileOut.innerHTML = profileHtml;
@@ -384,21 +380,7 @@
       setupReactionEvents();
     }
 
-    function getMyProfileReaction() {
-      if (!userId) return null;
-      if (profileReactions.heart.includes(userId)) return "heart";
-      if (profileReactions.thumb.includes(userId)) return "thumb";
-      if (profileReactions.smile.includes(userId)) return "smile";
-      return null;
-    }
-    function getMyPicReaction() {
-      if (!userId) return null;
-      if (picReactions.heart.includes(userId)) return "heart";
-      if (picReactions.thumb.includes(userId)) return "thumb";
-      if (picReactions.smile.includes(userId)) return "smile";
-      return null;
-    }
-
+    // --- Placeholder för event & reaktioner (om du vill utöka) ---
     function updateReactionUI() {}
     function setupReactionEvents() {}
 
@@ -412,7 +394,6 @@
       }
       renderProfile();
     });
-
   </script>
 </body>
 </html>
