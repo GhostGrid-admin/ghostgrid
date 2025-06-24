@@ -86,6 +86,7 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -108,6 +109,7 @@
       width: 100%;
       align-items: center;
       text-align: center;
+      position: relative;
     }
     .nav-content a {
       color: white;
@@ -123,42 +125,101 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-    /* Logga ut-knapp desktop */
-    #logoutBtnNavbar {
+    /* Logga ut-knappen i navbaren på desktop */
+    .logout-btn-desktop {
       position: fixed;
-      top: 13px;
-      right: 22px;
-      z-index: 1500;
+      top: 18px;
+      right: 26px;
+      z-index: 3005;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
+      padding: 8px 20px 7px 20px;
+      font-size: 1.08em;
       border-radius: 9px;
-      font-size: 1.12em;
-      padding: 5px 18px 6px 18px;
       font-family: 'Courier New', monospace;
       font-weight: bold;
-      transition: 0.16s;
-      box-shadow: 0 0 11px #00ffcc66, 0 0 7px #9000ff22;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.15s;
       cursor: pointer;
+      opacity: 0.97;
+      display: block;
     }
-    #logoutBtnNavbar:hover {
+    @media (max-width: 900px) {
+      .logout-btn-desktop { display: none !important; }
+    }
+    /* Logga ut-knappen i hamburgermenyn på mobil */
+    .logout-btn-mobile {
+      display: none;
+      width: 90%;
+      margin: 18px auto 0 auto;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 11px 0 11px 0;
+      font-size: 1.1em;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.18s;
+      cursor: pointer;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .logout-btn-mobile { display: block; }
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
       background: #00ffcc;
-      color: #111;
-      border-color: #9000ff;
-      box-shadow: 0 0 16px #00ffcccc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
     }
-    /* Logga ut mobil */
     @media (max-width: 700px) {
-      #logoutBtnNavbar { display: none; }
-      .nav-content .logout-menu-btn {
-        display: block;
-        margin: 15px 0 0 0;
-        width: 90vw;
-        text-align: center;
+      .nav-content {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        left: 0; right: 0;
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
       }
+      .nav-content.show {
+        display: flex;
+      }
+      .nav-content a {
+        padding: 18px 10px;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+      }
+      .hamburger { display: flex; }
     }
-    @media (min-width: 701px) {
-      .nav-content .logout-menu-btn { display: none; }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .upload-title { font-size: 1.6em; }
+      .upload-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
     }
     .upload-box {
       border: 2px solid #66ffcc;
@@ -206,7 +267,7 @@
       font-weight: bold;
       box-shadow: 0 0 8px #00ffcc;
     }
-    textarea, input[type="file"], input[type="text"], button[type="submit"], label {
+    textarea, input[type="file"], button[type="submit"], label {
       display: block;
       width: 100%;
       margin-top: 1rem;
@@ -237,6 +298,8 @@
     audio { margin-top: 10px; }
     .upload-section { display: none; }
     .upload-section.active { display: block; }
+    .desc-label, .desc-field { display: none; }
+    .show-desc .desc-label, .show-desc .desc-field { display: block; }
   </style>
 </head>
 <body>
@@ -258,6 +321,7 @@
       </a>
     </div>
   </div>
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -269,10 +333,11 @@
       <a href="upload.html">Ladda upp</a>
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
-      <button class="logout-menu-btn" id="logoutBtnMenu" style="display:none;">Logga ut</button>
+      <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
     </div>
-    <button id="logoutBtnNavbar" style="display:none;">Logga ut</button>
+    <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
   </nav>
+
   <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
@@ -293,19 +358,16 @@
       <div class="upload-section" data-section="image">
         <label for="image">Ladda upp en bild (max 5 MB):</label>
         <input type="file" id="image" accept="image/*" />
-        <input type="text" id="imageDesc" placeholder="Beskrivning (valfri, sökbar)" maxlength="100" />
       </div>
       <!-- VIDEO -->
       <div class="upload-section" data-section="video">
         <label for="video">Ladda upp ett klipp (max 30 MB):</label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
-        <input type="text" id="videoDesc" placeholder="Beskrivning (valfri, sökbar)" maxlength="100" />
       </div>
       <!-- AUDIO -->
       <div class="upload-section" data-section="audio">
         <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
         <input type="file" id="audio" accept="audio/*" />
-        <input type="text" id="audioDesc" placeholder="Beskrivning (valfri, sökbar)" maxlength="100" />
       </div>
       <!-- RÖSTINSPELNING -->
       <div class="upload-section" data-section="mic">
@@ -313,8 +375,10 @@
         <button type="button" id="recordButton">🎤 Starta inspelning</button>
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
-        <input type="text" id="micDesc" placeholder="Beskrivning (valfri, sökbar)" maxlength="100" />
       </div>
+      <!-- Beskrivning visas bara för bild, video, ljud och mic -->
+      <label class="desc-label" for="desc">Beskrivning (valfri):</label>
+      <textarea id="desc" class="desc-field" placeholder="Beskriv innehållet..."></textarea>
       <label style="margin-top:18px;">
         <input type="checkbox" id="temporary" />
         Gör detta till ett tillfälligt inlägg (försvinner om 24h)
@@ -351,7 +415,7 @@
       updateBanners();
     }, 6000);
 
-    // Hamburgermeny logik
+    // --- Hamburgermeny logik ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMenu = document.getElementById('navMenu');
     hamburgerBtn.addEventListener('click', function() {
@@ -362,21 +426,12 @@
         navMenu.classList.remove('show');
       });
     });
+    // Stäng meny även när logga ut på mobil trycks
+    document.getElementById("logoutMobileBtn").addEventListener("click", function() {
+      navMenu.classList.remove('show');
+    });
 
-    // Logga ut-knapp visa rätt plats
-    function showLogoutBtns() {
-      if(window.innerWidth > 700) {
-        document.getElementById('logoutBtnNavbar').style.display = "block";
-        document.getElementById('logoutBtnMenu').style.display = "none";
-      } else {
-        document.getElementById('logoutBtnNavbar').style.display = "none";
-        document.getElementById('logoutBtnMenu').style.display = "block";
-      }
-    }
-    showLogoutBtns();
-    window.addEventListener('resize', showLogoutBtns);
-
-    // Växla mellan sektionerna
+    // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
@@ -386,33 +441,15 @@
           sec.classList.remove('active');
           if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
+        // Visa beskrivning endast om inte inlägg är valt
+        let form = document.getElementById('uploadForm');
+        if (section !== "text") {
+          form.classList.add('show-desc');
+        } else {
+          form.classList.remove('show-desc');
+        }
       });
     });
-
-    // Logga ut-funktion
-    function logout() {
-      import("./scripts/firebase-init.js").then(mod => {
-        mod.auth.signOut().then(() => {
-          window.location.href = "login.html";
-        });
-      });
-    }
-    document.getElementById('logoutBtnNavbar').onclick = logout;
-    document.getElementById('logoutBtnMenu').onclick = logout;
-
-    // Navbar hide vid scroll på mobil
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
-        }
-        lastScrollY = window.scrollY;
-      });
-    }
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
@@ -422,7 +459,7 @@
     import {
       ref, uploadBytes, getDownloadURL
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
     const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
     const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
@@ -433,17 +470,6 @@
     const spinner = document.getElementById("spinner");
     const uploadBox = document.getElementById("uploadBox");
 
-    // Visa/dölj logga ut-knappar beroende på auth
-    function updateLogoutDisplay(isLoggedIn) {
-      if (isLoggedIn) {
-        document.getElementById('logoutBtnNavbar').style.display = window.innerWidth > 700 ? "block" : "none";
-        document.getElementById('logoutBtnMenu').style.display = window.innerWidth <= 700 ? "block" : "none";
-      } else {
-        document.getElementById('logoutBtnNavbar').style.display = "none";
-        document.getElementById('logoutBtnMenu').style.display = "none";
-      }
-    }
-
     // Dölj uppladdningsformulär om inte inloggad
     onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -452,10 +478,6 @@
             Du måste vara inloggad för att ladda upp innehåll.<br><br>
             <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
           </div>`;
-        updateLogoutDisplay(false);
-      } else {
-        uploadBox.style.display = "block";
-        updateLogoutDisplay(true);
       }
     });
 
@@ -478,9 +500,11 @@
       if (activeSection === "text") {
         postData.text = document.getElementById("text").value;
       }
+      if (["image", "video", "audio", "mic"].includes(activeSection)) {
+        postData.desc = document.getElementById("desc").value;
+      }
       if (activeSection === "image") {
         const img = document.getElementById("image").files[0];
-        postData.desc = document.getElementById("imageDesc").value;
         if (img && img.size > MAX_IMAGE_SIZE) {
           spinner.style.display = "none";
           return alert("Bilden är för stor! Maxstorlek: 5 MB.");
@@ -489,7 +513,6 @@
       }
       if (activeSection === "video") {
         const vid = document.getElementById("video").files[0];
-        postData.desc = document.getElementById("videoDesc").value;
         if (vid && vid.size > MAX_VIDEO_SIZE) {
           spinner.style.display = "none";
           return alert("Videoklippet är för stort! Maxstorlek: 30 MB.");
@@ -498,7 +521,6 @@
       }
       if (activeSection === "audio") {
         const aud = document.getElementById("audio").files[0];
-        postData.desc = document.getElementById("audioDesc").value;
         if (aud && aud.size > MAX_AUDIO_SIZE) {
           spinner.style.display = "none";
           return alert("Ljudfilen är för stor! Maxstorlek: 5 MB.");
@@ -507,7 +529,6 @@
       }
       if (activeSection === "mic") {
         const micBlob = window.lastRecordedAudioBlob;
-        postData.desc = document.getElementById("micDesc").value;
         if (micBlob && micBlob.size > MAX_MIC_SIZE) {
           spinner.style.display = "none";
           return alert("Röstinspelningen är för stor! Maxstorlek: 2 MB.");
@@ -560,6 +581,15 @@
         mediaRecorder && mediaRecorder.stop();
       };
     }
+
+    // Logga ut-funktion till båda knapparna
+    function doLogout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    }
+    document.getElementById("logoutDesktopBtn").onclick = doLogout;
+    document.getElementById("logoutMobileBtn").onclick = doLogout;
   </script>
 </body>
 </html>
