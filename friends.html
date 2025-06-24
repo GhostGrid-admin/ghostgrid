@@ -2,57 +2,318 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GhostGrid – Vänner</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
-    .glow-left, .glow-right { position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0; }
-    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
-    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
-    .side-banner { position: fixed; top: 87px; bottom: 0; width: 136px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
-    .side-banner .banner-inner { width: 120px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
-    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
-    .side-banner.left { left: 0; } .side-banner.right { right: 0; }
-    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
-    @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
-    .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
-    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
-    .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
-    .search-container { width: 210px; display: flex; justify-content: center; margin-left: 12px;}
-    .search-container input { padding: 8px 14px; font-size: 1.05em; background-color: #111; border: 2px solid #00ffcc; border-radius: 8px; color: #fff; box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc; text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc; width: 100%; max-width: 230px;}
-    .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
-    .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
+    body {
+      background: #0a0a0a;
+      color: #e0ffff;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 85px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-left,
+    .glow-right {
+      position: fixed;
+      top: 0;
+      width: 136px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa,
+        0 0 320px 90px #9400ff66;
+    }
+    .side-banner {
+      position: fixed;
+      top: 87px;
+      bottom: 0;
+      width: 136px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 120px;
+      height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+      min-height: 200px;
+    }
+    .side-banner.left {
+      left: 0;
+    }
+    .side-banner.right {
+      right: 0;
+    }
+    @media (max-width: 1100px) {
+      .side-banner,
+      .glow-left,
+      .glow-right {
+        width: 65px;
+      }
+      .side-banner .banner-inner {
+        width: 57px;
+      }
+    }
     @media (max-width: 700px) {
-      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
-      .nav-content.show { display: flex; }
-      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
-      .search-container { margin: 10px auto 0 auto; width: 90vw; }
-      .search-container input { width: 100%; max-width: 100vw;}
-      .hamburger { display: flex; }
+      .side-banner,
+      .glow-left,
+      .glow-right {
+        display: none;
+      }
     }
-    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
-    .friends-main { margin: 0 auto 0 auto; max-width: 550px; padding: 0 5vw; }
-    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 550px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0;}
-    .section-title { font-size: 1.6em; color: #00ffd9; text-align: center; margin-bottom: 15px; letter-spacing: 0.04em; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold;}
-    .friend-row, .result-row, .request-row, .blocked-row {
-      display: flex; align-items: center; gap: 18px; padding: 13px 0; border-bottom: 1px solid #183; font-size: 1.15em;
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      justify-content: center;
+      transition: top 0.3s;
     }
-    .friend-row:last-child, .result-row:last-child, .request-row:last-child, .blocked-row:last-child { border-bottom: none; }
-    .friend-actions button, .result-actions button, .request-actions button, .blocked-actions button {
-      background: #181f26; color: #0ff; border: 1.5px solid #00ffcc; border-radius: 8px; padding: 6px 13px; font-family: inherit; font-size: 0.97em; cursor: pointer; margin-left: 8px; transition: 0.2s;
+    .nav-content {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+      text-align: center;
     }
-    .friend-actions button:hover, .result-actions button:hover, .request-actions button:hover, .blocked-actions button:hover { background: #00ffcc; color: #181f26; }
-    .icon-btn { background: none !important; border: none !important; font-size: 1.18em; color: #00ffcc; cursor: pointer; margin: 0 3px;}
-    .icon-btn:hover { color: #00ffd9; }
-    .search-friends-box { padding: 20px 0 13px 0; text-align: center;}
+    .nav-content a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+    }
+    .nav-content a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .search-container {
+      width: 210px;
+      display: flex;
+      justify-content: center;
+      margin-left: 12px;
+    }
+    .search-container input {
+      padding: 8px 14px;
+      font-size: 1.05em;
+      background-color: #111;
+      border: 2px solid #00ffcc;
+      border-radius: 8px;
+      color: #fff;
+      box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
+      text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
+      width: 100%;
+      max-width: 230px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    @media (max-width: 700px) {
+      .nav-content {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+      }
+      .nav-content.show {
+        display: flex;
+      }
+      .nav-content a {
+        padding: 18px 10px;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+      }
+      .search-container {
+        margin: 10px auto 0 auto;
+        width: 90vw;
+      }
+      .search-container input {
+        width: 100%;
+        max-width: 100vw;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+    @media (max-width: 600px) {
+      nav.navbar {
+        transition: top 0.3s;
+      }
+      nav.navbar.hide-navbar {
+        top: -70px;
+      }
+    }
+    .friends-main {
+      margin: 0 auto 0 auto;
+      max-width: 550px;
+      padding: 0 5vw;
+    }
+    .wall-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 30px 20px 22px 20px;
+      margin: 36px auto 32px auto;
+      max-width: 550px;
+      background-color: rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 15px #00ffcc33;
+      position: relative;
+      z-index: 2;
+      min-width: 0;
+    }
+    .section-title {
+      font-size: 1.6em;
+      color: #00ffd9;
+      text-align: center;
+      margin-bottom: 15px;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
+      font-weight: bold;
+    }
+    .friend-row,
+    .result-row,
+    .request-row,
+    .blocked-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid #183;
+      font-size: 1.15em;
+    }
+    .friend-row:last-child,
+    .result-row:last-child,
+    .request-row:last-child,
+    .blocked-row:last-child {
+      border-bottom: none;
+    }
+    .friend-actions button,
+    .result-actions button,
+    .request-actions button,
+    .blocked-actions button {
+      background: #181f26;
+      color: #0ff;
+      border: 1.5px solid #00ffcc;
+      border-radius: 8px;
+      padding: 6px 13px;
+      font-family: inherit;
+      font-size: 0.97em;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: 0.2s;
+    }
+    .friend-actions button:hover,
+    .result-actions button:hover,
+    .request-actions button:hover,
+    .blocked-actions button:hover {
+      background: #00ffcc;
+      color: #181f26;
+    }
+    .icon-btn {
+      background: none !important;
+      border: none !important;
+      font-size: 1.18em;
+      color: #00ffcc;
+      cursor: pointer;
+      margin: 0 3px;
+    }
+    .icon-btn:hover {
+      color: #00ffd9;
+    }
+    .search-friends-box {
+      padding: 20px 0 13px 0;
+      text-align: center;
+    }
     .search-friends-box input {
-      padding: 10px 17px; font-size: 1.19em; border-radius: 10px; border: 2px solid #00ffcc; background: #111; color: #fff; box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc; width: 94%; max-width: 320px; margin-bottom: 5px;
+      padding: 10px 17px;
+      font-size: 1.19em;
+      border-radius: 10px;
+      border: 2px solid #00ffcc;
+      background: #111;
+      color: #fff;
+      box-shadow: 0 0 12px #7b00ff, 0 0 6px #00ffcc;
+      width: 94%;
+      max-width: 320px;
+      margin-bottom: 5px;
     }
     @media (max-width: 700px) {
-      .wall-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px;}
-      .friends-main { max-width: 99vw; }
+      .wall-box {
+        padding: 14px 2vw 12px 2vw;
+        max-width: 99vw;
+        margin: 18px 0 18px 0;
+        border-radius: 10px;
+      }
+      .friends-main {
+        max-width: 99vw;
+      }
     }
   </style>
 </head>
@@ -93,7 +354,12 @@
     <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
       <div class="section-title" data-i18n="search_friends">Sök användare eller användar-ID</div>
-      <input type="text" id="friendSearch" placeholder="Användarnamn eller användar-ID..." autocomplete="off" />
+      <input
+        type="text"
+        id="friendSearch"
+        placeholder="Användarnamn eller användar-ID..."
+        autocomplete="off"
+      />
       <div id="searchResults"></div>
     </div>
     <!-- DINA VÄNNER -->
@@ -103,7 +369,9 @@
     </div>
     <!-- INKOMMANDE FÖRFRÅGNINGAR -->
     <div class="wall-box">
-      <div class="section-title" data-i18n="incoming_requests">Inkommande vänförfrågningar</div>
+      <div class="section-title" data-i18n="incoming_requests">
+        Inkommande vänförfrågningar
+      </div>
       <div id="incomingRequests"></div>
     </div>
     <!-- BLOCKERADE -->
@@ -112,12 +380,21 @@
       <div id="blockedUsers"></div>
     </div>
   </div>
-  
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-  
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      arrayUnion,
+      arrayRemove,
+      collection,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
     // --- FIREBASE INIT ---
     const firebaseConfig = {
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
@@ -125,7 +402,7 @@
       projectId: "ghostgrid-fb278",
       storageBucket: "ghostgrid-fb278.appspot.com",
       messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968"
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
     };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -133,33 +410,74 @@
 
     // --- SIDBANNER LOGIK & NAVBAR ---
     const banners = [
-      { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
-      { left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
+      {
+        left: {
+          src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1",
+          alt: "Reklam Banner 1",
+          url: "#",
+        },
+        right: {
+          src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2",
+          alt: "Reklam Banner 2",
+          url: "#",
+        },
+      },
+      {
+        left: {
+          src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!",
+          alt: "Bli medlem",
+          url: "register.html",
+        },
+        right: {
+          src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här",
+          alt: "Annonsera",
+          url: "#",
+        },
+      },
     ];
     let bannerIndex = 0;
     function updateBanners() {
-      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
-      document.getElementById('leftBannerImg').src = left.src; document.getElementById('leftBannerImg').alt = left.alt; document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
+      const left = banners[bannerIndex].left,
+        right = banners[bannerIndex].right;
+      document.getElementById("leftBannerImg").src = left.src;
+      document.getElementById("leftBannerImg").alt = left.alt;
+      document.getElementById("leftBannerLink").href = left.url;
+      document.getElementById("rightBannerImg").src = right.src;
+      document.getElementById("rightBannerImg").alt = right.alt;
+      document.getElementById("rightBannerLink").href = right.url;
     }
-    updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
+    updateBanners();
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
 
     // --- NAV ---
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMenu = document.getElementById('navMenu');
-    hamburgerBtn.addEventListener('click', function() { navMenu.classList.toggle('show'); });
-    navMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('show'); }); });
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const navMenu = document.getElementById("navMenu");
+    hamburgerBtn.addEventListener("click", function () {
+      navMenu.classList.toggle("show");
+    });
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("show");
+      });
+    });
 
     // --- NAV-SÖK ---
     document.addEventListener("DOMContentLoaded", () => {
       const searchInput = document.getElementById("searchInput");
-      searchInput.placeholder = (localStorage.lang === "en" ? "Search the whole site..." : "Sök på hela sidan...");
+      searchInput.placeholder =
+        localStorage.lang === "en"
+          ? "Search the whole site..."
+          : "Sök på hela sidan...";
       if (searchInput) {
         searchInput.addEventListener("keydown", (e) => {
           if (e.key === "Enter") {
             e.preventDefault();
             const query = searchInput.value.trim();
-            if (query.length >= 2) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            if (query.length >= 2)
+              window.location.href = `search.html?q=${encodeURIComponent(query)}`;
           }
         });
       }
@@ -168,9 +486,13 @@
     // --- NAVBAR HIDE VID SCROLL ---
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) { navbar.classList.add('hide-navbar'); } else { navbar.classList.remove('hide-navbar'); }
+      let navbar = document.querySelector(".navbar");
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add("hide-navbar");
+        } else {
+          navbar.classList.remove("hide-navbar");
+        }
         lastScrollY = window.scrollY;
       });
     }
@@ -178,22 +500,74 @@
     // --- TRANSLATIONS ---
     const translations = {
       sv: {
-        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner",
-        search_friends: "Sök användare eller användar-ID", your_friends: "Dina vänner", incoming_requests: "Inkommande vänförfrågningar", blocked: "Blockerade användare",
-        add_friend: "Lägg till vän", message: "Meddela", block: "Blockera", unblock: "Avblockera", remove: "Ta bort vän", confirm_remove: "Ta bort vän?", confirm_block: "Blockera användaren?", confirm_unblock: "Avblockera användaren?", accept: "Acceptera", decline: "Neka", confirm: "Ja", cancel: "Nej", friend_request: "skickade vänförfrågan.", no_friends: "Du har inga vänner ännu.", no_results: "Inga användare hittades.", no_requests: "Inga inkommande förfrågningar.", no_blocked: "Du har inte blockerat någon.", me: "Du själv"
+        forum: "Forum",
+        store: "Butik",
+        wall: "Väggen",
+        upload: "Ladda upp",
+        profile: "Profil",
+        friends: "Vänner",
+        search_friends: "Sök användare eller användar-ID",
+        your_friends: "Dina vänner",
+        incoming_requests: "Inkommande vänförfrågningar",
+        blocked: "Blockerade användare",
+        add_friend: "Lägg till vän",
+        message: "Meddela",
+        block: "Blockera",
+        unblock: "Avblockera",
+        remove: "Ta bort vän",
+        confirm_remove: "Ta bort vän?",
+        confirm_block: "Blockera användaren?",
+        confirm_unblock: "Avblockera användaren?",
+        accept: "Acceptera",
+        decline: "Neka",
+        confirm: "Ja",
+        cancel: "Nej",
+        friend_request: "skickade vänförfrågan.",
+        no_friends: "Du har inga vänner ännu.",
+        no_results: "Inga användare hittades.",
+        no_requests: "Inga inkommande förfrågningar.",
+        no_blocked: "Du har inte blockerat någon.",
+        me: "Du själv",
       },
       en: {
-        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends",
-        search_friends: "Search users or user ID", your_friends: "Your friends", incoming_requests: "Incoming friend requests", blocked: "Blocked users",
-        add_friend: "Add friend", message: "Message", block: "Block", unblock: "Unblock", remove: "Remove friend", confirm_remove: "Remove friend?", confirm_block: "Block this user?", confirm_unblock: "Unblock this user?", accept: "Accept", decline: "Decline", confirm: "Yes", cancel: "No", friend_request: "sent a friend request.", no_friends: "You have no friends yet.", no_results: "No users found.", no_requests: "No incoming requests.", no_blocked: "You haven't blocked anyone.", me: "You"
-      }
+        forum: "Forum",
+        store: "Store",
+        wall: "Wall",
+        upload: "Upload",
+        profile: "Profile",
+        friends: "Friends",
+        search_friends: "Search users or user ID",
+        your_friends: "Your friends",
+        incoming_requests: "Incoming friend requests",
+        blocked: "Blocked users",
+        add_friend: "Add friend",
+        message: "Message",
+        block: "Block",
+        unblock: "Unblock",
+        remove: "Remove friend",
+        confirm_remove: "Remove friend?",
+        confirm_block: "Block this user?",
+        confirm_unblock: "Unblock this user?",
+        accept: "Accept",
+        decline: "Decline",
+        confirm: "Yes",
+        cancel: "No",
+        friend_request: "sent a friend request.",
+        no_friends: "You have no friends yet.",
+        no_results: "No users found.",
+        no_requests: "No incoming requests.",
+        no_blocked: "You haven't blocked anyone.",
+        me: "You",
+      },
     };
     function t(key) {
       const lang = localStorage.lang === "en" ? "en" : "sv";
       return translations[lang][key] || key;
     }
     function applyTranslations() {
-      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        el.textContent = t(el.getAttribute("data-i18n"));
+      });
       document.title = "GhostGrid – " + t("friends");
     }
     applyTranslations();
@@ -203,21 +577,22 @@
 
     // --- Utility för att visa bekräftelse ---
     function confirmBox(msg) {
-      return new Promise(resolve => {
-        if (confirm(msg)) resolve(true); else resolve(false);
+      return new Promise((resolve) => {
+        if (confirm(msg)) resolve(true);
+        else resolve(false);
       });
     }
 
     // --- AUTH CHECK ---
     function authCheck() {
-      return new Promise(res => {
-        onAuthStateChanged(auth, async user => {
-          if (!user) return location.href = "login.html";
+      return new Promise((res) => {
+        onAuthStateChanged(auth, async (user) => {
+          if (!user) return (location.href = "login.html");
           currentUser = user;
           currentUid = user.uid;
           // Hämta nickname
           const snap = await getDoc(doc(db, "users", currentUid));
-          currentNickname = snap.exists() ? (snap.data().nickname || "") : user.email;
+          currentNickname = snap.exists() ? snap.data().nickname || "" : user.email;
           res();
         });
       });
@@ -234,10 +609,12 @@
     function createUserRow(user, actions = [], note = "") {
       let row = document.createElement("div");
       row.className = "friend-row";
-      row.innerHTML = `<span><b>${user.nickname}</b>${user.uid === currentUid ? ` <span style="color:#888">(${t("me")})</span>` : ""}${note}</span>`;
+      row.innerHTML = `<span><b>${user.nickname}</b>${
+        user.uid === currentUid ? ` <span style="color:#888">(${t("me")})</span>` : ""
+      }${note}</span>`;
       let actionsDiv = document.createElement("div");
       actionsDiv.className = "friend-actions";
-      actions.forEach(a => actionsDiv.appendChild(a));
+      actions.forEach((a) => actionsDiv.appendChild(a));
       row.appendChild(actionsDiv);
       return row;
     }
@@ -245,31 +622,41 @@
     // --- FRIENDS ---
     async function renderFriends() {
       const list = document.getElementById("friendList");
-      list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
+      list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
       const snap = await getDoc(doc(db, "users", currentUid));
       const data = snap.data();
       const friends = Array.isArray(data.friends) ? data.friends : [];
-      if (!friends.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_friends")}</div>`; return; }
+      if (!friends.length) {
+        list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_friends")}</div>`;
+        return;
+      }
       list.innerHTML = "";
       for (let friendUid of friends) {
         const fSnap = await getDoc(doc(db, "users", friendUid));
         if (!fSnap.exists()) continue;
-        const user = { uid: friendUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
+        const user = {
+          uid: friendUid,
+          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+        };
         // Meddelande-knapp
         const msgBtn = document.createElement("button");
-        msgBtn.className = "icon-btn"; msgBtn.title = t("message");
+        msgBtn.className = "icon-btn";
+        msgBtn.title = t("message");
         msgBtn.innerHTML = "✉️";
-        msgBtn.onclick = () => alert("TODO: Meddelande"); // <-- Lägg in din egen meddelandefunktion här!
+        // Här länkar vi meddelandeknappen till messages.html med rätt uid i url:en:
+        msgBtn.onclick = () => {
+          window.location.href = `messages.html?to=${encodeURIComponent(user.uid)}`;
+        };
         // Ta bort vän
         const remBtn = document.createElement("button");
         remBtn.textContent = t("remove");
         remBtn.onclick = async () => {
           if (await confirmBox(t("confirm_remove"))) {
             await updateDoc(doc(db, "users", currentUid), {
-              friends: arrayRemove(friendUid)
+              friends: arrayRemove(friendUid),
             });
             await updateDoc(doc(db, "users", friendUid), {
-              friends: arrayRemove(currentUid)
+              friends: arrayRemove(currentUid),
             });
             renderAll();
           }
@@ -280,7 +667,7 @@
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
             await updateDoc(doc(db, "users", currentUid), {
-              blocked: arrayUnion(friendUid)
+              blocked: arrayUnion(friendUid),
             });
             renderAll();
           }
@@ -292,15 +679,21 @@
     // --- INKOMMANDE REQUESTS ---
     async function renderRequests() {
       const list = document.getElementById("incomingRequests");
-      list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
+      list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
       const snap = await getDoc(doc(db, "users", currentUid));
       const reqs = Array.isArray(snap.data().friendRequests) ? snap.data().friendRequests : [];
-      if (!reqs.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_requests")}</div>`; return; }
+      if (!reqs.length) {
+        list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_requests")}</div>`;
+        return;
+      }
       list.innerHTML = "";
       for (let rUid of reqs) {
         const fSnap = await getDoc(doc(db, "users", rUid));
         if (!fSnap.exists()) continue;
-        const user = { uid: rUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
+        const user = {
+          uid: rUid,
+          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+        };
         // Acceptera
         const accBtn = document.createElement("button");
         accBtn.textContent = t("accept");
@@ -308,10 +701,10 @@
           // Lägg till på båda
           await updateDoc(doc(db, "users", currentUid), {
             friends: arrayUnion(rUid),
-            friendRequests: arrayRemove(rUid)
+            friendRequests: arrayRemove(rUid),
           });
           await updateDoc(doc(db, "users", rUid), {
-            friends: arrayUnion(currentUid)
+            friends: arrayUnion(currentUid),
           });
           renderAll();
         };
@@ -320,33 +713,41 @@
         decBtn.textContent = t("decline");
         decBtn.onclick = async () => {
           await updateDoc(doc(db, "users", currentUid), {
-            friendRequests: arrayRemove(rUid)
+            friendRequests: arrayRemove(rUid),
           });
           renderAll();
         };
-        list.appendChild(createUserRow(user, [accBtn, decBtn], `<span style='color:#0cf;font-size:.93em;'>${t("friend_request")}</span>`));
+        list.appendChild(
+          createUserRow(user, [accBtn, decBtn], `<span style='color:#0cf;font-size:.93em;'>${t("friend_request")}</span>`)
+        );
       }
     }
 
     // --- BLOCKERADE ANVÄNDARE ---
     async function renderBlocked() {
       const list = document.getElementById("blockedUsers");
-      list.innerHTML = "<div style='color:#0ff;text-align:center'>Laddar...</div>";
+      list.innerHTML = `<div style='color:#0ff;text-align:center'>Laddar...</div>`;
       const snap = await getDoc(doc(db, "users", currentUid));
       const blocked = Array.isArray(snap.data().blocked) ? snap.data().blocked : [];
-      if (!blocked.length) { list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_blocked")}</div>`; return; }
+      if (!blocked.length) {
+        list.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_blocked")}</div>`;
+        return;
+      }
       list.innerHTML = "";
       for (let bUid of blocked) {
         const fSnap = await getDoc(doc(db, "users", bUid));
         if (!fSnap.exists()) continue;
-        const user = { uid: bUid, nickname: fSnap.data().nickname || fSnap.data().displayName || "?" };
+        const user = {
+          uid: bUid,
+          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+        };
         // Avblockera
         const unblockBtn = document.createElement("button");
         unblockBtn.textContent = t("unblock");
         unblockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_unblock"))) {
             await updateDoc(doc(db, "users", currentUid), {
-              blocked: arrayRemove(bUid)
+              blocked: arrayRemove(bUid),
             });
             renderAll();
           }
@@ -356,14 +757,17 @@
     }
 
     // --- SÖK FUNKTION ---
-    document.getElementById("friendSearch").addEventListener("input", async function() {
+    document.getElementById("friendSearch").addEventListener("input", async function () {
       let val = this.value.trim().toLowerCase();
       let resultsDiv = document.getElementById("searchResults");
-      if (!val || val.length < 2) { resultsDiv.innerHTML = ""; return; }
+      if (!val || val.length < 2) {
+        resultsDiv.innerHTML = "";
+        return;
+      }
       // Sök på nickname eller id
       const qSnap = await getDocs(collection(db, "users"));
       let hits = [];
-      qSnap.forEach(docu => {
+      qSnap.forEach((docu) => {
         if (docu.id === currentUid) return;
         let data = docu.data();
         let match = false;
@@ -371,7 +775,10 @@
         if (docu.id === val) match = true;
         if (match) hits.push({ uid: docu.id, nickname: data.nickname || data.displayName || "?" });
       });
-      if (!hits.length) { resultsDiv.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_results")}</div>`; return; }
+      if (!hits.length) {
+        resultsDiv.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_results")}</div>`;
+        return;
+      }
       resultsDiv.innerHTML = "";
       for (let user of hits) {
         // Knappar
@@ -380,20 +787,24 @@
         addBtn.onclick = async () => {
           // Skicka förfrågan
           await updateDoc(doc(db, "users", user.uid), {
-            friendRequests: arrayUnion(currentUid)
+            friendRequests: arrayUnion(currentUid),
           });
           alert(t("friend_request"));
         };
         const msgBtn = document.createElement("button");
-        msgBtn.className = "icon-btn"; msgBtn.title = t("message");
+        msgBtn.className = "icon-btn";
+        msgBtn.title = t("message");
         msgBtn.innerHTML = "✉️";
-        msgBtn.onclick = () => alert("TODO: Meddelande"); // Meddelandefunktion in här!
+        // Här länkar vi meddelandeknappen till messages.html med rätt uid i url:en:
+        msgBtn.onclick = () => {
+          window.location.href = `messages.html?to=${encodeURIComponent(user.uid)}`;
+        };
         const blockBtn = document.createElement("button");
         blockBtn.textContent = t("block");
         blockBtn.onclick = async () => {
           if (await confirmBox(t("confirm_block"))) {
             await updateDoc(doc(db, "users", currentUid), {
-              blocked: arrayUnion(user.uid)
+              blocked: arrayUnion(user.uid),
             });
             renderAll();
           }
@@ -406,4 +817,5 @@
     window.onload = renderAll;
   </script>
 </body>
+</html>
 </html>
