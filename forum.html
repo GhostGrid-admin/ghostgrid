@@ -16,7 +16,6 @@
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
     @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-
     nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
     .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
     .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
@@ -30,10 +29,8 @@
       .hamburger { display: flex; }
     }
     @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
-
     .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
     .forum-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
-
     .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
     .thread-form input, .thread-form textarea { width: 100%; padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; box-sizing: border-box;}
     .thread-form button { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 9px 0; border-radius: 7px; font-size: 1.13em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer; margin-top: 3px; }
@@ -105,17 +102,16 @@
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
-<div class="nav-content" id="navMenu">
+    <div class="nav-content" id="navMenu">
       <a href="forum.html" data-i18n="forum">Forum</a>
-      <a href="store.html" data-i18n="store">Store</a>
       <a href="wall.html" data-i18n="wall">Väggen</a>
       <a href="upload.html" data-i18n="upload">Ladda upp</a>
       <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
       <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Store</a>
     </div>
   </nav>
-
   <div class="forum-box">
     <div class="forum-title" data-i18n="forum_title">Forum</div>
     <form class="thread-form" id="threadForm">
@@ -125,7 +121,6 @@
     </form>
     <div id="threadList" class="thread-list"></div>
   </div>
-
   <script>
     // --- SIDBANNER ROTATION ---
     const banners = [
@@ -139,13 +134,11 @@
       document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
     }
     updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
-
     // --- HAMBURGERMENY ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMenu = document.getElementById('navMenu');
     hamburgerBtn.addEventListener('click', function() { navMenu.classList.toggle('show'); });
     navMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('show'); }); });
-
     // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
@@ -155,7 +148,6 @@
         lastScrollY = window.scrollY;
       });
     }
-
     // --- TRANSLATIONS ---
     const translations = {
       sv: {
@@ -213,12 +205,10 @@
       { emoji: "😡", key: "angry" },
       { emoji: "👎", key: "thumbsdown" }
     ];
-
     async function fetchUsers() {
       const snap = await db.collection("profiles").get();
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
-
     async function loadThreads() {
       await fetchUsers();
       const q = await db.collection("threads").orderBy("createdAt", "desc").get();
@@ -226,7 +216,6 @@
       document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
       addThreadListeners(threads);
     }
-
     function renderThread(thread) {
       return `<div class="thread" data-threadid="${thread.id}">
         <div class="thread-header">
@@ -241,12 +230,10 @@
         </form>
       </div>`;
     }
-
     function escapeHTML(str) {
       if (!str) return "";
       return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
     }
-
     function addThreadListeners(threads) {
       threads.forEach(thread => {
         loadPosts(thread.id);
@@ -276,7 +263,6 @@
         }
       });
     }
-
     async function loadPosts(threadId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
       const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -284,7 +270,6 @@
         posts.map(post => renderPost(threadId, post)).join("");
       posts.forEach(post => addPostListeners(threadId, post));
     }
-
     function renderPost(threadId, post) {
       const name = userMap[post.user] || t("guest");
       return `<div class="post" data-postid="${post.id}">
@@ -302,7 +287,6 @@
         </form>
       </div>`;
     }
-
     function addPostListeners(threadId, post) {
       // Reaktioner på inlägg
       document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
@@ -321,10 +305,8 @@
       });
       // Ladda och rendera reaktioner
       renderPostReactions(threadId, post.id);
-
       // Kommentarer (inkl subkommentarer)
       loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
-
       // Skicka kommentar
       document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function(e) {
         e.preventDefault();
@@ -339,7 +321,6 @@
         loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
       };
     }
-
     async function renderPostReactions(threadId, postId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
       const reactions = q.docs.map(doc => doc.data());
@@ -349,7 +330,6 @@
       document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
         Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
     }
-
     async function loadComments(threadId, postId, parentId, containerId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
         .where("parent", "==", parentId).orderBy("createdAt", "asc").get();
@@ -415,7 +395,6 @@
       // Ladda subkommentarer
       loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
     }
-
     document.getElementById("threadForm").onsubmit = async function(e) {
       e.preventDefault();
       if (!currentUser) { alert(t("login_to_comment")); return; }
@@ -429,7 +408,6 @@
       document.getElementById("threadDesc").value = "";
       loadThreads();
     }
-
     auth.onAuthStateChanged(user => {
       currentUser = user;
       loadThreads();
