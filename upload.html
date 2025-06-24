@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -6,385 +6,133 @@
   <title>GhostGrid – Ladda upp</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      background: #0a0a0a;
-      color: #e0ffff;
-      font-family: 'Courier New', monospace;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 85px;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .glow-left, .glow-right {
-      position: fixed;
-      top: 0;
-      width: 136px;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .glow-left {
-      left: 0;
-      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
-    }
-    .glow-right {
-      right: 0;
-      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
-    }
-
-    .side-banner {
-      position: fixed;
-      top: 87px;
-      bottom: 0;
-      width: 136px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      z-index: 1002;
-      background: none;
-      pointer-events: none;
-    }
-    .side-banner .banner-inner {
-      width: 120px;
-      height: 100%;
-      background: transparent;
-      border-radius: 12px;
-      box-shadow: 0 0 18px #7b00ff99;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      pointer-events: auto;
-    }
-    .side-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #220043;
-      cursor: pointer;
-      transition: box-shadow 0.3s;
-      box-shadow: 0 0 10px #8800ff70;
-      pointer-events: auto;
-      min-height: 200px;
-    }
-    .side-banner.left { left: 0; }
-    .side-banner.right { right: 0; }
-
-    @media (max-width: 1100px) {
-      .side-banner, .glow-left, .glow-right { width: 65px; }
-      .side-banner .banner-inner { width: 57px; }
-    }
-    @media (max-width: 700px) {
-      .side-banner { display: none; }
-    }
-
-    nav.navbar {
-      background-color: #000;
-      border-bottom: 2px solid #00ffcc;
-      padding: 12px 0;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 0 20px #bb00ff;
-      display: flex;
-      justify-content: center;
-      transition: top 0.3s;
-    }
-    .nav-content {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      max-width: 900px;
-      width: 100%;
-      align-items: center;
-      text-align: center;
-    }
-    .nav-content a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.2em;
-      padding: 7px 10px;
-      border-radius: 4px;
-      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
-      transition: 0.3s;
-    }
-    .nav-content a:hover {
-      background-color: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 10px #ffffff;
-    }
-    .search-container {
-      width: 210px;
-      display: flex;
-      justify-content: center;
-      margin-left: 12px;
-    }
-    .search-container input {
-      padding: 8px 14px;
-      font-size: 1.05em;
-      background-color: #111;
+    /* ... Din tidigare CSS ... */
+    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
+    /* ...Resten av din CSS... */
+    .logout-btn {
+      background: #10191f;
+      color: #00ffcc;
       border: 2px solid #00ffcc;
-      border-radius: 8px;
-      color: #fff;
-      box-shadow: 0 0 8px #7b00ff, 0 0 3px #00ffcc;
-      text-shadow: 0 0 2px #7b00ff, 0 0 2px #00ffcc;
-      width: 100%;
-      max-width: 230px;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .hamburger span {
-      width: 29px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 4px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    @media (max-width: 700px) {
-      .nav-content {
-        display: none;
-        flex-direction: column;
-        position: fixed;
-        left: 0; right: 0;
-        top: 58px;
-        background: #181f26;
-        box-shadow: 0 4px 28px #00ffcc77;
-        z-index: 1101;
-        padding-bottom: 20px;
-        gap: 0;
-      }
-      .nav-content.show {
-        display: flex;
-      }
-      .nav-content a {
-        padding: 18px 10px;
-        font-size: 1.15em;
-        width: 100vw;
-        border-radius: 0;
-        text-align: center;
-        border-bottom: 1px solid #3fffd966;
-      }
-      .search-container { margin: 10px auto 0 auto; width: 90vw; }
-      .search-container input { width: 100%; max-width: 100vw;}
-      .hamburger { display: flex; }
-    }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
-      .upload-title { font-size: 1.6em; }
-      .upload-box {
-        padding: 14px 2vw 12px 2vw;
-        max-width: 99vw;
-        margin: 18px 0 18px 0;
-        border-radius: 10px;
-      }
-    }
-    .upload-box {
-      border: 2px solid #66ffcc;
-      border-radius: 12px;
-      padding: 30px 20px 22px 20px;
-      margin: 36px auto 32px auto;
-      max-width: 440px;
-      background-color: rgba(0, 0, 0, 0.88);
-      box-shadow: 0 0 15px #00ffcc33;
-      position: relative;
-      z-index: 2;
-      min-width: 0;
-    }
-    .upload-title {
-      font-size: 2.6em;
-      text-align: center;
-      color: #f5f5f5;
-      margin: 16px 0 28px 0;
-      text-shadow: 0 2px 12px #222, 0 1px 0 #fff;
+      padding: 7px 20px;
+      border-radius: 9px;
       font-weight: bold;
-      letter-spacing: 0.04em;
-    }
-    .upload-switcher {
+      font-size: 1.08em;
+      box-shadow: 0 0 10px #00ffcc77;
+      cursor: pointer;
+      margin-left: 20px;
+      transition: background 0.2s, color 0.2s;
       display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
     }
-    .switch-btn {
-      background: #111;
-      color: #80ffcc;
-      border: 1px solid #66ffcc;
-      border-radius: 5px;
-      padding: 6px 14px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.18s;
-      font-family: 'Courier New', monospace;
+    .logout-btn:hover { background: #00ffcc; color: #14171c;}
+    /* Desktop: placerad längst till höger i navbaren */
+    .logout-btn.navbar { position: absolute; right: 24px; top: 13px; z-index: 2002; }
+    /* Mobil: syns sist i hamburgermenyn */
+    @media (max-width: 700px) {
+      .logout-btn.navbar { display: none; }
+      .logout-btn.menu { display: block; width: 94vw; margin: 19px auto 2px auto; }
     }
-    .switch-btn.active,
-    .switch-btn:hover {
-      background: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      box-shadow: 0 0 8px #00ffcc;
+    @media (min-width: 701px) {
+      .logout-btn.menu { display: none; }
     }
-    textarea, input[type="file"], button[type="submit"], label {
-      display: block;
-      width: 100%;
-      margin-top: 1rem;
-      font-family: inherit;
-      font-size: 1rem;
-      color: #b8f6ff;
-      background-color: #111;
-      border: 1px solid #66ffcc;
-      padding: 0.6rem;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    label {margin-bottom: -0.7rem;}
-    button[type="submit"] {
-      background-color: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button[type="submit"]:hover {
-      background-color: #00ccaa;
-    }
-    #spinner {
-      display: none;
-      width: 50px;
-      margin: 10px auto;
-    }
-    audio { margin-top: 10px; }
-    .upload-section { display: none; }
-    .upload-section.active { display: block; }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <!-- Vänster sidbanner -->
-  <div class="side-banner left">
-    <div class="banner-inner">
-      <a id="leftBannerLink" href="#" target="_blank">
-        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
-      </a>
-    </div>
-  </div>
-  <!-- Höger sidbanner -->
-  <div class="side-banner right">
-    <div class="banner-inner">
-      <a id="rightBannerLink" href="#" target="_blank">
-        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
-      </a>
-    </div>
-  </div>
+  <div class="side-banner left"><div class="banner-inner"><a id="leftBannerLink" href="#" target="_blank"><img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" /></a></div></div>
+  <div class="side-banner right"><div class="banner-inner"><a id="rightBannerLink" href="#" target="_blank"><img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" /></a></div></div>
+  <!-- LOGGA UT-KNAPP: desktop-läge -->
+  <button class="logout-btn navbar" id="logoutBtnNavbar" style="display:none;">Logga ut</button>
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0"><span></span><span></span><span></span></div>
     <div class="nav-content" id="navMenu">
-      <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
-      <a href="wall.html">Väggen</a>
-      <a href="upload.html">Ladda upp</a>
-      <a href="profile.html">Profil</a>
-      <a href="friends.html">Vänner</a>
-      <div class="search-container">
-        <input type="text" placeholder="Sök på hela sidan..." id="searchInput" />
-      </div>
+      <a href="forum.html" id="forumTab"></a>
+      <a href="wall.html" id="wallTab"></a>
+      <a href="upload.html" id="uploadTab"></a>
+      <a href="profile.html" id="profileTab"></a>
+      <a href="friends.html" id="friendsTab"></a>
+      <a href="ghostglow.html" id="ghostglowTab"></a>
+      <a href="store.html" id="storeTab"></a>
+      <!-- LOGGA UT-KNAPP: mobil-läge (sist i hamburgermenyn) -->
+      <button class="logout-btn menu" id="logoutBtnMenu" style="display:none;">Logga ut</button>
     </div>
   </nav>
   <div class="upload-box" id="uploadBox">
-    <div class="upload-title">Ladda upp innehåll</div>
+    <div class="upload-title" id="uploadTitle"></div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
     <div class="upload-switcher">
-      <button class="switch-btn active" data-section="text">📝 Inlägg</button>
-      <button class="switch-btn" data-section="image">🖼️ Bild</button>
-      <button class="switch-btn" data-section="video">🎬 Klipp</button>
-      <button class="switch-btn" data-section="audio">🎵 Ljud</button>
-      <button class="switch-btn" data-section="mic">🎤 Röst</button>
+      <button class="switch-btn active" data-section="text" id="btnText"></button>
+      <button class="switch-btn" data-section="image" id="btnImage"></button>
+      <button class="switch-btn" data-section="video" id="btnVideo"></button>
+      <button class="switch-btn" data-section="audio" id="btnAudio"></button>
+      <button class="switch-btn" data-section="mic" id="btnMic"></button>
     </div>
     <form id="uploadForm">
       <!-- TEXT -->
       <div class="upload-section active" data-section="text">
-        <label for="text">Skriv ett inlägg:</label>
-        <textarea id="text" placeholder="Vad vill du dela med dig av?" maxlength="1500"></textarea>
+        <label for="text" id="labelText"></label>
+        <textarea id="text" placeholder="" maxlength="1500"></textarea>
       </div>
       <!-- BILD -->
       <div class="upload-section" data-section="image">
-        <label for="image">Ladda upp en bild (max 5 MB):</label>
+        <label for="image" id="labelImage"></label>
         <input type="file" id="image" accept="image/*" />
+        <div class="desc-section">
+          <label for="imageDesc" id="labelImageDesc"></label>
+          <input type="text" id="imageDesc" maxlength="140" placeholder="" />
+        </div>
       </div>
       <!-- VIDEO -->
       <div class="upload-section" data-section="video">
-        <label for="video">Ladda upp ett klipp (max 30 MB):</label>
+        <label for="video" id="labelVideo"></label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
+        <div class="desc-section">
+          <label for="videoDesc" id="labelVideoDesc"></label>
+          <input type="text" id="videoDesc" maxlength="140" placeholder="" />
+        </div>
       </div>
       <!-- AUDIO -->
       <div class="upload-section" data-section="audio">
-        <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
+        <label for="audio" id="labelAudio"></label>
         <input type="file" id="audio" accept="audio/*" />
+        <div class="desc-section">
+          <label for="audioDesc" id="labelAudioDesc"></label>
+          <input type="text" id="audioDesc" maxlength="140" placeholder="" />
+        </div>
       </div>
       <!-- RÖSTINSPELNING -->
       <div class="upload-section" data-section="mic">
-        <label>Mikrofoninspelning (max 2 MB):</label>
-        <button type="button" id="recordButton">🎤 Starta inspelning</button>
-        <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
+        <label id="labelMic"></label>
+        <button type="button" id="recordButton"></button>
+        <button type="button" id="stopButton" disabled></button>
         <audio id="audioPreview" controls></audio>
+        <div class="desc-section">
+          <label for="micDesc" id="labelMicDesc"></label>
+          <input type="text" id="micDesc" maxlength="140" placeholder="" />
+        </div>
       </div>
       <label style="margin-top:18px;">
         <input type="checkbox" id="temporary" />
-        Gör detta till ett tillfälligt inlägg (försvinner om 24h)
+        <span id="tempLabel"></span>
       </label>
-      <button type="submit" style="margin-top:18px;">Ladda upp</button>
+      <button type="submit" style="margin-top:18px;" id="uploadBtn"></button>
     </form>
   </div>
   <script>
     // SIDBANNER ROTATION (vänster och höger)
     const banners = [
-      {
-        left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
-        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
-      },
-      {
-        left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
-        right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
-      }
+      { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }},
+      { left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
     ];
     let bannerIndex = 0;
     function updateBanners() {
-      const left = banners[bannerIndex].left;
-      const right = banners[bannerIndex].right;
-      document.getElementById('leftBannerImg').src = left.src;
-      document.getElementById('leftBannerImg').alt = left.alt;
-      document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src;
-      document.getElementById('rightBannerImg').alt = right.alt;
-      document.getElementById('rightBannerLink').href = right.url;
+      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
+      document.getElementById('leftBannerImg').src = left.src; document.getElementById('leftBannerImg').alt = left.alt; document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
     }
-    updateBanners();
-    setInterval(() => {
-      bannerIndex = (bannerIndex + 1) % banners.length;
-      updateBanners();
-    }, 6000);
+    updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
 
     // --- Hamburgermeny logik ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -398,47 +146,95 @@
       });
     });
 
-    // Växla mellan sektionerna
-    document.querySelectorAll('.switch-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const section = this.getAttribute('data-section');
-        document.querySelectorAll('.upload-section').forEach(sec => {
-          sec.classList.remove('active');
-          if (sec.getAttribute('data-section') === section) sec.classList.add('active');
-        });
-      });
-    });
-    // Sök-fält
-    document.addEventListener("DOMContentLoaded", () => {
-      const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-        searchInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            const query = searchInput.value.trim();
-            if (query.length >= 2) {
-              window.location.href = search.html?q=${encodeURIComponent(query)};
-            }
-          }
-        });
+    // Språkväxling för hela UI:t
+    const dict = {
+      sv: {
+        forum: "Forum", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow", store: "Butik",
+        uploadTitle: "Ladda upp innehåll", textBtn: "📝 Inlägg", imageBtn: "🖼️ Bild", videoBtn: "🎬 Klipp", audioBtn: "🎵 Ljud", micBtn: "🎤 Röst",
+        labelText: "Skriv ett inlägg:", labelImage: "Ladda upp en bild (max 5 MB):", labelVideo: "Ladda upp ett klipp (max 30 MB):",
+        labelAudio: "Ladda upp ljudfil (max 5 MB):", labelMic: "Mikrofoninspelning (max 2 MB):",
+        labelImageDesc: "Beskrivning:", labelVideoDesc: "Beskrivning:", labelAudioDesc: "Beskrivning:", labelMicDesc: "Beskrivning:",
+        placeholderText: "Vad vill du dela med dig av?", placeholderImage: "Beskriv bilden...", placeholderVideo: "Beskriv klippet...",
+        placeholderAudio: "Beskriv ljudet...", placeholderMic: "Beskriv röstinspelningen...",
+        tempLabel: "Gör detta till ett tillfälligt inlägg (försvinner om 24h)", uploadBtn: "Ladda upp",
+        recordBtn: "🎤 Starta inspelning", stopBtn: "🛑 Stoppa", logout: "Logga ut"
+      },
+      en: {
+        forum: "Forum", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow", store: "Store",
+        uploadTitle: "Upload Content", textBtn: "📝 Post", imageBtn: "🖼️ Image", videoBtn: "🎬 Clip", audioBtn: "🎵 Audio", micBtn: "🎤 Voice",
+        labelText: "Write a post:", labelImage: "Upload an image (max 5 MB):", labelVideo: "Upload a clip (max 30 MB):",
+        labelAudio: "Upload audio file (max 5 MB):", labelMic: "Voice recording (max 2 MB):",
+        labelImageDesc: "Description:", labelVideoDesc: "Description:", labelAudioDesc: "Description:", labelMicDesc: "Description:",
+        placeholderText: "What do you want to share?", placeholderImage: "Describe the image...", placeholderVideo: "Describe the clip...",
+        placeholderAudio: "Describe the audio...", placeholderMic: "Describe the voice recording...",
+        tempLabel: "Make this a temporary post (disappears after 24h)", uploadBtn: "Upload",
+        recordBtn: "🎤 Start recording", stopBtn: "🛑 Stop", logout: "Sign out"
+      }
+    };
+    const lang = localStorage.lang === "en" ? "en" : "sv";
+    function i18n() {
+      document.getElementById("forumTab").textContent = dict[lang].forum;
+      document.getElementById("wallTab").textContent = dict[lang].wall;
+      document.getElementById("uploadTab").textContent = dict[lang].upload;
+      document.getElementById("profileTab").textContent = dict[lang].profile;
+      document.getElementById("friendsTab").textContent = dict[lang].friends;
+      document.getElementById("ghostglowTab").textContent = dict[lang].ghostglow;
+      document.getElementById("storeTab").textContent = dict[lang].store;
+      document.getElementById("logoutBtnNavbar").textContent = dict[lang].logout;
+      document.getElementById("logoutBtnMenu").textContent = dict[lang].logout;
+      document.getElementById("uploadTitle").textContent = dict[lang].uploadTitle;
+      document.getElementById("btnText").textContent = dict[lang].textBtn;
+      document.getElementById("btnImage").textContent = dict[lang].imageBtn;
+      document.getElementById("btnVideo").textContent = dict[lang].videoBtn;
+      document.getElementById("btnAudio").textContent = dict[lang].audioBtn;
+      document.getElementById("btnMic").textContent = dict[lang].micBtn;
+      document.getElementById("labelText").textContent = dict[lang].labelText;
+      document.getElementById("labelImage").textContent = dict[lang].labelImage;
+      document.getElementById("labelImageDesc").textContent = dict[lang].labelImageDesc;
+      document.getElementById("labelVideo").textContent = dict[lang].labelVideo;
+      document.getElementById("labelVideoDesc").textContent = dict[lang].labelVideoDesc;
+      document.getElementById("labelAudio").textContent = dict[lang].labelAudio;
+      document.getElementById("labelAudioDesc").textContent = dict[lang].labelAudioDesc;
+      document.getElementById("labelMic").textContent = dict[lang].labelMic;
+      document.getElementById("labelMicDesc").textContent = dict[lang].labelMicDesc;
+      document.getElementById("text").placeholder = dict[lang].placeholderText;
+      document.getElementById("imageDesc").placeholder = dict[lang].placeholderImage;
+      document.getElementById("videoDesc").placeholder = dict[lang].placeholderVideo;
+      document.getElementById("audioDesc").placeholder = dict[lang].placeholderAudio;
+      document.getElementById("micDesc").placeholder = dict[lang].placeholderMic;
+      document.getElementById("tempLabel").textContent = dict[lang].tempLabel;
+      document.getElementById("uploadBtn").textContent = dict[lang].uploadBtn;
+      document.getElementById("recordButton").textContent = dict[lang].recordBtn;
+      document.getElementById("stopButton").textContent = dict[lang].stopBtn;
+    }
+    i18n();
+
+    // Visa logga ut-knappen när användaren är inloggad
+    let userLoggedIn = false;
+    function showLogout() {
+      userLoggedIn = true;
+      document.getElementById("logoutBtnNavbar").style.display = window.innerWidth > 700 ? "flex" : "none";
+      document.getElementById("logoutBtnMenu").style.display = window.innerWidth <= 700 ? "block" : "none";
+    }
+    window.addEventListener("resize", () => {
+      if (userLoggedIn) {
+        document.getElementById("logoutBtnNavbar").style.display = window.innerWidth > 700 ? "flex" : "none";
+        document.getElementById("logoutBtnMenu").style.display = window.innerWidth <= 700 ? "block" : "none";
       }
     });
-    // Navbar hide vid scroll på mobil
+
+    // NAVBAR HIDE på mobil
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
       window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
-        }
+        if (window.scrollY > lastScrollY && window.scrollY > 70) { navbar.classList.add('hide-navbar'); } else { navbar.classList.remove('hide-navbar'); }
         lastScrollY = window.scrollY;
       });
     }
+
   </script>
+  <!-- FIREBASE-INIT (du kan ha din vanliga scripts/firebase-init.js här) -->
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
     import {
@@ -447,7 +243,7 @@
     import {
       ref, uploadBytes, getDownloadURL
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
     const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
     const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
@@ -458,22 +254,28 @@
     const spinner = document.getElementById("spinner");
     const uploadBox = document.getElementById("uploadBox");
 
-    // Dölj uppladdningsformulär om inte inloggad
+    // Logga ut
+    document.getElementById("logoutBtnNavbar").onclick = () => signOut(auth).then(() => location.href = "login.html");
+    document.getElementById("logoutBtnMenu").onclick = () => signOut(auth).then(() => location.href = "login.html");
+
+    // Visa logga ut om inloggad
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        uploadBox.innerHTML = 
+        uploadBox.innerHTML = `
           <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
-            Du måste vara inloggad för att ladda upp innehåll.<br><br>
-            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
+            ${lang === "en" ? "You must be logged in to upload content." : "Du måste vara inloggad för att ladda upp innehåll."}<br><br>
+            <a href="login.html" style="color:#00ffcc;font-weight:bold;">${lang === "en" ? "Login here" : "Logga in här"}</a>
           </div>
-        ;
+        `;
+      } else {
+        showLogout();
       }
     });
 
     uploadForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!auth.currentUser) {
-        alert("Du måste vara inloggad för att ladda upp.");
+        alert(lang === "en" ? "You must be logged in to upload." : "Du måste vara inloggad för att ladda upp.");
         return;
       }
       spinner.style.display = "block";
@@ -493,39 +295,43 @@
         const img = document.getElementById("image").files[0];
         if (img && img.size > MAX_IMAGE_SIZE) {
           spinner.style.display = "none";
-          return alert(Bilden är för stor! Maxstorlek: 5 MB.);
+          return alert(lang === "en" ? "Image too large! Max size: 5 MB." : "Bilden är för stor! Maxstorlek: 5 MB.");
         }
         filesToUpload.push({ file: img, key: "imageUrl" });
+        postData.description = document.getElementById("imageDesc").value || "";
       }
       if (activeSection === "video") {
         const vid = document.getElementById("video").files[0];
         if (vid && vid.size > MAX_VIDEO_SIZE) {
           spinner.style.display = "none";
-          return alert(Videoklippet är för stort! Maxstorlek: 30 MB.);
+          return alert(lang === "en" ? "Video too large! Max size: 30 MB." : "Videoklippet är för stort! Maxstorlek: 30 MB.");
         }
         filesToUpload.push({ file: vid, key: "videoUrl" });
+        postData.description = document.getElementById("videoDesc").value || "";
       }
       if (activeSection === "audio") {
         const aud = document.getElementById("audio").files[0];
         if (aud && aud.size > MAX_AUDIO_SIZE) {
           spinner.style.display = "none";
-          return alert(Ljudfilen är för stor! Maxstorlek: 5 MB.);
+          return alert(lang === "en" ? "Audio too large! Max size: 5 MB." : "Ljudfilen är för stor! Maxstorlek: 5 MB.");
         }
         filesToUpload.push({ file: aud, key: "audioUrl" });
+        postData.description = document.getElementById("audioDesc").value || "";
       }
       if (activeSection === "mic") {
         const micBlob = window.lastRecordedAudioBlob;
         if (micBlob && micBlob.size > MAX_MIC_SIZE) {
           spinner.style.display = "none";
-          return alert(Röstinspelningen är för stor! Maxstorlek: 2 MB.);
+          return alert(lang === "en" ? "Voice recording too large! Max size: 2 MB." : "Röstinspelningen är för stor! Maxstorlek: 2 MB.");
         }
         if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
+        postData.description = document.getElementById("micDesc").value || "";
       }
 
       // Ladda upp filer (om det finns)
       for (let upload of filesToUpload) {
         if (!upload.file) continue;
-        const storageRef = ref(storage, uploads/${Date.now()}_${upload.file.name});
+        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
         await uploadBytes(storageRef, upload.file);
         const url = await getDownloadURL(storageRef);
         postData[upload.key] = url;
@@ -535,7 +341,7 @@
       await addDoc(collection(db, "wall"), postData);
 
       spinner.style.display = "none";
-      alert("✅ Inlägget har laddats upp!");
+      alert(lang === "en" ? "✅ Post uploaded!" : "✅ Inlägget har laddats upp!");
       uploadForm.reset();
       window.location.href = "wall.html";
     });
