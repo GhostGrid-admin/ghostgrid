@@ -188,7 +188,8 @@
       gap: 0;
     }
     .nav-mobile.show { display: flex; }
-    .nav-mobile a, .nav-mobile button {
+    .nav-mobile a,
+    .nav-mobile button#logoutMobileBtn {
       padding: 18px 10px;
       font-size: 1.15em;
       width: 100vw;
@@ -200,21 +201,8 @@
       font-weight: bold;
       border: none;
       box-shadow: none;
-    }
-    /* Fixar att logga ut-knappen är centrerad även visuellt och inte annorlunda än länkarna */
-    .nav-mobile button#logoutMobileBtn {
-      margin: 0 auto !important;
-      width: 100vw !important;
-      text-align: center !important;
-      display: block !important;
-      background: none !important;
-      border: none !important;
-      color: #00ffcc !important;
-      font-weight: bold !important;
-      font-size: 1.15em !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      border-bottom: 1px solid #3fffd966 !important;
+      display: block;
+      margin: 0;
     }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none; }
@@ -415,7 +403,7 @@
     const banners = [
       {
         left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
-        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", url: "#" }
       },
       {
         left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
