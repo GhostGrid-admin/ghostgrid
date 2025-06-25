@@ -201,7 +201,22 @@
       border: none;
       box-shadow: none;
     }
-    .nav-mobile button { margin: 0; }
+    .nav-mobile button {
+      margin: 0;
+      /* Extra centrering och stil för logga ut */
+      display: block;
+      width: 100vw;
+      text-align: center;
+      font-size: 1.15em;
+      background: #000;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 18px 10px;
+    }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none; }
       .hamburger { display: flex; }
@@ -401,7 +416,7 @@
     const banners = [
       {
         left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
-        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+        right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", url: "#" }
       },
       {
         left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
@@ -415,7 +430,7 @@
       document.getElementById('leftBannerImg').src = left.src;
       document.getElementById('leftBannerImg').alt = left.alt;
       document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src;
+      document.getElementById('rightBannerImg').src = right
       document.getElementById('rightBannerImg').alt = right.alt;
       document.getElementById('rightBannerLink').href = right.url;
     }
