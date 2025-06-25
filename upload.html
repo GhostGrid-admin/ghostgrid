@@ -100,23 +100,16 @@
       justify-content: center;
       transition: top 0.3s;
     }
-    .navbar-inner {
-      width: 100%;
-      max-width: 1280px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      margin: 0 auto;
-    }
     .nav-content {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       flex-wrap: wrap;
       gap: 16px;
+      max-width: 1200px;
+      width: 100%;
       align-items: center;
       text-align: center;
-      flex: 1 1 auto;
+      position: relative;
     }
     .nav-content a {
       color: white;
@@ -133,15 +126,12 @@
       box-shadow: 0 0 10px #ffffff;
     }
     .logout-btn-desktop {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
+      margin-left: auto;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
       padding: 8px 22px 7px 22px;
-      font-size: 1.08em;
+      font-size: 1.09em;
       border-radius: 9px;
       font-family: 'Courier New', monospace;
       font-weight: bold;
@@ -150,12 +140,11 @@
       cursor: pointer;
       opacity: 0.97;
       display: block;
-      z-index: 2002;
-      margin-right: 26px;
     }
     @media (max-width: 900px) {
       .logout-btn-desktop { display: none !important; }
     }
+    /* Logga ut-knappen i hamburgermenyn på mobil */
     .logout-btn-mobile {
       display: none;
       width: 90%;
@@ -330,21 +319,19 @@
   </div>
   <!-- Navbar -->
   <nav class="navbar">
-    <div class="navbar-inner">
-      <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="nav-content" id="navMenu">
-        <a href="forum.html">Forum</a>
-        <a href="wall.html">Väggen</a>
-        <a href="upload.html">Ladda upp</a>
-        <a href="profile.html">Profil</a>
-        <a href="friends.html">Vänner</a>
-        <a href="ghostglow.html">Ghost&Glow</a>
-        <a href="store.html">Butik</a>
-        <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
-      </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-content" id="navMenu">
+      <a href="forum.html">Forum</a>
+      <a href="wall.html">Väggen</a>
+      <a href="upload.html">Ladda upp</a>
+      <a href="profile.html">Profil</a>
+      <a href="friends.html">Vänner</a>
+      <a href="ghostglow.html">Ghost&Glow</a>
+      <a href="store.html">Butik</a>
       <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
+      <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
     </div>
   </nav>
 
