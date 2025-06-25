@@ -27,18 +27,12 @@
     .glow-left {
       left: 0;
       background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
     .glow-right {
       right: 0;
       background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow:
-        0 0 60px 30px #d900ffbb,
-        0 0 180px 60px #00ffe0aa,
-        0 0 320px 90px #9400ff66;
+      box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66;
     }
     .side-banner {
       position: fixed;
@@ -79,14 +73,6 @@
     }
     .side-banner.left { left: 0; }
     .side-banner.right { right: 0; }
-    @media (max-width: 1100px) {
-      .side-banner, .glow-left, .glow-right { width: 65px; }
-      .side-banner .banner-inner { width: 57px; }
-    }
-    @media (max-width: 700px) {
-      .side-banner { display: none; }
-    }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -99,6 +85,7 @@
       display: flex;
       justify-content: center;
       transition: top 0.3s;
+      align-items: center;
     }
     .nav-content {
       display: flex;
@@ -125,25 +112,58 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-    /* Logga ut-knappen i navbaren på desktop */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    /* Centrera logga ut över reklampelare till höger på desktop */
     .logout-btn-desktop {
       position: fixed;
-      top: 18px;
-      right: 26px;
-      z-index: 3005;
+      top: 0;
+      right: 0;
+      height: 62px;
+      width: 136px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2005;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      margin: 0;
+      padding: 0;
+    }
+    .logout-btn-desktop button {
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
-      padding: 8px 20px 7px 20px;
-      font-size: 1.08em;
-      border-radius: 9px;
+      padding: 10px 30px;
+      border-radius: 12px;
+      font-size: 1.15em;
       font-family: 'Courier New', monospace;
       font-weight: bold;
-      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
-      transition: 0.15s;
+      box-shadow: 0 0 16px #00ffccaa, 0 0 8px #bb00ff55;
+      transition: background 0.2s, color 0.2s, border 0.2s;
       cursor: pointer;
-      opacity: 0.97;
-      display: block;
+      text-align: center;
+    }
+    .logout-btn-desktop button:hover {
+      background: #00ffcc;
+      color: #0a0a0a;
+      border: 2px solid #bb00ff;
+      font-weight: bold;
+      box-shadow: 0 0 25px #00ffccbb;
     }
     @media (max-width: 900px) {
       .logout-btn-desktop { display: none !important; }
@@ -168,21 +188,6 @@
     }
     @media (max-width: 900px) {
       .logout-btn-mobile { display: block; }
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .hamburger span {
-      width: 29px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 4px 0;
-      border-radius: 2px;
-      transition: 0.3s;
     }
     @media (max-width: 700px) {
       .nav-content {
@@ -335,7 +340,7 @@
       <a href="friends.html">Vänner</a>
       <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
     </div>
-    <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
+    <div class="logout-btn-desktop"><button id="logoutDesktopBtn">Logga ut</button></div>
   </nav>
 
   <div class="upload-box" id="uploadBox">
@@ -426,7 +431,6 @@
         navMenu.classList.remove('show');
       });
     });
-    // Stäng meny även när logga ut på mobil trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function() {
       navMenu.classList.remove('show');
     });
@@ -441,7 +445,6 @@
           sec.classList.remove('active');
           if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
-        // Visa beskrivning endast om inte inlägg är valt
         let form = document.getElementById('uploadForm');
         if (section !== "text") {
           form.classList.add('show-desc');
