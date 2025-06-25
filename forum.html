@@ -63,7 +63,6 @@
     }
     .logout-btn {
       position: fixed;
-      /* Centrera i hörnet (lika från topp & höger som padding i navbar) */
       top: 12px;
       right: 12px;
       background: #000;
@@ -85,10 +84,10 @@
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
     }
-    /* Dölj logga ut-knappen och visa hamburgaren på mobil */
+    /* Dölj nav-center och logga ut-knapp, men inte navbar! */
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex; }
+      .hamburger { display: flex !important; }
     }
     .hamburger {
       display: none;
@@ -259,7 +258,7 @@
     <div id="threadList" class="thread-list"></div>
   </div>
   <script>
-  // SIDBANNER ROTATION
+    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
