@@ -86,6 +86,7 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
+
     /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
@@ -158,6 +159,7 @@
       .nav-links { gap: 14px; }
       .logout-btn { right: 8px; }
     }
+
     /* Hamburger och mobilmeny */
     .hamburger {
       display: none;
@@ -186,10 +188,10 @@
       z-index: 1101;
       padding-bottom: 20px;
       gap: 0;
+      align-items: center;
     }
     .nav-mobile.show { display: flex; }
-    .nav-mobile a,
-    .nav-mobile button#logoutMobileBtn {
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
       padding: 18px 10px;
       font-size: 1.15em;
       width: 100vw;
@@ -202,7 +204,11 @@
       border: none;
       box-shadow: none;
       display: block;
-      margin: 0;
+      margin: 0 auto;
+    }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
     }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none; }
@@ -345,7 +351,7 @@
       <a href="friends.html">Vänner</a>
       <a href="ghostglow.html">Ghost&Glow</a>
       <a href="store.html">Butik</a>
-      <button id="logoutMobileBtn">Logga ut</button>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
   <!-- NAVBAR END -->
@@ -407,7 +413,7 @@
       },
       {
         left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
-        right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
+        right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", url: "#" }
       }
     ];
     let bannerIndex = 0;
@@ -434,8 +440,10 @@
       navMobile.classList.toggle('show');
     });
     // Stäng meny även när logga ut på mobil trycks
-    document.getElementById("logoutMobileBtn").addEventListener("click", function() {
+    document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
+      e.preventDefault();
       navMobile.classList.remove('show');
+      doLogout();
     });
 
     // Visa beskrivning bara för allt utom inlägg
@@ -596,7 +604,11 @@
       });
     }
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    document.getElementById("logoutMobileBtn").onclick = doLogout;
+    // Nu som länk i mobilmenyn:
+    document.getElementById("logoutMobileBtn").onclick = function(e) {
+      e.preventDefault();
+      doLogout();
+    };
   </script>
 </body>
 </html>
