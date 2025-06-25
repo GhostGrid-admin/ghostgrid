@@ -86,7 +86,7 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
-
+    /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -97,22 +97,21 @@
       z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
-      justify-content: center;
       align-items: center;
       transition: top 0.3s;
+      justify-content: center;
     }
-    .nav-inner {
+    .nav-center {
+      flex: 1;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      width: 100%;
-      max-width: 1150px;
     }
     .nav-links {
       display: flex;
       gap: 26px;
       list-style: none;
-      margin: 0;
+      margin: 0 auto;
       padding: 0;
       align-items: center;
     }
@@ -135,6 +134,9 @@
       box-shadow: 0 0 10px #ffffff;
     }
     .logout-btn {
+      position: absolute;
+      top: 12px;
+      right: 38px;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
@@ -147,15 +149,22 @@
       transition: 0.18s;
       cursor: pointer;
       opacity: 0.98;
-      margin-left: 18px;
-      margin-right: 10px;
+      margin-right: 0;
+      margin-left: 0;
+      z-index: 1500;
+      display: block;
     }
+    @media (max-width: 950px) {
+      .nav-links { gap: 14px; }
+      .logout-btn { right: 8px; }
+    }
+    /* Hamburger och mobilmeny */
     .hamburger {
       display: none;
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 18px;
       z-index: 1110;
     }
     .hamburger span {
@@ -166,64 +175,36 @@
       border-radius: 2px;
       transition: 0.3s;
     }
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      left: 0; right: 0;
+      top: 58px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1101;
+      padding-bottom: 20px;
+      gap: 0;
+    }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile button {
+      padding: 18px 10px;
+      font-size: 1.15em;
+      width: 100vw;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+    }
+    .nav-mobile button { margin: 0; }
     @media (max-width: 900px) {
-      .nav-inner {
-        flex-direction: row;
-        justify-content: flex-start;
-      }
-      .nav-links,
-      .logout-btn {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-        margin-left: 10px;
-      }
-      .nav-mobile {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        left: 0; right: 0;
-        top: 58px;
-        background: #181f26;
-        box-shadow: 0 4px 28px #00ffcc77;
-        z-index: 1101;
-        padding-bottom: 20px;
-        gap: 0;
-      }
-      .nav-mobile a, .nav-mobile button {
-        padding: 18px 0;
-        font-size: 1.15em;
-        width: 100vw;
-        border-radius: 0;
-        text-align: center;
-        border-bottom: 1px solid #3fffd966;
-        background: none;
-        color: #00ffcc;
-        font-weight: bold;
-        border: none;
-        box-shadow: none;
-        margin: 0;
-        display: block;
-      }
-      .nav-mobile button {
-        background: #000;
-        color: #00ffcc;
-        border: none;
-        border-bottom: 1px solid #3fffd966;
-        font-family: 'Courier New', monospace;
-        font-size: 1.15em;
-        font-weight: bold;
-        text-align: center;
-        width: 100vw;
-        border-radius: 0;
-        box-shadow: none;
-        margin: 0;
-        cursor: pointer;
-        padding: 18px 0;
-      }
-      .nav-mobile { display: none; }
-      .nav-mobile.show { display: flex; }
+      .nav-center, .logout-btn { display: none; }
+      .hamburger { display: flex; }
     }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
@@ -338,10 +319,10 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="nav-inner">
-      <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-        <span></span><span></span><span></span>
-      </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-center">
       <ul class="nav-links">
         <li><a href="forum.html">Forum</a></li>
         <li><a href="wall.html">Väggen</a></li>
@@ -351,8 +332,8 @@
         <li><a href="ghostglow.html">Ghost&Glow</a></li>
         <li><a href="store.html">Butik</a></li>
       </ul>
-      <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
     </div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
     <!-- Mobile Menu (hidden by default) -->
     <div class="nav-mobile" id="navMobile">
       <a href="forum.html">Forum</a>
@@ -362,7 +343,7 @@
       <a href="friends.html">Vänner</a>
       <a href="ghostglow.html">Ghost&Glow</a>
       <a href="store.html">Butik</a>
-      <button id="logoutMobileBtn" class="mobile-logout-btn">Logga ut</button>
+      <button id="logoutMobileBtn">Logga ut</button>
     </div>
   </nav>
   <!-- NAVBAR END -->
@@ -450,10 +431,9 @@
     hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    navMobile.querySelectorAll('a, button').forEach(link => {
-      link.addEventListener('click', () => {
-        navMobile.classList.remove('show');
-      });
+    // Stäng meny även när logga ut på mobil trycks
+    document.getElementById("logoutMobileBtn").addEventListener("click", function() {
+      navMobile.classList.remove('show');
     });
 
     // Visa beskrivning bara för allt utom inlägg
