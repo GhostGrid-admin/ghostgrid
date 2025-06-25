@@ -86,7 +86,6 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
-
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -125,31 +124,27 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-    /* Logga ut-knappen fixad, placerad exakt centralt över reklampelaren höger och smal */
+    /* Logga ut-knappen centralt över reklampelaren till höger */
     .logout-btn-desktop {
       position: fixed;
-      top: 19px;
+      top: 87px;
       right: 68px;
+      transform: translateX(50%);
       z-index: 3005;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
-      padding: 4px 18px 4px 18px;
-      font-size: 1.03em;
-      border-radius: 7px;
+      padding: 7px 18px;
+      font-size: 1.08em;
+      border-radius: 9px;
       font-family: 'Courier New', monospace;
       font-weight: bold;
-      box-shadow: 0 0 13px #00ffcc88, 0 0 5px #bb00ff99;
-      transition: 0.13s;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.15s;
       cursor: pointer;
       opacity: 0.97;
       display: block;
-      height: auto;
-      line-height: 1.1;
-      min-width: 82px;
-    }
-    @media (max-width: 1100px) {
-      .logout-btn-desktop { right: 8px; }
+      min-width: 100px;
     }
     @media (max-width: 900px) {
       .logout-btn-desktop { display: none !important; }
@@ -161,12 +156,12 @@
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
-      padding: 9px 0 9px 0;
+      padding: 11px 0 11px 0;
       font-size: 1.1em;
       border-radius: 10px;
       font-family: 'Courier New', monospace;
       font-weight: bold;
-      box-shadow: 0 0 12px #00ffcc88, 0 0 4px #bb00ff99;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
       transition: 0.18s;
       cursor: pointer;
       text-align: center;
@@ -333,15 +328,17 @@
     </div>
     <div class="nav-content" id="navMenu">
       <a href="forum.html">Forum</a>
-      <a href="store.html">Store</a>
       <a href="wall.html">Väggen</a>
       <a href="upload.html">Ladda upp</a>
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
+      <a href="ghostglow.html">Ghost&Glow</a>
+      <a href="store.html">Butik</a>
       <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
     </div>
-    <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
   </nav>
+  <!-- Logga ut-knapp centrerad ovanför reklampelare höger -->
+  <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
 
   <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
