@@ -62,10 +62,13 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
+    /* ----- PLACERA LOGGA UT-KNAPPEN PRECIS ÖVER REKLAMPELAEREN ----- */
     .logout-btn {
-      position: absolute;
-      top: 12px;
-      right: 38px;
+      position: fixed;
+      /* Centrera över högra pelaren på desktop (170px bred) */
+      top: 16px;
+      right: calc(85px - 70px/2 + 0px); /* 85px = mitten av pelaren; 70px/2 = halva knappens bredd, justera 70px vid behov */
+      /* Om knappen är t.ex. 140px bred: byt ut 70px mot 140px (eller använd width + padding)! */
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
@@ -83,11 +86,18 @@
       z-index: 1500;
       display: block;
     }
+    @media (max-width: 1100px) {
+      .logout-btn {
+        right: calc(42.5px - 70px/2 + 0px);
+      }
+    }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none; }
+      .hamburger { display: flex; }
+    }
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
-      .logout-btn { right: 8px; }
     }
-
     .hamburger {
       display: none;
       flex-direction: column;
@@ -142,10 +152,6 @@
       font-weight: bold;
     }
     .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none; }
-      .hamburger { display: flex; }
-    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
@@ -243,7 +249,7 @@
       <a href="forum.html" data-i18n="forum">Forum</a>
       <a href="wall.html" data-i18n="wall">Väggen</a>
       <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
+            <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
       <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
       <a href="store.html" data-i18n="store">Butik</a>
