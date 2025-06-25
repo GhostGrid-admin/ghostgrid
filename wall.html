@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -7,99 +7,28 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
-    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
-    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
-    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
+    .glow-left, .glow-right { position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0; }
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
+    .side-banner { position: fixed; top: 87px; bottom: 0; width: 136px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
+    .side-banner .banner-inner { width: 120px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
     .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
-    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
+    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-
-    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s;}
-    .nav-wrap { display: flex; flex-direction: row; align-items: center; width: 100%; max-width: 100vw; justify-content: center;}
-    .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center;}
-    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s;}
+    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s; }
+    .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
+    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; }
     .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
-    .logout-btn-desktop-wrap { display: flex; justify-content: center; align-items: center; width: 100%; }
-    .logout-btn-desktop {
-      margin: 0 auto;
-      background: #000;
-      color: #00ffcc;
-      border: 2px solid #00ffcc;
-      padding: 8px 24px 7px 24px;
-      font-size: 1.1em;
-      border-radius: 9px;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
-      transition: 0.18s;
-      cursor: pointer;
-      opacity: 0.98;
-      text-align: center;
-      margin-top: 8px;
-      display: block;
-    }
-    @media (max-width: 700px) { .logout-btn-desktop-wrap { display: none; } }
-
-    /* --- Mobilmeny --- */
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      position: fixed;
-      left: 0; right: 0;
-      top: 58px;
-      background: #181f26;
-      box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1101;
-      padding-bottom: 20px;
-      gap: 0;
-    }
-    .nav-mobile.show { display: flex; }
-    .nav-mobile .nav-mobile-links {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
-    .nav-mobile a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 18px 10px;
-      font-size: 1.15em;
-      width: 100vw;
-      border-radius: 0;
-      text-align: center;
-      border-bottom: 1px solid #3fffd966;
-      color: #00ffcc;
-      font-weight: bold;
-      background: none;
-      font-family: 'Courier New', monospace;
-      box-shadow: none;
-      border: none;
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .nav-mobile a:last-child {
-      margin-top: 8px;
-      background: #000;
-      color: #00ffcc;
-      border-bottom: 1px solid #3fffd966;
-      font-weight: bold;
-    }
-    .nav-mobile a:hover { background: #00ffcc; color: #000; }
     .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
     .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
     @media (max-width: 700px) {
-      .nav-wrap, .nav-content, .logout-btn-desktop-wrap { display: none; }
+      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
+      .nav-content.show { display: flex; }
+      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
       .hamburger { display: flex; }
-      .nav-mobile { display: flex; }
     }
-    @media (min-width: 701px) { .nav-mobile { display: none !important; } }
-    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } }
-    /* --- Wall, box osv, som innan --- */
+    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } .wall-title { font-size: 1.6em; } .wall-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px;} }
     .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 550px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0;}
     .wall-title { font-size: 2.6em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
@@ -128,8 +57,6 @@
     .reply-link { color: #00ffcc; cursor: pointer; text-decoration: underline; font-size: 0.95em;}
     .comment-children { margin-left: 22px; border-left: 1.2px solid #273344; padding-left: 12px;}
     .reply-box { margin-top: 7px; }
-    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
 </head>
 <body>
@@ -138,47 +65,29 @@
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
-        <img id="leftBannerImg" src="https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
       </a>
     </div>
   </div>
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
-        <img id="rightBannerImg" src="https://dummyimage.com/150x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
       </a>
     </div>
   </div>
   <nav class="navbar">
-    <div class="nav-wrap">
-      <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="nav-content" id="navMenu">
-        <a href="forum.html" data-i18n="forum">Forum</a>
-        <a href="wall.html" data-i18n="wall">Väggen</a>
-        <a href="upload.html" data-i18n="upload">Ladda upp</a>
-        <a href="profile.html" data-i18n="profile">Profil</a>
-        <a href="friends.html" data-i18n="friends">Vänner</a>
-        <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-        <a href="store.html" data-i18n="store">Store</a>
-      </div>
-      <div class="logout-btn-desktop-wrap">
-        <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
-      </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
     </div>
-    <!-- Mobilmeny -->
-    <div class="nav-mobile" id="navMobile">
-      <div class="nav-mobile-links">
-        <a href="forum.html" data-i18n="forum">Forum</a>
-        <a href="wall.html" data-i18n="wall">Väggen</a>
-        <a href="upload.html" data-i18n="upload">Ladda upp</a>
-        <a href="profile.html" data-i18n="profile">Profil</a>
-        <a href="friends.html" data-i18n="friends">Vänner</a>
-        <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-        <a href="store.html" data-i18n="store">Store</a>
-        <a href="#" id="logoutMobileBtn" class="logout-btn-mobile">Logga ut</a>
-      </div>
+    <div class="nav-content" id="navMenu">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Store</a>
     </div>
   </nav>
   <div class="wall-box">
@@ -196,68 +105,7 @@
     </div>
     <div id="postList" class="post-list"></div>
   </div>
-  <!-- SCRIPTS -->
   <script>
-    // Banner rotation
-    const banners = [
-      { left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
-      { left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
-    ];
-    let bannerIndex = 0;
-    function updateBanners() {
-      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
-      document.getElementById('leftBannerImg').src = left.src; document.getElementById('leftBannerImg').alt = left.alt; document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
-    }
-    updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
-
-    // Hamburger-meny
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMobile = document.getElementById('navMobile');
-    hamburgerBtn.addEventListener('click', function() { navMobile.classList.toggle('show'); });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
-    });
-
-    // LOGOUT
-    function doLogout() {
-      // Sätt här din auth.signOut() om du använder Firebase
-      // auth.signOut().then(() => { window.location.href = "login.html"; });
-      window.location.href = "login.html";
-    }
-    document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    document.getElementById("logoutMobileBtn").onclick = function(e) { e.preventDefault(); doLogout(); };
-
-    // NAVBAR HIDE VID SCROLL PÅ MOBIL
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) { navbar.classList.add('hide-navbar'); } else { navbar.classList.remove('hide-navbar'); }
-        lastScrollY = window.scrollY;
-      });
-    }
-
-    // SPRÅK
-    const translations = {
-      sv: { wall: "Väggen", forum: "Forum", store: "Butik", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow", wall_title: "Väggen", all: "Alla", post: "Inlägg", image: "Bilder", video: "Klipp", audio: "Ljud", mic: "Röst", logout: "Logga ut" },
-      en: { wall: "Wall", forum: "Forum", store: "Store", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow", wall_title: "Wall", all: "All", post: "Posts", image: "Images", video: "Videos", audio: "Audio", mic: "Voice", logout: "Logout" }
-    };
-    function t(key) {
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      return translations[lang][key] || key;
-    }
-    function applyTranslations() {
-      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
-      document.title = "GhostGrid – " + t("wall");
-      document.querySelector(".wall-title").textContent = t("wall_title");
-      document.getElementById("logoutDesktopBtn").textContent = t("logout");
-      document.getElementById("logoutMobileBtn").textContent = t("logout");
-      // Sätt filter-knappar och sök
-      document.getElementById("wallSearchInput").placeholder = t("all") + "...";
-    }
-    applyTranslations();
-  </script>
     // Banner rotation
     const banners = [
       { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
@@ -369,7 +217,7 @@
 
     // Ladda wall
     async function loadWallPosts() {
-      postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
+      postList.innerHTML = <div style="color:#00ffcc; text-align:center;">${t("loading")}</div>;
       await fetchUsers();
       const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
@@ -378,7 +226,7 @@
         .map(doc => ({ ...doc.data(), id: doc.id }))
         .filter(post => {
           const lang = localStorage.lang === "en" ? "en" : "sv";
-          return post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang;
+          return post[text_${lang}] || post[desc_${lang}] || post.lang === lang;
         });
       renderPosts(currentFilter, searchTerm);
     }
@@ -408,15 +256,15 @@
     function formatPostContent(post) {
       switch (post.type) {
         case "text":
-          return `<div class="post-content">${escapeHTML(post[`text_${localStorage.lang}`] || post.text || "")}</div>`;
+          return <div class="post-content">${escapeHTML(post[text_${localStorage.lang}] || post.text || "")}</div>;
         case "image":
-          return post.imageUrl ? `<img src="${post.imageUrl}" alt="Bild" />` : "";
+          return post.imageUrl ? <img src="${post.imageUrl}" alt="Bild" /> : "";
         case "video":
-          return post.videoUrl ? `<video controls src="${post.videoUrl}"></video>` : "";
+          return post.videoUrl ? <video controls src="${post.videoUrl}"></video> : "";
         case "audio":
-          return post.audioUrl ? `<audio controls src="${post.audioUrl}"></audio>` : "";
+          return post.audioUrl ? <audio controls src="${post.audioUrl}"></audio> : "";
         case "mic":
-          return post.micAudioUrl ? `<audio controls src="${post.micAudioUrl}"></audio>` : "";
+          return post.micAudioUrl ? <audio controls src="${post.micAudioUrl}"></audio> : "";
         default: return "";
       }
     }
@@ -429,15 +277,15 @@
           const user = userMap[post.user] || "";
           // Sök på text, titel, beskrivning, användarnamn (alla språkfält)
           return (
-            (post[`text_sv`] && post[`text_sv`].toLowerCase().includes(search)) ||
-            (post[`text_en`] && post[`text_en`].toLowerCase().includes(search)) ||
-            (post[`desc_sv`] && post[`desc_sv`].toLowerCase().includes(search)) ||
-            (post[`desc_en`] && post[`desc_en`].toLowerCase().includes(search)) ||
+            (post[text_sv] && post[text_sv].toLowerCase().includes(search)) ||
+            (post[text_en] && post[text_en].toLowerCase().includes(search)) ||
+            (post[desc_sv] && post[desc_sv].toLowerCase().includes(search)) ||
+            (post[desc_en] && post[desc_en].toLowerCase().includes(search)) ||
             (user.toLowerCase().includes(search))
           );
         });
       }
-      if (!posts.length) { postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`; return; }
+      if (!posts.length) { postList.innerHTML = <div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>; return; }
       postList.innerHTML = "";
       for (let post of posts) {
         const reactions = await loadReactions(post.id, "reactions");
@@ -445,27 +293,27 @@
         let name = userMap[post.user] || t("guest");
         const comments = await loadThreadedComments(post.id);
 
-        postList.innerHTML += `
+        postList.innerHTML += 
           <div class="post" data-postid="${post.id}">
             <div class="post-header">${t("user")}: ${name}</div>
             ${formatPostContent(post)}
             <div class="emoji-row">${emojis.map(e =>
-              `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+              <button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
             ).join("")}
             <span class="reactions-view">${emojiSummary(reactions)}</span>
             </div>
             <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
             <div class="comments-block">
               ${renderThreadedComments(post.id, comments, null, 0)}
-              ${currentUser ? `
+              ${currentUser ? 
                 <form class="add-comment-form" data-postid="${post.id}" data-parentid="">
                   <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
                   <button type="submit">${t("comment")}</button>
-                </form>` :
-                `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
+                </form> :
+                <div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>}
             </div>
           </div>
-        `;
+        ;
       }
       addEventListeners();
     }
@@ -486,7 +334,7 @@
       if (!reactions || reactions.length === 0) return "";
       let counts = {};
       reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-      return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+      return Object.entries(counts).map(([k, v]) => ${emojis.find(e => e.key === k)?.emoji || ""} ${v}).join(" ");
     }
 
     // --- LADDA TRÅDADE KOMMENTARER ---
@@ -509,25 +357,25 @@
     // --- RENDERA KOMMENTARSTRÄD ---
     function renderThreadedComments(postId, comments, parentId, level) {
       if (!comments) return "";
-      return comments.map(c => `
+      return comments.map(c => 
         <div class="comment" data-commentid="${c.id}" data-postid="${postId}">
           <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
-          <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
+          <div class="comment-text">${escapeHTML(c[text_${localStorage.lang}] || c.text || "")}</div>
           <div class="emoji-row">${emojis.map(e =>
-            `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+            <button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
           ).join("")}
           <span class="reactions-view" data-cid="${c.id}"></span>
           </div>
           <div class="comment-actions">
             <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
-            ${currentUser && currentUser.uid === c.userId ? `
+            ${currentUser && currentUser.uid === c.userId ? 
               <a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>
-            ` : ""}
+             : ""}
           </div>
           <div class="reply-box" id="replybox-${c.id}" style="display:none;"></div>
-          ${c.children && c.children.length ? `<div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div>` : ""}
+          ${c.children && c.children.length ? <div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div> : ""}
         </div>
-      `).join("");
+      ).join("");
     }
 
     // --- EVENTLISTENERS ---
@@ -571,14 +419,14 @@
         link.onclick = function () {
           const cid = this.getAttribute("data-replyid");
           document.querySelectorAll(".reply-box").forEach(b => b.style.display = "none");
-          const box = document.getElementById(`replybox-${cid}`);
+          const box = document.getElementById(replybox-${cid});
           if (box) {
-            box.innerHTML = `
+            box.innerHTML = 
               <form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
                 <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
                 <button type="submit">${t("comment")}</button>
               </form>
-            `;
+            ;
             box.style.display = "block";
             box.querySelector("textarea").focus();
             addReplyFormListener(box.querySelector("form"));
@@ -596,7 +444,7 @@
           const commentId = commentDiv.dataset.commentid;
           const textDiv = commentDiv.querySelector(".comment-text");
           const oldText = textDiv.textContent;
-          textDiv.innerHTML = `<input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>`;
+          textDiv.innerHTML = <input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>;
           textDiv.querySelector("button").onclick = async function() {
             const newText = textDiv.querySelector("input").value.trim();
             if (newText.length === 0) return alert(t("comment_empty"));
@@ -631,7 +479,7 @@
         const postId = this.dataset.postid;
         const parentId = this.dataset.parentid || null;
         await addDoc(collection(db, "wall", postId, "comments"), {
-          [`text_${localStorage.lang}`]: text,
+          [text_${localStorage.lang}]: text,
           userId: currentUser.uid,
           createdAt: new Date(),
           parentId: parentId
