@@ -97,21 +97,28 @@
       z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
       transition: top 0.3s;
     }
-    .nav-content {
+    .nav-center {
+      flex: 1;
       display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 16px;
-      max-width: 1200px;
-      width: 100%;
+      justify-content: center;
       align-items: center;
-      text-align: center;
-      position: relative;
     }
-    .nav-content a {
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      align-items: center;
+    }
+    .nav-links li {
+      display: flex;
+    }
+    .nav-links a {
       color: white;
       text-decoration: none;
       font-size: 1.2em;
@@ -119,58 +126,42 @@
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
+      font-family: inherit;
     }
-    .nav-content a:hover {
+    .nav-links a:hover {
       background-color: #00ffcc;
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-    .logout-btn-desktop {
-      margin-left: auto;
+    /* Logga ut-knappen */
+    .logout-btn {
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
-      padding: 8px 22px 7px 22px;
-      font-size: 1.09em;
-      border-radius: 9px;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
-      transition: 0.15s;
-      cursor: pointer;
-      opacity: 0.97;
-      display: block;
-    }
-    @media (max-width: 900px) {
-      .logout-btn-desktop { display: none !important; }
-    }
-    /* Logga ut-knappen i hamburgermenyn på mobil */
-    .logout-btn-mobile {
-      display: none;
-      width: 90%;
-      margin: 18px auto 0 auto;
-      background: #000;
-      color: #00ffcc;
-      border: 2px solid #00ffcc;
-      padding: 11px 0 11px 0;
+      padding: 8px 24px 7px 24px;
       font-size: 1.1em;
-      border-radius: 10px;
+      border-radius: 9px;
       font-family: 'Courier New', monospace;
       font-weight: bold;
       box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
       transition: 0.18s;
       cursor: pointer;
-      text-align: center;
+      opacity: 0.98;
+      margin-right: 38px;
+      margin-left: 0;
     }
-    @media (max-width: 900px) {
-      .logout-btn-mobile { display: block; }
+    @media (max-width: 950px) {
+      .nav-links { gap: 14px; }
+      .logout-btn { margin-right: 14px; }
     }
+    /* HAMBURGERMENY */
     .hamburger {
       display: none;
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 18px;
+      z-index: 1110;
     }
     .hamburger span {
       width: 29px;
@@ -180,9 +171,11 @@
       border-radius: 2px;
       transition: 0.3s;
     }
-    @media (max-width: 700px) {
-      .nav-content {
-        display: none;
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none; }
+      .hamburger { display: flex; }
+      .nav-mobile {
+        display: flex;
         flex-direction: column;
         position: fixed;
         left: 0; right: 0;
@@ -193,18 +186,21 @@
         padding-bottom: 20px;
         gap: 0;
       }
-      .nav-content.show {
-        display: flex;
-      }
-      .nav-content a {
+      .nav-mobile a, .nav-mobile button {
         padding: 18px 10px;
         font-size: 1.15em;
         width: 100vw;
         border-radius: 0;
         text-align: center;
         border-bottom: 1px solid #3fffd966;
+        background: none;
+        color: #00ffcc;
+        font-weight: bold;
+        border: none;
+        box-shadow: none;
       }
-      .hamburger { display: flex; }
+      .nav-mobile { display: none; }
+      .nav-mobile.show { display: flex; }
     }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
@@ -317,12 +313,25 @@
       </a>
     </div>
   </div>
-  <!-- Navbar -->
+  <!-- NAVBAR START -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
-    <div class="nav-content" id="navMenu">
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="forum.html">Forum</a></li>
+        <li><a href="wall.html">Väggen</a></li>
+        <li><a href="upload.html">Ladda upp</a></li>
+        <li><a href="profile.html">Profil</a></li>
+        <li><a href="friends.html">Vänner</a></li>
+        <li><a href="ghostglow.html">Ghost&Glow</a></li>
+        <li><a href="store.html">Butik</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <!-- Mobile Menu (hidden by default) -->
+    <div class="nav-mobile" id="navMobile">
       <a href="forum.html">Forum</a>
       <a href="wall.html">Väggen</a>
       <a href="upload.html">Ladda upp</a>
@@ -330,10 +339,10 @@
       <a href="friends.html">Vänner</a>
       <a href="ghostglow.html">Ghost&Glow</a>
       <a href="store.html">Butik</a>
-      <button class="logout-btn-desktop" id="logoutDesktopBtn">Logga ut</button>
-      <button class="logout-btn-mobile" id="logoutMobileBtn">Logga ut</button>
+      <button id="logoutMobileBtn">Logga ut</button>
     </div>
   </nav>
+  <!-- NAVBAR END -->
 
   <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
@@ -414,18 +423,13 @@
 
     // --- Hamburgermeny logik ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMenu = document.getElementById('navMenu');
+    const navMobile = document.getElementById('navMobile');
     hamburgerBtn.addEventListener('click', function() {
-      navMenu.classList.toggle('show');
-    });
-    navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('show');
-      });
+      navMobile.classList.toggle('show');
     });
     // Stäng meny även när logga ut på mobil trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function() {
-      navMenu.classList.remove('show');
+      navMobile.classList.remove('show');
     });
 
     // Visa beskrivning bara för allt utom inlägg
