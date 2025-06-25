@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -62,13 +62,10 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
-    /* ----- PLACERA LOGGA UT-KNAPPEN PRECIS ÖVER REKLAMPELAEREN ----- */
     .logout-btn {
-      position: fixed;
-      /* Centrera över högra pelaren på desktop (170px bred) */
-      top: 16px;
-      right: calc(85px - 70px/2 + 0px); /* 85px = mitten av pelaren; 70px/2 = halva knappens bredd, justera 70px vid behov */
-      /* Om knappen är t.ex. 140px bred: byt ut 70px mot 140px (eller använd width + padding)! */
+      position: absolute;
+      top: 12px;
+      right: 38px;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
@@ -86,18 +83,11 @@
       z-index: 1500;
       display: block;
     }
-    @media (max-width: 1100px) {
-      .logout-btn {
-        right: calc(42.5px - 70px/2 + 0px);
-      }
-    }
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none; }
-      .hamburger { display: flex; }
-    }
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
+      .logout-btn { right: 8px; }
     }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -152,6 +142,10 @@
       font-weight: bold;
     }
     .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none; }
+      .hamburger { display: flex; }
+    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
@@ -249,7 +243,7 @@
       <a href="forum.html" data-i18n="forum">Forum</a>
       <a href="wall.html" data-i18n="wall">Väggen</a>
       <a href="upload.html" data-i18n="upload">Ladda upp</a>
-            <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
       <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
       <a href="store.html" data-i18n="store">Butik</a>
@@ -393,10 +387,10 @@
       addThreadListeners(threads);
     }
     function renderThread(thread) {
-      return `<div class="thread" data-threadid="${thread.id}">
+      return <div class="thread" data-threadid="${thread.id}">
         <div class="thread-header">
           <span>${escapeHTML(thread.title)}</span>
-          ${currentUser && thread.user === currentUser.uid ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>` : ""}
+          ${currentUser && thread.user === currentUser.uid ? <button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button> : ""}
         </div>
         <div class="thread-desc">${escapeHTML(thread.description)}</div>
         <div class="thread-content" id="threadContent-${thread.id}"></div>
@@ -404,7 +398,7 @@
           <textarea rows="2" maxlength="280" placeholder="${t("post_placeholder")}"></textarea>
           <button type="submit">${t("add_post")}</button>
         </form>
-      </div>`;
+      </div>;
     }
     function escapeHTML(str) {
       if (!str) return "";
@@ -414,7 +408,7 @@
       threads.forEach(thread => {
         loadPosts(thread.id);
         // Radera tråd
-        const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
+        const delBtn = document.querySelector(.thread[data-threadid="${thread.id}"] .thread-delete-btn);
         if (delBtn) {
           delBtn.onclick = async function() {
             if (confirm(t("delete_thread_confirm"))) {
@@ -424,7 +418,7 @@
           }
         }
         // Lägg till inlägg
-        const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
+        const postForm = document.querySelector(.thread[data-threadid="${thread.id}"] .add-post-form);
         postForm.onsubmit = async function(e) {
           e.preventDefault();
           if (!currentUser) { alert(t("login_to_comment")); return; }
@@ -442,17 +436,17 @@
     async function loadPosts(threadId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
       const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById(`threadContent-${threadId}`).innerHTML =
+      document.getElementById(threadContent-${threadId}).innerHTML =
         posts.map(post => renderPost(threadId, post)).join("");
       posts.forEach(post => addPostListeners(threadId, post));
     }
     function renderPost(threadId, post) {
       const name = userMap[post.user] || t("guest");
-      return `<div class="post" data-postid="${post.id}">
+      return <div class="post" data-postid="${post.id}">
         <div class="post-header">${t("user")}: ${name}</div>
         <div class="post-content">${escapeHTML(post.text)}</div>
         <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+          <button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
         ).join("")}
         <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
         </div>
@@ -461,11 +455,11 @@
           <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
           <button type="submit">${t("comment")}</button>
         </form>
-      </div>`;
+      </div>;
     }
     function addPostListeners(threadId, post) {
       // Reaktioner på inlägg
-      document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
+      document.querySelectorAll(.post[data-postid="${post.id}"] .emoji-btn).forEach(btn => {
         btn.onclick = async function() {
           if (!currentUser) return alert(t("login_to_react"));
           const emojiKey = this.dataset.emoji;
@@ -482,9 +476,9 @@
       // Ladda och rendera reaktioner
       renderPostReactions(threadId, post.id);
       // Kommentarer (inkl subkommentarer)
-      loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
+      loadComments(threadId, post.id, null, postComments-${threadId}-${post.id});
       // Skicka kommentar
-      document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function(e) {
+      document.querySelector(.post[data-postid="${post.id}"] .add-comment-form).onsubmit = async function(e) {
         e.preventDefault();
         if (!currentUser) { alert(t("login_to_comment")); return; }
         const textarea = this.querySelector("textarea");
@@ -494,17 +488,17 @@
           text, user: currentUser.uid, parent: null, createdAt: new Date()
         });
         textarea.value = "";
-        loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
+        loadComments(threadId, post.id, null, postComments-${threadId}-${post.id});
       };
     }
     async function renderPostReactions(threadId, postId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
       const reactions = q.docs.map(doc => doc.data());
-      if (!reactions.length) { document.getElementById(`postReactions-${threadId}-${postId}`).textContent = ""; return; }
+      if (!reactions.length) { document.getElementById(postReactions-${threadId}-${postId}).textContent = ""; return; }
       let counts = {};
       reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-      document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
-        Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+      document.getElementById(postReactions-${threadId}-${postId}).textContent =
+        Object.entries(counts).map(([k, v]) => ${emojis.find(e => e.key === k)?.emoji || ""} ${v}).join(" ");
     }
     async function loadComments(threadId, postId, parentId, containerId) {
       const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
@@ -515,11 +509,11 @@
     }
     function renderComment(threadId, postId, c) {
       const name = userMap[c.user] || t("guest");
-      return `<div class="comment" data-commentid="${c.id}">
+      return <div class="comment" data-commentid="${c.id}">
         <div class="comment-meta">${name}</div>
         <div class="comment-text">${escapeHTML(c.text)}</div>
         <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+          <button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>
         ).join("")}</div>
         <div class="comment-actions">
           <a href="#" class="reply-comment">${t("comment")}</a>
@@ -529,11 +523,11 @@
           <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
           <button type="submit">${t("comment")}</button>
         </form>
-      </div>`;
+      </div>;
     }
     function addCommentListeners(threadId, postId, c, parentContainerId) {
       // Emoji på kommentar
-      document.querySelectorAll(`.comment[data-commentid="${c.id}"] .emoji-btn`).forEach(btn => {
+      document.querySelectorAll(.comment[data-commentid="${c.id}"] .emoji-btn).forEach(btn => {
         btn.onclick = async function() {
           if (!currentUser) return alert(t("login_to_react"));
           const emojiKey = this.dataset.emoji;
@@ -549,8 +543,8 @@
         };
       });
       // Svara/reply på kommentar
-      const replyBtn = document.querySelector(`.comment[data-commentid="${c.id}"] .reply-comment`);
-      const replyForm = document.querySelector(`.comment[data-commentid="${c.id}"] .add-subcomment-form`);
+      const replyBtn = document.querySelector(.comment[data-commentid="${c.id}"] .reply-comment);
+      const replyForm = document.querySelector(.comment[data-commentid="${c.id}"] .add-subcomment-form);
       replyBtn.onclick = function(e) {
         e.preventDefault();
         replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
@@ -566,10 +560,10 @@
         });
         textarea.value = "";
         replyForm.style.display = "none";
-        loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
+        loadComments(threadId, postId, c.id, subComments-${threadId}-${postId}-${c.id});
       };
       // Ladda subkommentarer
-      loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
+      loadComments(threadId, postId, c.id, subComments-${threadId}-${postId}-${c.id});
     }
     document.getElementById("threadForm").onsubmit = async function(e) {
       e.preventDefault();
