@@ -86,7 +86,7 @@
     @media (max-width: 700px) {
       .side-banner { display: none; }
     }
-    /* --- NAVBAR --- */
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -97,9 +97,9 @@
       z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
+      justify-content: space-between;
       align-items: center;
       transition: top 0.3s;
-      justify-content: center;
     }
     .nav-center {
       flex: 1;
@@ -133,10 +133,8 @@
       color: #000;
       box-shadow: 0 0 10px #ffffff;
     }
+    /* Logga ut-knappen desktop */
     .logout-btn {
-      position: absolute;
-      top: 12px;
-      right: 38px;
       background: #000;
       color: #00ffcc;
       border: 2px solid #00ffcc;
@@ -149,16 +147,59 @@
       transition: 0.18s;
       cursor: pointer;
       opacity: 0.98;
-      margin-right: 0;
+      margin-right: 38px;
       margin-left: 0;
-      z-index: 1500;
       display: block;
     }
-    @media (max-width: 950px) {
-      .nav-links { gap: 14px; }
-      .logout-btn { right: 8px; }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none; }
+      .hamburger { display: flex; }
+      .nav-mobile {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        left: 0; right: 0;
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+      }
+      .nav-mobile a, .nav-mobile button {
+        padding: 18px 0;
+        font-size: 1.15em;
+        width: 100vw;
+        border-radius: 0;
+        text-align: center;
+        border-bottom: 1px solid #3fffd966;
+        background: none;
+        color: #00ffcc;
+        font-weight: bold;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        display: block;
+      }
+      .nav-mobile button {
+        background: #000;
+        color: #00ffcc;
+        border: none;
+        border-bottom: 1px solid #3fffd966;
+        font-family: 'Courier New', monospace;
+        font-size: 1.15em;
+        font-weight: bold;
+        text-align: center;
+        width: 100vw;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+        cursor: pointer;
+        padding: 18px 0;
+      }
+      .nav-mobile { display: none; }
+      .nav-mobile.show { display: flex; }
     }
-    /* Hamburger och mobilmeny */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -174,37 +215,6 @@
       margin: 4px 0;
       border-radius: 2px;
       transition: 0.3s;
-    }
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      position: fixed;
-      left: 0; right: 0;
-      top: 58px;
-      background: #181f26;
-      box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1101;
-      padding-bottom: 20px;
-      gap: 0;
-    }
-    .nav-mobile.show { display: flex; }
-    .nav-mobile a, .nav-mobile button {
-      padding: 18px 10px;
-      font-size: 1.15em;
-      width: 100vw;
-      border-radius: 0;
-      text-align: center;
-      border-bottom: 1px solid #3fffd966;
-      background: none;
-      color: #00ffcc;
-      font-weight: bold;
-      border: none;
-      box-shadow: none;
-    }
-    .nav-mobile button { margin: 0; }
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none; }
-      .hamburger { display: flex; }
     }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
@@ -343,7 +353,7 @@
       <a href="friends.html">Vänner</a>
       <a href="ghostglow.html">Ghost&Glow</a>
       <a href="store.html">Butik</a>
-      <button id="logoutMobileBtn">Logga ut</button>
+      <button id="logoutMobileBtn" class="mobile-logout-btn">Logga ut</button>
     </div>
   </nav>
   <!-- NAVBAR END -->
@@ -431,9 +441,10 @@
     hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    // Stäng meny även när logga ut på mobil trycks
-    document.getElementById("logoutMobileBtn").addEventListener("click", function() {
-      navMobile.classList.remove('show');
+    navMobile.querySelectorAll('a, button').forEach(link => {
+      link.addEventListener('click', () => {
+        navMobile.classList.remove('show');
+      });
     });
 
     // Visa beskrivning bara för allt utom inlägg
