@@ -6,16 +6,82 @@
   <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
-    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
-    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
-    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
-    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
-    .side-banner.left { left: 0; } .side-banner.right { right: 0; }
-    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
-    @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
+    /* === GRUNDLÄGGANDE STYLES === */
+    body {
+      background: #0a0a0a;
+      color: #e0ffff;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 85px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 170px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
+    }
+    .side-banner {
+      position: fixed;
+      top: 87px;
+      bottom: 0;
+      width: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 150px;
+      height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+      min-height: 200px;
+    }
+    .side-banner.left { left: 0; }
+    .side-banner.right { right: 0; }
+    @media (max-width: 1100px) {
+      .side-banner, .glow-left, .glow-right { width: 85px; }
+      .side-banner .banner-inner { width: 75px; }
+    }
+    @media (max-width: 900px) {
+      .side-banner, .glow-left, .glow-right { display: none; }
+    }
+    /* === NAVBAR DESKTOP === */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -80,13 +146,7 @@
       z-index: 1500;
       display: block;
     }
-    @media (max-width: 950px) {
-      .nav-links { gap: 14px; }
-    }
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex; }
-    }
+    /* === HAMBURGER OCH NAV-MOBILE === */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -103,6 +163,7 @@
       border-radius: 2px;
       transition: 0.3s;
     }
+    /* === MOBILE-MENY VISNING === */
     .nav-mobile {
       display: none;
       flex-direction: column;
@@ -116,7 +177,7 @@
       gap: 0;
       align-items: center;
     }
-    .nav-mobile.show { display: flex; }
+    .nav-mobile.show { display: flex !important; }
     .nav-mobile a {
       padding: 18px 10px;
       font-size: 1.15em;
@@ -141,11 +202,44 @@
       font-weight: bold;
     }
     .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    /* === RESPONSIVITET: VISA RÄTT MENY === */
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+      nav.navbar { justify-content: flex-start; }
+    }
+    @media (max-width: 900px) {
+      .nav-mobile {
+        display: none;
+      }
+      .nav-mobile.show {
+        display: flex !important;
+      }
+    }
+    @media (min-width: 901px) {
+      .nav-mobile {
+        display: none !important;
+      }
+    }
+    @media (max-width: 700px) {
+      .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; }
+    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
     }
-    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
+    /* === WALL, FILTER, POSTS === */
+    .wall-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 30px 20px 22px 20px;
+      margin: 36px auto 32px auto;
+      max-width: 650px;
+      background-color: rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 15px #00ffcc33;
+      position: relative;
+      z-index: 2;
+    }
     .wall-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
     .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
@@ -173,8 +267,6 @@
     .reply-link { color: #00ffcc; cursor: pointer; text-decoration: underline; font-size: 0.95em;}
     .comment-children { margin-left: 22px; border-left: 1.2px solid #273344; padding-left: 12px;}
     .reply-box { margin-top: 7px; }
-    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -213,7 +305,7 @@
       </a>
     </div>
   </div>
-  <!-- NAVBAR START -->
+  <!-- === NAVBAR DESKTOP === -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -230,19 +322,19 @@
       </ul>
     </div>
     <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-    <!-- Mobile Menu (hidden by default) -->
-    <div class="nav-mobile" id="navMobile">
-      <a href="forum.html" data-i18n="forum">Forum</a>
-      <a href="wall.html" data-i18n="wall">Väggen</a>
-      <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
-      <a href="friends.html" data-i18n="friends">Vänner</a>
-      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-      <a href="store.html" data-i18n="store">Butik</a>
-      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-    </div>
   </nav>
-  <!-- NAVBAR END -->
+  <!-- === MOBILMENY - MÅSTE LIGGA UTANFÖR NAV!!! === -->
+  <div class="nav-mobile" id="navMobile">
+    <a href="forum.html" data-i18n="forum">Forum</a>
+    <a href="wall.html" data-i18n="wall">Väggen</a>
+    <a href="upload.html" data-i18n="upload">Ladda upp</a>
+    <a href="profile.html" data-i18n="profile">Profil</a>
+    <a href="friends.html" data-i18n="friends">Vänner</a>
+    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+    <a href="store.html" data-i18n="store">Butik</a>
+    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+  </div>
+  <!-- === SLUT PÅ MENY === -->
 
   <div class="wall-box">
     <div class="wall-title" data-i18n="wall_title">Väggen</div>
@@ -260,7 +352,7 @@
     <div id="postList" class="post-list"></div>
   </div>
   <script>
-    // Banner rotation
+    // === REKLAMBANNERS ROTATION ===
     const banners = [
       { left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }},
       { left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
@@ -273,7 +365,7 @@
     }
     updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
 
-    // Hamburger-meny
+    // === MOBIL NAV/HAMBURGER ===
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMobile = document.getElementById('navMobile');
     hamburgerBtn.addEventListener('click', function () {
@@ -288,7 +380,7 @@
       doLogout();
     });
 
-    // NAVBAR HIDE VID SCROLL PÅ MOBIL
+    // === GÖM/SHOW NAVBAR VID MOBILSCROLL ===
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
@@ -298,17 +390,17 @@
       });
     }
 
-    // --- FILTER KNAPPAR: Glow och aktiv färg + render
+    // === FILTER KNAPPAR: Glow och aktiv färg (OBS: renderPosts körs nedan!) ===
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         currentFilter = this.getAttribute("data-type");
-        renderPosts(currentFilter, searchTerm); // <-- Uppdatera posten direkt!
+        renderPosts(currentFilter, searchTerm);
       });
     });
 
-    // --- TRANSLATIONS
+    // === TRANSLATIONS
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -349,20 +441,18 @@
     }
     applyTranslations();
 
-    // --- LOGOUT FUNCTION
+    // === LOGOUT FUNCTION
     function doLogout() {
       auth.signOut().then(() => { window.location.href = "login.html"; });
     }
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
-    // --- GLOBALA VARIABLER ---
+    // === GLOBALA VARIABLER ===
     let currentUser = null;
     let userMap = {};
     let allPosts = [];
     let searchTerm = "";
     let currentFilter = "all";
-
-    // Emojis-array (lägg in din)
     const emojis = [
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
@@ -377,6 +467,12 @@
       { emoji: "👎", key: "thumbsdown" }
     ];
 
+    // === FIRESTORE-UTILS ===
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+    }
+
     // Hämta användare
     async function fetchUsers() {
       const q = firebase.firestore().collection("profiles");
@@ -384,40 +480,39 @@
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
 
-    // --- LADDA OCH VISA WALLPOSTER ---
-    const filterRow = document.getElementById("filterRow");
-    const postList = document.getElementById("postList");
-    const wallSearchInput = document.getElementById("wallSearchInput");
-
     // Ladda wall
     async function loadWallPosts() {
       postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
       await fetchUsers();
       const q = firebase.firestore().collection("wall").orderBy("createdAt", "desc");
       const snapshot = await q.get();
-      // Visa bara inlägg på rätt språk
+      const lang = localStorage.lang === "en" ? "en" : "sv";
       allPosts = snapshot.docs
         .map(doc => ({ ...doc.data(), id: doc.id }))
-        .filter(post => {
-          const lang = localStorage.lang === "en" ? "en" : "sv";
-          return post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang;
-        });
+        .filter(post =>
+          post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang
+        );
       renderPosts(currentFilter, searchTerm);
     }
 
-    // --- FILTRERING OCH SÖK ---
+    // Filter-knappar och sök
+    const filterRow = document.getElementById("filterRow");
+    const postList = document.getElementById("postList");
+    const wallSearchInput = document.getElementById("wallSearchInput");
+    filterRow.addEventListener("click", (e) => {
+      if (e.target.classList.contains("filter-btn")) {
+        filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+        e.target.classList.add("active");
+        currentFilter = e.target.getAttribute("data-type");
+        renderPosts(currentFilter, searchTerm);
+      }
+    });
     wallSearchInput.addEventListener("input", function () {
       searchTerm = this.value.toLowerCase().trim();
       renderPosts(currentFilter, searchTerm);
     });
 
-    // --- ESCAPE HTML ---
-    function escapeHTML(str) {
-      if (!str) return "";
-      return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
-    }
-
-    // --- FORMAT POST CONTENT ---
+    // Rendera poster (exakt som innan, integrera din kod)
     function formatPostContent(post) {
       switch (post.type) {
         case "text":
@@ -433,8 +528,6 @@
         default: return "";
       }
     }
-
-    // --- RENDER POSTS ---
     async function renderPosts(type, search) {
       let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
       if (search && search.length > 0) {
@@ -449,21 +542,210 @@
           );
         });
       }
-      if (!posts.length) { postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`; return; }
+      if (!posts.length) {
+        postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
+        return;
+      }
       postList.innerHTML = "";
       for (let post of posts) {
+        const reactions = await loadReactions(post.id, "reactions");
+        const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
         let name = userMap[post.user] || t("guest");
-        postList.innerHTML += `
-          <div class="post" data-postid="${post.id}">
+        const comments = await loadThreadedComments(post.id);
+        postList.innerHTML +=
+          `<div class="post" data-postid="${post.id}">
             <div class="post-header">${t("user")}: ${name}</div>
             ${formatPostContent(post)}
+            <div class="emoji-row">${emojis.map(e =>
+              `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+            ).join("")}
+            <span class="reactions-view">${emojiSummary(reactions)}</span>
+            </div>
             <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
-          </div>
-        `;
+            <div class="comments-block">
+              ${renderThreadedComments(post.id, comments, null, 0)}
+              ${currentUser ?
+                `<form class="add-comment-form" data-postid="${post.id}" data-parentid="">
+                  <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+                  <button type="submit">${t("comment")}</button>
+                </form>` :
+                `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
+            </div>
+          </div>`;
       }
+      addEventListeners();
     }
 
-    // Inloggning
+    // Reaktionssammanställning
+    async function loadReactions(postId, subcol, commentId) {
+      let path;
+      if (commentId) {
+        path = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions");
+      } else {
+        path = firebase.firestore().collection("wall").doc(postId).collection(subcol);
+      }
+      const snap = await path.get();
+      return snap.docs.map(doc => doc.data());
+    }
+    function emojiSummary(reactions) {
+      if (!reactions || reactions.length === 0) return "";
+      let counts = {};
+      reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+      return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+    }
+
+    // --- LADDA TRÅDADE KOMMENTARER ---
+    async function loadThreadedComments(postId) {
+      const q = firebase.firestore().collection("wall").doc(postId).collection("comments").orderBy("createdAt", "asc");
+      const snap = await q.get();
+      const all = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      let tree = [], lookup = {};
+      all.forEach(c => lookup[c.id] = { ...c, children: [] });
+      all.forEach(c => {
+        if (c.parentId) {
+          if (lookup[c.parentId]) lookup[c.parentId].children.push(lookup[c.id]);
+        } else {
+          tree.push(lookup[c.id]);
+        }
+      });
+      return tree;
+    }
+
+    // --- RENDERA KOMMENTARSTRÄD ---
+    function renderThreadedComments(postId, comments, parentId, level) {
+      if (!comments) return "";
+      return comments.map(c =>
+        `<div class="comment" data-commentid="${c.id}" data-postid="${postId}">
+          <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+          <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
+          <div class="emoji-row">${emojis.map(e =>
+            `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+          ).join("")}
+          <span class="reactions-view" data-cid="${c.id}"></span>
+          </div>
+          <div class="comment-actions">
+            <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
+            ${currentUser && currentUser.uid === c.userId ?
+              `<a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>`
+             : ""}
+          </div>
+          <div class="reply-box" id="replybox-${c.id}" style="display:none;"></div>
+          ${c.children && c.children.length ? `<div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div>` : ""}
+        </div>`
+      ).join("");
+    }
+
+    // --- EVENTLISTENERS ---
+    function addEventListeners() {
+      // Emoji på post
+      document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
+        btn.onclick = async function () {
+          if (!currentUser) return alert(t("login_to_react"));
+          const postId = this.closest(".post").dataset.postid;
+          const emojiKey = this.dataset.emoji;
+          const ref = firebase.firestore().collection("wall").doc(postId).collection("reactions").doc(currentUser.uid);
+          const snap = await ref.get();
+          if (snap.exists && snap.data().emoji === emojiKey) {
+            await ref.delete();
+          } else {
+            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          }
+          loadWallPosts();
+        };
+      });
+      // Emoji på kommentar
+      document.querySelectorAll(".comment .emoji-row .emoji-btn").forEach(btn => {
+        btn.onclick = async function () {
+          if (!currentUser) return alert(t("login_to_react"));
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          const emojiKey = this.dataset.emoji;
+          const ref = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions").doc(currentUser.uid);
+          const snap = await ref.get();
+          if (snap.exists && snap.data().emoji === emojiKey) {
+            await ref.delete();
+          } else {
+            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          }
+          loadWallPosts();
+        };
+      });
+      // Svara på kommentar
+      document.querySelectorAll(".reply-link").forEach(link => {
+        link.onclick = function () {
+          const cid = this.getAttribute("data-replyid");
+          document.querySelectorAll(".reply-box").forEach(b => b.style.display = "none");
+          const box = document.getElementById(`replybox-${cid}`);
+          if (box) {
+            box.innerHTML =
+              `<form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
+                <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+                <button type="submit">${t("comment")}</button>
+              </form>`;
+            box.style.display = "block";
+            box.querySelector("textarea").focus();
+            addReplyFormListener(box.querySelector("form"));
+          }
+        };
+      });
+      // Ny kommentar-form på post
+      document.querySelectorAll(".add-comment-form").forEach(form => addReplyFormListener(form));
+      // Edit/radera egna kommentarer
+      document.querySelectorAll(".edit-comment").forEach(link => {
+        link.onclick = function(e) {
+          e.preventDefault();
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          const textDiv = commentDiv.querySelector(".comment-text");
+          const oldText = textDiv.textContent;
+          textDiv.innerHTML = `<input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>`;
+          textDiv.querySelector("button").onclick = async function() {
+            const newText = textDiv.querySelector("input").value.trim();
+            if (newText.length === 0) return alert(t("comment_empty"));
+            await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).update({ text: newText });
+            loadWallPosts();
+          };
+        };
+      });
+      document.querySelectorAll(".delete-comment").forEach(link => {
+        link.onclick = async function(e) {
+          e.preventDefault();
+          const commentDiv = this.closest(".comment");
+          const postId = commentDiv.dataset.postid;
+          const commentId = commentDiv.dataset.commentid;
+          if (confirm(t("delete_confirm"))) {
+            await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).delete();
+            loadWallPosts();
+          }
+        };
+      });
+    }
+
+    // --- NY KOMMENTAR / SVAR ---
+    function addReplyFormListener(form) {
+      if (!form) return;
+      form.onsubmit = async function (e) {
+        e.preventDefault();
+        const textarea = this.querySelector("textarea");
+        const text = textarea.value.trim();
+        if (text.length === 0) return alert(t("comment_empty"));
+        if (text.length > 200) return alert(t("max_200"));
+        const postId = this.dataset.postid;
+        const parentId = this.dataset.parentid || null;
+        await firebase.firestore().collection("wall").doc(postId).collection("comments").add({
+          [`text_${localStorage.lang}`]: text,
+          userId: currentUser.uid,
+          createdAt: new Date(),
+          parentId: parentId
+        });
+        textarea.value = "";
+        loadWallPosts();
+      };
+    }
+
+    // Inloggning & posts
     firebase.auth().onAuthStateChanged(user => {
       currentUser = user;
       loadWallPosts();
