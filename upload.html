@@ -84,6 +84,8 @@
     /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 0;
       position: fixed;
       width: 100%;
       top: 0;
@@ -94,16 +96,7 @@
       align-items: center;
       transition: top 0.3s;
       justify-content: center;
-      height: 61px;
-      border-bottom: none;
-    }
-    .navbar-border {
-      position: fixed;
-      left: 0; right: 0;
-      top: 61px;
-      height: 2px;
-      background: #00ffcc;
-      z-index: 998;
+      min-height: 60px;
     }
     .nav-center {
       flex: 1;
@@ -158,57 +151,55 @@
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
     }
-    /* ===== HAMBURGER MENY ===== */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      z-index: 2001;
-      background: none;
-      border: none;
-      width: 54px;
-      height: 54px;
-      outline: none;
-      margin: 0 auto;
-      position: fixed;
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-    }
-    .hamburger span {
-      width: 29px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 4px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-      display: block;
-    }
+
+    /* ============ HAMBURGARMENY MOBIL ============ */
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
       nav.navbar {
         justify-content: center !important;
-        height: 61px;
+        padding: 0;
+        min-height: 0;
+        height: 55px;
       }
       .hamburger {
         display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 55px;
+        z-index: 2002;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 32px;
+        height: 4px;
+        background: #00ffcc;
+        margin: 5px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+        display: block;
       }
       .nav-mobile {
         display: none;
         flex-direction: column;
         align-items: center;
-        position: fixed;
+        position: absolute;
+        top: 55px;
         left: 50%;
-        top: 61px;
         transform: translateX(-50%);
-        min-width: 240px;
+        min-width: 220px;
         width: 92vw;
         max-width: 400px;
         background: #181f26;
         box-shadow: 0 4px 28px #00ffcc77;
-        z-index: 1999;
+        z-index: 1201;
         padding-bottom: 20px;
         border-radius: 0 0 16px 16px;
         animation: dropin 0.16s;
@@ -251,7 +242,7 @@
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
-      .nav-mobile { min-width: 170px; width: 98vw; }
+      .nav-mobile { min-width: 160px; width: 98vw; }
     }
 
     /* --- UPLOAD BOX --- */
@@ -363,7 +354,7 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0" style="display:none;">
       <span></span><span></span><span></span>
     </div>
     <div class="nav-center">
@@ -389,7 +380,6 @@
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
-  <div class="navbar-border"></div>
   <!-- NAVBAR END -->
 
   <div class="upload-box" id="uploadBox">
@@ -441,7 +431,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION (vänster och höger)
+    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -470,16 +460,38 @@
     }, 6000);
 
     // --- Hamburgermeny logik ---
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMobile = document.getElementById('navMobile');
-    hamburgerBtn.addEventListener('click', function() {
-      navMobile.classList.toggle('show');
-    });
-    // Stäng meny även när logga ut på mobil trycks
-    document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
-      e.preventDefault();
-      navMobile.classList.remove('show');
-      doLogout();
+    function updateMenuMode() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navCenter = document.querySelector('.nav-center');
+      const logoutBtn = document.getElementById('logoutDesktopBtn');
+      const navMobile = document.getElementById('navMobile');
+
+      if (window.innerWidth <= 900) {
+        hamburgerBtn.style.display = "flex";
+        navCenter.style.display = "none";
+        logoutBtn.style.display = "none";
+      } else {
+        hamburgerBtn.style.display = "none";
+        navCenter.style.display = "flex";
+        logoutBtn.style.display = "block";
+        navMobile.classList.remove('show');
+      }
+    }
+    window.addEventListener("resize", updateMenuMode);
+    document.addEventListener("DOMContentLoaded", function() {
+      updateMenuMode();
+
+      // Hamburgermenyn togglas
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      hamburgerBtn.onclick = function() {
+        navMobile.classList.toggle('show');
+      };
+      document.getElementById("logoutMobileBtn").onclick = function(e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      };
     });
 
     // Visa beskrivning bara för allt utom inlägg
@@ -503,11 +515,10 @@
     });
 
     // ---------- SPRÅKVÄXLING (SV/EN) ----------
-    document.addEventListener('DOMContentLoaded', function () {
+    function setLanguage() {
       const lang = localStorage.language || 'sv';
-      // Svenska -> original
       if (lang === 'en') {
-        // Meny desktop
+        // Meny Desktop
         document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
         document.querySelectorAll('.nav-links a')[1].textContent = 'Wall';
         document.querySelectorAll('.nav-links a')[2].textContent = 'Upload';
@@ -516,7 +527,7 @@
         document.querySelectorAll('.nav-links a')[5].textContent = 'Ghost&Glow';
         document.querySelectorAll('.nav-links a')[6].textContent = 'Store';
         document.getElementById('logoutDesktopBtn').textContent = 'Log out';
-        // Mobil
+        // Meny Mobil
         document.querySelectorAll('#navMobile a')[0].textContent = 'Forum';
         document.querySelectorAll('#navMobile a')[1].textContent = 'Wall';
         document.querySelectorAll('#navMobile a')[2].textContent = 'Upload';
@@ -544,8 +555,50 @@
           `<input type="checkbox" id="temporary" />
            Make this a temporary post (disappears in 24h)`;
         document.querySelector('button[type="submit"]').textContent = 'Upload';
+      } else {
+        // SVENSKA - säkerställ att alla element återställs på svenska (även om man byter språk tillbaka)
+        document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
+        document.querySelectorAll('.nav-links a')[1].textContent = 'Väggen';
+        document.querySelectorAll('.nav-links a')[2].textContent = 'Ladda upp';
+        document.querySelectorAll('.nav-links a')[3].textContent = 'Profil';
+        document.querySelectorAll('.nav-links a')[4].textContent = 'Vänner';
+        document.querySelectorAll('.nav-links a')[5].textContent = 'Ghost&Glow';
+        document.querySelectorAll('.nav-links a')[6].textContent = 'Butik';
+        document.getElementById('logoutDesktopBtn').textContent = 'Logga ut';
+        // Meny Mobil
+        document.querySelectorAll('#navMobile a')[0].textContent = 'Forum';
+        document.querySelectorAll('#navMobile a')[1].textContent = 'Väggen';
+        document.querySelectorAll('#navMobile a')[2].textContent = 'Ladda upp';
+        document.querySelectorAll('#navMobile a')[3].textContent = 'Profil';
+        document.querySelectorAll('#navMobile a')[4].textContent = 'Vänner';
+        document.querySelectorAll('#navMobile a')[5].textContent = 'Ghost&Glow';
+        document.querySelectorAll('#navMobile a')[6].textContent = 'Butik';
+        document.querySelector('#navMobile .logout-link-mobile').textContent = 'Logga ut';
+        // Rubriker och fält
+        document.querySelector('.upload-title').textContent = 'Ladda upp innehåll';
+        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Inlägg';
+        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Bild';
+        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Klipp';
+        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Ljud';
+        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Röst';
+        document.querySelector('label[for="text"]').textContent = 'Skriv ett inlägg:';
+        document.querySelector('textarea#text').placeholder = 'Vad vill du dela med dig av?';
+        document.querySelector('label[for="image"]').textContent = 'Ladda upp en bild (max 5 MB):';
+        document.querySelector('label[for="video"]').textContent = 'Ladda upp ett klipp (max 30 MB):';
+        document.querySelector('label[for="audio"]').textContent = 'Ladda upp ljudfil (max 5 MB):';
+        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Mikrofoninspelning (max 2 MB):';
+        document.querySelector('.desc-label').textContent = 'Beskrivning (valfri):';
+        document.querySelector('#desc').placeholder = 'Beskriv innehållet...';
+        document.querySelector('label[for="temporary"]').innerHTML =
+          `<input type="checkbox" id="temporary" />
+           Gör detta till ett tillfälligt inlägg (försvinner om 24h)`;
+        document.querySelector('button[type="submit"]').textContent = 'Ladda upp';
       }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      setLanguage();
     });
+
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
