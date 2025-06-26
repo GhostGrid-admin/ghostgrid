@@ -151,15 +151,21 @@
     }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex !important; }
-      nav.navbar { justify-content: flex-start; }
+      nav.navbar {
+        justify-content: center !important;
+      }
+      .hamburger {
+        display: flex !important;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
     .hamburger {
       display: none;
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
-      margin-left: 18px;
       z-index: 1110;
     }
     .hamburger span {
@@ -183,7 +189,7 @@
       gap: 0;
       align-items: center;
     }
-    .nav-mobile.show { display: flex !important; }
+    .nav-mobile.show { display: flex; }
     .nav-mobile a, .nav-mobile .logout-link-mobile {
       padding: 18px 10px;
       font-size: 1.15em;
@@ -199,6 +205,10 @@
       display: block;
       margin: 0 auto;
       font-family: inherit;
+    }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
     }
     .nav-mobile a:last-child {
       margin-top: 8px;
@@ -235,17 +245,17 @@
       font-weight: bold;
       letter-spacing: 0.04em;
     }
-
-    /* --- UPLOAD SWITCHER FIX --- */
-    .upload-switcher { 
-      display: flex !important; 
+    .upload-switcher {
+      display: flex;
       gap: 10px;
-      justify-content: center; 
+      justify-content: center;
+      margin-bottom: 22px;
       flex-wrap: wrap;
       width: 100%;
-      margin-bottom: 22px;
+      min-width: 0;
+      align-items: center;
+      transition: none;
     }
-
     .switch-btn {
       background: #111;
       color: #80ffcc;
@@ -256,6 +266,8 @@
       cursor: pointer;
       transition: 0.18s;
       font-family: 'Courier New', monospace;
+      min-width: 110px;
+      margin: 0;
     }
     .switch-btn.active,
     .switch-btn:hover {
@@ -297,14 +309,12 @@
     .upload-section.active { display: block; }
     .desc-label, .desc-field { display: none; }
     .show-desc .desc-label, .show-desc .desc-field { display: block; }
-    @media (max-width: 700px) {
-      .upload-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px; }
-    }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
+  <!-- Vänster sidbanner -->
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
@@ -312,6 +322,7 @@
       </a>
     </div>
   </div>
+  <!-- Höger sidbanner -->
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
@@ -432,28 +443,12 @@
     hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
-    });
+    // Stäng meny även när logga ut på mobil trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
       doLogout();
     });
-
-    // NAVBAR HIDE VID SCROLL PÅ MOBIL
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
-        }
-        lastScrollY = window.scrollY;
-      });
-    }
 
     // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
