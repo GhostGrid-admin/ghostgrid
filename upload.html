@@ -324,6 +324,27 @@
     .desc-label, .desc-field { display: none; }
     .show-desc .desc-label, .show-desc .desc-field { display: block; }
   </style>
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+  <script>
+    // Din firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.appspot.com",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
+      measurementId: "G-B0WCKJCNT9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+  </script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -412,10 +433,56 @@
     </form>
   </div>
   <script>
-    // Tvinga alltid fram body efter 1 sekund, oavsett!
-    setTimeout(function() {
+    // --- Språk och menyhantering ---
+    const translations = {
+      sv: [
+        "Forum", "Väggen", "Ladda upp", "Profil", "Vänner", "Ghost&Glow", "Butik",
+        "Logga ut",
+        "Ladda upp innehåll",
+        "📝 Inlägg", "🖼️ Bild", "🎬 Klipp", "🎵 Ljud", "🎤 Röst",
+        "Skriv ett inlägg:", "Vad vill du dela med dig av?",
+        "Ladda upp en bild (max 5 MB):", "Ladda upp ett klipp (max 30 MB):", "Ladda upp ljudfil (max 5 MB):",
+        "Mikrofoninspelning (max 2 MB):", "Beskrivning (valfri):", "Beskriv innehållet...",
+        "Gör detta till ett tillfälligt inlägg (försvinner om 24h)", "Ladda upp"
+      ],
+      en: [
+        "Forum", "Wall", "Upload", "Profile", "Friends", "Ghost&Glow", "Store",
+        "Log out",
+        "Upload content",
+        "📝 Post", "🖼️ Image", "🎬 Clip", "🎵 Audio", "🎤 Voice",
+        "Write a post:", "What do you want to share?",
+        "Upload an image (max 5 MB):", "Upload a clip (max 30 MB):", "Upload an audio file (max 5 MB):",
+        "Microphone recording (max 2 MB):", "Description (optional):", "Describe the content...",
+        "Make this a temporary post (disappears in 24h)", "Upload"
+      ]
+    };
+    function setLanguage() {
+      const lang = (localStorage.lang === "en") ? "en" : "sv";
+      const t = translations[lang];
+      document.querySelectorAll('.nav-links a').forEach((a, i) => a.textContent = t[i]);
+      document.querySelectorAll('#navMobile a:not(.logout-link-mobile)').forEach((a, i) => a.textContent = t[i]);
+      document.getElementById('logoutDesktopBtn').textContent = t[7];
+      document.getElementById('logoutMobileBtn').textContent = t[7];
+      document.querySelector('.upload-title').textContent = t[8];
+      document.querySelector('.switch-btn[data-section="text"]').textContent = t[9];
+      document.querySelector('.switch-btn[data-section="image"]').textContent = t[10];
+      document.querySelector('.switch-btn[data-section="video"]').textContent = t[11];
+      document.querySelector('.switch-btn[data-section="audio"]').textContent = t[12];
+      document.querySelector('.switch-btn[data-section="mic"]').textContent = t[13];
+      document.querySelector('label[for="text"]').textContent = t[14];
+      document.querySelector('textarea#text').placeholder = t[15];
+      document.querySelector('label[for="image"]').textContent = t[16];
+      document.querySelector('label[for="video"]').textContent = t[17];
+      document.querySelector('label[for="audio"]').textContent = t[18];
+      document.querySelector('.upload-section[data-section="mic"] label').textContent = t[19];
+      document.querySelector('.desc-label').textContent = t[20];
+      document.querySelector('#desc').placeholder = t[21];
+      document.querySelector('label[for="temporary"]').innerHTML =
+        `<input type="checkbox" id="temporary" /> ${t[22]}`;
+      document.querySelector('button[type="submit"]').textContent = t[23];
+      document.title = "GhostGrid – " + t[2];
       document.body.classList.add('ready');
-    }, 1000);
+    }
 
     function updateMenuMode() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -435,73 +502,18 @@
       }
     }
 
-    function setLanguage() {
-      const lang = localStorage.language || 'sv';
-      // Desktop
-      const navLinks = document.querySelectorAll('.nav-links a');
-      // Mobil
-      const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
-      const logoutMobileBtn = document.querySelector('#navMobile .logout-link-mobile');
-      if (lang === 'en') {
-        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        document.getElementById('logoutDesktopBtn').textContent = 'Log out';
-        logoutMobileBtn.textContent = 'Log out';
-        document.querySelector('.upload-title').textContent = 'Upload content';
-        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
-        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
-        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Clip';
-        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Audio';
-        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Voice';
-        document.querySelector('label[for="text"]').textContent = 'Write a post:';
-        document.querySelector('textarea#text').placeholder = 'What do you want to share?';
-        document.querySelector('label[for="image"]').textContent = 'Upload an image (max 5 MB):';
-        document.querySelector('label[for="video"]').textContent = 'Upload a clip (max 30 MB):';
-        document.querySelector('label[for="audio"]').textContent = 'Upload an audio file (max 5 MB):';
-        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Microphone recording (max 2 MB):';
-        document.querySelector('.desc-label').textContent = 'Description (optional):';
-        document.querySelector('#desc').placeholder = 'Describe the content...';
-        document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`;
-        document.querySelector('button[type="submit"]').textContent = 'Upload';
-      } else {
-        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        document.getElementById('logoutDesktopBtn').textContent = 'Logga ut';
-        logoutMobileBtn.textContent = 'Logga ut';
-        document.querySelector('.upload-title').textContent = 'Ladda upp innehåll';
-        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Inlägg';
-        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Bild';
-        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Klipp';
-        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Ljud';
-        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Röst';
-        document.querySelector('label[for="text"]').textContent = 'Skriv ett inlägg:';
-        document.querySelector('textarea#text').placeholder = 'Vad vill du dela med dig av?';
-        document.querySelector('label[for="image"]').textContent = 'Ladda upp en bild (max 5 MB):';
-        document.querySelector('label[for="video"]').textContent = 'Ladda upp ett klipp (max 30 MB):';
-        document.querySelector('label[for="audio"]').textContent = 'Ladda upp ljudfil (max 5 MB):';
-        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Mikrofoninspelning (max 2 MB):';
-        document.querySelector('.desc-label').textContent = 'Beskrivning (valfri):';
-        document.querySelector('#desc').placeholder = 'Beskriv innehållet...';
-        document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" /> Gör detta till ett tillfälligt inlägg (försvinner om 24h)`;
-        document.querySelector('button[type="submit"]').textContent = 'Ladda upp';
-      }
-      // Sidan visas när språket är satt!
-      document.body.classList.add('ready');
-    }
-
     document.addEventListener("DOMContentLoaded", function() {
       updateMenuMode();
       setLanguage();
-      // Hamburgermenyn togglas
+
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
       hamburgerBtn.onclick = function() {
         navMobile.classList.toggle('show');
       };
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+      });
       document.getElementById("logoutMobileBtn").onclick = function(e) {
         e.preventDefault();
         navMobile.classList.remove('show');
@@ -511,7 +523,7 @@
     });
     window.addEventListener("resize", updateMenuMode);
 
-    // Banner-rotation (vänster och höger)
+    // Banner rotation
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -539,7 +551,7 @@
       updateBanners();
     }, 6000);
 
-    // Visa beskrivning bara för allt utom inlägg
+    // --- Switcher ---
     document.querySelectorAll('.switch-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
@@ -558,153 +570,140 @@
       });
     });
 
-    // Logga ut-funktion till båda knapparna
-    function doLogout() {
-      if (typeof signOut !== "undefined" && typeof auth !== "undefined") {
-        signOut(auth).then(() => {
-          window.location.href = "login.html";
-        });
-      } else {
-        window.location.href = "login.html";
-      }
-    }
-  </script>
-  <script type="module">
-    import { auth, db, storage } from "./scripts/firebase-init.js";
-    import {
-      collection, addDoc, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import {
-      ref, uploadBytes, getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-
-    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-    const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
-    const MAX_AUDIO_SIZE = 5 * 1024 * 1024;
-    const MAX_MIC_SIZE = 2 * 1024 * 1024;
-
-    const uploadForm = document.getElementById("uploadForm");
-    const spinner = document.getElementById("spinner");
-    const uploadBox = document.getElementById("uploadBox");
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        uploadBox.innerHTML =
-          `<div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
-            Du måste vara inloggad för att ladda upp innehåll.<br><br>
-            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
-          </div>`;
-      }
-    });
-
-    uploadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!auth.currentUser) {
-        alert("Du måste vara inloggad för att ladda upp.");
-        return;
-      }
-      spinner.style.display = "block";
-      const activeSection = document.querySelector('.switch-btn.active').getAttribute('data-section');
-      let postData = {
-        createdAt: serverTimestamp(),
-        user: auth.currentUser.uid,
-        type: activeSection,
-        temporary: document.getElementById("temporary").checked,
-      };
-      let filesToUpload = [];
-
-      if (activeSection === "text") {
-        postData.text = document.getElementById("text").value;
-      }
-      if (["image", "video", "audio", "mic"].includes(activeSection)) {
-        postData.desc = document.getElementById("desc").value;
-      }
-      if (activeSection === "image") {
-        const img = document.getElementById("image").files[0];
-        if (img && img.size > MAX_IMAGE_SIZE) {
-          spinner.style.display = "none";
-          return alert("Bilden är för stor! Maxstorlek: 5 MB.");
+    // NAVBAR HIDE VID SCROLL PÅ MOBIL (exakt som wall.html)
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
         }
-        filesToUpload.push({ file: img, key: "imageUrl" });
-      }
-      if (activeSection === "video") {
-        const vid = document.getElementById("video").files[0];
-        if (vid && vid.size > MAX_VIDEO_SIZE) {
-          spinner.style.display = "none";
-          return alert("Videoklippet är för stort! Maxstorlek: 30 MB.");
-        }
-        filesToUpload.push({ file: vid, key: "videoUrl" });
-      }
-      if (activeSection === "audio") {
-        const aud = document.getElementById("audio").files[0];
-        if (aud && aud.size > MAX_AUDIO_SIZE) {
-          spinner.style.display = "none";
-          return alert("Ljudfilen är för stor! Maxstorlek: 5 MB.");
-        }
-        filesToUpload.push({ file: aud, key: "audioUrl" });
-      }
-      if (activeSection === "mic") {
-        const micBlob = window.lastRecordedAudioBlob;
-        if (micBlob && micBlob.size > MAX_MIC_SIZE) {
-          spinner.style.display = "none";
-          return alert("Röstinspelningen är för stor! Maxstorlek: 2 MB.");
-        }
-        if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
-      }
-
-      for (let upload of filesToUpload) {
-        if (!upload.file) continue;
-        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
-        await uploadBytes(storageRef, upload.file);
-        const url = await getDownloadURL(storageRef);
-        postData[upload.key] = url;
-      }
-
-      await addDoc(collection(db, "wall"), postData);
-
-      spinner.style.display = "none";
-      alert("✅ Inlägget har laddats upp!");
-      uploadForm.reset();
-      window.location.href = "wall.html";
-    });
-
-    let mediaRecorder, audioChunks = [];
-    const recordBtn = document.getElementById("recordButton");
-    const stopBtn = document.getElementById("stopButton");
-    const audioPreview = document.getElementById("audioPreview");
-    if (recordBtn && stopBtn && audioPreview) {
-      recordBtn.onclick = async function () {
-        audioChunks = [];
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-        recordBtn.disabled = true;
-        stopBtn.disabled = false;
-        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-        mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-          window.lastRecordedAudioBlob = audioBlob;
-          audioPreview.src = URL.createObjectURL(audioBlob);
-          recordBtn.disabled = false;
-          stopBtn.disabled = true;
-        };
-      };
-      stopBtn.onclick = function () {
-        mediaRecorder && mediaRecorder.stop();
-      };
+        lastScrollY = window.scrollY;
+      });
     }
 
+    // --- Logga ut-funktion ---
     function doLogout() {
-      signOut(auth).then(() => {
+      auth.signOut().then(() => {
         window.location.href = "login.html";
       });
     }
-    document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    document.getElementById("logoutMobileBtn").onclick = function(e) {
-      e.preventDefault();
-      doLogout();
-    };
+  </script>
+  <script>
+    // FIREBASE upload
+    document.addEventListener("DOMContentLoaded", function () {
+      // Koll om inloggad:
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          document.getElementById("uploadBox").innerHTML =
+            `<div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
+              Du måste vara inloggad för att ladda upp innehåll.<br><br>
+              <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
+            </div>`;
+        }
+      });
+
+      // Uppladdning
+      document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!auth.currentUser) {
+          alert("Du måste vara inloggad för att ladda upp.");
+          return;
+        }
+        document.getElementById("spinner").style.display = "block";
+        const section = document.querySelector(".switch-btn.active").getAttribute("data-section");
+        let postData = {
+          createdAt: new Date(),
+          user: auth.currentUser.uid,
+          type: section,
+          temporary: document.getElementById("temporary").checked,
+        };
+        let filesToUpload = [];
+
+        if (section === "text") {
+          postData.text = document.getElementById("text").value;
+        }
+        if (["image", "video", "audio", "mic"].includes(section)) {
+          postData.desc = document.getElementById("desc").value;
+        }
+        if (section === "image") {
+          const img = document.getElementById("image").files[0];
+          if (img && img.size > 5 * 1024 * 1024) {
+            document.getElementById("spinner").style.display = "none";
+            return alert("Bilden är för stor! Maxstorlek: 5 MB.");
+          }
+          if (img) filesToUpload.push({ file: img, key: "imageUrl" });
+        }
+        if (section === "video") {
+          const vid = document.getElementById("video").files[0];
+          if (vid && vid.size > 30 * 1024 * 1024) {
+            document.getElementById("spinner").style.display = "none";
+            return alert("Videoklippet är för stort! Maxstorlek: 30 MB.");
+          }
+          if (vid) filesToUpload.push({ file: vid, key: "videoUrl" });
+        }
+        if (section === "audio") {
+          const aud = document.getElementById("audio").files[0];
+          if (aud && aud.size > 5 * 1024 * 1024) {
+            document.getElementById("spinner").style.display = "none";
+            return alert("Ljudfilen är för stor! Maxstorlek: 5 MB.");
+          }
+          if (aud) filesToUpload.push({ file: aud, key: "audioUrl" });
+        }
+        if (section === "mic") {
+          const micBlob = window.lastRecordedAudioBlob;
+          if (micBlob && micBlob.size > 2 * 1024 * 1024) {
+            document.getElementById("spinner").style.display = "none";
+            return alert("Röstinspelningen är för stor! Maxstorlek: 2 MB.");
+          }
+          if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
+        }
+
+        // Firebase Storage
+        for (let upload of filesToUpload) {
+          if (!upload.file) continue;
+          const ref = storage.ref(`uploads/${Date.now()}_${upload.file.name || 'audio.webm'}`);
+          await ref.put(upload.file);
+          const url = await ref.getDownloadURL();
+          postData[upload.key] = url;
+        }
+        await db.collection("wall").add(postData);
+
+        document.getElementById("spinner").style.display = "none";
+        alert("✅ Inlägget har laddats upp!");
+        document.getElementById("uploadForm").reset();
+        window.location.href = "wall.html";
+      });
+
+      // Ljudinspelning via mic
+      let mediaRecorder, audioChunks = [];
+      const recordBtn = document.getElementById("recordButton");
+      const stopBtn = document.getElementById("stopButton");
+      const audioPreview = document.getElementById("audioPreview");
+      if (recordBtn && stopBtn && audioPreview) {
+        recordBtn.onclick = async function () {
+          audioChunks = [];
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+          recordBtn.disabled = true;
+          stopBtn.disabled = false;
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+            window.lastRecordedAudioBlob = audioBlob;
+            audioPreview.src = URL.createObjectURL(audioBlob);
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+          };
+        };
+        stopBtn.onclick = function () {
+          mediaRecorder && mediaRecorder.stop();
+        };
+      }
+    });
   </script>
 </body>
 </html>
