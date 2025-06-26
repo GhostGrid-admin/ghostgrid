@@ -195,7 +195,7 @@
     }
     .nav-mobile.show { display: flex; }
     .nav-mobile a, .nav-mobile .logout-link-mobile {
-      padding: 18px 10px;
+      padding: 18px 0px;
       font-size: 1.15em;
       width: 100%;
       border-radius: 0;
@@ -207,7 +207,7 @@
       border: none;
       box-shadow: none;
       display: block;
-      margin: 0 auto;
+      margin: 0;
       font-family: inherit;
     }
     .nav-mobile .logout-link-mobile {
@@ -236,7 +236,6 @@
       from { opacity: 0; transform: translateY(-10px);}
       to { opacity: 1; transform: translateY(0);}
     }
-
     /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
@@ -451,13 +450,12 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik ---
+    // --- Hamburgermeny logik och språkväxling ---
     function updateMenuMode() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navCenter = document.querySelector('.nav-center');
       const logoutBtn = document.getElementById('logoutDesktopBtn');
       const navMobile = document.getElementById('navMobile');
-
       if (window.innerWidth <= 900) {
         hamburgerBtn.style.display = "flex";
         navCenter.style.display = "none";
@@ -511,26 +509,18 @@
     // ---------- SPRÅKVÄXLING (SV/EN) ----------
     function setLanguage() {
       const lang = localStorage.language || 'sv';
+      // Desktop
+      const navLinks = document.querySelectorAll('.nav-links a');
+      // Mobil
+      const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
+      const logoutMobileBtn = document.querySelector('#navMobile .logout-link-mobile');
       if (lang === 'en') {
-        // Meny Desktop
-        document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
-        document.querySelectorAll('.nav-links a')[1].textContent = 'Wall';
-        document.querySelectorAll('.nav-links a')[2].textContent = 'Upload';
-        document.querySelectorAll('.nav-links a')[3].textContent = 'Profile';
-        document.querySelectorAll('.nav-links a')[4].textContent = 'Friends';
-        document.querySelectorAll('.nav-links a')[5].textContent = 'Ghost&Glow';
-        document.querySelectorAll('.nav-links a')[6].textContent = 'Store';
+        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
+        navLinks.forEach((a,i) => a.textContent = texts[i]);
+        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
         document.getElementById('logoutDesktopBtn').textContent = 'Log out';
-        // Meny Mobil
-        document.querySelectorAll('#navMobile a')[0].textContent = 'Forum';
-        document.querySelectorAll('#navMobile a')[1].textContent = 'Wall';
-        document.querySelectorAll('#navMobile a')[2].textContent = 'Upload';
-        document.querySelectorAll('#navMobile a')[3].textContent = 'Profile';
-        document.querySelectorAll('#navMobile a')[4].textContent = 'Friends';
-        document.querySelectorAll('#navMobile a')[5].textContent = 'Ghost&Glow';
-        document.querySelectorAll('#navMobile a')[6].textContent = 'Store';
-        document.querySelector('#navMobile .logout-link-mobile').textContent = 'Log out';
-        // Rubriker och fält
+        logoutMobileBtn.textContent = 'Log out';
+        // Resten av sidan (rubriker, knappar etc)
         document.querySelector('.upload-title').textContent = 'Upload content';
         document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
         document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
@@ -550,25 +540,12 @@
            Make this a temporary post (disappears in 24h)`;
         document.querySelector('button[type="submit"]').textContent = 'Upload';
       } else {
-        // SVENSKA
-        document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
-        document.querySelectorAll('.nav-links a')[1].textContent = 'Väggen';
-        document.querySelectorAll('.nav-links a')[2].textContent = 'Ladda upp';
-        document.querySelectorAll('.nav-links a')[3].textContent = 'Profil';
-        document.querySelectorAll('.nav-links a')[4].textContent = 'Vänner';
-        document.querySelectorAll('.nav-links a')[5].textContent = 'Ghost&Glow';
-        document.querySelectorAll('.nav-links a')[6].textContent = 'Butik';
+        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
+        navLinks.forEach((a,i) => a.textContent = texts[i]);
+        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
         document.getElementById('logoutDesktopBtn').textContent = 'Logga ut';
-        // Meny Mobil
-        document.querySelectorAll('#navMobile a')[0].textContent = 'Forum';
-        document.querySelectorAll('#navMobile a')[1].textContent = 'Väggen';
-        document.querySelectorAll('#navMobile a')[2].textContent = 'Ladda upp';
-        document.querySelectorAll('#navMobile a')[3].textContent = 'Profil';
-        document.querySelectorAll('#navMobile a')[4].textContent = 'Vänner';
-        document.querySelectorAll('#navMobile a')[5].textContent = 'Ghost&Glow';
-        document.querySelectorAll('#navMobile a')[6].textContent = 'Butik';
-        document.querySelector('#navMobile .logout-link-mobile').textContent = 'Logga ut';
-        // Rubriker och fält
+        logoutMobileBtn.textContent = 'Logga ut';
+        // Resten av sidan (rubriker, knappar etc)
         document.querySelector('.upload-title').textContent = 'Ladda upp innehåll';
         document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Inlägg';
         document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Bild';
