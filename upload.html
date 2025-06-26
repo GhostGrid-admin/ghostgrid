@@ -149,7 +149,7 @@
       .nav-links { gap: 14px; }
     }
 
-    /* CENTRERA HAMBURGER OCH MOBILMENY PÅ MOBIL */
+    /* RÄTTAR: CENTRERAD HAMBURGER + MENY UNDER */
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
       .hamburger {
@@ -157,7 +157,7 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        margin-left: 0;
+        z-index: 1111;
       }
       nav.navbar { justify-content: flex-start !important; }
       .nav-mobile {
