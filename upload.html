@@ -77,10 +77,10 @@
       .side-banner, .glow-left, .glow-right { width: 85px; }
       .side-banner .banner-inner { width: 75px; }
     }
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       .side-banner, .glow-left, .glow-right { display: none; }
     }
-    /* --- NAVBAR --- */
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -148,44 +148,46 @@
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
     }
+
+    /* CENTRERA HAMBURGER OCH MOBILMENY PÅ MOBIL */
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex !important; }
+      .hamburger {
+        display: flex !important;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-left: 0;
+      }
+      nav.navbar { justify-content: flex-start !important; }
+      .nav-mobile {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 58px;
+        background: #181f26;
+        box-shadow: 0 4px 28px #00ffcc77;
+        z-index: 1101;
+        padding-bottom: 20px;
+        gap: 0;
+        align-items: center;
+        min-width: 220px;
+        max-width: 95vw;
+        border-radius: 0 0 16px 16px;
+        animation: dropin 0.16s;
+      }
     }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      margin-left: 18px;
-      z-index: 1110;
-    }
-    .hamburger span {
-      width: 29px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 4px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      position: fixed;
-      left: 0; right: 0;
-      top: 58px;
-      background: #181f26;
-      box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1101;
-      padding-bottom: 20px;
-      gap: 0;
-      align-items: center;
+    @keyframes dropin {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: translateY(0);}
     }
     .nav-mobile.show { display: flex; }
     .nav-mobile a, .nav-mobile .logout-link-mobile {
       padding: 18px 10px;
       font-size: 1.15em;
-      width: 100vw;
+      width: 100%;
       border-radius: 0;
       text-align: center;
       border-bottom: 1px solid #3fffd966;
@@ -213,7 +215,9 @@
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
+      .nav-mobile { min-width: 150px; }
     }
+
     /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
@@ -321,7 +325,7 @@
       </a>
     </div>
   </div>
-  <!-- NAVBAR START (identisk med wall.html/forum.html) -->
+  <!-- NAVBAR START -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -400,7 +404,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION (identisk logik som wall)
+    // SIDBANNER ROTATION (vänster och höger)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -428,34 +432,22 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik (identisk wall)
+    // --- Hamburgermeny logik ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMobile = document.getElementById('navMobile');
-    hamburgerBtn.addEventListener('click', function () {
+    hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
-    });
+    // Stäng meny även när logga ut på mobil trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
       doLogout();
     });
-
-    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
-        }
-        lastScrollY = window.scrollY;
-      });
-    }
+    // Stäng meny när man klickar på ett val
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+    });
 
     // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
