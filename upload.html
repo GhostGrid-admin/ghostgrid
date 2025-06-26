@@ -80,7 +80,8 @@
     @media (max-width: 900px) {
       .side-banner, .glow-left, .glow-right { display: none; }
     }
-    /* NAVBAR + LOGGA UT */
+
+    /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -151,6 +152,7 @@
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
       .hamburger { display: flex !important; }
+      nav.navbar { justify-content: flex-start; }
     }
     .hamburger {
       display: none;
@@ -181,7 +183,7 @@
       gap: 0;
       align-items: center;
     }
-    .nav-mobile.show { display: flex; }
+    .nav-mobile.show { display: flex !important; }
     .nav-mobile a, .nav-mobile .logout-link-mobile {
       padding: 18px 10px;
       font-size: 1.15em;
@@ -198,10 +200,6 @@
       margin: 0 auto;
       font-family: inherit;
     }
-    .nav-mobile .logout-link-mobile {
-      cursor: pointer;
-      background: none;
-    }
     .nav-mobile a:last-child {
       margin-top: 8px;
       background: #000;
@@ -214,7 +212,8 @@
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
     }
-    /* --- UPLOAD RESTEN --- */
+
+    /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
@@ -236,13 +235,17 @@
       font-weight: bold;
       letter-spacing: 0.04em;
     }
-    .upload-switcher {
-      display: flex;
+
+    /* --- UPLOAD SWITCHER FIX --- */
+    .upload-switcher { 
+      display: flex !important; 
       gap: 10px;
-      justify-content: center;
-      margin-bottom: 22px;
+      justify-content: center; 
       flex-wrap: wrap;
+      width: 100%;
+      margin-bottom: 22px;
     }
+
     .switch-btn {
       background: #111;
       color: #80ffcc;
@@ -294,21 +297,14 @@
     .upload-section.active { display: block; }
     .desc-label, .desc-field { display: none; }
     .show-desc .desc-label, .show-desc .desc-field { display: block; }
-    @media (max-width: 600px) {
-      .upload-title { font-size: 1.6em; }
-      .upload-box {
-        padding: 14px 2vw 12px 2vw;
-        max-width: 99vw;
-        margin: 18px 0 18px 0;
-        border-radius: 10px;
-      }
+    @media (max-width: 700px) {
+      .upload-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px; }
     }
   </style>
 </head>
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <!-- Vänster sidbanner -->
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
@@ -316,7 +312,6 @@
       </a>
     </div>
   </div>
-  <!-- Höger sidbanner -->
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
@@ -336,7 +331,7 @@
         <li><a href="upload.html">Ladda upp</a></li>
         <li><a href="profile.html">Profil</a></li>
         <li><a href="friends.html">Vänner</a></li>
-        <li><a href="ghost&glow.html">Ghost&Glow</a></li>
+        <li><a href="ghostglow.html">Ghost&Glow</a></li>
         <li><a href="store.html">Butik</a></li>
       </ul>
     </div>
@@ -347,7 +342,7 @@
       <a href="upload.html">Ladda upp</a>
       <a href="profile.html">Profil</a>
       <a href="friends.html">Vänner</a>
-      <a href="ghost&glow.html">Ghost&Glow</a>
+      <a href="ghostglow.html">Ghost&Glow</a>
       <a href="store.html">Butik</a>
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
@@ -437,12 +432,28 @@
     hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    // Stäng meny även när logga ut på mobil trycks
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+    });
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
       doLogout();
     });
+
+    // NAVBAR HIDE VID SCROLL PÅ MOBIL
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
 
     // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
@@ -602,7 +613,6 @@
       });
     }
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    // Nu som länk i mobilmenyn:
     document.getElementById("logoutMobileBtn").onclick = function(e) {
       e.preventDefault();
       doLogout();
