@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -7,36 +7,154 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
-    .glow-left, .glow-right { position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0; }
-    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
-    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 60px 30px #d900ffbb, 0 0 180px 60px #00ffe0aa, 0 0 320px 90px #9400ff66; }
-    .side-banner { position: fixed; top: 87px; bottom: 0; width: 136px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
-    .side-banner .banner-inner { width: 120px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
+    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
+    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
+    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
     .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
-    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 65px; } .side-banner .banner-inner { width: 57px; } }
+    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 12px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; justify-content: center; transition: top 0.3s; }
-    .nav-content { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; max-width: 900px; width: 100%; align-items: center; text-align: center; }
-    .nav-content a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; }
-    .nav-content a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
-    .hamburger { display: none; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 10px; }
-    .hamburger span { width: 29px; height: 4px; background: #00ffcc; margin: 4px 0; border-radius: 2px; transition: 0.3s; }
-    @media (max-width: 700px) {
-      .nav-content { display: none; flex-direction: column; position: fixed; left: 0; right: 0; top: 58px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1101; padding-bottom: 20px; gap: 0; }
-      .nav-content.show { display: flex; }
-      .nav-content a { padding: 18px 10px; font-size: 1.15em; width: 100vw; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966;}
+
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 12px 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      align-items: center;
+      transition: top 0.3s;
+      justify-content: center;
+    }
+    .nav-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      align-items: center;
+    }
+    .nav-links li { display: flex; }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+      font-family: inherit;
+    }
+    .nav-links a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 8px 24px 7px 24px;
+      font-size: 1.1em;
+      border-radius: 9px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.18s;
+      cursor: pointer;
+      opacity: 0.98;
+      margin: 0;
+      z-index: 1500;
+      display: block;
+    }
+    @media (max-width: 950px) {
+      .nav-links { gap: 14px; }
+    }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
       .hamburger { display: flex; }
     }
-    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } .wall-title { font-size: 1.6em; } .wall-box { padding: 14px 2vw 12px 2vw; max-width: 99vw; margin: 18px 0 18px 0; border-radius: 10px;} }
-    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 550px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0;}
-    .wall-title { font-size: 2.6em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 18px;
+      z-index: 1110;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      left: 0; right: 0;
+      top: 58px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1101;
+      padding-bottom: 20px;
+      gap: 0;
+      align-items: center;
+    }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a {
+      padding: 18px 10px;
+      font-size: 1.15em;
+      width: 100vw;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0 auto;
+      font-family: inherit;
+    }
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
+    }
+    .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+    }
+
+    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
+    .wall-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
     .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
-    .filter-btn.active, .filter-btn:hover { background: #00ffcc; color: #19191b; font-weight: bold; box-shadow: 0 0 12px #00ffcc; }
+    .filter-btn.active, .filter-btn:focus, .filter-btn:active { background: #00ffcc; color: #19191b; font-weight: bold; box-shadow: 0 0 12px #00ffcc; }
     .wall-search-row { display: flex; justify-content: center; margin-bottom: 10px; }
     .wall-search-row input { padding: 9px 15px; border: 2px solid #00ffcc; border-radius: 7px; background: #14181e; color: #baffff; font-size: 1.12em; box-shadow: 0 0 8px #7b00ff55; width: 96%; max-width: 370px; margin: 0 auto 7px auto;}
-    .post-list { width:100%; max-width:550px; margin:24px auto;}
+    .post-list { width:100%; max-width:650px; margin:24px auto;}
     .post { background: #181f26; border: 1.5px solid #66ffcc; border-radius: 9px; box-shadow: 0 0 10px #00ffcc30; margin-bottom: 24px; padding: 18px 13px; color: #e0ffff; word-break: break-word; overflow: auto; }
     .post .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
     .post .post-content { font-size: 1.19em;}
@@ -57,7 +175,28 @@
     .reply-link { color: #00ffcc; cursor: pointer; text-decoration: underline; font-size: 0.95em;}
     .comment-children { margin-left: 22px; border-left: 1.2px solid #273344; padding-left: 12px;}
     .reply-box { margin-top: 7px; }
+    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
+    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
+    // -- DIN KONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.appspot.com",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
+      measurementId: "G-B0WCKJCNT9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+  </script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -65,31 +204,48 @@
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
-        <img id="leftBannerImg" src="https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+        <img id="leftBannerImg" src="https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
       </a>
     </div>
   </div>
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
-        <img id="rightBannerImg" src="https://dummyimage.com/120x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+        <img id="rightBannerImg" src="https://dummyimage.com/150x1800/222299/fff&text=Reklam+2" alt="Reklam" />
       </a>
     </div>
   </div>
+  <!-- NAVBAR START -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
-    <div class="nav-content" id="navMenu">
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="forum.html" data-i18n="forum">Forum</a></li>
+        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+        <li><a href="store.html" data-i18n="store">Butik</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <!-- Mobile Menu (hidden by default) -->
+    <div class="nav-mobile" id="navMobile">
       <a href="forum.html" data-i18n="forum">Forum</a>
       <a href="wall.html" data-i18n="wall">Väggen</a>
       <a href="upload.html" data-i18n="upload">Ladda upp</a>
       <a href="profile.html" data-i18n="profile">Profil</a>
       <a href="friends.html" data-i18n="friends">Vänner</a>
       <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-      <a href="store.html" data-i18n="store">Store</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
+  <!-- NAVBAR END -->
+
   <div class="wall-box">
     <div class="wall-title" data-i18n="wall_title">Väggen</div>
     <div class="filter-row" id="filterRow">
@@ -108,8 +264,8 @@
   <script>
     // Banner rotation
     const banners = [
-      { left: { src: "https://dummyimage.com/120x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/120x1800/222299/fff&text=Reklam Banner 2", alt: "Reklam Banner 2", url: "#" }},
-      { left: { src: "https://dummyimage.com/120x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/120x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
+      { left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }},
+      { left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
     ];
     let bannerIndex = 0;
     function updateBanners() {
@@ -120,11 +276,18 @@
     updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
 
     // Hamburger-meny
-    document.addEventListener("DOMContentLoaded", () => {
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navMenu = document.getElementById('navMenu');
-      hamburgerBtn.addEventListener('click', function() { navMenu.classList.toggle('show'); });
-      navMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navMenu.classList.remove('show'); }); });
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMobile = document.getElementById('navMobile');
+    hamburgerBtn.addEventListener('click', function () {
+      navMobile.classList.toggle('show');
+    });
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+    });
+    document.getElementById("logoutMobileBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      navMobile.classList.remove('show');
+      doLogout();
     });
 
     // NAVBAR HIDE VID SCROLL PÅ MOBIL
@@ -136,31 +299,16 @@
         lastScrollY = window.scrollY;
       });
     }
-  </script>
-  <script type="module">
-    import { auth, db } from "./scripts/firebase-init.js";
-    import {
-      collection, query, orderBy, getDocs, doc, setDoc, getDoc,
-      addDoc, deleteDoc, updateDoc, onSnapshot, serverTimestamp, where
-    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-    // Emojis (samma ordning som tidigare)
-    const emojis = [
-      { emoji: "👍", key: "thumbsup" },
-      { emoji: "😂", key: "laugh" },
-      { emoji: "😃", key: "bigsmile" },
-      { emoji: "🙂", key: "smile" },
-      { emoji: "😇", key: "angel" },
-      { emoji: "😳", key: "embarrassed" },
-      { emoji: "😕", key: "confused" },
-      { emoji: "🙁", key: "sad" },
-      { emoji: "😢", key: "cry" },
-      { emoji: "😡", key: "angry" },
-      { emoji: "👎", key: "thumbsdown" }
-    ];
+    // --- FILTER KNAPPAR: Glow och aktiv färg ---
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
 
-    // Språkhantering
+    // --- TRANSLATIONS
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -193,8 +341,17 @@
       document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
       document.title = "GhostGrid – " + t("wall");
       document.querySelector(".wall-title").textContent = t("wall_title");
+      document.getElementById("wallSearchInput").placeholder = localStorage.lang === "en" ? "Search selected category..." : "Sök i valda kategorin...";
+      document.getElementById("logoutDesktopBtn").textContent = t("logout") || "Logga ut";
+      document.getElementById("logoutMobileBtn").textContent = t("logout") || "Logga ut";
     }
     applyTranslations();
+
+    // --- LOGOUT FUNCTION
+    function doLogout() {
+      auth.signOut().then(() => { window.location.href = "login.html"; });
+    }
+    document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
     // --- GLOBALA VARIABLER ---
     let currentUser = null;
