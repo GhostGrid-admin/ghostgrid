@@ -149,7 +149,7 @@
       .nav-links { gap: 14px; }
     }
 
-    /* RÄTTAR: CENTRERAD HAMBURGER + MENY UNDER */
+    /* CENTRERA HAMBURGER OCH MOBILMENY PÅ MOBIL */
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
       .hamburger {
@@ -157,7 +157,7 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 1111;
+        margin-left: 0;
       }
       nav.navbar { justify-content: flex-start !important; }
       .nav-mobile {
@@ -492,10 +492,10 @@
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         uploadBox.innerHTML =
-          `<div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
+          <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
             Du måste vara inloggad för att ladda upp innehåll.<br><br>
             <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
-          </div>`;
+          </div>;
       }
     });
 
@@ -557,7 +557,7 @@
       // Ladda upp filer (om det finns)
       for (let upload of filesToUpload) {
         if (!upload.file) continue;
-        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
+        const storageRef = ref(storage, uploads/${Date.now()}_${upload.file.name});
         await uploadBytes(storageRef, upload.file);
         const url = await getDownloadURL(storageRef);
         postData[upload.key] = url;
