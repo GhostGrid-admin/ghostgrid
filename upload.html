@@ -15,7 +15,7 @@
       padding-top: 85px;
       position: relative;
       overflow-x: hidden;
-      opacity: 0; /* Dölj allt tills språket är satt! */
+      opacity: 0; /* Dölj allt tills språket är satt */
       transition: opacity 0.13s;
     }
     body.ready { opacity: 1; }
@@ -85,7 +85,6 @@
       .side-banner, .glow-left, .glow-right { display: none; }
     }
 
-    /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -152,7 +151,6 @@
       z-index: 1500;
       display: block;
     }
-    /* ============ HAMBURGARMENY MOBIL ============ */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -240,7 +238,6 @@
       from { opacity: 0; transform: translateY(-10px);}
       to { opacity: 1; transform: translateY(0);}
     }
-    /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
       border-radius: 12px;
@@ -331,7 +328,6 @@
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <!-- Vänster sidbanner -->
   <div class="side-banner left">
     <div class="banner-inner">
       <a id="leftBannerLink" href="#" target="_blank">
@@ -339,7 +335,6 @@
       </a>
     </div>
   </div>
-  <!-- Höger sidbanner -->
   <div class="side-banner right">
     <div class="banner-inner">
       <a id="rightBannerLink" href="#" target="_blank">
@@ -347,7 +342,6 @@
       </a>
     </div>
   </div>
-  <!-- NAVBAR START -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -375,8 +369,6 @@
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
-  <!-- NAVBAR END -->
-
   <div class="upload-box" id="uploadBox">
     <div class="upload-title">Ladda upp innehåll</div>
     <img id="spinner" src="spinner-asg.png" alt="Laddar..." />
@@ -388,34 +380,28 @@
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
     </div>
     <form id="uploadForm">
-      <!-- TEXT -->
       <div class="upload-section active" data-section="text">
         <label for="text">Skriv ett inlägg:</label>
         <textarea id="text" placeholder="Vad vill du dela med dig av?" maxlength="1500"></textarea>
       </div>
-      <!-- BILD -->
       <div class="upload-section" data-section="image">
         <label for="image">Ladda upp en bild (max 5 MB):</label>
         <input type="file" id="image" accept="image/*" />
       </div>
-      <!-- VIDEO -->
       <div class="upload-section" data-section="video">
         <label for="video">Ladda upp ett klipp (max 30 MB):</label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
       </div>
-      <!-- AUDIO -->
       <div class="upload-section" data-section="audio">
         <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
         <input type="file" id="audio" accept="audio/*" />
       </div>
-      <!-- RÖSTINSPELNING -->
       <div class="upload-section" data-section="mic">
         <label>Mikrofoninspelning (max 2 MB):</label>
         <button type="button" id="recordButton">🎤 Starta inspelning</button>
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
       </div>
-      <!-- Beskrivning visas bara för bild, video, ljud och mic -->
       <label class="desc-label" for="desc">Beskrivning (valfri):</label>
       <textarea id="desc" class="desc-field" placeholder="Beskriv innehållet..."></textarea>
       <label style="margin-top:18px;">
@@ -426,7 +412,106 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION (vänster och höger)
+    // Tvinga alltid fram body efter 1 sekund, oavsett!
+    setTimeout(function() {
+      document.body.classList.add('ready');
+    }, 1000);
+
+    function updateMenuMode() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navCenter = document.querySelector('.nav-center');
+      const logoutBtn = document.getElementById('logoutDesktopBtn');
+      const navMobile = document.getElementById('navMobile');
+      if (window.innerWidth <= 900) {
+        hamburgerBtn.style.display = "flex";
+        navCenter.style.display = "none";
+        logoutBtn.style.display = "none";
+        navMobile.classList.remove('show');
+      } else {
+        hamburgerBtn.style.display = "none";
+        navCenter.style.display = "flex";
+        logoutBtn.style.display = "block";
+        navMobile.classList.remove('show');
+      }
+    }
+
+    function setLanguage() {
+      const lang = localStorage.language || 'sv';
+      // Desktop
+      const navLinks = document.querySelectorAll('.nav-links a');
+      // Mobil
+      const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
+      const logoutMobileBtn = document.querySelector('#navMobile .logout-link-mobile');
+      if (lang === 'en') {
+        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
+        navLinks.forEach((a,i) => a.textContent = texts[i]);
+        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
+        document.getElementById('logoutDesktopBtn').textContent = 'Log out';
+        logoutMobileBtn.textContent = 'Log out';
+        document.querySelector('.upload-title').textContent = 'Upload content';
+        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
+        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
+        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Clip';
+        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Audio';
+        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Voice';
+        document.querySelector('label[for="text"]').textContent = 'Write a post:';
+        document.querySelector('textarea#text').placeholder = 'What do you want to share?';
+        document.querySelector('label[for="image"]').textContent = 'Upload an image (max 5 MB):';
+        document.querySelector('label[for="video"]').textContent = 'Upload a clip (max 30 MB):';
+        document.querySelector('label[for="audio"]').textContent = 'Upload an audio file (max 5 MB):';
+        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Microphone recording (max 2 MB):';
+        document.querySelector('.desc-label').textContent = 'Description (optional):';
+        document.querySelector('#desc').placeholder = 'Describe the content...';
+        document.querySelector('label[for="temporary"]').innerHTML =
+          `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`;
+        document.querySelector('button[type="submit"]').textContent = 'Upload';
+      } else {
+        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
+        navLinks.forEach((a,i) => a.textContent = texts[i]);
+        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
+        document.getElementById('logoutDesktopBtn').textContent = 'Logga ut';
+        logoutMobileBtn.textContent = 'Logga ut';
+        document.querySelector('.upload-title').textContent = 'Ladda upp innehåll';
+        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Inlägg';
+        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Bild';
+        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Klipp';
+        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Ljud';
+        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Röst';
+        document.querySelector('label[for="text"]').textContent = 'Skriv ett inlägg:';
+        document.querySelector('textarea#text').placeholder = 'Vad vill du dela med dig av?';
+        document.querySelector('label[for="image"]').textContent = 'Ladda upp en bild (max 5 MB):';
+        document.querySelector('label[for="video"]').textContent = 'Ladda upp ett klipp (max 30 MB):';
+        document.querySelector('label[for="audio"]').textContent = 'Ladda upp ljudfil (max 5 MB):';
+        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Mikrofoninspelning (max 2 MB):';
+        document.querySelector('.desc-label').textContent = 'Beskrivning (valfri):';
+        document.querySelector('#desc').placeholder = 'Beskriv innehållet...';
+        document.querySelector('label[for="temporary"]').innerHTML =
+          `<input type="checkbox" id="temporary" /> Gör detta till ett tillfälligt inlägg (försvinner om 24h)`;
+        document.querySelector('button[type="submit"]').textContent = 'Ladda upp';
+      }
+      // Sidan visas när språket är satt!
+      document.body.classList.add('ready');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateMenuMode();
+      setLanguage();
+      // Hamburgermenyn togglas
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      hamburgerBtn.onclick = function() {
+        navMobile.classList.toggle('show');
+      };
+      document.getElementById("logoutMobileBtn").onclick = function(e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      };
+      document.getElementById("logoutDesktopBtn").onclick = doLogout;
+    });
+    window.addEventListener("resize", updateMenuMode);
+
+    // Banner-rotation (vänster och höger)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -454,105 +539,6 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik och språkväxling ---
-    function updateMenuMode() {
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navCenter = document.querySelector('.nav-center');
-      const logoutBtn = document.getElementById('logoutDesktopBtn');
-      const navMobile = document.getElementById('navMobile');
-      if (window.innerWidth <= 900) {
-        hamburgerBtn.style.display = "flex";
-        navCenter.style.display = "none";
-        logoutBtn.style.display = "none";
-        navMobile.classList.remove('show');
-      } else {
-        hamburgerBtn.style.display = "none";
-        navCenter.style.display = "flex";
-        logoutBtn.style.display = "block";
-        navMobile.classList.remove('show');
-      }
-    }
-    window.addEventListener("resize", updateMenuMode);
-
-    function setLanguage() {
-      const lang = localStorage.language || 'sv';
-      // Desktop
-      const navLinks = document.querySelectorAll('.nav-links a');
-      // Mobil
-      const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
-      const logoutMobileBtn = document.querySelector('#navMobile .logout-link-mobile');
-      if (lang === 'en') {
-        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        document.getElementById('logoutDesktopBtn').textContent = 'Log out';
-        logoutMobileBtn.textContent = 'Log out';
-        // Resten av sidan (rubriker, knappar etc)
-        document.querySelector('.upload-title').textContent = 'Upload content';
-        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
-        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
-        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Clip';
-        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Audio';
-        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Voice';
-        document.querySelector('label[for="text"]').textContent = 'Write a post:';
-        document.querySelector('textarea#text').placeholder = 'What do you want to share?';
-        document.querySelector('label[for="image"]').textContent = 'Upload an image (max 5 MB):';
-        document.querySelector('label[for="video"]').textContent = 'Upload a clip (max 30 MB):';
-        document.querySelector('label[for="audio"]').textContent = 'Upload an audio file (max 5 MB):';
-        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Microphone recording (max 2 MB):';
-        document.querySelector('.desc-label').textContent = 'Description (optional):';
-        document.querySelector('#desc').placeholder = 'Describe the content...';
-        document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" />
-           Make this a temporary post (disappears in 24h)`;
-        document.querySelector('button[type="submit"]').textContent = 'Upload';
-      } else {
-        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        document.getElementById('logoutDesktopBtn').textContent = 'Logga ut';
-        logoutMobileBtn.textContent = 'Logga ut';
-        // Resten av sidan (rubriker, knappar etc)
-        document.querySelector('.upload-title').textContent = 'Ladda upp innehåll';
-        document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Inlägg';
-        document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Bild';
-        document.querySelector('.switch-btn[data-section="video"]').textContent = '🎬 Klipp';
-        document.querySelector('.switch-btn[data-section="audio"]').textContent = '🎵 Ljud';
-        document.querySelector('.switch-btn[data-section="mic"]').textContent = '🎤 Röst';
-        document.querySelector('label[for="text"]').textContent = 'Skriv ett inlägg:';
-        document.querySelector('textarea#text').placeholder = 'Vad vill du dela med dig av?';
-        document.querySelector('label[for="image"]').textContent = 'Ladda upp en bild (max 5 MB):';
-        document.querySelector('label[for="video"]').textContent = 'Ladda upp ett klipp (max 30 MB):';
-        document.querySelector('label[for="audio"]').textContent = 'Ladda upp ljudfil (max 5 MB):';
-        document.querySelector('.upload-section[data-section="mic"] label').textContent = 'Mikrofoninspelning (max 2 MB):';
-        document.querySelector('.desc-label').textContent = 'Beskrivning (valfri):';
-        document.querySelector('#desc').placeholder = 'Beskriv innehållet...';
-        document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" />
-           Gör detta till ett tillfälligt inlägg (försvinner om 24h)`;
-        document.querySelector('button[type="submit"]').textContent = 'Ladda upp';
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      updateMenuMode();
-      setLanguage();
-      // Gör sidan synlig först när språk är satt
-      document.body.classList.add('ready');
-      // Hamburgermenyn togglas
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navMobile = document.getElementById('navMobile');
-      hamburgerBtn.onclick = function() {
-        navMobile.classList.toggle('show');
-      };
-      document.getElementById("logoutMobileBtn").onclick = function(e) {
-        e.preventDefault();
-        navMobile.classList.remove('show');
-        doLogout();
-      };
-      document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    });
-
     // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
       btn.addEventListener('click', function () {
@@ -563,7 +549,6 @@
           sec.classList.remove('active');
           if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
-        // Visa beskrivning endast om inte inlägg är valt
         let form = document.getElementById('uploadForm');
         if (section !== "text") {
           form.classList.add('show-desc');
@@ -603,7 +588,6 @@
     const spinner = document.getElementById("spinner");
     const uploadBox = document.getElementById("uploadBox");
 
-    // Dölj uppladdningsformulär om inte inloggad
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         uploadBox.innerHTML =
@@ -669,7 +653,6 @@
         if (micBlob) filesToUpload.push({ file: micBlob, key: "micAudioUrl" });
       }
 
-      // Ladda upp filer (om det finns)
       for (let upload of filesToUpload) {
         if (!upload.file) continue;
         const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
@@ -678,7 +661,6 @@
         postData[upload.key] = url;
       }
 
-      // Spara posten på "väggen"
       await addDoc(collection(db, "wall"), postData);
 
       spinner.style.display = "none";
@@ -687,7 +669,6 @@
       window.location.href = "wall.html";
     });
 
-    // --- Röstinspelning ---
     let mediaRecorder, audioChunks = [];
     const recordBtn = document.getElementById("recordButton");
     const stopBtn = document.getElementById("stopButton");
@@ -700,7 +681,6 @@
         mediaRecorder.start();
         recordBtn.disabled = true;
         stopBtn.disabled = false;
-
         mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
@@ -715,13 +695,11 @@
       };
     }
 
-    // Logga ut-funktion till båda knapparna
     function doLogout() {
       signOut(auth).then(() => {
         window.location.href = "login.html";
       });
     }
-    // (Redundant bind i denna modul, men spelar ingen roll!)
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
     document.getElementById("logoutMobileBtn").onclick = function(e) {
       e.preventDefault();
