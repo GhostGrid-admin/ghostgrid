@@ -94,9 +94,9 @@
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       align-items: center;
-      transition: top 0.3s;
       justify-content: center;
       min-height: 60px;
+      transition: top 0.3s;
     }
     .nav-center {
       flex: 1;
@@ -148,101 +148,93 @@
       z-index: 1500;
       display: block;
     }
-    @media (max-width: 950px) {
-      .nav-links { gap: 14px; }
-    }
-
     /* ============ HAMBURGARMENY MOBIL ============ */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 55px;
+      z-index: 2002;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 32px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
+    }
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1201;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
+    }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      padding: 18px 10px;
+      font-size: 1.15em;
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0 auto;
+      font-family: inherit;
+    }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
+    }
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
+    }
+    .nav-mobile a:hover { background: #00ffcc; color: #000; }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
-      nav.navbar {
-        justify-content: center !important;
-        padding: 0;
-        min-height: 0;
-        height: 55px;
-      }
-      .hamburger {
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 55px;
-        z-index: 2002;
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-      .hamburger span {
-        width: 32px;
-        height: 4px;
-        background: #00ffcc;
-        margin: 5px 0;
-        border-radius: 2px;
-        transition: 0.3s;
-        display: block;
-      }
-      .nav-mobile {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
-        top: 55px;
-        left: 50%;
-        transform: translateX(-50%);
-        min-width: 220px;
-        width: 92vw;
-        max-width: 400px;
-        background: #181f26;
-        box-shadow: 0 4px 28px #00ffcc77;
-        z-index: 1201;
-        padding-bottom: 20px;
-        border-radius: 0 0 16px 16px;
-        animation: dropin 0.16s;
-        text-align: center;
-      }
-      .nav-mobile.show { display: flex; }
-      .nav-mobile a, .nav-mobile .logout-link-mobile {
-        padding: 18px 10px;
-        font-size: 1.15em;
-        width: 100%;
-        border-radius: 0;
-        text-align: center;
-        border-bottom: 1px solid #3fffd966;
-        background: none;
-        color: #00ffcc;
-        font-weight: bold;
-        border: none;
-        box-shadow: none;
-        display: block;
-        margin: 0 auto;
-        font-family: inherit;
-      }
-      .nav-mobile .logout-link-mobile {
-        cursor: pointer;
-        background: none;
-      }
-      .nav-mobile a:last-child {
-        margin-top: 8px;
-        background: #000;
-        color: #00ffcc;
-        border-bottom: 1px solid #3fffd966;
-        font-weight: bold;
-      }
-      .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    }
-    @keyframes dropin {
-      from { opacity: 0; transform: translateY(-10px);}
-      to { opacity: 1; transform: translateY(0);}
+      .hamburger { display: flex !important; }
+      nav.navbar { min-height: 55px; border-bottom-width: 2px;}
     }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
       .nav-mobile { min-width: 160px; width: 98vw; }
+    }
+    @keyframes dropin {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: translateY(0);}
     }
 
     /* --- UPLOAD BOX --- */
@@ -354,7 +346,7 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0" style="display:none;">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
     <div class="nav-center">
@@ -431,7 +423,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION
+    // SIDBANNER ROTATION (vänster och höger)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -470,6 +462,7 @@
         hamburgerBtn.style.display = "flex";
         navCenter.style.display = "none";
         logoutBtn.style.display = "none";
+        navMobile.classList.remove('show');
       } else {
         hamburgerBtn.style.display = "none";
         navCenter.style.display = "flex";
@@ -478,9 +471,9 @@
       }
     }
     window.addEventListener("resize", updateMenuMode);
+
     document.addEventListener("DOMContentLoaded", function() {
       updateMenuMode();
-
       // Hamburgermenyn togglas
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
@@ -492,6 +485,7 @@
         navMobile.classList.remove('show');
         doLogout();
       };
+      setLanguage();
     });
 
     // Visa beskrivning bara för allt utom inlägg
@@ -556,7 +550,7 @@
            Make this a temporary post (disappears in 24h)`;
         document.querySelector('button[type="submit"]').textContent = 'Upload';
       } else {
-        // SVENSKA - säkerställ att alla element återställs på svenska (även om man byter språk tillbaka)
+        // SVENSKA
         document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
         document.querySelectorAll('.nav-links a')[1].textContent = 'Väggen';
         document.querySelectorAll('.nav-links a')[2].textContent = 'Ladda upp';
@@ -595,10 +589,24 @@
         document.querySelector('button[type="submit"]').textContent = 'Ladda upp';
       }
     }
-    document.addEventListener("DOMContentLoaded", function () {
-      setLanguage();
-    });
 
+    // Logga ut-funktion till båda knapparna
+    function doLogout() {
+      if (typeof signOut !== "undefined" && typeof auth !== "undefined") {
+        signOut(auth).then(() => {
+          window.location.href = "login.html";
+        });
+      } else {
+        window.location.href = "login.html";
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("logoutDesktopBtn").onclick = doLogout;
+      document.getElementById("logoutMobileBtn").onclick = function(e) {
+        e.preventDefault();
+        doLogout();
+      };
+    });
   </script>
   <script type="module">
     import { auth, db, storage } from "./scripts/firebase-init.js";
