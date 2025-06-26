@@ -6,82 +6,17 @@
   <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* === GRUNDLÄGGANDE STYLES === */
-    body {
-      background: #0a0a0a;
-      color: #e0ffff;
-      font-family: 'Courier New', monospace;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 85px;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .glow-left, .glow-right {
-      position: fixed;
-      top: 0;
-      width: 170px;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .glow-left {
-      left: 0;
-      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
-    }
-    .glow-right {
-      right: 0;
-      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
-      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
-    }
-    .side-banner {
-      position: fixed;
-      top: 87px;
-      bottom: 0;
-      width: 170px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      z-index: 1002;
-      background: none;
-      pointer-events: none;
-    }
-    .side-banner .banner-inner {
-      width: 150px;
-      height: 100%;
-      background: transparent;
-      border-radius: 12px;
-      box-shadow: 0 0 18px #7b00ff99;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      pointer-events: auto;
-    }
-    .side-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #220043;
-      cursor: pointer;
-      transition: box-shadow 0.3s;
-      box-shadow: 0 0 10px #8800ff70;
-      pointer-events: auto;
-      min-height: 200px;
-    }
-    .side-banner.left { left: 0; }
-    .side-banner.right { right: 0; }
-    @media (max-width: 1100px) {
-      .side-banner, .glow-left, .glow-right { width: 85px; }
-      .side-banner .banner-inner { width: 75px; }
-    }
-    @media (max-width: 900px) {
-      .side-banner, .glow-left, .glow-right { display: none; }
-    }
-    /* === NAVBAR DESKTOP === */
+    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
+    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
+    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
+    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
+    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
+    .side-banner.left { left: 0; } .side-banner.right { right: 0; }
+    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
+    @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -146,7 +81,14 @@
       z-index: 1500;
       display: block;
     }
-    /* === HAMBURGER OCH NAV-MOBILE === */
+    @media (max-width: 950px) {
+      .nav-links { gap: 14px; }
+    }
+    /* Dölj nav-center och logga ut-knapp, men inte navbar! */
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+    }
     .hamburger {
       display: none;
       flex-direction: column;
@@ -163,7 +105,6 @@
       border-radius: 2px;
       transition: 0.3s;
     }
-    /* === MOBILE-MENY VISNING === */
     .nav-mobile {
       display: none;
       flex-direction: column;
@@ -177,7 +118,7 @@
       gap: 0;
       align-items: center;
     }
-    .nav-mobile.show { display: flex !important; }
+    .nav-mobile.show { display: flex; }
     .nav-mobile a {
       padding: 18px 10px;
       font-size: 1.15em;
@@ -202,44 +143,12 @@
       font-weight: bold;
     }
     .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    /* === RESPONSIVITET: VISA RÄTT MENY === */
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex !important; }
-      nav.navbar { justify-content: flex-start; }
-    }
-    @media (max-width: 900px) {
-      .nav-mobile {
-        display: none;
-      }
-      .nav-mobile.show {
-        display: flex !important;
-      }
-    }
-    @media (min-width: 901px) {
-      .nav-mobile {
-        display: none !important;
-      }
-    }
-    @media (max-width: 700px) {
-      .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; }
-    }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
     }
-    /* === WALL, FILTER, POSTS === */
-    .wall-box {
-      border: 2px solid #66ffcc;
-      border-radius: 12px;
-      padding: 30px 20px 22px 20px;
-      margin: 36px auto 32px auto;
-      max-width: 650px;
-      background-color: rgba(0, 0, 0, 0.88);
-      box-shadow: 0 0 15px #00ffcc33;
-      position: relative;
-      z-index: 2;
-    }
+
+    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
     .wall-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
     .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
@@ -267,6 +176,8 @@
     .reply-link { color: #00ffcc; cursor: pointer; text-decoration: underline; font-size: 0.95em;}
     .comment-children { margin-left: 22px; border-left: 1.2px solid #273344; padding-left: 12px;}
     .reply-box { margin-top: 7px; }
+    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
+    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -305,7 +216,7 @@
       </a>
     </div>
   </div>
-  <!-- === NAVBAR DESKTOP === -->
+  <!-- NAVBAR START (identisk med forum.html) -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -322,19 +233,18 @@
       </ul>
     </div>
     <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <div class="nav-mobile" id="navMobile">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+    </div>
   </nav>
-  <!-- === MOBILMENY - MÅSTE LIGGA UTANFÖR NAV!!! === -->
-  <div class="nav-mobile" id="navMobile">
-    <a href="forum.html" data-i18n="forum">Forum</a>
-    <a href="wall.html" data-i18n="wall">Väggen</a>
-    <a href="upload.html" data-i18n="upload">Ladda upp</a>
-    <a href="profile.html" data-i18n="profile">Profil</a>
-    <a href="friends.html" data-i18n="friends">Vänner</a>
-    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-    <a href="store.html" data-i18n="store">Butik</a>
-    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-  </div>
-  <!-- === SLUT PÅ MENY === -->
+  <!-- NAVBAR END -->
 
   <div class="wall-box">
     <div class="wall-title" data-i18n="wall_title">Väggen</div>
@@ -352,20 +262,34 @@
     <div id="postList" class="post-list"></div>
   </div>
   <script>
-    // === REKLAMBANNERS ROTATION ===
+    // SIDBANNER ROTATION (identisk logik som forum)
     const banners = [
-      { left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" }, right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }},
-      { left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" }, right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }}
+      {
+        left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
+        right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+      },
+      {
+        left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
+        right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
+      }
     ];
     let bannerIndex = 0;
     function updateBanners() {
       const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
-      document.getElementById('leftBannerImg').src = left.src; document.getElementById('leftBannerImg').alt = left.alt; document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src; document.getElementById('rightBannerImg').alt = right.alt; document.getElementById('rightBannerLink').href = right.url;
+      document.getElementById('leftBannerImg').src = left.src;
+      document.getElementById('leftBannerImg').alt = left.alt;
+      document.getElementById('leftBannerLink').href = left.url;
+      document.getElementById('rightBannerImg').src = right.src;
+      document.getElementById('rightBannerImg').alt = right.alt;
+      document.getElementById('rightBannerLink').href = right.url;
     }
-    updateBanners(); setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
+    updateBanners();
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
 
-    // === MOBIL NAV/HAMBURGER ===
+    // --- Hamburgermeny logik (identisk forum)
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMobile = document.getElementById('navMobile');
     hamburgerBtn.addEventListener('click', function () {
@@ -380,27 +304,21 @@
       doLogout();
     });
 
-    // === GÖM/SHOW NAVBAR VID MOBILSCROLL ===
+    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
       window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) { navbar.classList.add('hide-navbar'); } else { navbar.classList.remove('hide-navbar'); }
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
         lastScrollY = window.scrollY;
       });
     }
 
-    // === FILTER KNAPPAR: Glow och aktiv färg (OBS: renderPosts körs nedan!) ===
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentFilter = this.getAttribute("data-type");
-        renderPosts(currentFilter, searchTerm);
-      });
-    });
-
-    // === TRANSLATIONS
+    // --- TRANSLATIONS
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -441,13 +359,13 @@
     }
     applyTranslations();
 
-    // === LOGOUT FUNCTION
+    // --- LOGOUT FUNCTION
     function doLogout() {
       auth.signOut().then(() => { window.location.href = "login.html"; });
     }
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
-    // === GLOBALA VARIABLER ===
+    // --- FIREBASE LOGIK ---
     let currentUser = null;
     let userMap = {};
     let allPosts = [];
@@ -467,20 +385,16 @@
       { emoji: "👎", key: "thumbsdown" }
     ];
 
-    // === FIRESTORE-UTILS ===
     function escapeHTML(str) {
       if (!str) return "";
       return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
     }
 
-    // Hämta användare
     async function fetchUsers() {
       const q = firebase.firestore().collection("profiles");
       const snap = await q.get();
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
-
-    // Ladda wall
     async function loadWallPosts() {
       postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
       await fetchUsers();
@@ -494,8 +408,6 @@
         );
       renderPosts(currentFilter, searchTerm);
     }
-
-    // Filter-knappar och sök
     const filterRow = document.getElementById("filterRow");
     const postList = document.getElementById("postList");
     const wallSearchInput = document.getElementById("wallSearchInput");
@@ -512,7 +424,6 @@
       renderPosts(currentFilter, searchTerm);
     });
 
-    // Rendera poster (exakt som innan, integrera din kod)
     function formatPostContent(post) {
       switch (post.type) {
         case "text":
@@ -575,8 +486,6 @@
       }
       addEventListeners();
     }
-
-    // Reaktionssammanställning
     async function loadReactions(postId, subcol, commentId) {
       let path;
       if (commentId) {
@@ -593,8 +502,6 @@
       reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
       return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
     }
-
-    // --- LADDA TRÅDADE KOMMENTARER ---
     async function loadThreadedComments(postId) {
       const q = firebase.firestore().collection("wall").doc(postId).collection("comments").orderBy("createdAt", "asc");
       const snap = await q.get();
@@ -610,8 +517,6 @@
       });
       return tree;
     }
-
-    // --- RENDERA KOMMENTARSTRÄD ---
     function renderThreadedComments(postId, comments, parentId, level) {
       if (!comments) return "";
       return comments.map(c =>
@@ -634,10 +539,7 @@
         </div>`
       ).join("");
     }
-
-    // --- EVENTLISTENERS ---
     function addEventListeners() {
-      // Emoji på post
       document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
         btn.onclick = async function () {
           if (!currentUser) return alert(t("login_to_react"));
@@ -653,7 +555,6 @@
           loadWallPosts();
         };
       });
-      // Emoji på kommentar
       document.querySelectorAll(".comment .emoji-row .emoji-btn").forEach(btn => {
         btn.onclick = async function () {
           if (!currentUser) return alert(t("login_to_react"));
@@ -671,7 +572,6 @@
           loadWallPosts();
         };
       });
-      // Svara på kommentar
       document.querySelectorAll(".reply-link").forEach(link => {
         link.onclick = function () {
           const cid = this.getAttribute("data-replyid");
@@ -689,9 +589,7 @@
           }
         };
       });
-      // Ny kommentar-form på post
       document.querySelectorAll(".add-comment-form").forEach(form => addReplyFormListener(form));
-      // Edit/radera egna kommentarer
       document.querySelectorAll(".edit-comment").forEach(link => {
         link.onclick = function(e) {
           e.preventDefault();
@@ -722,8 +620,6 @@
         };
       });
     }
-
-    // --- NY KOMMENTAR / SVAR ---
     function addReplyFormListener(form) {
       if (!form) return;
       form.onsubmit = async function (e) {
@@ -744,8 +640,6 @@
         loadWallPosts();
       };
     }
-
-    // Inloggning & posts
     firebase.auth().onAuthStateChanged(user => {
       currentUser = user;
       loadWallPosts();
