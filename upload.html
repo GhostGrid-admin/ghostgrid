@@ -80,8 +80,6 @@
     @media (max-width: 900px) {
       .side-banner, .glow-left, .glow-right { display: none; }
     }
-
-    /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -149,7 +147,9 @@
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
     }
-    /* ===== HAMBURGER MENY HELT CENTRERAD PÅ MOBIL ===== */
+    .hamburger {
+      display: none;
+    }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
       nav.navbar {
@@ -162,6 +162,23 @@
         top: 14px;
         transform: translateX(-50%);
         z-index: 2002;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 44px;
+        height: 44px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 30px;
+        height: 4px;
+        background: #00ffcc;
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+        display: block;
       }
       .nav-mobile {
         display: none;
@@ -182,7 +199,7 @@
         animation: dropin 0.16s;
         text-align: center;
       }
-      .nav-mobile.show { display: flex; }
+      .nav-mobile.show { display: flex !important; }
       .nav-mobile a, .nav-mobile .logout-link-mobile {
         padding: 18px 10px;
         font-size: 1.15em;
@@ -221,7 +238,6 @@
       nav.navbar.hide-navbar { top: -70px; }
       .nav-mobile { min-width: 170px; width: 98vw; }
     }
-
     /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
@@ -408,7 +424,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION (vänster och höger)
+    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -442,7 +458,6 @@
     hamburgerBtn.addEventListener('click', function() {
       navMobile.classList.toggle('show');
     });
-    // Stäng meny även när logga ut på mobil trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
@@ -459,7 +474,6 @@
           sec.classList.remove('active');
           if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
-        // Visa beskrivning endast om inte inlägg är valt
         let form = document.getElementById('uploadForm');
         if (section !== "text") {
           form.classList.add('show-desc');
@@ -469,10 +483,10 @@
       });
     });
 
-    // ---------- SPRÅKVÄXLING (SV/EN) ----------
+    // --------- SPRÅKVÄXLING (SV/EN) ----------
     document.addEventListener('DOMContentLoaded', function () {
       if (localStorage.language === 'en') {
-        // Meny
+        // Meny desktop
         document.querySelectorAll('.nav-links a')[0].textContent = 'Forum';
         document.querySelectorAll('.nav-links a')[1].textContent = 'Wall';
         document.querySelectorAll('.nav-links a')[2].textContent = 'Upload';
@@ -481,7 +495,7 @@
         document.querySelectorAll('.nav-links a')[5].textContent = 'Ghost&Glow';
         document.querySelectorAll('.nav-links a')[6].textContent = 'Store';
         document.getElementById('logoutDesktopBtn').textContent = 'Log out';
-        // Mobil
+        // Meny mobil
         document.querySelectorAll('#navMobile a')[0].textContent = 'Forum';
         document.querySelectorAll('#navMobile a')[1].textContent = 'Wall';
         document.querySelectorAll('#navMobile a')[2].textContent = 'Upload';
@@ -490,7 +504,7 @@
         document.querySelectorAll('#navMobile a')[5].textContent = 'Ghost&Glow';
         document.querySelectorAll('#navMobile a')[6].textContent = 'Store';
         document.querySelector('#navMobile .logout-link-mobile').textContent = 'Log out';
-        // Rubriker och fält
+        // Upload form och innehåll
         document.querySelector('.upload-title').textContent = 'Upload content';
         document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
         document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
@@ -506,8 +520,7 @@
         document.querySelector('.desc-label').textContent = 'Description (optional):';
         document.querySelector('#desc').placeholder = 'Describe the content...';
         document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" />
-           Make this a temporary post (disappears in 24h)`;
+          `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`;
         document.querySelector('button[type="submit"]').textContent = 'Upload';
       }
     });
