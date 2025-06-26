@@ -77,10 +77,9 @@
       .side-banner, .glow-left, .glow-right { width: 85px; }
       .side-banner .banner-inner { width: 75px; }
     }
-    @media (max-width: 900px) {
+    @media (max-width: 700px) {
       .side-banner, .glow-left, .glow-right { display: none; }
     }
-
     /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
@@ -151,21 +150,14 @@
     }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
-      nav.navbar {
-        justify-content: center !important;
-      }
-      .hamburger {
-        display: flex !important;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+      .hamburger { display: flex !important; }
     }
     .hamburger {
       display: none;
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
+      margin-left: 18px;
       z-index: 1110;
     }
     .hamburger span {
@@ -222,7 +214,6 @@
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
     }
-
     /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
@@ -330,7 +321,7 @@
       </a>
     </div>
   </div>
-  <!-- NAVBAR START -->
+  <!-- NAVBAR START (identisk med wall.html/forum.html) -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -409,7 +400,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION (vänster och höger)
+    // SIDBANNER ROTATION (identisk logik som wall)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -437,18 +428,34 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik ---
+    // --- Hamburgermeny logik (identisk wall)
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMobile = document.getElementById('navMobile');
-    hamburgerBtn.addEventListener('click', function() {
+    hamburgerBtn.addEventListener('click', function () {
       navMobile.classList.toggle('show');
     });
-    // Stäng meny även när logga ut på mobil trycks
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+    });
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
       doLogout();
     });
+
+    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
 
     // Visa beskrivning bara för allt utom inlägg
     document.querySelectorAll('.switch-btn').forEach(btn => {
