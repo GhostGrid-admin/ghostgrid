@@ -80,6 +80,8 @@
     @media (max-width: 900px) {
       .side-banner, .glow-left, .glow-right { display: none; }
     }
+
+    /* --- NAVBAR --- */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -91,8 +93,8 @@
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       align-items: center;
-      transition: top 0.3s;
       justify-content: center;
+      transition: top 0.3s;
     }
     .nav-center {
       flex: 1;
@@ -147,8 +149,78 @@
     @media (max-width: 950px) {
       .nav-links { gap: 14px; }
     }
+
+    /* ===== MOBIL NAV ===== */
     .hamburger {
       display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      z-index: 2003;
+    }
+    .hamburger span {
+      width: 29px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
+    }
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      left: 50%;
+      top: 58px;
+      transform: translateX(-50%);
+      min-width: 240px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1101;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
+    }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      padding: 18px 10px;
+      font-size: 1.15em;
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0 auto;
+      font-family: inherit;
+    }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
+    }
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
+    }
+    .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    @keyframes dropin {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: translateY(0);}
     }
     @media (max-width: 900px) {
       .nav-center, .logout-btn { display: none !important; }
@@ -159,85 +231,16 @@
         display: flex !important;
         position: fixed;
         left: 50%;
-        top: 14px;
+        top: 12px;
         transform: translateX(-50%);
-        z-index: 2002;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 44px;
-        height: 44px;
-        background: none;
-        border: none;
-        cursor: pointer;
       }
-      .hamburger span {
-        width: 30px;
-        height: 4px;
-        background: #00ffcc;
-        margin: 4px 0;
-        border-radius: 2px;
-        transition: 0.3s;
-        display: block;
-      }
-      .nav-mobile {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        position: fixed;
-        left: 50%;
-        top: 54px;
-        transform: translateX(-50%);
-        min-width: 240px;
-        width: 92vw;
-        max-width: 400px;
-        background: #181f26;
-        box-shadow: 0 4px 28px #00ffcc77;
-        z-index: 1101;
-        padding-bottom: 20px;
-        border-radius: 0 0 16px 16px;
-        animation: dropin 0.16s;
-        text-align: center;
-      }
-      .nav-mobile.show { display: flex !important; }
-      .nav-mobile a, .nav-mobile .logout-link-mobile {
-        padding: 18px 10px;
-        font-size: 1.15em;
-        width: 100%;
-        border-radius: 0;
-        text-align: center;
-        border-bottom: 1px solid #3fffd966;
-        background: none;
-        color: #00ffcc;
-        font-weight: bold;
-        border: none;
-        box-shadow: none;
-        display: block;
-        margin: 0 auto;
-        font-family: inherit;
-      }
-      .nav-mobile .logout-link-mobile {
-        cursor: pointer;
-        background: none;
-      }
-      .nav-mobile a:last-child {
-        margin-top: 8px;
-        background: #000;
-        color: #00ffcc;
-        border-bottom: 1px solid #3fffd966;
-        font-weight: bold;
-      }
-      .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    }
-    @keyframes dropin {
-      from { opacity: 0; transform: translateY(-10px);}
-      to { opacity: 1; transform: translateY(0);}
     }
     @media (max-width: 600px) {
       nav.navbar { transition: top 0.3s; }
       nav.navbar.hide-navbar { top: -70px; }
       .nav-mobile { min-width: 170px; width: 98vw; }
     }
+
     /* --- UPLOAD BOX --- */
     .upload-box {
       border: 2px solid #66ffcc;
@@ -347,9 +350,6 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
     <div class="nav-center">
       <ul class="nav-links">
         <li><a href="forum.html">Forum</a></li>
@@ -360,6 +360,9 @@
         <li><a href="ghostglow.html">Ghost&Glow</a></li>
         <li><a href="store.html">Butik</a></li>
       </ul>
+    </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
     </div>
     <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
     <div class="nav-mobile" id="navMobile">
@@ -424,7 +427,7 @@
     </form>
   </div>
   <script>
-    // SIDBANNER ROTATION
+    // SIDBANNER ROTATION (vänster och höger)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -452,12 +455,17 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik ---
+    // Hamburgermeny logik
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navMobile = document.getElementById('navMobile');
-    hamburgerBtn.addEventListener('click', function() {
+    function handleHamburger() {
       navMobile.classList.toggle('show');
+    }
+    hamburgerBtn.addEventListener('click', handleHamburger);
+    hamburgerBtn.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') handleHamburger();
     });
+    // Stäng mobilmeny när logga ut trycks
     document.getElementById("logoutMobileBtn").addEventListener("click", function(e) {
       e.preventDefault();
       navMobile.classList.remove('show');
@@ -474,6 +482,7 @@
           sec.classList.remove('active');
           if (sec.getAttribute('data-section') === section) sec.classList.add('active');
         });
+        // Visa beskrivning endast om inte inlägg är valt
         let form = document.getElementById('uploadForm');
         if (section !== "text") {
           form.classList.add('show-desc');
@@ -483,7 +492,7 @@
       });
     });
 
-    // --------- SPRÅKVÄXLING (SV/EN) ----------
+    // ---------- SPRÅKVÄXLING (SV/EN) ----------
     document.addEventListener('DOMContentLoaded', function () {
       if (localStorage.language === 'en') {
         // Meny desktop
@@ -504,7 +513,7 @@
         document.querySelectorAll('#navMobile a')[5].textContent = 'Ghost&Glow';
         document.querySelectorAll('#navMobile a')[6].textContent = 'Store';
         document.querySelector('#navMobile .logout-link-mobile').textContent = 'Log out';
-        // Upload form och innehåll
+        // Rubriker och fält
         document.querySelector('.upload-title').textContent = 'Upload content';
         document.querySelector('.switch-btn[data-section="text"]').textContent = '📝 Post';
         document.querySelector('.switch-btn[data-section="image"]').textContent = '🖼️ Image';
@@ -520,7 +529,8 @@
         document.querySelector('.desc-label').textContent = 'Description (optional):';
         document.querySelector('#desc').placeholder = 'Describe the content...';
         document.querySelector('label[for="temporary"]').innerHTML =
-          `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`;
+          `<input type="checkbox" id="temporary" />
+           Make this a temporary post (disappears in 24h)`;
         document.querySelector('button[type="submit"]').textContent = 'Upload';
       }
     });
