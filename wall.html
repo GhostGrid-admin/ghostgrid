@@ -498,7 +498,7 @@ async function fetchUsers() {
   const snap = await getDocs(collection(db, "profiles"));
   snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
 }
-async function loadWallPosts() {
+async function loadWallPosts() { 
   const postList = document.getElementById("postList");
   postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
   await fetchUsers();
@@ -508,7 +508,7 @@ async function loadWallPosts() {
   allPosts = snapshot.docs
     .map(doc => ({ ...doc.data(), id: doc.id }))
     .filter(post =>
-      post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang
+      post[`text_${lang}`] && post[`text_${lang}`].trim() !== ""
     );
   renderPosts(currentFilter, searchTerm);
 }
