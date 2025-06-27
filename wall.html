@@ -487,67 +487,66 @@
       { emoji: "👎", key: "thumbsdown" }
     ];
 
-    function escapeHTML(str) {
-      if (!str) return "";
-      return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
-    }
+function escapeHTML(str) {
+  if (!str) return "";
+  return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+}
 
-    async function fetchUsers() {
-      const q = firebase.firestore().collection("profiles");
-      const snap = await q.get();
-      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
-    }
-    async function loadWallPosts() {
-      postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
-      await fetchUsers();
-      const q = firebase.firestore().collection("wall").orderBy("createdAt", "desc");
-      const snapshot = await q.get();
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      allPosts = snapshot.docs
-        .map(doc => ({ ...doc.data(), id: doc.id }))
-        .filter(post =>
-          post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang
-        );
-      renderPosts(currentFilter, searchTerm);
-    }
-    const filterRow = document.getElementById("filterRow");
-    const postList = document.getElementById("postList");
-    const wallSearchInput = document.getElementById("wallSearchInput");
-    filterRow.addEventListener("click", (e) => {
-      if (e.target.classList.contains("filter-btn")) {
-        filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-        e.target.classList.add("active");
-        currentFilter = e.target.getAttribute("data-type");
-        renderPosts(currentFilter, searchTerm);
-      }
-    });
-    wallSearchInput.addEventListener("input", function () {
-      searchTerm = this.value.toLowerCase().trim();
-      renderPosts(currentFilter, searchTerm);
-    });
+async function fetchUsers() {
+  const q = firebase.firestore().collection("profiles");
+  const snap = await q.get();
+  snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
+}
+async function loadWallPosts() {
+  postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
+  await fetchUsers();
+  const q = firebase.firestore().collection("wall").orderBy("createdAt", "desc");
+  const snapshot = await q.get();
+  const lang = localStorage.lang === "en" ? "en" : "sv";
+  allPosts = snapshot.docs
+    .map(doc => ({ ...doc.data(), id: doc.id }))
+    .filter(post =>
+      post[`text_${lang}`] || post[`desc_${lang}`] || post.lang === lang
+    );
+  renderPosts(currentFilter, searchTerm);
+}
+const filterRow = document.getElementById("filterRow");
+const postList = document.getElementById("postList");
+const wallSearchInput = document.getElementById("wallSearchInput");
+filterRow.addEventListener("click", (e) => {
+  if (e.target.classList.contains("filter-btn")) {
+    filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+    e.target.classList.add("active");
+    currentFilter = e.target.getAttribute("data-type");
+    renderPosts(currentFilter, searchTerm);
+  }
+});
+wallSearchInput.addEventListener("input", function () {
+  searchTerm = this.value.toLowerCase().trim();
+  renderPosts(currentFilter, searchTerm);
+});
 
-    function formatPostContent(post) {
-      switch (post.type) {
-        case "text":
-          return `<div class="post-content">${escapeHTML(post[`text_${localStorage.lang}`] || post.text || "")}</div>`;
-        case "image":
-          return post.imageUrl ? `<img src="${post.imageUrl}" alt="Bild" />` : "";
-        case "video":
-          return post.videoUrl ? `<video controls src="${post.videoUrl}"></video>` : "";
-        case "audio":
-          return post.audioUrl ? `<audio controls src="${post.audioUrl}"></audio>` : "";
-        case "mic":
-          return post.micAudioUrl ? `<audio controls src="${post.micAudioUrl}"></audio>` : "";
-        default: return "";
-      }
-    }
-    async function renderPosts(type, search) {
-  // Lägg till detta överst!
-  if (typeof currentUser === 'undefined') {
+function formatPostContent(post) {
+  switch (post.type) {
+    case "text":
+      return `<div class="post-content">${escapeHTML(post[`text_${localStorage.lang}`] || post.text || "")}</div>`;
+    case "image":
+      return post.imageUrl ? `<img src="${post.imageUrl}" alt="Bild" />` : "";
+    case "video":
+      return post.videoUrl ? `<video controls src="${post.videoUrl}"></video>` : "";
+    case "audio":
+      return post.audioUrl ? `<audio controls src="${post.audioUrl}"></audio>` : "";
+    case "mic":
+      return post.micAudioUrl ? `<audio controls src="${post.micAudioUrl}"></audio>` : "";
+    default: return "";
+  }
+}
+
+async function renderPosts(type, search) {
+  if (loadingUser) {
     postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
     return;
   }
-
   let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
   if (search && search.length > 0) {
     posts = posts.filter(post => {
@@ -561,193 +560,201 @@
       );
     });
   }
-      if (!posts.length) {
-        postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
-        return;
-      }
-      postList.innerHTML = "";
-      for (let post of posts) {
-        const reactions = await loadReactions(post.id, "reactions");
-        const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
-        let name = userMap[post.user] || t("guest");
-        const comments = await loadThreadedComments(post.id);
-        postList.innerHTML +=
-          `<div class="post" data-postid="${post.id}">
-            <div class="post-header">${t("user")}: ${name}</div>
-            ${formatPostContent(post)}
-            <div class="emoji-row">${emojis.map(e =>
-              `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
-            ).join("")}
-            <span class="reactions-view">${emojiSummary(reactions)}</span>
-            </div>
-            <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
-            <div class="comments-block">
-              ${renderThreadedComments(post.id, comments, null, 0)}
-              ${currentUser ?
-                `<form class="add-comment-form" data-postid="${post.id}" data-parentid="">
-                  <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-                  <button type="submit">${t("comment")}</button>
-                </form>` :
-                `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
-            </div>
-          </div>`;
-      }
-      addEventListeners();
+  if (!posts.length) {
+    postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
+    return;
+  }
+  postList.innerHTML = "";
+  for (let post of posts) {
+    const reactions = await loadReactions(post.id, "reactions");
+    const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
+    let name = userMap[post.user] || t("guest");
+    const comments = await loadThreadedComments(post.id);
+    postList.innerHTML +=
+      `<div class="post" data-postid="${post.id}">
+        <div class="post-header">${t("user")}: ${name}</div>
+        ${formatPostContent(post)}
+        <div class="emoji-row">${emojis.map(e =>
+          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+        ).join("")}
+        <span class="reactions-view">${emojiSummary(reactions)}</span>
+        </div>
+        <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+        <div class="comments-block">
+          ${renderThreadedComments(post.id, comments, null, 0)}
+          ${currentUser ?
+            `<form class="add-comment-form" data-postid="${post.id}" data-parentid="">
+              <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+              <button type="submit">${t("comment")}</button>
+            </form>` :
+            `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
+        </div>
+      </div>`;
+  }
+  addEventListeners();
+}
+
+async function loadReactions(postId, subcol, commentId) {
+  let path;
+  if (commentId) {
+    path = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions");
+  } else {
+    path = firebase.firestore().collection("wall").doc(postId).collection(subcol);
+  }
+  const snap = await path.get();
+  return snap.docs.map(doc => doc.data());
+}
+
+function emojiSummary(reactions) {
+  if (!reactions || reactions.length === 0) return "";
+  let counts = {};
+  reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+  return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+}
+
+async function loadThreadedComments(postId) {
+  const q = firebase.firestore().collection("wall").doc(postId).collection("comments").orderBy("createdAt", "asc");
+  const snap = await q.get();
+  const all = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  let tree = [], lookup = {};
+  all.forEach(c => lookup[c.id] = { ...c, children: [] });
+  all.forEach(c => {
+    if (c.parentId) {
+      if (lookup[c.parentId]) lookup[c.parentId].children.push(lookup[c.id]);
+    } else {
+      tree.push(lookup[c.id]);
     }
-    async function loadReactions(postId, subcol, commentId) {
-      let path;
-      if (commentId) {
-        path = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions");
+  });
+  return tree;
+}
+
+function renderThreadedComments(postId, comments, parentId, level) {
+  if (!comments) return "";
+  return comments.map(c =>
+    `<div class="comment" data-commentid="${c.id}" data-postid="${postId}">
+      <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+      <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
+      <div class="emoji-row">${emojis.map(e =>
+        `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+      ).join("")}
+      <span class="reactions-view" data-cid="${c.id}"></span>
+      </div>
+      <div class="comment-actions">
+        <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
+        ${currentUser && currentUser.uid === c.userId ?
+          `<a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>`
+         : ""}
+      </div>
+      <div class="reply-box" id="replybox-${c.id}" style="display:none;"></div>
+      ${c.children && c.children.length ? `<div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div>` : ""}
+    </div>`
+  ).join("");
+}
+
+function addEventListeners() {
+  document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
+    btn.onclick = async function () {
+      if (!currentUser) return alert(t("login_to_react"));
+      const postId = this.closest(".post").dataset.postid;
+      const emojiKey = this.dataset.emoji;
+      const ref = firebase.firestore().collection("wall").doc(postId).collection("reactions").doc(currentUser.uid);
+      const snap = await ref.get();
+      if (snap.exists && snap.data().emoji === emojiKey) {
+        await ref.delete();
       } else {
-        path = firebase.firestore().collection("wall").doc(postId).collection(subcol);
+        await ref.set({ emoji: emojiKey, user: currentUser.uid });
       }
-      const snap = await path.get();
-      return snap.docs.map(doc => doc.data());
-    }
-    function emojiSummary(reactions) {
-      if (!reactions || reactions.length === 0) return "";
-      let counts = {};
-      reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-      return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
-    }
-    async function loadThreadedComments(postId) {
-      const q = firebase.firestore().collection("wall").doc(postId).collection("comments").orderBy("createdAt", "asc");
-      const snap = await q.get();
-      const all = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      let tree = [], lookup = {};
-      all.forEach(c => lookup[c.id] = { ...c, children: [] });
-      all.forEach(c => {
-        if (c.parentId) {
-          if (lookup[c.parentId]) lookup[c.parentId].children.push(lookup[c.id]);
-        } else {
-          tree.push(lookup[c.id]);
-        }
-      });
-      return tree;
-    }
-    function renderThreadedComments(postId, comments, parentId, level) {
-      if (!comments) return "";
-      return comments.map(c =>
-        `<div class="comment" data-commentid="${c.id}" data-postid="${postId}">
-          <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
-          <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
-          <div class="emoji-row">${emojis.map(e =>
-            `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
-          ).join("")}
-          <span class="reactions-view" data-cid="${c.id}"></span>
-          </div>
-          <div class="comment-actions">
-            <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
-            ${currentUser && currentUser.uid === c.userId ?
-              `<a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>`
-             : ""}
-          </div>
-          <div class="reply-box" id="replybox-${c.id}" style="display:none;"></div>
-          ${c.children && c.children.length ? `<div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div>` : ""}
-        </div>`
-      ).join("");
-    }
-    function addEventListeners() {
-      document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
-        btn.onclick = async function () {
-          if (!currentUser) return alert(t("login_to_react"));
-          const postId = this.closest(".post").dataset.postid;
-          const emojiKey = this.dataset.emoji;
-          const ref = firebase.firestore().collection("wall").doc(postId).collection("reactions").doc(currentUser.uid);
-          const snap = await ref.get();
-          if (snap.exists && snap.data().emoji === emojiKey) {
-            await ref.delete();
-          } else {
-            await ref.set({ emoji: emojiKey, user: currentUser.uid });
-          }
-          loadWallPosts();
-        };
-      });
-      document.querySelectorAll(".comment .emoji-row .emoji-btn").forEach(btn => {
-        btn.onclick = async function () {
-          if (!currentUser) return alert(t("login_to_react"));
-          const commentDiv = this.closest(".comment");
-          const postId = commentDiv.dataset.postid;
-          const commentId = commentDiv.dataset.commentid;
-          const emojiKey = this.dataset.emoji;
-          const ref = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions").doc(currentUser.uid);
-          const snap = await ref.get();
-          if (snap.exists && snap.data().emoji === emojiKey) {
-            await ref.delete();
-          } else {
-            await ref.set({ emoji: emojiKey, user: currentUser.uid });
-          }
-          loadWallPosts();
-        };
-      });
-      document.querySelectorAll(".reply-link").forEach(link => {
-        link.onclick = function () {
-          const cid = this.getAttribute("data-replyid");
-          document.querySelectorAll(".reply-box").forEach(b => b.style.display = "none");
-          const box = document.getElementById(`replybox-${cid}`);
-          if (box) {
-            box.innerHTML =
-              `<form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
-                <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-                <button type="submit">${t("comment")}</button>
-              </form>`;
-            box.style.display = "block";
-            box.querySelector("textarea").focus();
-            addReplyFormListener(box.querySelector("form"));
-          }
-        };
-      });
-      document.querySelectorAll(".add-comment-form").forEach(form => addReplyFormListener(form));
-      document.querySelectorAll(".edit-comment").forEach(link => {
-        link.onclick = function(e) {
-          e.preventDefault();
-          const commentDiv = this.closest(".comment");
-          const postId = commentDiv.dataset.postid;
-          const commentId = commentDiv.dataset.commentid;
-          const textDiv = commentDiv.querySelector(".comment-text");
-          const oldText = textDiv.textContent;
-          textDiv.innerHTML = `<input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>`;
-          textDiv.querySelector("button").onclick = async function() {
-            const newText = textDiv.querySelector("input").value.trim();
-            if (newText.length === 0) return alert(t("comment_empty"));
-            await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).update({ text: newText });
-            loadWallPosts();
-          };
-        };
-      });
-      document.querySelectorAll(".delete-comment").forEach(link => {
-        link.onclick = async function(e) {
-          e.preventDefault();
-          const commentDiv = this.closest(".comment");
-          const postId = commentDiv.dataset.postid;
-          const commentId = commentDiv.dataset.commentid;
-          if (confirm(t("delete_confirm"))) {
-            await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).delete();
-            loadWallPosts();
-          }
-        };
-      });
-    }
-    function addReplyFormListener(form) {
-      if (!form) return;
-      form.onsubmit = async function (e) {
-        e.preventDefault();
-        const textarea = this.querySelector("textarea");
-        const text = textarea.value.trim();
-        if (text.length === 0) return alert(t("comment_empty"));
-        if (text.length > 200) return alert(t("max_200"));
-        const postId = this.dataset.postid;
-        const parentId = this.dataset.parentid || null;
-        await firebase.firestore().collection("wall").doc(postId).collection("comments").add({
-          [`text_${localStorage.lang}`]: text,
-          userId: currentUser.uid,
-          createdAt: new Date(),
-          parentId: parentId
-        });
-        textarea.value = "";
+      loadWallPosts();
+    };
+  });
+  document.querySelectorAll(".comment .emoji-row .emoji-btn").forEach(btn => {
+    btn.onclick = async function () {
+      if (!currentUser) return alert(t("login_to_react"));
+      const commentDiv = this.closest(".comment");
+      const postId = commentDiv.dataset.postid;
+      const commentId = commentDiv.dataset.commentid;
+      const emojiKey = this.dataset.emoji;
+      const ref = firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).collection("reactions").doc(currentUser.uid);
+      const snap = await ref.get();
+      if (snap.exists && snap.data().emoji === emojiKey) {
+        await ref.delete();
+      } else {
+        await ref.set({ emoji: emojiKey, user: currentUser.uid });
+      }
+      loadWallPosts();
+    };
+  });
+  document.querySelectorAll(".reply-link").forEach(link => {
+    link.onclick = function () {
+      const cid = this.getAttribute("data-replyid");
+      document.querySelectorAll(".reply-box").forEach(b => b.style.display = "none");
+      const box = document.getElementById(`replybox-${cid}`);
+      if (box) {
+        box.innerHTML =
+          `<form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
+            <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+            <button type="submit">${t("comment")}</button>
+          </form>`;
+        box.style.display = "block";
+        box.querySelector("textarea").focus();
+        addReplyFormListener(box.querySelector("form"));
+      }
+    };
+  });
+  document.querySelectorAll(".add-comment-form").forEach(form => addReplyFormListener(form));
+  document.querySelectorAll(".edit-comment").forEach(link => {
+    link.onclick = function(e) {
+      e.preventDefault();
+      const commentDiv = this.closest(".comment");
+      const postId = commentDiv.dataset.postid;
+      const commentId = commentDiv.dataset.commentid;
+      const textDiv = commentDiv.querySelector(".comment-text");
+      const oldText = textDiv.textContent;
+      textDiv.innerHTML = `<input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>`;
+      textDiv.querySelector("button").onclick = async function() {
+        const newText = textDiv.querySelector("input").value.trim();
+        if (newText.length === 0) return alert(t("comment_empty"));
+        await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).update({ text: newText });
         loadWallPosts();
       };
-    }
+    };
+  });
+  document.querySelectorAll(".delete-comment").forEach(link => {
+    link.onclick = async function(e) {
+      e.preventDefault();
+      const commentDiv = this.closest(".comment");
+      const postId = commentDiv.dataset.postid;
+      const commentId = commentDiv.dataset.commentid;
+      if (confirm(t("delete_confirm"))) {
+        await firebase.firestore().collection("wall").doc(postId).collection("comments").doc(commentId).delete();
+        loadWallPosts();
+      }
+    };
+  });
+}
+
+function addReplyFormListener(form) {
+  if (!form) return;
+  form.onsubmit = async function (e) {
+    e.preventDefault();
+    const textarea = this.querySelector("textarea");
+    const text = textarea.value.trim();
+    if (text.length === 0) return alert(t("comment_empty"));
+    if (text.length > 200) return alert(t("max_200"));
+    const postId = this.dataset.postid;
+    const parentId = this.dataset.parentid || null;
+    await firebase.firestore().collection("wall").doc(postId).collection("comments").add({
+      [`text_${localStorage.lang}`]: text,
+      userId: currentUser.uid,
+      createdAt: new Date(),
+      parentId: parentId
+    });
+    textarea.value = "";
+    loadWallPosts();
+  };
+}
+
+// Viktigt! Använd loadingUser här:
 firebase.auth().onAuthStateChanged(user => {
   currentUser = user;
   loadingUser = false;
