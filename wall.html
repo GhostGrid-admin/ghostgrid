@@ -447,50 +447,67 @@
         logout: "Log out"
       }
     };
-    function t(key) {
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      return translations[lang][key] || key;
-    }
-    function applyTranslations() {
-      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
-      document.title = "GhostGrid – " + t("wall");
-      document.querySelector(".wall-title").textContent = t("wall_title");
-      document.getElementById("wallSearchInput").placeholder = localStorage.lang === "en" ? "Search selected category..." : "Sök i valda kategorin...";
-      document.getElementById("logoutDesktopBtn").textContent = t("logout") || "Logga ut";
-      document.getElementById("logoutMobileBtn").textContent = t("logout") || "Logga ut";
-    }
-    applyTranslations();
+    function t(key) { 
+  const lang = localStorage.lang === "en" ? "en" : "sv";
+  return translations[lang][key] || key;
+}
+function applyTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+  document.title = "GhostGrid – " + t("wall");
+  document.querySelector(".wall-title").textContent = t("wall_title");
+  document.getElementById("wallSearchInput").placeholder = localStorage.lang === "en" ? "Search selected category..." : "Sök i valda kategorin...";
+  document.getElementById("logoutDesktopBtn").textContent = t("logout") || "Logga ut";
+  document.getElementById("logoutMobileBtn").textContent = t("logout") || "Logga ut";
+}
+applyTranslations();
 
-    // --- LOGOUT FUNCTION
-    function doLogout() {
-      auth.signOut().then(() => { window.location.href = "login.html"; });
-    }
-    document.getElementById("logoutDesktopBtn").onclick = doLogout;
+// --- LOGOUT FUNCTION
+function doLogout() {
+  auth.signOut().then(() => { window.location.href = "login.html"; });
+}
+document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
-    // --- FIREBASE LOGIK ---
-    let currentUser = null;
-    let userMap = {};
-    let allPosts = [];
-    let searchTerm = "";
-    let currentFilter = "all";
-    const emojis = [
-      { emoji: "👍", key: "thumbsup" },
-      { emoji: "😂", key: "laugh" },
-      { emoji: "😃", key: "bigsmile" },
-      { emoji: "🙂", key: "smile" },
-      { emoji: "😇", key: "angel" },
-      { emoji: "😳", key: "embarrassed" },
-      { emoji: "😕", key: "confused" },
-      { emoji: "🙁", key: "sad" },
-      { emoji: "😢", key: "cry" },
-      { emoji: "😡", key: "angry" },
-      { emoji: "👎", key: "thumbsdown" }
-    ];
+// --- FIREBASE LOGIK ---
+let currentUser = null;
+let userMap = {};
+let allPosts = [];
+let searchTerm = "";
+let currentFilter = "all";
+let loadingUser = true;
+const emojis = [
+  { emoji: "👍", key: "thumbsup" },
+  { emoji: "😂", key: "laugh" },
+  { emoji: "😃", key: "bigsmile" },
+  { emoji: "🙂", key: "smile" },
+  { emoji: "😇", key: "angel" },
+  { emoji: "😳", key: "embarrassed" },
+  { emoji: "😕", key: "confused" },
+  { emoji: "🙁", key: "sad" },
+  { emoji: "😢", key: "cry" },
+  { emoji: "😡", key: "angry" },
+  { emoji: "👎", key: "thumbsdown" }
+];
 
 function escapeHTML(str) {
   if (!str) return "";
   return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
 }
+
+const filterRow = document.getElementById("filterRow");
+const postList = document.getElementById("postList");
+const wallSearchInput = document.getElementById("wallSearchInput");
+filterRow.addEventListener("click", (e) => {
+  if (e.target.classList.contains("filter-btn")) {
+    filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+    e.target.classList.add("active");
+    currentFilter = e.target.getAttribute("data-type");
+    renderPosts(currentFilter, searchTerm);
+  }
+});
+wallSearchInput.addEventListener("input", function () {
+  searchTerm = this.value.toLowerCase().trim();
+  renderPosts(currentFilter, searchTerm);
+});
 
 async function fetchUsers() {
   const q = firebase.firestore().collection("profiles");
@@ -510,21 +527,6 @@ async function loadWallPosts() {
     );
   renderPosts(currentFilter, searchTerm);
 }
-const filterRow = document.getElementById("filterRow");
-const postList = document.getElementById("postList");
-const wallSearchInput = document.getElementById("wallSearchInput");
-filterRow.addEventListener("click", (e) => {
-  if (e.target.classList.contains("filter-btn")) {
-    filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-    e.target.classList.add("active");
-    currentFilter = e.target.getAttribute("data-type");
-    renderPosts(currentFilter, searchTerm);
-  }
-});
-wallSearchInput.addEventListener("input", function () {
-  searchTerm = this.value.toLowerCase().trim();
-  renderPosts(currentFilter, searchTerm);
-});
 
 function formatPostContent(post) {
   switch (post.type) {
@@ -575,7 +577,7 @@ async function renderPosts(type, search) {
         <div class="post-header">${t("user")}: ${name}</div>
         ${formatPostContent(post)}
         <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
         ).join("")}
         <span class="reactions-view">${emojiSummary(reactions)}</span>
         </div>
@@ -635,7 +637,7 @@ function renderThreadedComments(postId, comments, parentId, level) {
       <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
       <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
       <div class="emoji-row">${emojis.map(e =>
-        `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}">${e.emoji}</button>`
+        `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
       ).join("")}
       <span class="reactions-view" data-cid="${c.id}"></span>
       </div>
