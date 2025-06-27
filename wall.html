@@ -532,11 +532,24 @@ async function loadWallPosts() {
   const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
   const lang = localStorage.lang === "en" ? "en" : "sv";
-  allPosts = snapshot.docs
-    .map(doc => ({ ...doc.data(), id: doc.id }))
-    .filter(post =>
-      post[text_${lang}] && post[text_${lang}].trim() !== ""
-    );
+allPosts = snapshot.docs
+  .map(doc => ({ ...doc.data(), id: doc.id }))
+  .filter(post => {
+    if (post.type === "text") {
+      // Visa textinlägg om det finns på något språk
+      return (post.text_sv && post.text_sv.trim() !== "") || (post.text_en && post.text_en.trim() !== "");
+    } else if (post.type === "image") {
+      return !!post.imageUrl;
+    } else if (post.type === "video") {
+      return !!post.videoUrl;
+    } else if (post.type === "audio") {
+      return !!post.audioUrl;
+    } else if (post.type === "mic") {
+      return !!post.micAudioUrl;
+    }
+    // Om det är någon okänd typ – visa inte
+    return false;
+  });
   renderPosts(currentFilter, searchTerm);
 }
 function formatPostContent(post) {
