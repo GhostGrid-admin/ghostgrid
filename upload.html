@@ -388,48 +388,44 @@ textarea, input[type="file"], button[type="submit"], label {
       <button class="switch-btn" data-section="audio">🎵 Ljud</button>
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
     </div>
-    <form id="uploadForm">
-      <!-- Textinlägg på båda språk -->
-      <div class="upload-section active" data-section="text">
-        <label for="text_sv">Skriv ett inlägg (svenska):</label>
-        <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500"></textarea>
-        <label for="text_en" style="margin-top:12px;">Write a post (English):</label>
-        <textarea id="text_en" placeholder="Write in English..." maxlength="1500"></textarea>
-      </div>
-      <!-- Bild -->
-      <div class="upload-section" data-section="image">
-        <label for="image">Ladda upp en bild (max 5 MB):</label>
-        <input type="file" id="image" accept="image/*" />
-      </div>
-      <!-- Video -->
-      <div class="upload-section" data-section="video">
-        <label for="video">Ladda upp ett klipp (max 30 MB):</label>
-        <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
-      </div>
-      <!-- Ljud -->
-      <div class="upload-section" data-section="audio">
-        <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
-        <input type="file" id="audio" accept="audio/*" />
-      </div>
-      <!-- Röstinspelning -->
-      <div class="upload-section" data-section="mic">
-        <label>Mikrofoninspelning (max 2 MB):</label>
-        <button type="button" id="recordButton">🎤 Starta inspelning</button>
-        <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
-        <audio id="audioPreview" controls></audio>
-      </div>
-      <!-- Beskrivning på båda språk för ALLT UTOM inlägg -->
-      <label class="desc-label" for="desc_sv">Beskrivning (svenska, valfri):</label>
-      <textarea id="desc_sv" class="desc-field" placeholder="Beskriv på svenska..."></textarea>
-      <label class="desc-label" for="desc_en" style="margin-top:8px;">Description (English, optional):</label>
-      <textarea id="desc_en" class="desc-field" placeholder="Describe in English..."></textarea>
-      <!-- Temporärt -->
-      <label style="margin-top:18px;">
-        <input type="checkbox" id="temporary" />
-        Gör detta till ett tillfälligt inlägg (försvinner om 24h)
-      </label>
-      <button type="submit" style="margin-top:18px;">Ladda upp</button>
-    </form>
+<form id="uploadForm">
+  <div class="upload-section active" data-section="text">
+    <label id="textLabel_sv" for="text_sv" style="display:none;">Skriv ett inlägg:</label>
+    <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500" style="display:none;"></textarea>
+    <label id="textLabel_en" for="text_en" style="display:none;">Write a post:</label>
+    <textarea id="text_en" placeholder="Write in English..." maxlength="1500" style="display:none;"></textarea>
+  </div>
+  <div class="upload-section" data-section="image">
+    <label for="image">Ladda upp en bild (max 5 MB):</label>
+    <input type="file" id="image" accept="image/*" />
+  </div>
+  <div class="upload-section" data-section="video">
+    <label for="video">Ladda upp ett klipp (max 30 MB):</label>
+    <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
+  </div>
+  <div class="upload-section" data-section="audio">
+    <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
+    <input type="file" id="audio" accept="audio/*" />
+  </div>
+  <div class="upload-section" data-section="mic">
+    <label>Mikrofoninspelning (max 2 MB):</label>
+    <button type="button" id="recordButton">🎤 Starta inspelning</button>
+    <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
+    <audio id="audioPreview" controls></audio>
+  </div>
+  <!-- Beskrivning på båda språk -->
+  <label class="desc-label sv" id="descLabel_sv" for="desc_sv" style="display:none;">Beskrivning (valfri):</label>
+  <textarea id="desc_sv" class="desc-field" placeholder="Beskriv innehållet..." style="display:none;"></textarea>
+  <label class="desc-label en" id="descLabel_en" for="desc_en" style="display:none;">Description (optional):</label>
+  <textarea id="desc_en" class="desc-field" placeholder="Describe the content..." style="display:none;"></textarea>
+  <!-- Temporärt inlägg, du kan välja att visa bara en label här om du vill -->
+  <label style="margin-top:18px;">
+    <input type="checkbox" id="temporary" />
+    <span id="tmp_sv">Gör detta till ett tillfälligt inlägg (försvinner om 24h)</span>
+    <span id="tmp_en" style="display:none;">Make this a temporary post (disappears in 24h)</span>
+  </label>
+  <button type="submit" id="submitBtn" style="margin-top:18px;">Ladda upp</button>
+</form>
   </div>
   <script>
     // SÄKER DOM-UPPDATERARE
@@ -441,58 +437,75 @@ textarea, input[type="file"], button[type="submit"], label {
       var el = document.querySelector(selector);
       if (el) el.innerHTML = html;
     }
-    function setLanguage() {
-      const lang = (localStorage.lang || localStorage.language || "sv");
-      const navLinks = document.querySelectorAll('.nav-links a');
-      const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
-      const logoutMobileBtn = document.querySelector('#navMobile .logout-link-mobile');
-      if (lang === 'en') {
-        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        safeSet('#logoutDesktopBtn', 'textContent', 'Log out');
-        safeSet('#logoutMobileBtn', 'textContent', 'Log out');
-        safeSet('.upload-title', 'textContent', 'Upload content');
-        safeSet('.switch-btn[data-section="text"]', 'textContent', '📝 Post');
-        safeSet('.switch-btn[data-section="image"]', 'textContent', '🖼️ Image');
-        safeSet('.switch-btn[data-section="video"]', 'textContent', '🎬 Clip');
-        safeSet('.switch-btn[data-section="audio"]', 'textContent', '🎵 Audio');
-        safeSet('.switch-btn[data-section="mic"]', 'textContent', '🎤 Voice');
-        safeSet('label[for="text"]', 'textContent', 'Write a post:');
-        safeSet('textarea#text', 'placeholder', 'What do you want to share?');
-        safeSet('label[for="image"]', 'textContent', 'Upload an image (max 5 MB):');
-        safeSet('label[for="video"]', 'textContent', 'Upload a clip (max 30 MB):');
-        safeSet('label[for="audio"]', 'textContent', 'Upload an audio file (max 5 MB):');
-        safeSet('.upload-section[data-section="mic"] label', 'textContent', 'Microphone recording (max 2 MB):');
-        safeSet('.desc-label', 'textContent', 'Description (optional):');
-        safeSet('#desc', 'placeholder', 'Describe the content...');
-        safeSetHTML('label[for="temporary"]', `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`);
-        safeSet('button[type="submit"]', 'textContent', 'Upload');
-      } else {
-        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
-        navLinks.forEach((a,i) => a.textContent = texts[i]);
-        navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
-        safeSet('#logoutDesktopBtn', 'textContent', 'Logga ut');
-        safeSet('#logoutMobileBtn', 'textContent', 'Logga ut');
-        safeSet('.upload-title', 'textContent', 'Ladda upp innehåll');
-        safeSet('.switch-btn[data-section="text"]', 'textContent', '📝 Inlägg');
-        safeSet('.switch-btn[data-section="image"]', 'textContent', '🖼️ Bild');
-        safeSet('.switch-btn[data-section="video"]', 'textContent', '🎬 Klipp');
-        safeSet('.switch-btn[data-section="audio"]', 'textContent', '🎵 Ljud');
-        safeSet('.switch-btn[data-section="mic"]', 'textContent', '🎤 Röst');
-        safeSet('label[for="text"]', 'textContent', 'Skriv ett inlägg:');
-        safeSet('textarea#text', 'placeholder', 'Vad vill du dela med dig av?');
-        safeSet('label[for="image"]', 'textContent', 'Ladda upp en bild (max 5 MB):');
-        safeSet('label[for="video"]', 'textContent', 'Ladda upp ett klipp (max 30 MB):');
-        safeSet('label[for="audio"]', 'textContent', 'Ladda upp ljudfil (max 5 MB):');
-        safeSet('.upload-section[data-section="mic"] label', 'textContent', 'Mikrofoninspelning (max 2 MB):');
-        safeSet('.desc-label', 'textContent', 'Beskrivning (valfri):');
-        safeSet('#desc', 'placeholder', 'Beskriv innehållet...');
-        safeSetHTML('label[for="temporary"]', `<input type="checkbox" id="temporary" /> Gör detta till ett tillfälligt inlägg (försvinner om 24h)`);
-        safeSet('button[type="submit"]', 'textContent', 'Ladda upp');
-      }
-      document.body.classList.add('ready');
-    }
+function setLanguage() {
+  const lang = (localStorage.lang || localStorage.language || "sv");
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
+  if (lang === 'en') {
+    const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
+    navLinks.forEach((a,i) => a.textContent = texts[i]);
+    navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
+    safeSet('#logoutDesktopBtn', 'textContent', 'Log out');
+    safeSet('#logoutMobileBtn', 'textContent', 'Log out');
+    safeSet('.upload-title', 'textContent', 'Upload content');
+    safeSet('.switch-btn[data-section="text"]', 'textContent', '📝 Post');
+    safeSet('.switch-btn[data-section="image"]', 'textContent', '🖼️ Image');
+    safeSet('.switch-btn[data-section="video"]', 'textContent', '🎬 Clip');
+    safeSet('.switch-btn[data-section="audio"]', 'textContent', '🎵 Audio');
+    safeSet('.switch-btn[data-section="mic"]', 'textContent', '🎤 Voice');
+    // Visa/dölj rätt textfält för inlägg
+    safeSet('#text_sv', 'style.display', 'none');
+    safeSet('#text_en', 'style.display', 'block');
+    safeSet('#textLabel_sv', 'style.display', 'none');
+    safeSet('#textLabel_en', 'style.display', 'block');
+    safeSet('#text_en', 'placeholder', 'Write in English...');
+    // Visa/dölj rätt fält för beskrivning
+    safeSet('#desc_sv', 'style.display', 'none');
+    safeSet('#desc_en', 'style.display', 'block');
+    safeSet('.desc-label.sv', 'style.display', 'none');
+    safeSet('.desc-label.en', 'style.display', 'block');
+    safeSet('#desc_en', 'placeholder', 'Describe in English...');
+    // Resterande fält
+    safeSet('label[for="image"]', 'textContent', 'Upload an image (max 5 MB):');
+    safeSet('label[for="video"]', 'textContent', 'Upload a clip (max 30 MB):');
+    safeSet('label[for="audio"]', 'textContent', 'Upload an audio file (max 5 MB):');
+    safeSet('.upload-section[data-section="mic"] label', 'textContent', 'Microphone recording (max 2 MB):');
+    safeSetHTML('label[for="temporary"]', `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`);
+    safeSet('button[type="submit"]', 'textContent', 'Upload');
+  } else {
+    const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
+    navLinks.forEach((a,i) => a.textContent = texts[i]);
+    navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
+    safeSet('#logoutDesktopBtn', 'textContent', 'Logga ut');
+    safeSet('#logoutMobileBtn', 'textContent', 'Logga ut');
+    safeSet('.upload-title', 'textContent', 'Ladda upp innehåll');
+    safeSet('.switch-btn[data-section="text"]', 'textContent', '📝 Inlägg');
+    safeSet('.switch-btn[data-section="image"]', 'textContent', '🖼️ Bild');
+    safeSet('.switch-btn[data-section="video"]', 'textContent', '🎬 Klipp');
+    safeSet('.switch-btn[data-section="audio"]', 'textContent', '🎵 Ljud');
+    safeSet('.switch-btn[data-section="mic"]', 'textContent', '🎤 Röst');
+    // Visa/dölj rätt textfält för inlägg
+    safeSet('#text_sv', 'style.display', 'block');
+    safeSet('#text_en', 'style.display', 'none');
+    safeSet('#textLabel_sv', 'style.display', 'block');
+    safeSet('#textLabel_en', 'style.display', 'none');
+    safeSet('#text_sv', 'placeholder', 'Skriv på svenska...');
+    // Visa/dölj rätt fält för beskrivning
+    safeSet('#desc_sv', 'style.display', 'block');
+    safeSet('#desc_en', 'style.display', 'none');
+    safeSet('.desc-label.sv', 'style.display', 'block');
+    safeSet('.desc-label.en', 'style.display', 'none');
+    safeSet('#desc_sv', 'placeholder', 'Beskriv på svenska...');
+    // Resterande fält
+    safeSet('label[for="image"]', 'textContent', 'Ladda upp en bild (max 5 MB):');
+    safeSet('label[for="video"]', 'textContent', 'Ladda upp ett klipp (max 30 MB):');
+    safeSet('label[for="audio"]', 'textContent', 'Ladda upp ljudfil (max 5 MB):');
+    safeSet('.upload-section[data-section="mic"] label', 'textContent', 'Mikrofoninspelning (max 2 MB):');
+    safeSetHTML('label[for="temporary"]', `<input type="checkbox" id="temporary" /> Gör detta till ett tillfälligt inlägg (försvinner om 24h)`);
+    safeSet('button[type="submit"]', 'textContent', 'Ladda upp');
+  }
+  document.body.classList.add('ready');
+}
 
     function updateMenuMode() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -512,23 +525,30 @@ textarea, input[type="file"], button[type="submit"], label {
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      updateMenuMode();
-      setLanguage();
-      // Hamburgermenyn togglas
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navMobile = document.getElementById('navMobile');
-      hamburgerBtn.onclick = function() {
-        navMobile.classList.toggle('show');
-      };
-      document.getElementById("logoutMobileBtn").onclick = function(e) {
-        e.preventDefault();
-        navMobile.classList.remove('show');
-        doLogout();
-      };
-      document.getElementById("logoutDesktopBtn").onclick = doLogout;
-    });
-    window.addEventListener("resize", updateMenuMode);
+document.addEventListener("DOMContentLoaded", function() {
+  updateMenuMode();
+  setLanguage();
+
+  // Hamburgermenyn togglas
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMobile = document.getElementById('navMobile');
+  hamburgerBtn.onclick = function() {
+    navMobile.classList.toggle('show');
+  };
+
+  // Logga ut-knappar
+  document.getElementById("logoutMobileBtn").onclick = function(e) {
+    e.preventDefault();
+    navMobile.classList.remove('show');
+    doLogout();
+  };
+  document.getElementById("logoutDesktopBtn").onclick = doLogout;
+
+  // --- Lägg till denna del om du vill säkerställa språkväxling vid filter/byten ---
+  // Om användaren byter språk live på sidan, kan du kalla setLanguage() igen då.
+});
+
+window.addEventListener("resize", updateMenuMode);
 
     // Banner-rotation (vänster och höger)
     const banners = [
