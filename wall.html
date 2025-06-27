@@ -363,88 +363,87 @@
     </div>
     <div id="postList" class="post-list"></div>
   </div>
-  <script>
-    // SIDBANNER ROTATION (identisk logik som forum)
-    const banners = [
-      {
-        left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
-        right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
-      },
-      {
-        left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
-        right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
-      }
-    ];
-    let bannerIndex = 0;
-    function updateBanners() {
-      const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
-      document.getElementById('leftBannerImg').src = left.src;
-      document.getElementById('leftBannerImg').alt = left.alt;
-      document.getElementById('leftBannerLink').href = left.url;
-      document.getElementById('rightBannerImg').src = right.src;
-      document.getElementById('rightBannerImg').alt = right.alt;
-      document.getElementById('rightBannerLink').href = right.url;
+<script>
+  // SIDBANNER ROTATION (identisk logik som forum)
+  const banners = [
+    {
+      left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
+      right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+    },
+    {
+      left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
+      right: { src: "https://dummyimage.com/150x1800/0077ff/fff&text=Annonsera+Här", alt: "Annonsera", url: "#" }
     }
+  ];
+  let bannerIndex = 0;
+  function updateBanners() {
+    const left = banners[bannerIndex].left, right = banners[bannerIndex].right;
+    document.getElementById('leftBannerImg').src = left.src;
+    document.getElementById('leftBannerImg').alt = left.alt;
+    document.getElementById('leftBannerLink').href = left.url;
+    document.getElementById('rightBannerImg').src = right.src;
+    document.getElementById('rightBannerImg').alt = right.alt;
+    document.getElementById('rightBannerLink').href = right.url;
+  }
+  updateBanners();
+  setInterval(() => {
+    bannerIndex = (bannerIndex + 1) % banners.length;
     updateBanners();
-    setInterval(() => {
-      bannerIndex = (bannerIndex + 1) % banners.length;
-      updateBanners();
-    }, 6000);
+  }, 6000);
 
-// --- Hamburgermeny + Filterknappar (identisk forum/wall)
-document.addEventListener("DOMContentLoaded", function() {
-  // HAMBURGERMENY
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const navMobile = document.getElementById('navMobile');
-  if (hamburgerBtn && navMobile) {
-    hamburgerBtn.addEventListener('click', function () {
-      navMobile.classList.toggle('show');
-    });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navMobile.classList.remove('show');
+  // --- Hamburgermeny + Filterknappar (identisk forum/wall)
+  document.addEventListener("DOMContentLoaded", function() {
+    // HAMBURGERMENY
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMobile = document.getElementById('navMobile');
+    if (hamburgerBtn && navMobile) {
+      hamburgerBtn.addEventListener('click', function () {
+        navMobile.classList.toggle('show');
       });
-    });
-    const logoutBtn = document.getElementById("logoutMobileBtn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        navMobile.classList.remove('show');
-        doLogout();
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMobile.classList.remove('show');
+        });
+      });
+      const logoutBtn = document.getElementById("logoutMobileBtn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          navMobile.classList.remove('show');
+          doLogout();
+        });
+      }
+    }
+
+    // NAVBAR HIDE VID SCROLL PÅ MOBIL
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
       });
     }
-  }
 
-  // NAVBAR HIDE VID SCROLL PÅ MOBIL
-  if (window.innerWidth <= 600) {
-    let lastScrollY = window.scrollY;
-    let navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > lastScrollY && window.scrollY > 70) {
-        navbar.classList.add('hide-navbar');
-      } else {
-        navbar.classList.remove('hide-navbar');
-      }
-      lastScrollY = window.scrollY;
-    });
-  }
-
-  // FILTERKNAPPAR: ENDAST EN AKTIV
-  const filterRow = document.getElementById("filterRow");
-  if (filterRow) {
-    filterRow.addEventListener("click", function(e) {
-      if (e.target.classList.contains("filter-btn")) {
-        filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-        e.target.classList.add("active");
-        // Anropa filtrering om du har (exempel):
-        if (typeof renderPosts === "function") {
-          currentFilter = e.target.getAttribute("data-type");
-          renderPosts(currentFilter, window.searchTerm || "");
+    // FILTERKNAPPAR: ENDAST EN AKTIV
+    const filterRow = document.getElementById("filterRow");
+    if (filterRow) {
+      filterRow.addEventListener("click", function(e) {
+        if (e.target.classList.contains("filter-btn")) {
+          filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+          e.target.classList.add("active");
+          if (typeof renderPosts === "function") {
+            currentFilter = e.target.getAttribute("data-type");
+            renderPosts(currentFilter, window.searchTerm || "");
+          }
         }
-      }
-    });
-  }
-});
+      });
+    }
+  });
 </script>
 
     
@@ -787,35 +786,35 @@ function addReplyFormListener(form) {
 }
 
 // AUTH STATE
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  loadingUser = false;
-  applyTranslations();
-  loadWallPosts();
+  firebase.auth().onAuthStateChanged(user => {
+      currentUser = user;
+      loadingUser = false;
+      applyTranslations();
+      loadWallPosts();
 
-  // Sätt listeners när användare är satt
-  document.getElementById("logoutDesktopBtn").onclick = doLogout;
-  document.getElementById("logoutMobileBtn").onclick = doLogout;
+      // Sätt listeners när användare är satt
+      document.getElementById("logoutDesktopBtn").onclick = doLogout;
+      document.getElementById("logoutMobileBtn").onclick = doLogout;
 
-  const filterRow = document.getElementById("filterRow");
-  const wallSearchInput = document.getElementById("wallSearchInput");
-  filterRow.addEventListener("click", (e) => {
-    if (e.target.classList.contains("filter-btn")) {
-      filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-      e.target.classList.add("active");
-      currentFilter = e.target.getAttribute("data-type");
-      renderPosts(currentFilter, searchTerm);
+      const filterRow = document.getElementById("filterRow");
+      const wallSearchInput = document.getElementById("wallSearchInput");
+      filterRow.addEventListener("click", (e) => {
+        if (e.target.classList.contains("filter-btn")) {
+          filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+          e.target.classList.add("active");
+          currentFilter = e.target.getAttribute("data-type");
+          renderPosts(currentFilter, searchTerm);
+        }
+      });
+      wallSearchInput.addEventListener("input", function () {
+        searchTerm = this.value.toLowerCase().trim();
+        renderPosts(currentFilter, searchTerm);
+      });
+    });
+
+    function doLogout() {
+      firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
     }
-  });
-  wallSearchInput.addEventListener("input", function () {
-    searchTerm = this.value.toLowerCase().trim();
-    renderPosts(currentFilter, searchTerm);
-  });
-});
-
-function doLogout() {
-  signOut(auth).then(() => { window.location.href = "login.html"; });
-}
 </script>
 </body>
 </html>
