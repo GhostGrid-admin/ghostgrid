@@ -542,19 +542,25 @@
       }
     }
     async function renderPosts(type, search) {
-      let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
-      if (search && search.length > 0) {
-        posts = posts.filter(post => {
-          const user = userMap[post.user] || "";
-          return (
-            (post.text_sv && post.text_sv.toLowerCase().includes(search)) ||
-            (post.text_en && post.text_en.toLowerCase().includes(search)) ||
-            (post.desc_sv && post.desc_sv.toLowerCase().includes(search)) ||
-            (post.desc_en && post.desc_en.toLowerCase().includes(search)) ||
-            (user.toLowerCase().includes(search))
-          );
-        });
-      }
+  // Lägg till detta överst!
+  if (typeof currentUser === 'undefined') {
+    postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
+    return;
+  }
+
+  let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
+  if (search && search.length > 0) {
+    posts = posts.filter(post => {
+      const user = userMap[post.user] || "";
+      return (
+        (post.text_sv && post.text_sv.toLowerCase().includes(search)) ||
+        (post.text_en && post.text_en.toLowerCase().includes(search)) ||
+        (post.desc_sv && post.desc_sv.toLowerCase().includes(search)) ||
+        (post.desc_en && post.desc_en.toLowerCase().includes(search)) ||
+        (user.toLowerCase().includes(search))
+      );
+    });
+  }
       if (!posts.length) {
         postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
         return;
