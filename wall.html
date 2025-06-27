@@ -469,11 +469,11 @@ document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
 // --- FIREBASE LOGIK ---
 let currentUser = null;
+let loadingUser = true;
 let userMap = {};
 let allPosts = [];
 let searchTerm = "";
 let currentFilter = "all";
-let loadingUser = true;
 const emojis = [
   { emoji: "👍", key: "thumbsup" },
   { emoji: "😂", key: "laugh" },
@@ -488,32 +488,31 @@ const emojis = [
   { emoji: "👎", key: "thumbsdown" }
 ];
 
+function t(key) { 
+  const lang = localStorage.lang === "en" ? "en" : "sv";
+  return translations[lang][key] || key;
+}
+
 function escapeHTML(str) {
   if (!str) return "";
   return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
 }
 
-const filterRow = document.getElementById("filterRow");
-const postList = document.getElementById("postList");
-const wallSearchInput = document.getElementById("wallSearchInput");
-filterRow.addEventListener("click", (e) => {
-  if (e.target.classList.contains("filter-btn")) {
-    filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-    e.target.classList.add("active");
-    currentFilter = e.target.getAttribute("data-type");
-    renderPosts(currentFilter, searchTerm);
-  }
-});
-wallSearchInput.addEventListener("input", function () {
-  searchTerm = this.value.toLowerCase().trim();
-  renderPosts(currentFilter, searchTerm);
-});
+function applyTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+  document.title = "GhostGrid – " + t("wall");
+  document.querySelector(".wall-title").textContent = t("wall_title");
+  document.getElementById("wallSearchInput").placeholder = localStorage.lang === "en" ? "Search selected category..." : "Sök i valda kategorin...";
+  document.getElementById("logoutDesktopBtn").textContent = t("logout") || "Logga ut";
+  document.getElementById("logoutMobileBtn").textContent = t("logout") || "Logga ut";
+}
 
 async function fetchUsers() {
   const q = firebase.firestore().collection("profiles");
   const snap = await q.get();
   snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
 }
+
 async function loadWallPosts() {
   postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
   await fetchUsers();
@@ -756,11 +755,28 @@ function addReplyFormListener(form) {
   };
 }
 
-// Viktigt! Använd loadingUser här:
+// Kör INGET innan auth är satt!
 firebase.auth().onAuthStateChanged(user => {
   currentUser = user;
   loadingUser = false;
+  applyTranslations();
   loadWallPosts();
+
+  // Sätt listeners först när användare är satt
+  document.getElementById("logoutDesktopBtn").onclick = doLogout;
+  document.getElementById("logoutMobileBtn").onclick = doLogout;
+  filterRow.addEventListener("click", (e) => {
+    if (e.target.classList.contains("filter-btn")) {
+      filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+      e.target.classList.add("active");
+      currentFilter = e.target.getAttribute("data-type");
+      renderPosts(currentFilter, searchTerm);
+    }
+  });
+  wallSearchInput.addEventListener("input", function () {
+    searchTerm = this.value.toLowerCase().trim();
+    renderPosts(currentFilter, searchTerm);
+  });
 });
 </script>
 </body>
