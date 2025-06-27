@@ -748,10 +748,11 @@
         loadWallPosts();
       };
     }
-    firebase.auth().onAuthStateChanged(user => {
-      currentUser = user;
-      loadWallPosts();
-    });
-  </script>
+firebase.auth().onAuthStateChanged(user => {
+  currentUser = user;
+  loadingUser = false;
+  loadWallPosts();
+});
+</script>
 </body>
 </html>
