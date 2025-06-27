@@ -6,36 +6,247 @@
   <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden; }
-    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
-    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
-    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
-    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto; }
-    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px; }
+    body {
+      background: #0a0a0a;
+      color: #e0ffff;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 85px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-left, .glow-right {
+      position: fixed;
+      top: 0;
+      width: 170px;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-left {
+      left: 0;
+      background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
+    }
+    .glow-right {
+      right: 0;
+      background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%);
+      box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;
+    }
+    .side-banner {
+      position: fixed;
+      top: 87px;
+      bottom: 0;
+      width: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      z-index: 1002;
+      background: none;
+      pointer-events: none;
+    }
+    .side-banner .banner-inner {
+      width: 150px;
+      height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #7b00ff99;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #220043;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 10px #8800ff70;
+      pointer-events: auto;
+      min-height: 200px;
+    }
     .side-banner.left { left: 0; }
     .side-banner.right { right: 0; }
-    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
-    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 0; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; align-items: center; justify-content: center; min-height: 60px; transition: top 0.3s; }
-    .nav-center { flex: 1; display: flex; justify-content: center; align-items: center; }
-    .nav-links { display: flex; gap: 26px; list-style: none; margin: 0 auto; padding: 0; align-items: center; }
+    @media (max-width: 1100px) {
+      .side-banner, .glow-left, .glow-right { width: 85px; }
+      .side-banner .banner-inner { width: 75px; }
+    }
+    @media (max-width: 900px) {
+      .side-banner, .glow-left, .glow-right { display: none; }
+    }
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+      transition: top 0.3s;
+    }
+    .nav-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      align-items: center;
+    }
     .nav-links li { display: flex; }
-    .nav-links a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; font-family: inherit; }
-    .nav-links a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
-    .logout-btn { position: fixed; top: 12px; right: 12px; background: #000; color: #00ffcc; border: 2px solid #00ffcc; padding: 8px 24px 7px 24px; font-size: 1.1em; border-radius: 9px; font-family: 'Courier New', monospace; font-weight: bold; box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99; transition: 0.18s; cursor: pointer; opacity: 0.98; margin: 0; z-index: 1500; display: block; }
-    .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 55px; z-index: 2002; background: none; border: none; cursor: pointer; }
-    .hamburger span { width: 32px; height: 4px; background: #00ffcc; margin: 5px 0; border-radius: 2px; transition: 0.3s; display: block; }
-    @media (max-width: 900px) { .nav-center, .logout-btn { display: none !important; } .hamburger { display: flex !important; } nav.navbar { min-height: 55px; border-bottom-width: 2px;}}
-    .nav-mobile { display: none; flex-direction: column; align-items: center; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); min-width: 220px; width: 92vw; max-width: 400px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1201; padding-bottom: 20px; border-radius: 0 0 16px 16px; animation: dropin 0.16s; text-align: center; }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+      font-family: inherit;
+    }
+    .nav-links a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 8px 24px 7px 24px;
+      font-size: 1.1em;
+      border-radius: 9px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.18s;
+      cursor: pointer;
+      opacity: 0.98;
+      margin: 0;
+      z-index: 1500;
+      display: block;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 55px;
+      z-index: 2002;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 32px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+      nav.navbar { min-height: 55px; border-bottom-width: 2px;}
+    }
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1201;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
+    }
     .nav-mobile.show { display: flex; }
-    .nav-mobile a, .nav-mobile .logout-link-mobile { padding: 18px 0px; font-size: 1.15em; width: 100%; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; background: none; color: #00ffcc; font-weight: bold; border: none; box-shadow: none; display: block; margin: 0; font-family: inherit; }
-    .nav-mobile .logout-link-mobile { cursor: pointer; background: none; }
-    .nav-mobile a:last-child { margin-top: 8px; background: #000; color: #00ffcc; border-bottom: 1px solid #3fffd966; font-weight: bold; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      padding: 18px 0px;
+      font-size: 1.15em;
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0;
+      font-family: inherit;
+    }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
+    }
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
+    }
     .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } .nav-mobile { min-width: 160px; width: 98vw; } }
-    .wall-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 440px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2; min-width: 0; }
-    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-mobile { min-width: 160px; width: 98vw; }
+    }
+    .wall-box {
+      border: 2px solid #66ffcc;
+      border-radius: 12px;
+      padding: 30px 20px 22px 20px;
+      margin: 36px auto 32px auto;
+      max-width: 440px;
+      background-color: rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 15px #00ffcc33;
+      position: relative;
+      z-index: 2;
+      min-width: 0;
+    }
+    @media (max-width: 700px) {
+      .wall-box {
+        padding: 12px 2vw 10px 2vw;
+        max-width: 99vw;
+      }
+    }
     .wall-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
     .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
@@ -48,17 +259,15 @@
     .post .post-content { font-size: 1.19em;}
     .post .post-time { color: #9df; font-size: 0.91em; margin-top: 6px;}
     .post img, .post video, .post audio { max-width: 100%; border-radius: 7px; margin-top: 7px;}
-    .reaction-bar { display: flex; align-items: center; gap: 14px; position: relative; }
-    .show-reactions-btn { background: #00ffcc; border: none; border-radius: 7px; color: #111; font-size: 1.3em; font-weight: bold; padding: 4px 13px; cursor: pointer; box-shadow: 0 0 5px #00ffcc88; transition: background 0.16s;}
-    .reactions-dropdown { position: absolute; left: 0; top: 38px; background: #181f26; border: 1.5px solid #66ffcc; box-shadow: 0 8px 24px #00ffcc44; border-radius: 10px; z-index: 900; padding: 7px 12px 6px 12px; display: none; gap: 8px; transition: opacity 0.15s;}
-    .reactions-dropdown .emoji-btn { background: none; border: none; font-size: 1.55em; cursor: pointer; border-radius: 4px; transition: background 0.14s; }
-    .reactions-dropdown .emoji-btn.selected { background: #00ffcc33;}
-    .reaction-summary { margin-left: 8px; font-size: 1.08em; color: #ffdc40;}
+    .emoji-row { margin: 7px 0 3px 0; display: flex; flex-wrap: wrap; gap: 7px; }
+    .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
+    .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
+    .reactions-view { margin-left: 6px; font-size: 1.18em;}
     .comments-block { margin-top: 13px; padding-top: 13px; border-top: 1px solid #333; }
     .comment { margin-bottom: 11px; border-radius: 5px; background: #141923; padding: 8px 9px 6px 9px; }
     .comment .comment-meta { color: #00ffd9; font-size: 0.96em; }
     .comment .comment-text { margin: 4px 0 2px 0;}
-    .comment .reaction-bar { margin: 2px 0 5px 0;}
+    .comment .emoji-row { margin-top: 1px;}
     .comment-actions { font-size: 0.9em; color: #8ef; margin-top: 2px;}
     .comment-actions a { margin-right: 9px; color: #00ccff; text-decoration: underline; cursor: pointer;}
     .comment-actions a:hover { color: #00ffcc; }
@@ -116,6 +325,7 @@
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
+
   <div class="wall-box">
     <div class="wall-title" data-i18n="wall_title">Väggen</div>
     <div class="filter-row" id="filterRow">
@@ -132,7 +342,7 @@
     <div id="postList" class="post-list"></div>
   </div>
   <script>
-    // --- FIREBASE INIT ---
+    // FIREBASE INIT
     const firebaseConfig = {
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -146,7 +356,7 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    // --- BANNERS ---
+    // --- BANNERS
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -168,9 +378,12 @@
       document.getElementById('rightBannerLink').href = right.url;
     }
     updateBanners();
-    setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
+    setInterval(() => {
+      bannerIndex = (bannerIndex + 1) % banners.length;
+      updateBanners();
+    }, 6000);
 
-    // --- NAV & MOBILNAV ---
+    // HAMBURGER + MOBILNAV
     document.addEventListener("DOMContentLoaded", function() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
@@ -200,12 +413,37 @@
       }
     });
 
-    // --- TRANSLATION ---
+    // TRANSLATIONS
     const translations = {
-      sv: { forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow", wall_title: "Väggen", all: "Alla", post: "Inlägg", image: "Bilder", video: "Klipp", audio: "Ljud", mic: "Röst", loading: "Laddar inlägg...", no_posts: "Inga inlägg hittades.", user: "Användare", comment: "Kommentera", comment_placeholder: "Kommentera...", login_to_comment: "Logga in för att kommentera.", edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt", reply: "Svara", guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.", max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.", login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera inlägget?", all_fields: "Alla fält måste fyllas i.", logout: "Logga ut"},
-      en: { forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow", wall_title: "Wall", all: "All", post: "Posts", image: "Images", video: "Videos", audio: "Audio", mic: "Voice", loading: "Loading posts...", no_posts: "No posts found.", user: "User", comment: "Comment", comment_placeholder: "Comment...", login_to_comment: "Login to comment.", edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel", reply: "Reply", guest: "Guest", at: "at", comment_deleted: "Comment deleted.", max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.", login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this post?", all_fields: "All fields are required.", logout: "Log out"}
+      sv: {
+        forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
+        wall_title: "Väggen",
+        all: "Alla", post: "Inlägg", image: "Bilder", video: "Klipp", audio: "Ljud", mic: "Röst",
+        loading: "Laddar inlägg...", no_posts: "Inga inlägg hittades.",
+        user: "Användare", comment: "Kommentera", comment_placeholder: "Kommentera...", login_to_comment: "Logga in för att kommentera.",
+        edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt", reply: "Svara",
+        guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.",
+        max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
+        login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera inlägget?", all_fields: "Alla fält måste fyllas i.",
+        logout: "Logga ut"
+      },
+      en: {
+        forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow",
+        wall_title: "Wall",
+        all: "All", post: "Posts", image: "Images", video: "Videos", audio: "Audio", mic: "Voice",
+        loading: "Loading posts...", no_posts: "No posts found.",
+        user: "User", comment: "Comment", comment_placeholder: "Comment...", login_to_comment: "Login to comment.",
+        edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel", reply: "Reply",
+        guest: "Guest", at: "at", comment_deleted: "Comment deleted.",
+        max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
+        login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this post?", all_fields: "All fields are required.",
+        logout: "Log out"
+      }
     };
-    function t(key) { const lang = localStorage.lang === "en" ? "en" : "sv"; return translations[lang][key] || key; }
+    function t(key) {
+      const lang = localStorage.lang === "en" ? "en" : "sv";
+      return translations[lang][key] || key;
+    }
     function applyTranslations() {
       document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
       document.title = "GhostGrid – " + t("wall");
@@ -214,47 +452,165 @@
       document.getElementById("logoutDesktopBtn").textContent = t("logout") || "Logga ut";
       document.getElementById("logoutMobileBtn").textContent = t("logout") || "Logga ut";
     }
-    function escapeHTML(str) { if (!str) return ""; return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]); }
-    let currentUser = null, loadingUser = true, userMap = {}, allPosts = [], searchTerm = "", currentFilter = "all";
-    const emojis = [{ emoji: "👍", key: "thumbsup" },{ emoji: "😂", key: "laugh" },{ emoji: "😃", key: "bigsmile" },{ emoji: "🙂", key: "smile" },{ emoji: "😇", key: "angel" },{ emoji: "😳", key: "embarrassed" },{ emoji: "😕", key: "confused" },{ emoji: "🙁", key: "sad" },{ emoji: "😢", key: "cry" },{ emoji: "😡", key: "angry" },{ emoji: "👎", key: "thumbsdown" }];
-    async function fetchUsers() { userMap = {}; const snap = await db.collection("profiles").get(); snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest")); }
-    async function loadWallPosts() {
-      const postList = document.getElementById("postList");
-      postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
-      await fetchUsers();
-      const snapshot = await db.collection("wall").orderBy("createdAt", "desc").get();
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      allPosts = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-        .filter(post => (post[`text_${lang}`] && post[`text_${lang}`].trim() !== "") || post.type !== "text");
-      renderPosts(currentFilter, searchTerm);
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
     }
-    function formatPostContent(post) {
-      switch (post.type) {
-        case "text": return `<div class="post-content">${escapeHTML(post[`text_${localStorage.lang}`] || post.text || "")}</div>`;
-        case "image": return post.imageUrl ? `<img src="${post.imageUrl}" alt="Bild" />` : "";
-        case "video": return post.videoUrl ? `<video controls src="${post.videoUrl}"></video>` : "";
-        case "audio": return post.audioUrl ? `<audio controls src="${post.audioUrl}"></audio>` : "";
-        case "mic": return post.micAudioUrl ? `<audio controls src="${post.micAudioUrl}"></audio>` : "";
-        default: return "";
-      }
-    }
+
+    let currentUser = null;
+    let loadingUser = true;
+    let userMap = {};
+    let allPosts = [];
+    let searchTerm = "";
+    let currentFilter = "all";
+    const emojis = [
+      { emoji: "👍", key: "thumbsup" }, { emoji: "😂", key: "laugh" }, { emoji: "😃", key: "bigsmile" },
+      { emoji: "🙂", key: "smile" }, { emoji: "😇", key: "angel" }, { emoji: "😳", key: "embarrassed" },
+      { emoji: "😕", key: "confused" }, { emoji: "🙁", key: "sad" }, { emoji: "😢", key: "cry" },
+      { emoji: "😡", key: "angry" }, { emoji: "👎", key: "thumbsdown" }
+    ];
+
     function emojiSummary(reactions) {
       if (!reactions || reactions.length === 0) return "";
       let counts = {};
       reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-      return Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
+      return Object.entries(counts).map(([k, v]) =>
+        `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`
+      ).join(" ");
     }
+
     async function loadReactions(postId) {
       const snap = await db.collection("wall").doc(postId).collection("reactions").get();
       return snap.docs.map(doc => doc.data());
     }
+
+    // Bygg post med dropdown-hamburgermeny för reaktioner
+    async function renderPosts(type, search) {
+      const postList = document.getElementById("postList");
+      postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">Laddar...</div>`;
+      let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
+      // ...samma filtrering...
+      if (!posts.length) {
+        postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>Inga inlägg hittades.</div>`;
+        return;
+      }
+      postList.innerHTML = "";
+      for (let post of posts) {
+        const reactions = await loadReactions(post.id);
+        const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
+        // --- Reaktionsdropdown ---
+        let dropdown = `
+        <div class="react-dropdown">
+          <button class="react-dropdown-btn" data-postid="${post.id}" aria-label="Reagera">${userReaction ? emojis.find(e=>e.key===userReaction.emoji).emoji : "😊"}</button>
+          <div class="react-dropdown-list">
+            ${emojis.map(e=>`<button data-emoji="${e.key}" data-postid="${post.id}">${e.emoji}</button>`).join("")}
+            ${userReaction ? `<button data-emoji="remove" data-postid="${post.id}" style="color:#c00;font-weight:bold;">Ta bort</button>` : ""}
+          </div>
+        </div>
+        <span class="react-summary">${emojiSummary(reactions)}</span>`;
+        // --- Post HTML ---
+        postList.innerHTML += `
+          <div class="post" data-postid="${post.id}">
+            <div class="post-header">Användare: ${userMap[post.user] || "Gäst"}</div>
+            ${formatPostContent(post)}
+            <div class="emoji-row">${dropdown}</div>
+            <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString("sv-SE") : ""}</div>
+            <div class="comments-block">
+              <!-- Här renderar du kommentarerna på vanligt sätt -->
+            </div>
+          </div>`;
+      }
+      addDropdownListeners();
+    }
+
+    // Dropdown-funktion för reaktioner
+    function addDropdownListeners() {
+      // Öppna/öppna endast en dropdown åt gången
+      document.querySelectorAll('.react-dropdown-btn').forEach(btn => {
+        btn.onclick = function(e) {
+          e.stopPropagation();
+          document.querySelectorAll('.react-dropdown').forEach(d => d.classList.remove('open'));
+          this.parentElement.classList.add('open');
+        };
+      });
+      // Klick på emoji i dropdown
+      document.querySelectorAll('.react-dropdown-list button').forEach(btn => {
+        btn.onclick = async function(e) {
+          e.stopPropagation();
+          const postId = this.getAttribute('data-postid');
+          const emojiKey = this.getAttribute('data-emoji');
+          const ref = db.collection("wall").doc(postId).collection("reactions").doc(currentUser.uid);
+          if (emojiKey === "remove") {
+            await ref.delete();
+          } else {
+            await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          }
+          document.querySelectorAll('.react-dropdown').forEach(d => d.classList.remove('open'));
+          loadWallPosts();
+        };
+      });
+      // Klick utanför dropdown stänger meny
+      document.body.onclick = function() {
+        document.querySelectorAll('.react-dropdown').forEach(d => d.classList.remove('open'));
+      };
+    }
+
+    async function fetchUsers() {
+      userMap = {};
+      const snap = await db.collection("profiles").get();
+      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
+    }
+
+    async function loadWallPosts() {
+      const postList = document.getElementById("postList");
+      postList.innerHTML = <div style="color:#00ffcc; text-align:center;">${t("loading")}</div>;
+      await fetchUsers();
+      const snapshot = await db.collection("wall").orderBy("createdAt", "desc").get();
+      const lang = localStorage.lang === "en" ? "en" : "sv";
+      allPosts = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+        .filter(post => (post[text_${lang}] && post[text_${lang}].trim() !== "") || post.type !== "text");
+      renderPosts(currentFilter, searchTerm);
+    }
+
+    function formatPostContent(post) {
+      switch (post.type) {
+        case "text":
+          return <div class="post-content">${escapeHTML(post[text_${localStorage.lang}] || post.text || "")}</div>;
+        case "image":
+          return post.imageUrl ? <img src="${post.imageUrl}" alt="Bild" /> : "";
+        case "video":
+          return post.videoUrl ? <video controls src="${post.videoUrl}"></video> : "";
+        case "audio":
+          return post.audioUrl ? <audio controls src="${post.audioUrl}"></audio> : "";
+        case "mic":
+          return post.micAudioUrl ? <audio controls src="${post.micAudioUrl}"></audio> : "";
+        default: return "";
+      }
+    }
+
+    function emojiSummary(reactions) {
+      if (!reactions || reactions.length === 0) return "";
+      let counts = {};
+      reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+      return Object.entries(counts).map(([k, v]) => ${emojis.find(e => e.key === k)?.emoji || ""} ${v}).join(" ");
+    }
+
+    async function loadReactions(postId) {
+      const snap = await db.collection("wall").doc(postId).collection("reactions").get();
+      return snap.docs.map(doc => doc.data());
+    }
+
     async function loadComments(postId) {
       const snap = await db.collection("wall").doc(postId).collection("comments").orderBy("createdAt", "asc").get();
       return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     }
+
     async function renderPosts(type, search) {
       const postList = document.getElementById("postList");
-      if (loadingUser) { postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`; return; }
+      if (loadingUser) {
+        postList.innerHTML = <div style="color:#00ffcc; text-align:center;">${t("loading")}</div>;
+        return;
+      }
       let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
       if (search && search.length > 0) {
         posts = posts.filter(post => {
@@ -267,76 +623,59 @@
         });
       }
       if (!posts.length) {
-        postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
+        postList.innerHTML = <div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>;
         return;
       }
       postList.innerHTML = "";
       for (let post of posts) {
+        // Reactions
         const reactions = await loadReactions(post.id);
         const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
+        // Comments
         const comments = await loadComments(post.id);
         let commentsHtml = "";
         comments.forEach(c => {
-          commentsHtml += `<div class="comment">
+          commentsHtml += <div class="comment">
             <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt?.toDate?.() ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
             <div class="comment-text">${escapeHTML(c.text || "")}</div>
-          </div>`;
+          </div>;
         });
+        // Radera-knapp om du är ägare
         let deleteBtn = "";
         if (currentUser && post.user === currentUser.uid) {
-          deleteBtn = `<button class="delete-post-btn" data-id="${post.id}" style="float:right; background:#b00;color:#fff;border:none;padding:4px 12px;border-radius:6px;cursor:pointer;">${t("delete")}</button>`;
+          deleteBtn = <button class="delete-post-btn" data-id="${post.id}" style="float:right; background:#b00;color:#fff;border:none;padding:4px 12px;border-radius:6px;cursor:pointer;">${t("delete")}</button>;
         }
-        // --- HAMBURGERMENY FÖR REAKTIONER ---
-        let reactionsMenuId = `reaction-menu-${post.id}`;
-        let showReactBtn = `<button class="show-reactions-btn" data-menu="${reactionsMenuId}" title="Reagera">😊</button>`;
-        let reactionsMenuHtml = `
-          <div class="reactions-dropdown" id="${reactionsMenuId}" style="display:none;">
-            ${emojis.map(e =>
-              `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
-            ).join("")}
-          </div>
-          <span class="reaction-summary">${emojiSummary(reactions)}</span>
-        `;
         postList.innerHTML +=
-          `<div class="post" data-postid="${post.id}">
+          <div class="post" data-postid="${post.id}">
             <div class="post-header">${t("user")}: ${userMap[post.user] || t("guest")}
             ${deleteBtn}
             </div>
             ${formatPostContent(post)}
-            <div class="reaction-bar">${showReactBtn}${reactionsMenuHtml}</div>
+            <div class="emoji-row">
+              ${emojis.map(e =>
+                <button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>
+              ).join("")}
+              <span class="reactions-view">${emojiSummary(reactions)}</span>
+            </div>
             <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
             <div class="comments-block">
               ${commentsHtml}
-              ${currentUser ? `
+              ${currentUser ? 
                 <form class="add-comment-form" data-postid="${post.id}">
                   <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
                   <button type="submit">${t("comment")}</button>
                 </form>
-              ` : `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
+               : <div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>}
             </div>
-          </div>`;
+          </div>;
       }
       addEventListeners();
     }
 
-    // --- EVENT-LISTENERS, REAKTIONSDROPDOWN ---
     function addEventListeners() {
-      // Visa/dölj reactions-dropdown
-      document.querySelectorAll('.show-reactions-btn').forEach(btn => {
-        btn.onclick = function(e) {
-          e.stopPropagation();
-          let menuId = this.getAttribute('data-menu');
-          document.querySelectorAll('.reactions-dropdown').forEach(m => m.style.display = "none");
-          let menu = document.getElementById(menuId);
-          if (menu) menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-        }
-      });
-      // Dölj dropdown när man klickar utanför
-      window.onclick = () => document.querySelectorAll('.reactions-dropdown').forEach(m => m.style.display = "none");
-      // Emoji i dropdown
-      document.querySelectorAll(".reactions-dropdown .emoji-btn").forEach(btn => {
-        btn.onclick = async function (e) {
-          e.stopPropagation();
+      // Emoji
+      document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
+        btn.onclick = async function () {
           if (!currentUser) return alert(t("login_to_react"));
           const postId = this.closest(".post").dataset.postid;
           const emojiKey = this.dataset.emoji;
@@ -350,7 +689,7 @@
           loadWallPosts();
         };
       });
-      // Kommentarer
+      // Kommentar
       document.querySelectorAll(".add-comment-form").forEach(form => {
         form.onsubmit = async function (e) {
           e.preventDefault();
@@ -381,8 +720,9 @@
       });
     }
 
-    // FILTER + SEARCH
+    // FILTERKNAPPAR + SEARCH
     document.addEventListener("DOMContentLoaded", function() {
+      // FILTER
       const filterRow = document.getElementById("filterRow");
       filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
       filterRow.querySelector(".filter-btn[data-type='all']").classList.add("active");
@@ -394,13 +734,14 @@
           renderPosts(currentFilter, searchTerm);
         }
       });
+      // SEARCH
       document.getElementById("wallSearchInput").addEventListener("input", function () {
         searchTerm = this.value.toLowerCase().trim();
         renderPosts(currentFilter, searchTerm);
       });
     });
 
-    // --- AUTH, LADDA IN ---
+    // AUTENTISERING & LADDA IN
     auth.onAuthStateChanged(user => {
       currentUser = user;
       loadingUser = false;
@@ -409,7 +750,10 @@
       document.getElementById("logoutDesktopBtn").onclick = doLogout;
       document.getElementById("logoutMobileBtn").onclick = doLogout;
     });
-    function doLogout() { auth.signOut().then(() => { window.location.href = "login.html"; }); }
+
+    function doLogout() {
+      auth.signOut().then(() => { window.location.href = "login.html"; });
+    }
   </script>
 </body>
 </html>
