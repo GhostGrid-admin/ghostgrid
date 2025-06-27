@@ -391,39 +391,60 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik (identisk forum)
+// --- Hamburgermeny + Filterknappar (identisk forum/wall)
 document.addEventListener("DOMContentLoaded", function() {
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMobile = document.getElementById('navMobile');
-    if (hamburgerBtn && navMobile) {
-      hamburgerBtn.addEventListener('click', function () {
-        navMobile.classList.toggle('show');
+  // HAMBURGERMENY
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMobile = document.getElementById('navMobile');
+  if (hamburgerBtn && navMobile) {
+    hamburgerBtn.addEventListener('click', function () {
+      navMobile.classList.toggle('show');
+    });
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMobile.classList.remove('show');
       });
-      navMobile.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          navMobile.classList.remove('show');
-        });
-      });
-      document.getElementById("logoutMobileBtn").addEventListener("click", function (e) {
+    });
+    const logoutBtn = document.getElementById("logoutMobileBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
         e.preventDefault();
         navMobile.classList.remove('show');
         doLogout();
       });
     }
-    // NAVBAR HIDE VID SCROLL PÅ MOBIL
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
+  }
+
+  // NAVBAR HIDE VID SCROLL PÅ MOBIL
+  if (window.innerWidth <= 600) {
+    let lastScrollY = window.scrollY;
+    let navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > lastScrollY && window.scrollY > 70) {
+        navbar.classList.add('hide-navbar');
+      } else {
+        navbar.classList.remove('hide-navbar');
+      }
+      lastScrollY = window.scrollY;
+    });
+  }
+
+  // FILTERKNAPPAR: ENDAST EN AKTIV
+  const filterRow = document.getElementById("filterRow");
+  if (filterRow) {
+    filterRow.addEventListener("click", function(e) {
+      if (e.target.classList.contains("filter-btn")) {
+        filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+        e.target.classList.add("active");
+        // Anropa filtrering om du har (exempel):
+        if (typeof renderPosts === "function") {
+          currentFilter = e.target.getAttribute("data-type");
+          renderPosts(currentFilter, window.searchTerm || "");
         }
-        lastScrollY = window.scrollY;
-      });
-    }
-  });
+      }
+    });
+  }
+});
 </script>
 
     
