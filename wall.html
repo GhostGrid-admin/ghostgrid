@@ -392,25 +392,25 @@
     }, 6000);
 
     // --- Hamburgermeny logik (identisk forum)
-<script>
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const navMobile = document.getElementById('navMobile');
-  hamburgerBtn.addEventListener('click', function () {
-    navMobile.classList.toggle('show');
-  });
-  navMobile.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navMobile.classList.remove('show');
-    });
-  });
-  document.getElementById("logoutMobileBtn").addEventListener("click", function (e) {
-    e.preventDefault();
-    navMobile.classList.remove('show');
-      navMobile.classList.remove('show');
-      doLogout();
-    });
-
-    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
+document.addEventListener("DOMContentLoaded", function() {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMobile = document.getElementById('navMobile');
+    if (hamburgerBtn && navMobile) {
+      hamburgerBtn.addEventListener('click', function () {
+        navMobile.classList.toggle('show');
+      });
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navMobile.classList.remove('show');
+        });
+      });
+      document.getElementById("logoutMobileBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      });
+    }
+    // NAVBAR HIDE VID SCROLL PÅ MOBIL
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
@@ -423,6 +423,8 @@
         lastScrollY = window.scrollY;
       });
     }
+  });
+</script>
 
     // --- TRANSLATIONS
 <script type="module">
