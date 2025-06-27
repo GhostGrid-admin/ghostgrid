@@ -527,43 +527,45 @@ async function fetchUsers() {
 }
 async function loadWallPosts() { 
   const postList = document.getElementById("postList");
-  postList.innerHTML = <div style="color:#00ffcc; text-align:center;">${t("loading")}</div>;
+  postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
   await fetchUsers();
   const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
+  console.log("Alla dokument i wall:", snapshot.docs.map(doc => doc.data()));
   const lang = localStorage.lang === "en" ? "en" : "sv";
-allPosts = snapshot.docs
-  .map(doc => ({ ...doc.data(), id: doc.id }))
-  .filter(post => {
-    if (post.type === "text") {
-      // Visa textinlägg om det finns på något språk
-      return (post.text_sv && post.text_sv.trim() !== "") || (post.text_en && post.text_en.trim() !== "");
-    } else if (post.type === "image") {
-      return !!post.imageUrl;
-    } else if (post.type === "video") {
-      return !!post.videoUrl;
-    } else if (post.type === "audio") {
-      return !!post.audioUrl;
-    } else if (post.type === "mic") {
-      return !!post.micAudioUrl;
-    }
-    // Om det är någon okänd typ – visa inte
-    return false;
-  });
+  allPosts = snapshot.docs
+    .map(doc => ({ ...doc.data(), id: doc.id }))
+    .filter(post => {
+      if (post.type === "text") {
+        // Visa textinlägg om det finns på något språk
+        return (post.text_sv && post.text_sv.trim() !== "") || (post.text_en && post.text_en.trim() !== "");
+      } else if (post.type === "image") {
+        return !!post.imageUrl;
+      } else if (post.type === "video") {
+        return !!post.videoUrl;
+      } else if (post.type === "audio") {
+        return !!post.audioUrl;
+      } else if (post.type === "mic") {
+        return !!post.micAudioUrl;
+      }
+      // Om det är någon okänd typ – visa inte
+      return false;
+    });
   renderPosts(currentFilter, searchTerm);
 }
+
 function formatPostContent(post) {
   switch (post.type) {
     case "text":
-      return <div class="post-content">${escapeHTML(post[text_${localStorage.lang}] || post.text || "")}</div>;
+      return `<div class="post-content">${escapeHTML(post[`text_${localStorage.lang}`] || post.text || "")}</div>`;
     case "image":
-      return post.imageUrl ? <img src="${post.imageUrl}" alt="Bild" /> : "";
+      return post.imageUrl ? `<img src="${post.imageUrl}" alt="Bild" />` : "";
     case "video":
-      return post.videoUrl ? <video controls src="${post.videoUrl}"></video> : "";
+      return post.videoUrl ? `<video controls src="${post.videoUrl}"></video>` : "";
     case "audio":
-      return post.audioUrl ? <audio controls src="${post.audioUrl}"></audio> : "";
+      return post.audioUrl ? `<audio controls src="${post.audioUrl}"></audio>` : "";
     case "mic":
-      return post.micAudioUrl ? <audio controls src="${post.micAudioUrl}"></audio> : "";
+      return post.micAudioUrl ? `<audio controls src="${post.micAudioUrl}"></audio>` : "";
     default: return "";
   }
 }
