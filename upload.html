@@ -299,7 +299,7 @@
       font-weight: bold;
       box-shadow: 0 0 8px #00ffcc;
     }
-    textarea, input[type="file"], button[type="submit"], label {
+textarea, input[type="file"], button[type="submit"], label {
       display: block;
       width: 100%;
       margin-top: 1rem;
@@ -389,30 +389,41 @@
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
     </div>
     <form id="uploadForm">
+      <!-- Textinlägg på båda språk -->
       <div class="upload-section active" data-section="text">
-        <label for="text">Skriv ett inlägg:</label>
-        <textarea id="text" placeholder="Vad vill du dela med dig av?" maxlength="1500"></textarea>
+        <label for="text_sv">Skriv ett inlägg (svenska):</label>
+        <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500"></textarea>
+        <label for="text_en" style="margin-top:12px;">Write a post (English):</label>
+        <textarea id="text_en" placeholder="Write in English..." maxlength="1500"></textarea>
       </div>
+      <!-- Bild -->
       <div class="upload-section" data-section="image">
         <label for="image">Ladda upp en bild (max 5 MB):</label>
         <input type="file" id="image" accept="image/*" />
       </div>
+      <!-- Video -->
       <div class="upload-section" data-section="video">
         <label for="video">Ladda upp ett klipp (max 30 MB):</label>
         <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
       </div>
+      <!-- Ljud -->
       <div class="upload-section" data-section="audio">
         <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
         <input type="file" id="audio" accept="audio/*" />
       </div>
+      <!-- Röstinspelning -->
       <div class="upload-section" data-section="mic">
         <label>Mikrofoninspelning (max 2 MB):</label>
         <button type="button" id="recordButton">🎤 Starta inspelning</button>
         <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
         <audio id="audioPreview" controls></audio>
       </div>
-      <label class="desc-label" for="desc">Beskrivning (valfri):</label>
-      <textarea id="desc" class="desc-field" placeholder="Beskriv innehållet..."></textarea>
+      <!-- Beskrivning på båda språk för ALLT UTOM inlägg -->
+      <label class="desc-label" for="desc_sv">Beskrivning (svenska, valfri):</label>
+      <textarea id="desc_sv" class="desc-field" placeholder="Beskriv på svenska..."></textarea>
+      <label class="desc-label" for="desc_en" style="margin-top:8px;">Description (English, optional):</label>
+      <textarea id="desc_en" class="desc-field" placeholder="Describe in English..."></textarea>
+      <!-- Temporärt -->
       <label style="margin-top:18px;">
         <input type="checkbox" id="temporary" />
         Gör detta till ett tillfälligt inlägg (försvinner om 24h)
@@ -565,18 +576,6 @@
         }
       });
     });
-
-    // Logga ut-funktion till båda knapparna
-    function doLogout() {
-      // Anpassa efter om du använder Firebase v8 eller v9+
-      if (typeof signOut !== "undefined" && typeof auth !== "undefined") {
-        signOut(auth).then(() => {
-          window.location.href = "login.html";
-        });
-      } else {
-        window.location.href = "login.html";
-      }
-    }
   </script>
   <!-- Firebase-upload etc här nedanför (din kod för submit/record/etc ska in här, t ex från förra versionen) -->
   <script type="module">
@@ -624,12 +623,17 @@
       };
       let filesToUpload = [];
 
+      // --- Text på båda språk ---
       if (activeSection === "text") {
-        postData.text = document.getElementById("text").value;
+        postData.text_sv = document.getElementById("text_sv").value || "";
+        postData.text_en = document.getElementById("text_en").value || "";
       }
+      // --- Beskrivning på båda språk för media ---
       if (["image", "video", "audio", "mic"].includes(activeSection)) {
-        postData.desc = document.getElementById("desc").value;
+        postData.desc_sv = document.getElementById("desc_sv")?.value || "";
+        postData.desc_en = document.getElementById("desc_en")?.value || "";
       }
+
       if (activeSection === "image") {
         const img = document.getElementById("image").files[0];
         if (img && img.size > MAX_IMAGE_SIZE) {
@@ -665,7 +669,7 @@
 
       for (let upload of filesToUpload) {
         if (!upload.file) continue;
-        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name}`);
+        const storageRef = ref(storage, `uploads/${Date.now()}_${upload.file.name || 'mic.wav'}`);
         await uploadBytes(storageRef, upload.file);
         const url = await getDownloadURL(storageRef);
         postData[upload.key] = url;
@@ -679,6 +683,7 @@
       window.location.href = "wall.html";
     });
 
+    // --- Röstinspelning ---
     let mediaRecorder, audioChunks = [];
     const recordBtn = document.getElementById("recordButton");
     const stopBtn = document.getElementById("stopButton");
@@ -705,6 +710,7 @@
       };
     }
 
+    // Logga ut-knappar
     function doLogout() {
       signOut(auth).then(() => {
         window.location.href = "login.html";
