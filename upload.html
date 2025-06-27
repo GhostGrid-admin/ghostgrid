@@ -389,12 +389,12 @@ textarea, input[type="file"], button[type="submit"], label {
       <button class="switch-btn" data-section="mic">🎤 Röst</button>
     </div>
 <form id="uploadForm">
-  <div class="upload-section active" data-section="text">
-    <label id="textLabel_sv" for="text_sv" style="display:none;">Skriv ett inlägg:</label>
-    <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500" style="display:none;"></textarea>
-    <label id="textLabel_en" for="text_en" style="display:none;">Write a post:</label>
-    <textarea id="text_en" placeholder="Write in English..." maxlength="1500" style="display:none;"></textarea>
-  </div>
+<div class="upload-section active" data-section="text">
+  <label id="textLabel_sv" for="text_sv">Skriv ett inlägg (svenska):</label>
+  <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500"></textarea>
+  <label id="textLabel_en" for="text_en" style="display:none;">Write a post (English):</label>
+  <textarea id="text_en" placeholder="Write in English..." maxlength="1500" style="display:none;"></textarea>
+</div>
   <div class="upload-section" data-section="image">
     <label for="image">Ladda upp en bild (max 5 MB):</label>
     <input type="file" id="image" accept="image/*" />
