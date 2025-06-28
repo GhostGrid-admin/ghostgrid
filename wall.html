@@ -454,7 +454,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-const translations = {
+const translations = { 
   sv: {
     forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
     wall_title: "Väggen",
@@ -464,7 +464,10 @@ const translations = {
     edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt", reply: "Svara",
     guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.",
     max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
-    login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
+    login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", 
+    delete_confirm: "Radera kommentaren?",
+    delete_post_confirm: "Radera inlägget?",      // <-- Ny rad för radering av inlägg
+    all_fields: "Alla fält måste fyllas i.",
     logout: "Logga ut"
   },
   en: {
@@ -476,7 +479,10 @@ const translations = {
     edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel", reply: "Reply",
     guest: "Guest", at: "at", comment_deleted: "Comment deleted.",
     max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
-    login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
+    login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", 
+    delete_confirm: "Delete this comment?",
+    delete_post_confirm: "Delete this post?",     // <-- Ny rad för radering av inlägg
+    all_fields: "All fields are required.",
     logout: "Log out"
   }
 };
