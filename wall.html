@@ -618,6 +618,7 @@ async function renderPosts(type, search) {
   addEventListeners();
 }
 
+// Hämta alla reaktioner på ett inlägg eller kommentar
 async function loadReactions(postId, subcol, commentId) {
   let path;
   if (commentId) {
@@ -626,9 +627,11 @@ async function loadReactions(postId, subcol, commentId) {
     path = collection(db, "wall", postId, subcol);
   }
   const snap = await getDocs(path);
-  return snap.docs.map(doc => doc.data());
+  // Returnera även .id så att du kan identifiera reaktioner på användare senare om du vill!
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
+// Sammanfattning av reaktioner för visning
 function emojiSummary(reactions) {
   if (!reactions || reactions.length === 0) return "";
   let counts = {};
@@ -639,6 +642,7 @@ function emojiSummary(reactions) {
   }).join(" ");
 }
 
+// Hämta tråd-kommentarer, i trädstruktur
 async function loadThreadedComments(postId) {
   const q = query(collection(db, "wall", postId, "comments"), orderBy("createdAt", "asc"));
   const snap = await getDocs(q);
@@ -655,6 +659,7 @@ async function loadThreadedComments(postId) {
   return tree;
 }
 
+// Rendera kommentarer, trådat (med reply, redigera, ta bort)
 function renderThreadedComments(postId, comments, parentId, level) {
   if (!comments) return "";
   return comments.map(c =>
@@ -677,7 +682,6 @@ function renderThreadedComments(postId, comments, parentId, level) {
     </div>`
   ).join("");
 }
-
 function addEventListeners() {
   // Reaktion på inlägg (en reaktion per användare)
   document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
