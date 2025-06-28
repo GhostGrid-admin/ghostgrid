@@ -590,9 +590,13 @@ async function renderPosts(type, search) {
     const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
     let name = userMap[post.user] || t("guest");
     const comments = await loadThreadedComments(post.id);
+    let canDelete = currentUser && currentUser.uid === post.user;
     postList.innerHTML += `
       <div class="post" data-postid="${post.id}">
-        <div class="post-header">${t("user")}: ${name}</div>
+        <div class="post-header">
+  ${t("user")}: ${name}
+  ${canDelete ? `<button class="delete-post-btn" data-postid="${post.id}" style="margin-left:10px; color:#ff5d5d; background:#222; border:none; cursor:pointer;">${t("delete")}</button>` : ""}
+</div>
         ${formatPostContent(post)}
         <div class="emoji-row">${emojis.map(e =>
           `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
