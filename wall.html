@@ -675,22 +675,30 @@ function renderThreadedComments(postId, comments, parentId, level) {
 }
 
 function addEventListeners() {
+  // Reaktion på inlägg (en reaktion per användare)
   document.querySelectorAll(".post .emoji-row .emoji-btn").forEach(btn => {
     btn.onclick = async function () {
       if (!auth.currentUser) return alert(t("login_to_react"));
       const postId = this.closest(".post").dataset.postid;
       const emojiKey = this.dataset.emoji;
       const ref = doc(db, "wall", postId, "reactions", auth.currentUser.uid);
+
+      // Hämta aktuell reaktion (om någon) för denna användare
       const snap = await getDocs(collection(db, "wall", postId, "reactions"));
-      const existing = snap.docs.find(d => d.id === auth.currentUser.uid && d.data().emoji === emojiKey);
-      if (existing) {
+      const userReactionDoc = snap.docs.find(d => d.id === auth.currentUser.uid);
+
+      if (userReactionDoc && userReactionDoc.data().emoji === emojiKey) {
+        // Om samma emoji klickas igen = ta bort reaktion
         await deleteDoc(ref);
       } else {
-        await updateDoc(ref, { emoji: emojiKey, user: auth.currentUser.uid }).catch(() => addDoc(collection(db, "wall", postId, "reactions"), { emoji: emojiKey, user: auth.currentUser.uid }));
+        // Annars, sätt ny/ändra reaktion
+        await setDoc(ref, { emoji: emojiKey, user: auth.currentUser.uid });
       }
       loadWallPosts();
     };
   });
+
+  // Reaktion på kommentar (en reaktion per användare)
   document.querySelectorAll(".comment .emoji-row .emoji-btn").forEach(btn => {
     btn.onclick = async function () {
       if (!auth.currentUser) return alert(t("login_to_react"));
@@ -699,12 +707,17 @@ function addEventListeners() {
       const commentId = commentDiv.dataset.commentid;
       const emojiKey = this.dataset.emoji;
       const ref = doc(db, "wall", postId, "comments", commentId, "reactions", auth.currentUser.uid);
+
+      // Hämta aktuell reaktion (om någon) för denna användare
       const snap = await getDocs(collection(db, "wall", postId, "comments", commentId, "reactions"));
-      const existing = snap.docs.find(d => d.id === auth.currentUser.uid && d.data().emoji === emojiKey);
-      if (existing) {
+      const userReactionDoc = snap.docs.find(d => d.id === auth.currentUser.uid);
+
+      if (userReactionDoc && userReactionDoc.data().emoji === emojiKey) {
+        // Om samma emoji klickas igen = ta bort reaktion
         await deleteDoc(ref);
       } else {
-        await updateDoc(ref, { emoji: emojiKey, user: auth.currentUser.uid }).catch(() => addDoc(collection(db, "wall", postId, "comments", commentId, "reactions"), { emoji: emojiKey, user: auth.currentUser.uid }));
+        // Annars, sätt ny/ändra reaktion
+        await setDoc(ref, { emoji: emojiKey, user: auth.currentUser.uid });
       }
       loadWallPosts();
     };
