@@ -765,7 +765,7 @@ function addEventListeners() {
       };
     };
   });
-  document.querySelectorAll(".delete-comment").forEach(link => {
+document.querySelectorAll(".delete-comment").forEach(link => {
     link.onclick = async function(e) {
       e.preventDefault();
       const commentDiv = this.closest(".comment");
@@ -773,6 +773,18 @@ function addEventListeners() {
       const commentId = commentDiv.dataset.commentid;
       if (confirm(t("delete_confirm"))) {
         await deleteDoc(doc(db, "wall", postId, "comments", commentId));
+        loadWallPosts();
+      }
+    };
+  });
+
+  // --- Lägg till detta block ---
+  document.querySelectorAll(".delete-post-btn").forEach(btn => {
+    btn.onclick = async function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postid;
+      if (confirm(t("delete_confirm"))) {
+        await deleteDoc(doc(db, "wall", postId));
         loadWallPosts();
       }
     };
