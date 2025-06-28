@@ -250,64 +250,7 @@
         max-width: 99vw;
       }
     }
-.reaction-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  position: relative;
-  margin: 6px 0 2px 0;
-}
-.emoji-toggle {
-  background: transparent;
-  border: none;
-  font-size: 19px;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 50%;
-  outline: none;
-  transition: background 0.2s, transform 0.15s;
-}
-.emoji-toggle:active,
-.emoji-toggle.open {
-  background: #1c2340;
-}
-.reaction-counts span {
-  font-size: 15px;
-  margin: 0 2px;
-  background: #111e24;
-  border-radius: 8px;
-  padding: 1px 5px 1px 5px;
-  color: #00ffc8;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.emoji-palette {
-  display: none;
-  position: absolute;
-  left: 34px;
-  top: -8px;
-  background: #232323;
-  border-radius: 10px;
-  box-shadow: 0 2px 14px #0008;
-  padding: 6px 9px;
-  z-index: 15;
-  flex-direction: row;
-  gap: 6px;
-  animation: fadein .22s;
-}
-@keyframes fadein { from { opacity: 0; transform: translateY(-5px);} to {opacity:1; transform:none;}}
-.emoji-palette button {
-  font-size: 18px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  padding: 2px 4px;
-  transition: background 0.16s, transform 0.11s;
-}
-.emoji-palette button:hover { background: #111e24; transform: scale(1.18);}
-.reaction-bar.open .emoji-palette { display: flex; }
+
     .wall-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .filter-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;}
     .filter-btn { padding: 7px 16px; border-radius: 5px; border: 2px solid #00ffcc; background: #121e2a; color: #00ffcc; font-family: inherit; font-size: 1em; cursor: pointer; box-shadow: 0 0 8px #00ffcc66; transition: 0.2s; margin-bottom: 4px;}
@@ -511,7 +454,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-const translations = { 
+const translations = {
   sv: {
     forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
     wall_title: "Väggen",
@@ -521,10 +464,7 @@ const translations = {
     edit: "Redigera", delete: "Radera", save: "Spara", cancel: "Avbryt", reply: "Svara",
     guest: "Gäst", at: "kl", comment_deleted: "Kommentaren har raderats.",
     max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
-    login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", 
-    delete_confirm: "Radera kommentaren?",
-    delete_post_confirm: "Radera inlägget?",      // <-- Ny rad för radering av inlägg
-    all_fields: "Alla fält måste fyllas i.",
+    login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
     logout: "Logga ut"
   },
   en: {
@@ -536,10 +476,7 @@ const translations = {
     edit: "Edit", delete: "Delete", save: "Save", cancel: "Cancel", reply: "Reply",
     guest: "Guest", at: "at", comment_deleted: "Comment deleted.",
     max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
-    login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", 
-    delete_confirm: "Delete this comment?",
-    delete_post_confirm: "Delete this post?",     // <-- Ny rad för radering av inlägg
-    all_fields: "All fields are required.",
+    login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
     logout: "Log out"
   }
 };
@@ -661,15 +598,11 @@ async function renderPosts(type, search) {
   ${canDelete ? `<button class="delete-post-btn" data-postid="${post.id}" style="margin-left:10px; color:#ff5d5d; background:#222; border:none; cursor:pointer;">${t("delete")}</button>` : ""}
 </div>
         ${formatPostContent(post)}
-        <div class="reaction-bar">
-  <button class="emoji-toggle" aria-label="Reagera">&#128512;</button>
-  <span class="reaction-counts">${emojiSummary(reactions, true)}</span>
-  <div class="emoji-palette">
-    ${emojis.map(e =>
-      `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
-    ).join("")}
-  </div>
-</div>
+        <div class="emoji-row">${emojis.map(e =>
+          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
+        ).join("")}
+        <span class="reactions-view">${emojiSummary(reactions)}</span>
+        </div>
         <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
         <div class="comments-block">
           ${renderThreadedComments(post.id, comments, null, 0)}
@@ -683,20 +616,7 @@ async function renderPosts(type, search) {
       </div>`;
   }
   addEventListeners();
-  // Lägg till detta direkt efter addEventListeners():
-document.querySelectorAll(".emoji-toggle").forEach(btn => {
-  btn.onclick = function() {
-    // Stäng alla andra öppna reaction-bar
-    document.querySelectorAll(".reaction-bar.open").forEach(bar => bar.classList.remove("open"));
-    this.closest(".reaction-bar").classList.toggle("open");
-  };
-});
-document.addEventListener("click", function(e) {
-  // Stäng reaction-bar om man klickar utanför
-  if (!e.target.closest(".reaction-bar")) {
-    document.querySelectorAll(".reaction-bar.open").forEach(bar => bar.classList.remove("open"));
-  }
-});
+}
 
 // Hämta alla reaktioner på ett inlägg eller kommentar
 async function loadReactions(postId, subcol, commentId) {
@@ -845,31 +765,30 @@ function addEventListeners() {
       };
     };
   });
-// Ta bort kommentar
-document.querySelectorAll(".delete-comment").forEach(link => { 
-  link.onclick = async function(e) {
-    e.preventDefault();
-    const commentDiv = this.closest(".comment");
-    const postId = commentDiv.dataset.postid;
-    const commentId = commentDiv.dataset.commentid;
-    if (confirm(t("delete_confirm"))) {
-      await deleteDoc(doc(db, "wall", postId, "comments", commentId));
-      loadWallPosts();
-    }
-  };
-});
+document.querySelectorAll(".delete-comment").forEach(link => {
+    link.onclick = async function(e) {
+      e.preventDefault();
+      const commentDiv = this.closest(".comment");
+      const postId = commentDiv.dataset.postid;
+      const commentId = commentDiv.dataset.commentid;
+      if (confirm(t("delete_confirm"))) {
+        await deleteDoc(doc(db, "wall", postId, "comments", commentId));
+        loadWallPosts();
+      }
+    };
+  });
 
-// Ta bort inlägg
-document.querySelectorAll(".delete-post-btn").forEach(btn => {
-  btn.onclick = async function(e) {
-    e.preventDefault();
-    const postId = this.dataset.postid;
-    if (confirm(t("delete_post_confirm"))) {
-      await deleteDoc(doc(db, "wall", postId));
-      loadWallPosts();
-    }
-  };
-});
+  // --- Lägg till detta block ---
+  document.querySelectorAll(".delete-post-btn").forEach(btn => {
+    btn.onclick = async function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postid;
+      if (confirm(t("delete_confirm"))) {
+        await deleteDoc(doc(db, "wall", postId));
+        loadWallPosts();
+      }
+    };
+  });
 }
 
 function addReplyFormListener(form) {
