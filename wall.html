@@ -450,7 +450,7 @@
 <script type="module">
 import { auth, db } from "./scripts/firebase-init.js";
 import {
-  collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp
+  collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc, doc
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
@@ -480,6 +480,7 @@ const translations = {
     logout: "Log out"
   }
 };
+
 function t(key) {
   const lang = localStorage.lang === "en" ? "en" : "sv";
   return translations[lang][key] || key;
@@ -524,19 +525,17 @@ async function fetchUsers() {
   const snap = await getDocs(collection(db, "profiles"));
   snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
 }
+
 async function loadWallPosts() { 
   const postList = document.getElementById("postList");
   postList.innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
   await fetchUsers();
   const q = query(collection(db, "wall"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
-  console.log("Alla dokument i wall:", snapshot.docs.map(doc => doc.data()));
-  const lang = localStorage.lang === "en" ? "en" : "sv";
   allPosts = snapshot.docs
     .map(doc => ({ ...doc.data(), id: doc.id }))
     .filter(post => {
       if (post.type === "text") {
-        // Visa textinlägg om det finns på något språk
         return (post.text_sv && post.text_sv.trim() !== "") || (post.text_en && post.text_en.trim() !== "");
       } else if (post.type === "image") {
         return !!post.imageUrl;
@@ -547,7 +546,6 @@ async function loadWallPosts() {
       } else if (post.type === "mic") {
         return !!post.micAudioUrl;
       }
-      // Om det är någon okänd typ – visa inte
       return false;
     });
   renderPosts(currentFilter, searchTerm);
@@ -571,20 +569,19 @@ function formatPostContent(post) {
 
 async function renderPosts(type, search) {
   const postList = document.getElementById("postList");
-  postList.innerHTML = "";
-  for (let post of allPosts) {
-    postList.innerHTML += `
-      <div style="color:#fff; background:#222; margin:1em 0; padding:1em;">
-        <b>type:</b> ${post.type} <br>
-        <b>text_sv:</b> ${post.text_sv || ""} <br>
-        <b>text_en:</b> ${post.text_en || ""} <br>
-        <b>createdAt:</b> ${post.createdAt ? JSON.stringify(post.createdAt) : ""} <br>
-      </div>
-    `;
+  let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
+  if (search && search.length > 0) {
+    posts = posts.filter(post => {
+      const user = userMap[post.user] || "";
+      return (
+        (post.text_sv && post.text_sv.toLowerCase().includes(search)) ||
+        (post.text_en && post.text_en.toLowerCase().includes(search)) ||
+        (user.toLowerCase().includes(search))
+      );
+    });
   }
-}
   if (!posts.length) {
-    postList.innerHTML = <div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>;
+    postList.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_posts")}</div>`;
     return;
   }
   postList.innerHTML = "";
@@ -593,12 +590,12 @@ async function renderPosts(type, search) {
     const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
     let name = userMap[post.user] || t("guest");
     const comments = await loadThreadedComments(post.id);
-    postList.innerHTML +=
+    postList.innerHTML += `
       <div class="post" data-postid="${post.id}">
         <div class="post-header">${t("user")}: ${name}</div>
         ${formatPostContent(post)}
         <div class="emoji-row">${emojis.map(e =>
-          <button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>
+          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
         ).join("")}
         <span class="reactions-view">${emojiSummary(reactions)}</span>
         </div>
@@ -606,13 +603,13 @@ async function renderPosts(type, search) {
         <div class="comments-block">
           ${renderThreadedComments(post.id, comments, null, 0)}
           ${currentUser ?
-            <form class="add-comment-form" data-postid="${post.id}" data-parentid="">
+            `<form class="add-comment-form" data-postid="${post.id}" data-parentid="">
               <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
               <button type="submit">${t("comment")}</button>
-            </form> :
-            <div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>}
+            </form>` :
+            `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
         </div>
-      </div>;
+      </div>`;
   }
   addEventListeners();
 }
@@ -632,7 +629,10 @@ function emojiSummary(reactions) {
   if (!reactions || reactions.length === 0) return "";
   let counts = {};
   reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-  return Object.entries(counts).map(([k, v]) => ${emojis.find(e => e.key === k)?.emoji || ""} ${v}).join(" ");
+  return Object.entries(counts).map(([k, v]) => {
+    const e = emojis.find(e => e.key === k);
+    return `${e ? e.emoji : ""} ${v}`;
+  }).join(" ");
 }
 
 async function loadThreadedComments(postId) {
@@ -654,23 +654,23 @@ async function loadThreadedComments(postId) {
 function renderThreadedComments(postId, comments, parentId, level) {
   if (!comments) return "";
   return comments.map(c =>
-    <div class="comment" data-commentid="${c.id}" data-postid="${postId}">
+    `<div class="comment" data-commentid="${c.id}" data-postid="${postId}">
       <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
-      <div class="comment-text">${escapeHTML(c[text_${localStorage.lang}] || c.text || "")}</div>
+      <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
       <div class="emoji-row">${emojis.map(e =>
-        <button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>
+        `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
       ).join("")}
       <span class="reactions-view" data-cid="${c.id}"></span>
       </div>
       <div class="comment-actions">
         <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
         ${currentUser && currentUser.uid === c.userId ?
-          <a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>
+          `<a href="#" class="edit-comment">${t("edit")}</a> <a href="#" class="delete-comment">${t("delete")}</a>`
          : ""}
       </div>
       <div class="reply-box" id="replybox-${c.id}" style="display:none;"></div>
-      ${c.children && c.children.length ? <div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div> : ""}
-    </div>
+      ${c.children && c.children.length ? `<div class="comment-children">${renderThreadedComments(postId, c.children, c.id, level + 1)}</div>` : ""}
+    </div>`
   ).join("");
 }
 
@@ -713,13 +713,13 @@ function addEventListeners() {
     link.onclick = function () {
       const cid = this.getAttribute("data-replyid");
       document.querySelectorAll(".reply-box").forEach(b => b.style.display = "none");
-      const box = document.getElementById(replybox-${cid});
+      const box = document.getElementById(`replybox-${cid}`);
       if (box) {
         box.innerHTML =
-          <form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
+          `<form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
             <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
             <button type="submit">${t("comment")}</button>
-          </form>;
+          </form>`;
         box.style.display = "block";
         box.querySelector("textarea").focus();
         addReplyFormListener(box.querySelector("form"));
@@ -735,7 +735,7 @@ function addEventListeners() {
       const commentId = commentDiv.dataset.commentid;
       const textDiv = commentDiv.querySelector(".comment-text");
       const oldText = textDiv.textContent;
-      textDiv.innerHTML = <input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>;
+      textDiv.innerHTML = `<input value="${escapeHTML(oldText)}" style="width:80%" /> <button>${t("save")}</button>`;
       textDiv.querySelector("button").onclick = async function() {
         const newText = textDiv.querySelector("input").value.trim();
         if (newText.length === 0) return alert(t("comment_empty"));
@@ -770,7 +770,7 @@ function addReplyFormListener(form) {
     const postId = this.dataset.postid;
     const parentId = this.dataset.parentid || null;
     await addDoc(collection(db, "wall", postId, "comments"), {
-      [text_${localStorage.lang}]: text,
+      [`text_${localStorage.lang}`]: text,
       userId: auth.currentUser.uid,
       createdAt: new Date(),
       parentId: parentId
@@ -781,35 +781,34 @@ function addReplyFormListener(form) {
 }
 
 // AUTH STATE
-  firebase.auth().onAuthStateChanged(user => {
-      currentUser = user;
-      loadingUser = false;
-      applyTranslations();
-      loadWallPosts();
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  loadingUser = false;
+  applyTranslations();
+  loadWallPosts();
 
-      // Sätt listeners när användare är satt
-      document.getElementById("logoutDesktopBtn").onclick = doLogout;
-      document.getElementById("logoutMobileBtn").onclick = doLogout;
+  document.getElementById("logoutDesktopBtn").onclick = doLogout;
+  document.getElementById("logoutMobileBtn").onclick = doLogout;
 
-      const filterRow = document.getElementById("filterRow");
-      const wallSearchInput = document.getElementById("wallSearchInput");
-      filterRow.addEventListener("click", (e) => {
-        if (e.target.classList.contains("filter-btn")) {
-          filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-          e.target.classList.add("active");
-          currentFilter = e.target.getAttribute("data-type");
-          renderPosts(currentFilter, searchTerm);
-        }
-      });
-      wallSearchInput.addEventListener("input", function () {
-        searchTerm = this.value.toLowerCase().trim();
-        renderPosts(currentFilter, searchTerm);
-      });
-    });
-
-    function doLogout() {
-      firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
+  const filterRow = document.getElementById("filterRow");
+  const wallSearchInput = document.getElementById("wallSearchInput");
+  filterRow.addEventListener("click", (e) => {
+    if (e.target.classList.contains("filter-btn")) {
+      filterRow.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+      e.target.classList.add("active");
+      currentFilter = e.target.getAttribute("data-type");
+      renderPosts(currentFilter, searchTerm);
     }
+  });
+  wallSearchInput.addEventListener("input", function () {
+    searchTerm = this.value.toLowerCase().trim();
+    renderPosts(currentFilter, searchTerm);
+  });
+});
+
+function doLogout() {
+  signOut(auth).then(() => { window.location.href = "login.html"; });
+}
 </script>
 </body>
 </html>
