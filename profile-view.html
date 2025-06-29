@@ -391,7 +391,6 @@
     return;
   }
   const data = snap.data();
-      console.log("🔍 Hämta profil-data:", data);
   const showUsername = (data.nickname || data.username || "Okänd användare");
   profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
   profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
@@ -399,13 +398,18 @@
   picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
   picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
   picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
+  let profileHtml = '';
 
-  let profileHtml = `
-    <div class="profile-header">
-      ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
+  // PROFILBILD
+  if (data.profilePicUrl) {
+    profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
+  }
+
+  // ANVÄNDARNAMN + MEDDELANDE-IKON
+  profileHtml += `
+    <div class="username-section">
+      <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
       <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-      <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
-      <span class="user-id" id="userIdTxt">${uid}</span>
       ${
         userId ? `
         <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
@@ -419,10 +423,16 @@
       ` : ""
       }
     </div>
-    <div class="profile-section">
-      ${data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>"}
-    </div>
   `;
+
+  // ANVÄNDAR-ID
+  profileHtml += `<div class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</div>`;
+  profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
+
+  // PROFILKOD / INNEHÅLL
+  profileHtml += `<div class="after-user-id">`;
+  profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
+  profileHtml += `</div>`;
 
   profileOut.innerHTML = profileHtml;
 
