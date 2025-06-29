@@ -398,41 +398,30 @@
   picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
   picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
   picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
-  let profileHtml = '';
 
-  // PROFILBILD
-  if (data.profilePicUrl) {
-    profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
-  }
-
-  // ANVÄNDARNAMN + MEDDELANDE-IKON
-  profileHtml += `
-    <div class="username-section">
-      <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
+  let profileHtml = `
+    <div class="profile-header">
+      ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
       <span class="profile-username-box" id="userNameBox">${showUsername}</span>
+      <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
+      <span class="user-id" id="userIdTxt">${uid}</span>
       ${
-        userId ? `
-        <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
-          <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
-            <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-            <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          ${userId === uid && unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
-        </a>
-      ` : ""
+        userId
+          ? `<a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
+                <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                  <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                  <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ${userId === uid && unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+             </a>`
+          : ""
       }
     </div>
+    <div class="profile-section">
+      ${data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>"}
+    </div>
   `;
-
-  // ANVÄNDAR-ID
-  profileHtml += `<div class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</div>`;
-  profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
-
-  // PROFILKOD / INNEHÅLL
-  profileHtml += `<div class="after-user-id">`;
-  profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
-  profileHtml += `</div>`;
 
   profileOut.innerHTML = profileHtml;
 
