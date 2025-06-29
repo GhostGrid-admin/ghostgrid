@@ -728,7 +728,12 @@ function renderThreadedComments(postId, comments, parentId, level) {
   if (!comments) return "";
   return comments.map(c =>
   `<div class="comment comment-level-${level}" data-commentid="${c.id}" data-postid="${postId}">
-      <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
+      <div class="comment-meta">
+        <a href="profile.html?uid=${c.userId}" class="profile-link">
+          ${userMap[c.userId] || t("guest")}
+        </a>
+        – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}
+      </div>
       <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
       <div class="emoji-row">${emojis.map(e =>
         `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
