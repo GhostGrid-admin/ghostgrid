@@ -280,6 +280,31 @@
     .reply-box { margin-top: 7px; }
     @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
     @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
+    .comment {
+      background: #181f28;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      box-shadow: 0 2px 8px #0004;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .comment-level-1 {
+      margin-left: 32px;
+      background: #232d38;
+      border-left: 3px solid #00ffe6;
+    }
+    .comment-level-2 {
+      margin-left: 64px;
+      background: #263044;
+      border-left: 3px solid #ff00e6;
+    }
+    .comment-level-3 {
+      margin-left: 96px;
+      background: #2a3550;
+      border-left: 3px solid #fffa00;
+    }
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -663,7 +688,7 @@ async function loadThreadedComments(postId) {
 function renderThreadedComments(postId, comments, parentId, level) {
   if (!comments) return "";
   return comments.map(c =>
-    `<div class="comment" data-commentid="${c.id}" data-postid="${postId}">
+  `<div class="comment comment-level-${level}" data-commentid="${c.id}" data-postid="${postId}">
       <div class="comment-meta">${userMap[c.userId] || t("guest")} – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
       <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
       <div class="emoji-row">${emojis.map(e =>
