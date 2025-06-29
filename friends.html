@@ -255,21 +255,32 @@
     </div>
   </div>
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-content" id="navMenu">
-      <a href="forum.html" data-i18n="forum">Forum</a>
-      <a href="store.html" data-i18n="store">Store</a>
-      <a href="wall.html" data-i18n="wall">Väggen</a>
-      <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
-      <a href="friends.html" data-i18n="friends">Vänner</a>
-      <div class="search-container">
-        <input type="text" placeholder="" id="searchInput" />
-      </div>
-    </div>
-  </nav>
+  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="wall.html">Väggen</a></li>
+      <li><a href="upload.html">Ladda upp</a></li>
+      <li><a href="profile.html">Profil</a></li>
+      <li><a href="friends.html" class="active">Vänner</a></li>
+      <li><a href="ghost&glow.html">Ghost&Glow</a></li>
+      <li><a href="store.html">Butik</a></li>
+    </ul>
+  </div>
+  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+  <div class="nav-mobile" id="navMobile">
+    <a href="forum.html">Forum</a>
+    <a href="wall.html">Väggen</a>
+    <a href="upload.html">Ladda upp</a>
+    <a href="profile.html">Profil</a>
+    <a href="friends.html" class="active">Vänner</a>
+    <a href="ghost&glow.html">Ghost&Glow</a>
+    <a href="store.html">Butik</a>
+    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+  </div>
+</nav>
   <div class="friends-main">
     <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
