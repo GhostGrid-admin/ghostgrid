@@ -842,10 +842,10 @@ async function loadThreadedComments(postId) {
 }
 
 // Rendera kommentarer, trådat (med reply, redigera, ta bort)
-function renderThreadedComments(postId, comments, parentId, level) {
+function renderThreadedComments(postId, comments, parentId, level) { 
   if (!comments) return "";
   return comments.map(c =>
-  `<div class="comment comment-level-${level}" data-commentid="${c.id}" data-postid="${postId}">
+    `<div class="comment comment-level-${level}" data-commentid="${c.id}" data-postid="${postId}">
       <div class="comment-meta">
         <a href="profile-view.html?uid=${c.userId}" class="profile-link">
           ${userMap[c.userId] || t("guest")}
@@ -853,10 +853,11 @@ function renderThreadedComments(postId, comments, parentId, level) {
         – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}
       </div>
       <div class="comment-text">${escapeHTML(c[`text_${localStorage.lang}`] || c.text || "")}</div>
-      <div class="emoji-row">${emojis.map(e =>
-        `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
-      ).join("")}
-      <span class="reactions-view" data-cid="${c.id}"></span>
+      <div class="emoji-row">
+        ${emojis.map(e =>
+          `<button class="emoji-btn" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
+        ).join("")}
+        <span class="reactions-view" data-cid="${c.id}"></span>
       </div>
       <div class="comment-actions">
         <span class="reply-link" data-replyid="${c.id}">${t("reply")}</span>
