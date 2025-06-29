@@ -6,12 +6,17 @@
   <title>Profilvisning – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
+    html, body {
       background: #000;
       color: #00ff00;
       font-family: monospace;
       margin: 0;
       min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
       display: flex;
       flex-direction: column;
     }
@@ -83,32 +88,29 @@
       width: 100vw;
       box-sizing: border-box;
       padding: 0 12px;
+      overflow-x: hidden;
     }
     #profile-output {
       width: 100%;
-      max-width: 1300px;
-      min-width: 290px;
+      max-width: 900px;
+      min-width: 0;
       margin: 0 auto;
       box-sizing: border-box;
       transition: box-shadow 0.3s;
       box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
-      border-radius: 28px;
+      border-radius: 24px;
       background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
-      padding: 44px 18px 38px 18px;
+      padding: 36px 8vw 32px 8vw;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
     }
-    @media (min-width: 900px) {
-      #profile-output {
-        width: 75vw;
-        min-width: 520px;
-      }
-    }
     .profile-picture {
-      width: 135px;
-      height: 135px;
+      width: 130px;
+      height: 130px;
+      max-width: 35vw;
+      max-height: 35vw;
       border-radius: 50%;
       object-fit: cover;
       margin: 0 auto 14px auto;
@@ -123,6 +125,7 @@
       flex-direction: column;
       align-items: center;
       margin-bottom: 4px;
+      width: 100%;
     }
     .username-label {
       font-size: 1.05em;
@@ -138,7 +141,7 @@
       border-radius: 16px;
       font-size: 2em;
       font-weight: bold;
-      min-width: 140px;
+      min-width: 120px;
       box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
       letter-spacing: 0.5px;
       text-align: center;
@@ -210,6 +213,43 @@
     }
     .after-user-id {
       margin-top: 0px !important; /* Y2K/profil ska komma direkt efter id */
+    }
+
+    /* --- MOBILANPASSNING --- */
+    @media (max-width: 700px) {
+      #profile-output {
+        max-width: 100vw;
+        min-width: 0;
+        padding: 28px 2vw 18px 2vw;
+        border-radius: 14px;
+      }
+      .profile-picture {
+        width: 92px;
+        height: 92px;
+        max-width: 32vw;
+        max-height: 32vw;
+      }
+      .profile-username-box {
+        font-size: 1.16em;
+        padding: 8px 10vw;
+        min-width: 60px;
+      }
+      .main-content {
+        padding: 0 1vw;
+      }
+    }
+    @media (max-width: 500px) {
+      #profile-output {
+        padding: 14px 0 12px 0;
+        border-radius: 8px;
+        box-shadow: 0 0 24px 2px #0ff3, 0 0 10px #8000ff99;
+      }
+      .profile-username-box {
+        padding: 6px 4vw;
+      }
+      .main-content {
+        padding: 0;
+      }
     }
   </style>
 </head>
