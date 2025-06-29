@@ -5748,16 +5748,42 @@
     const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
 
     // Meny
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMenu = document.getElementById('navMenu');
-    hamburgerBtn.addEventListener('click', function() {
-      navMenu.classList.toggle('show');
+    document.addEventListener("DOMContentLoaded", function() {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMobile = document.getElementById('navMobile');
+
+  if (hamburgerBtn && navMobile) {
+    hamburgerBtn.addEventListener('click', function () {
+      navMobile.classList.toggle('show');
     });
-    navMenu.querySelectorAll('a').forEach(link => {
+
+    navMobile.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        navMenu.classList.remove('show');
+        navMobile.classList.remove('show');
       });
     });
+
+    const logoutBtn = document.getElementById("logoutMobileBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      });
+    }
+  }
+
+  const logoutDesktopBtn = document.getElementById("logoutDesktopBtn");
+  if (logoutDesktopBtn) {
+    logoutDesktopBtn.onclick = doLogout;
+  }
+});
+
+function doLogout() {
+  firebase.auth().signOut().then(() => {
+    window.location.href = "login.html";
+  });
+}
 
     // Teman till dropdown
     const themeSelect = document.getElementById("theme");
