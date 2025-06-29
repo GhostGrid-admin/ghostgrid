@@ -355,6 +355,74 @@
       color: #00ffcc;
       text-shadow: 0 0 5px #00ffcc;
     }
+    .emoji-row { 
+      display: flex;
+      align-items: center;
+      position: relative;
+      min-height: 36px;
+    }
+    .emoji-dropdown-btn {
+      background: none;
+      border: none;
+      font-size: 1.24em;
+      cursor: pointer;
+      color: #00ffd9;
+      padding: 2px 8px;
+      border-radius: 7px;
+      transition: background 0.14s;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .emoji-dropdown-btn:hover {
+      background: #00ffcc1a;
+    }
+    .emoji-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 35px;
+      left: 0;
+      background: #191f2a;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px #00ffcc77;
+      padding: 8px 12px;
+      z-index: 40;
+      min-width: 140px;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .emoji-dropdown-menu.show {
+      display: flex;
+    }
+    .emoji-dropdown-menu button {
+      background: none;
+      border: none;
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 5px;
+      transition: background 0.12s;
+    }
+    .emoji-dropdown-menu button:hover,
+    .emoji-dropdown-menu button.selected {
+      background: #00ffcc33;
+    }
+    .emoji-summary-chips {
+      display: inline-flex;
+      gap: 7px;
+      margin-left: 8px;
+    }
+    .emoji-chip {
+      background: #181f2a;
+      border-radius: 14px;
+      border: 1.1px solid #273344;
+      color: #00ffcc;
+      padding: 1px 8px;
+      font-size: 1.06em;
+      display: inline-flex;
+      align-items: center;
+      font-weight: bold;
+    }
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -594,7 +662,15 @@ const emojis = [
   { emoji: "😡", key: "angry" },
   { emoji: "👎", key: "thumbsdown" }
 ];
-
+function emojiSummaryChips(reactions) {
+    if (!reactions || reactions.length === 0) return "";
+    let counts = {};
+    reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+    return Object.entries(counts).map(([k, v]) => {
+      const e = emojis.find(e => e.key === k);
+      return `<span class="emoji-chip" title="${e ? e.emoji : ""}">${e ? e.emoji : ""} ${v}</span>`;
+    }).join("");
+  }
 async function fetchUsers() {
   userMap = {};
   const snap = await getDocs(collection(db, "profiles"));
@@ -641,7 +717,15 @@ function formatPostContent(post) {
     default: return "";
   }
 }
-
+function emojiSummaryChips(reactions) {
+  if (!reactions || reactions.length === 0) return "";
+  let counts = {};
+  reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+  return Object.entries(counts).map(([k, v]) => {
+    const e = emojis.find(e => e.key === k);
+    return `<span class="emoji-chip" title="${e ? e.emoji : ""}">${e ? e.emoji : ""} ${v}</span>`;
+  }).join("");
+}
 async function renderPosts(type, search) {
   const postList = document.getElementById("postList");
   let posts = type === "all" ? allPosts : allPosts.filter(p => p.type === type);
@@ -673,11 +757,22 @@ async function renderPosts(type, search) {
       ${canDelete ? `<button class="delete-post-btn" data-postid="${post.id}" style="margin-left:10px; color:#ff5d5d; background:#222; border:none; cursor:pointer;">${t("delete")}</button>` : ""}
     </div>
         ${formatPostContent(post)}
-        <div class="emoji-row">${emojis.map(e =>
-          `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" data-emoji="${e.key}" title="${e.emoji}" ${currentUser ? "" : "disabled"}>${e.emoji}</button>`
-        ).join("")}
-        <span class="reactions-view">${emojiSummary(reactions)}</span>
-        </div>
+        <div class="emoji-row">
+  <button class="emoji-dropdown-btn" type="button">
+    😊 <span style="font-size:1em;">&#9660;</span>
+  </button>
+  <div class="emoji-dropdown-menu">
+    ${emojis.map(e =>
+      `<button class="emoji-btn${userReaction && userReaction.emoji === e.key ? " selected" : ""}" 
+        data-emoji="${e.key}" 
+        title="${e.emoji}" 
+        ${currentUser ? "" : "disabled"}>
+        ${e.emoji}
+      </button>`
+    ).join("")}
+  </div>
+  <span class="emoji-summary-chips">${emojiSummaryChips(reactions)}</span>
+</div>
         <div class="post-time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}</div>
         <div class="comments-block">
           ${renderThreadedComments(post.id, comments, null, 0)}
@@ -691,6 +786,18 @@ async function renderPosts(type, search) {
       </div>`;
   }
   addEventListeners();
+  // Emoji-dropdown: visa/dölj meny
+document.querySelectorAll(".emoji-dropdown-btn").forEach(btn => {
+  btn.onclick = function(e) {
+    e.stopPropagation();
+    document.querySelectorAll(".emoji-dropdown-menu").forEach(m => m.classList.remove("show"));
+    this.nextElementSibling.classList.add("show");
+  };
+});
+// Klick utanför dropdown stänger alla menyer
+document.addEventListener("click", function() {
+  document.querySelectorAll(".emoji-dropdown-menu").forEach(m => m.classList.remove("show"));
+});
 }
 
 // Hämta alla reaktioner på ett inlägg eller kommentar
