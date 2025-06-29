@@ -391,6 +391,7 @@
     return;
   }
   const data = snap.data();
+      console.log("🔍 Hämta profil-data:", data);
   const showUsername = (data.nickname || data.username || "Okänd användare");
   profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
   profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
