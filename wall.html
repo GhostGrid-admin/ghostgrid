@@ -669,7 +669,7 @@ async function renderPosts(type, search) {
     postList.innerHTML += `
   <div class="post" data-postid="${post.id}">
     <div class="post-header">
-      ${t("user")}: <a href="profile.html?uid=${post.user}" class="profile-link">${name}</a>
+      ${t("user")}: <a href="profile-view.html?uid=${post.user}" class="profile-link">${name}</a>
       ${canDelete ? `<button class="delete-post-btn" data-postid="${post.id}" style="margin-left:10px; color:#ff5d5d; background:#222; border:none; cursor:pointer;">${t("delete")}</button>` : ""}
     </div>
         ${formatPostContent(post)}
@@ -740,7 +740,7 @@ function renderThreadedComments(postId, comments, parentId, level) {
   return comments.map(c =>
   `<div class="comment comment-level-${level}" data-commentid="${c.id}" data-postid="${postId}">
       <div class="comment-meta">
-        <a href="profile.html?uid=${c.userId}" class="profile-link">
+        <a href="profile-view.html?uid=${c.userId}" class="profile-link">
           ${userMap[c.userId] || t("guest")}
         </a>
         – ${c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE") : ""}
