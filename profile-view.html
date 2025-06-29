@@ -101,8 +101,79 @@
 }
 @media (max-width: 1100px) {
   #profile-output {
-    max-width: 98vw;
-    padding: 32px 10vw;
+  width: 100%;
+  max-width: 1300px;
+  min-width: 0;
+  margin: 34px auto;
+  box-sizing: border-box;
+  box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
+  border-radius: 30px;
+  background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
+  padding: 40px 4vw 40px 4vw;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 36px;
+  overflow-x: auto;
+}
+
+.profile-section {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto 28px auto;
+  background: rgba(18,30,40,0.8);
+  border-radius: 24px;
+  box-shadow: 0 0 24px #00ffe522, 0 0 6px #8000ff55;
+  padding: 32px 4vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Gör så profilkoden ALDRIG sticker utanför på någon skärm */
+#profile-output, .profile-section, .after-user-id, .profile-username-box {
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1100px) {
+  #profile-output {
+    width: 70vw;
+    max-width: 1300px;
+    padding-left: 3vw;
+    padding-right: 3vw;
+  }
+  .profile-section {
+    max-width: 950px;
+    padding: 38px 5vw;
+  }
+}
+
+@media (max-width: 900px) {
+  #profile-output {
+    max-width: 97vw;
+    padding: 20px 2vw 20px 2vw;
+  }
+  .profile-section {
+    max-width: 97vw;
+    padding: 16px 2vw;
+    border-radius: 17px;
+  }
+}
+@media (max-width: 700px) {
+  #profile-output {
+    max-width: 100vw;
+    padding: 10px 0;
+    border-radius: 10px;
+  }
+  .profile-section {
+    max-width: 100vw;
+    padding: 10px 0.5em;
+    border-radius: 7px;
   }
 }
 @media (max-width: 700px) {
