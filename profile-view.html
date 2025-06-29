@@ -155,7 +155,6 @@
   gap: 34px;
   box-sizing: border-box;
 }
-
 .profile-header {
   width: 100%;
   max-width: 480px;
@@ -169,7 +168,6 @@
   padding: 28px 24px 14px 24px;
   box-sizing: border-box;
 }
-
 .profile-section {
   width: 100%;
   max-width: 950px;
@@ -183,7 +181,6 @@
   align-items: center;
   box-sizing: border-box;
 }
-
 .profile-picture {
   width: 115px;
   height: 115px;
@@ -195,7 +192,6 @@
   display: block;
   margin-bottom: 14px;
 }
-
 .profile-username-box {
   background: #fff;
   color: #181f21;
@@ -240,7 +236,7 @@
   font-size: 2.1em;
   color: #00ff00;
 }
-
+/* RESPONSIVITET */
 @media (min-width: 1100px) {
   #profile-output {
     width: 70vw;
@@ -252,7 +248,6 @@
     padding: 38px 5vw;
   }
 }
-
 @media (max-width: 900px) {
   #profile-output {
     max-width: 97vw;
@@ -270,6 +265,25 @@
     padding: 10px 0;
     border-radius: 13px;
   }
+  .profile-header {
+    max-width: 99vw;
+    padding: 15px 0.2em 5px 0.2em;
+  }
+  .profile-section {
+    max-width: 100vw;
+    padding: 10px 0.5em;
+    border-radius: 7px;
+  }
+  .profile-picture {
+    width: 70px;
+    height: 70px;
+  }
+  .profile-username-box {
+    font-size: 1.13em;
+    padding: 6px 1em;
+    min-width: 60px;
+  }
+}
   .profile-header {
     max-width: 99vw;
     padding: 15px 0.2em 5px 0.2em;
@@ -371,90 +385,49 @@
     }
 
     async function renderProfile() {
-      const snap = await getDoc(profileRef);
-      if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
-        return;
+  const snap = await getDoc(profileRef);
+  if (!snap.exists()) {
+    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
+    return;
+  }
+  const data = snap.data();
+  const showUsername = (data.nickname || data.username || "Okänd användare");
+  profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
+  profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
+  profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
+  picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
+  picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
+  picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
+
+  let profileHtml = `
+    <div class="profile-header">
+      ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
+      <span class="profile-username-box" id="userNameBox">${showUsername}</span>
+      <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
+      <span class="user-id" id="userIdTxt">${uid}</span>
+      ${
+        userId ? `
+        <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
+          <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+            <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+            <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          ${userId === uid && unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+        </a>
+      ` : ""
       }
-      const data = snap.data();
-      const showUsername = (data.nickname || data.username || "Okänd användare");
-      profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
-      profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
-      profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
-      picReactions.heart = Array.isArray(data.picHeartUsers) ? data.picHeartUsers : [];
-      picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
-      picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
-      let profileHtml = '';
+    </div>
+    <div class="profile-section">
+      ${data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>"}
+    </div>
+  `;
 
-      // PROFILBILD
-      if (data.profilePicUrl) {
-        profileHtml += `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">`;
-      }
+  profileOut.innerHTML = profileHtml;
 
-      // ANVÄNDARNAMN + MEDDELANDE-IKON
-      profileHtml += `
-        <div class="username-section">
-          <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
-          <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-          ${
-            userId ? `
-            <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}" style="">
-              <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-                <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              ${userId === uid && unreadTotal > 0 ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
-            </a>
-          ` : ""
-          }
-        </div>
-      `;
-
-      // ANVÄNDAR-ID
-      profileHtml += `<div class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</div>`;
-      profileHtml += `<div class="user-id" id="userIdTxt">${uid}</div>`;
-
-      // PROFILKOD / INNEHÅLL
-      profileHtml += `<div class="after-user-id">`;
-      profileHtml += data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>";
-      profileHtml += `</div>`;
-
-      profileOut.innerHTML = profileHtml;
-
-      updateReactionUI();
-      setupReactionEvents();
-    }
-
-    // ... REAKTIONSKOD SOM TIDIGARE ...
-
-    function getMyProfileReaction() {
-      if (!userId) return null;
-      if (profileReactions.heart.includes(userId)) return "heart";
-      if (profileReactions.thumb.includes(userId)) return "thumb";
-      if (profileReactions.smile.includes(userId)) return "smile";
-      return null;
-    }
-    function getMyPicReaction() {
-      if (!userId) return null;
-      if (picReactions.heart.includes(userId)) return "heart";
-      if (picReactions.thumb.includes(userId)) return "thumb";
-      if (picReactions.smile.includes(userId)) return "smile";
-      return null;
-    }
-    function updateReactionUI() {}
-    function setupReactionEvents() {}
-
-    // Hantera auth och badge (endast för egen profil)
-    onAuthStateChanged(auth, async user => {
-      userId = user ? user.uid : null;
-      if (userId && userId === uid) {
-        unreadTotal = await getUnreadMessagesCount();
-      } else {
-        unreadTotal = 0;
-      }
-      renderProfile();
-    });
+  updateReactionUI();
+  setupReactionEvents();
+}
   </script>
 </body>
 </html>
