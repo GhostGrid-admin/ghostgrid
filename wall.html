@@ -278,33 +278,72 @@
     .reply-link { color: #00ffcc; cursor: pointer; text-decoration: underline; font-size: 0.95em;}
     .comment-children { margin-left: 22px; border-left: 1.2px solid #273344; padding-left: 12px;}
     .reply-box { margin-top: 7px; }
-    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
-    @media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
-    .comment {
-      background: #181f28;
-      border-radius: 8px;
-      padding: 12px 18px;
-      margin-top: 10px;
-      margin-bottom: 6px;
-      box-shadow: 0 2px 8px #0004;
-      position: relative;
-      transition: background 0.2s;
-    }
-    .comment-level-1 {
-      margin-left: 32px;
-      background: #232d38;
-      border-left: 3px solid #00ffe6;
-    }
-    .comment-level-2 {
-      margin-left: 64px;
-      background: #263044;
-      border-left: 3px solid #ff00e6;
-    }
-    .comment-level-3 {
-      margin-left: 96px;
-      background: #2a3550;
-      border-left: 3px solid #fffa00;
-    }
+@media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
+@media (max-width: 700px) { .wall-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
+.comment {
+  background: #181f28;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 8px #0004;
+  position: relative;
+  transition: background 0.2s;
+}
+.comment-level-1 {
+  margin-left: 32px;
+  background: #232d38;
+  border-left: 3px solid #00ffe6;
+}
+.comment-level-2 {
+  margin-left: 64px;
+  background: #263044;
+  border-left: 3px solid #ff00e6;
+}
+.comment-level-3 {
+  margin-left: 96px;
+  background: #2a3550;
+  border-left: 3px solid #fffa00;
+} /* <-- den här måste finnas! */
+ 
+.add-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.comment-textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 1.08em;
+  font-family: inherit;
+  border: 2px solid #00ffcc;
+  border-radius: 7px;
+  background: #181f28;
+  color: #e0ffff;
+  padding: 8px 9px;
+  resize: vertical;
+}
+.add-comment-form button {
+  width: 100%;
+  font-size: 1.14em;
+  font-weight: bold;
+  padding: 9px 0;
+  border-radius: 7px;
+  background: #00ffcc;
+  color: #181f28;
+  border: none;
+  cursor: pointer;
+  margin-top: 2px;
+  box-shadow: 0 0 8px #00ffcc80;
+  transition: background 0.14s, color 0.14s;
+}
+.add-comment-form button:hover {
+  background: #0bffd2;
+  color: #181f28;
+}
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -763,7 +802,7 @@ function addEventListeners() {
       if (box) {
         box.innerHTML =
           `<form class="add-comment-form" data-parentid="${cid}" data-postid="${this.closest(".post").dataset.postid}">
-            <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+            <textarea rows="2" placeholder="Kommentera..." maxlength="200" class="comment-textarea"></textarea>
             <button type="submit">${t("comment")}</button>
           </form>`;
         box.style.display = "block";
