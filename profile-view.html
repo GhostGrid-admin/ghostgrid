@@ -6,252 +6,251 @@
   <title>Profilvisning – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    html, body {
-      background: #000;
-      color: #00ff00;
-      font-family: monospace;
-      margin: 0;
-      min-height: 100vh;
-      width: 100%;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-    body {
-      display: flex;
+  html, body {
+    background: #000;
+    color: #00ff00;
+    font-family: monospace;
+    margin: 0;
+    min-height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  nav.navbar {
+    width: 100vw;
+    min-height: 54px;
+    background: #111127;
+    border-bottom: 3px solid #8000ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .nav-content {
+    display: flex;
+    gap: 38px;
+    justify-content: center;
+    align-items: center;
+  }
+  .nav-content a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px #fff, 0 0 18px #8f4cff;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    transition: 0.2s;
+    white-space: nowrap;
+  }
+  .nav-content a:hover {
+    color: #0ff;
+    text-shadow: 0 0 14px #0ff, 0 0 10px #bb00ff;
+  }
+  #menuBtn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    position: absolute;
+    right: 20px;
+    top: 7px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  @media (max-width: 800px) {
+    .nav-content {
       flex-direction: column;
-    }
-    nav.navbar {
+      background: #0a0020f7;
+      position: absolute;
       width: 100vw;
-      min-height: 54px;
-      background: #111127;
-      border-bottom: 3px solid #8000ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: sticky;
-      top: 0;
+      left: 0; top: 54px;
+      padding: 12px 0;
+      gap: 17px;
+      display: none;
       z-index: 1000;
     }
-    .nav-content {
-      display: flex;
-      gap: 38px;
-      justify-content: center;
-      align-items: center;
-    }
-    .nav-content a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.3em;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px #fff, 0 0 18px #8f4cff;
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-    .nav-content a:hover {
-      color: #0ff;
-      text-shadow: 0 0 14px #0ff, 0 0 10px #bb00ff;
-    }
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 2em;
-      position: absolute;
-      right: 20px;
-      top: 7px;
-      cursor: pointer;
-      z-index: 1001;
-    }
-    @media (max-width: 800px) {
-      .nav-content {
-        flex-direction: column;
-        background: #0a0020f7;
-        position: absolute;
-        width: 100vw;
-        left: 0; top: 54px;
-        padding: 12px 0;
-        gap: 17px;
-        display: none;
-        z-index: 1000;
-      }
-      .nav-content.active { display: flex; }
-      #menuBtn { display: block; }
-    }
-    .main-content {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100vw;
-      box-sizing: border-box;
-      padding: 0 12px;
-      overflow-x: hidden;
-    }
+    .nav-content.active { display: flex; }
+    #menuBtn { display: block; }
+  }
+  .main-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 0 0.5em;
+    overflow-x: hidden;
+  }
+  #profile-output {
+    width: 100%;
+    max-width: 480px;
+    min-width: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s;
+    box-shadow: 0 0 38px 2px #0ff4, 0 0 12px 1px #8000ff80;
+    border-radius: 19px;
+    background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
+    padding: 28px 1em 20px 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .profile-picture {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 14px auto;
+    box-shadow: 0 0 18px #00ff80cc, 0 0 6px #0ff;
+    border: 2px solid #0ff;
+    background: #111;
+    display: block;
+  }
+  .username-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4px;
+    width: 100%;
+  }
+  .username-label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 4px #0ff;
+    margin-bottom: 2px;
+  }
+  .profile-username-box {
+    background: #fff;
+    color: #181f21;
+    padding: 8px 2em;
+    border-radius: 13px;
+    font-size: 1.3em;
+    font-weight: bold;
+    min-width: 60px;
+    box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
+    letter-spacing: 0.5px;
+    text-align: center;
+    border: 2px solid #00ffcc;
+    font-family: 'Courier New', monospace;
+    user-select: text;
+    margin: 0 auto;
+    display: block;
+    word-break: break-word;
+  }
+  .ghostgrid-message-link {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    margin-left: 12px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 50%;
+    background: #171c19;
+    transition: box-shadow .23s;
+    box-shadow: 0 0 10px #19ff19b0, 0 0 20px #19ff1990;
+  }
+  .ghostgrid-message-link:focus,
+  .ghostgrid-message-link:active {
+    box-shadow: 0 0 32px #19ff19, 0 0 44px #50ffb9;
+  }
+  .ghostgrid-message-svg {
+    display: block;
+    border-radius: 50%;
+  }
+  .ghostgrid-badge {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #19ff19;
+    color: #111;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
+    border: 2px solid #111;
+    display: flex; align-items: center; justify-content: center;
+    animation: pulseBadge 1.1s infinite alternate;
+  }
+  @keyframes pulseBadge {
+    0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
+    100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
+  }
+  .user-id-label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 7px;
+    margin-bottom: 1px;
+    text-shadow: 0 0 4px #0ff;
+  }
+  .user-id {
+    color: #bbfff5;
+    font-size: 0.93em;
+    text-align: center;
+    letter-spacing: 0.8px;
+    opacity: 0.7;
+    user-select: all;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+    margin-bottom: 6px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+  .after-user-id {
+    margin-top: 2px !important;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    padding-bottom: 1em;
+  }
+  /* PROFILKOD OCH INNEHÅLL: förhindra att något sticker ut */
+  .after-user-id * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Mobil extra anpassning */
+  @media (max-width: 540px) {
     #profile-output {
-      width: 100%;
-      max-width: 900px;
-      min-width: 0;
-      margin: 0 auto;
-      box-sizing: border-box;
-      transition: box-shadow 0.3s;
-      box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
-      border-radius: 24px;
-      background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
-      padding: 36px 8vw 32px 8vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .profile-picture {
-      width: 130px;
-      height: 130px;
-      max-width: 35vw;
-      max-height: 35vw;
-      border-radius: 50%;
-      object-fit: cover;
-      margin: 0 auto 14px auto;
-      box-shadow: 0 0 32px #00ff80cc, 0 0 12px #0ff;
-      border: 3px solid #0ff;
-      background: #111;
-      display: block;
-    }
-    .username-section {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 4px;
-      width: 100%;
-    }
-    .username-label {
-      font-size: 1.05em;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 4px #0ff;
-      margin-bottom: 2px;
+      max-width: 100vw;
+      padding: 12px 0 12px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 18px 1px #0ff2, 0 0 6px #8000ff80;
     }
     .profile-username-box {
-      background: #fff;
-      color: #181f21;
-      padding: 11px 36px;
-      border-radius: 16px;
-      font-size: 2em;
-      font-weight: bold;
-      min-width: 120px;
-      box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
-      letter-spacing: 0.5px;
-      text-align: center;
-      border: 2.2px solid #00ffcc;
-      font-family: 'Courier New', monospace;
-      user-select: text;
-      margin: 0 auto;
-      display: block;
-    }
-    .ghostgrid-message-link {
-      position: absolute;
-      top: 50%;
-      left: 100%;
-      transform: translateY(-50%);
-      margin-left: 16px;
-      display: inline-flex;
-      align-items: center;
-      border-radius: 50%;
-      background: #171c19;
-      transition: box-shadow .23s;
-      box-shadow: 0 0 10px #19ff19b0, 0 0 32px #19ff1990;
-    }
-    .ghostgrid-message-link:focus,
-    .ghostgrid-message-link:active {
-      box-shadow: 0 0 32px #19ff19, 0 0 44px #50ffb9;
-    }
-    .ghostgrid-message-svg {
-      display: block;
-      border-radius: 50%;
-    }
-    .ghostgrid-badge {
-      position: absolute;
-      top: -9px;
-      right: -9px;
-      min-width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #19ff19;
-      color: #111;
+      padding: 6px 2vw;
       font-size: 1.05em;
-      font-weight: bold;
-      box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
-      border: 2px solid #111;
-      display: flex; align-items: center; justify-content: center;
-      animation: pulseBadge 1.1s infinite alternate;
     }
-    @keyframes pulseBadge {
-      0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
-      100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
+    .main-content {
+      padding: 0;
     }
-    .user-id-label {
-      font-size: 1em;
-      font-weight: bold;
-      color: #fff;
-      margin-top: 7px;
-      margin-bottom: 1px;
-      text-shadow: 0 0 4px #0ff;
-    }
-    .user-id {
-      color: #bbfff5;
-      font-size: 0.95em;
-      text-align: center;
-      letter-spacing: 0.8px;
-      opacity: 0.69;
-      user-select: all;
-      font-family: 'Courier New', monospace;
-      word-break: break-all;
-      margin-bottom: 6px;
-    }
-    .after-user-id {
-      margin-top: 0px !important; /* Y2K/profil ska komma direkt efter id */
-    }
-
-    /* --- MOBILANPASSNING --- */
-    @media (max-width: 700px) {
-      #profile-output {
-        max-width: 100vw;
-        min-width: 0;
-        padding: 28px 2vw 18px 2vw;
-        border-radius: 14px;
-      }
-      .profile-picture {
-        width: 92px;
-        height: 92px;
-        max-width: 32vw;
-        max-height: 32vw;
-      }
-      .profile-username-box {
-        font-size: 1.16em;
-        padding: 8px 10vw;
-        min-width: 60px;
-      }
-      .main-content {
-        padding: 0 1vw;
-      }
-    }
-    @media (max-width: 500px) {
-      #profile-output {
-        padding: 14px 0 12px 0;
-        border-radius: 8px;
-        box-shadow: 0 0 24px 2px #0ff3, 0 0 10px #8000ff99;
-      }
-      .profile-username-box {
-        padding: 6px 4vw;
-      }
-      .main-content {
-        padding: 0;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <nav class="navbar">
