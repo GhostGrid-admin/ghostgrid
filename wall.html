@@ -672,9 +672,9 @@ async function renderPosts(type, search) {
           ${renderThreadedComments(post.id, comments, null, 0)}
           ${currentUser ?
             `<form class="add-comment-form" data-postid="${post.id}" data-parentid="">
-              <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-              <button type="submit">${t("comment")}</button>
-            </form>` :
+             <textarea rows="2" placeholder="${t("comment_placeholder")}" maxlength="200" class="comment-textarea"></textarea>
+             <button type="submit">${t("comment")}</button>
+             </form>` :
             `<div style="color:#00ffcc; margin:4px 0;">${t("login_to_comment")}</div>`}
         </div>
       </div>`;
