@@ -300,10 +300,11 @@
         padding: 5px 2vw;
       }
     }
-  </style>
+</style>
 </head>
 <body>
-  <!-- NAVBAR -->
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -321,7 +322,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    // ---- FIREBASE INIT ----
     const firebaseConfig = {
       apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -334,7 +334,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ----------- MENY OCH SPRÅK -----------
+    // NAVBAR LOGIK
     const menuLabels = {
       sv: {
         forum: "Forum",
@@ -404,7 +404,7 @@
       });
     }
 
-    // -------- PROFIL-VIEW LOGIK --------
+    // PROFILE-VIEW LOGIK
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
@@ -434,8 +434,6 @@
       }
       const data = snap.data();
       const showUsername = (data.nickname || data.username || (lang === "sv" ? "Okänd användare" : "Unknown user"));
-
-      // PROFILRUTA: Bild, namn, id, ikon
       let profileHeader = `
         <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
@@ -446,17 +444,17 @@
             <span class="user-id" id="userIdTxt">${uid}</span>
             ${userId ? `
               <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
-                <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                <svg viewBox="0 0 54 54" width="38" height="38" class="ghostgrid-message-svg" aria-label="Meddelanden">
                   <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                   <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
                   <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
+                ${(userId === uid && unreadTotal > 0) ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
               </a>
             ` : ""}
           </div>
         </div>
       `;
-
       let profileHtml = `
         ${profileHeader}
         <div class="profile-section">
