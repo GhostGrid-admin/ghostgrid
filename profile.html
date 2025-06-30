@@ -7,13 +7,15 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      background-color: black;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column; align-items: center;
-      min-height: 100vh; padding-top: 100px;
-    }
+  background: #0a0a0a;
+  color: #e0ffff;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 85px;
+  position: relative;
+  overflow-x: hidden;
+}
     .hidden { display: none !important; }
     nav.navbar {
   background-color: #000;
@@ -275,7 +277,8 @@
   </div>
 </nav>
 
-  <div class="login-container">
+  <div class="profile-box" style="width:100%;display:flex;justify-content:center;">
+  <div class="login-container" style="margin-top:40px;max-width:500px;width:100%;">
     <h2 id="header-txt">Redigera din profil</h2>
     <p id="profile-email">E-post:</p>
     <div style="margin-bottom:14px; text-align:left;">
@@ -307,10 +310,11 @@
     <p style="margin-top: 20px;"><a href="#" id="logoutLink">Logga ut</a></p>
   </div>
 
-  <div id="fullscreenPreview" class="hidden">
+  <div id="fullscreenPreview" class="hidden" style="margin-top:40px;">
     <button id="exitPreviewBtn">Redigera profil</button>
     <div id="profileContent"></div>
   </div>
+</div>
 
   <script type="module">
     import { auth, db, storage } from './scripts/firebase-init.js';
