@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profilvisning – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -143,188 +143,45 @@
       .nav-mobile { display: none !important; }
     }
 
-   /* Gör så att huvudcontainern kan scrolla om innehållet blir för stort på små skärmar */
-.main-content {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* smidigare scroll på iOS */
-}
-
-/* --- Ny layout för profilhuvudet: bild, namn, id och meddelandesymbol bredvid varandra på desktop --- */
-.profile-header {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto 22px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px; /* Avstånd mellan element */
-  background: rgba(18,30,40,0.90);
-  border-radius: 22px;
-  box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
-  padding: 28px 24px 14px 24px;
-  box-sizing: border-box;
-  position: relative;
-  flex-wrap: nowrap; /* Se till att de ligger på en rad */
-  flex-shrink: 0;
-}
-
-/* Profilbild - lite mindre och med bra marginal */
-.profile-picture {
-  width: 115px;
-  height: 115px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
-  border: 3px solid #0ff;
-  background: #111;
-  display: block;
-  flex-shrink: 0;
-}
-
-/* Användarnamn - större text och centrerat vertikalt */
-.profile-username-box {
-  background: #fff;
-  color: #181f21;
-  padding: 11px 36px;
-  border-radius: 16px;
-  font-size: 2em;
-  font-weight: bold;
-  min-width: 140px;
-  box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
-  letter-spacing: 0.5px;
-  text-align: center;
-  border: 2.2px solid #00ffcc;
-  font-family: 'Courier New', monospace;
-  user-select: text;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 220px;
-  flex-shrink: 0;
-}
-
-/* Användar-id och etikett i en kolumn */
-.user-id-label, .user-id {
-  color: #fff;
-  font-size: 1em;
-  text-shadow: 0 0 4px #0ff;
-  font-weight: bold;
-  display: block;
-  margin: 0;
-  margin-top: 5px;
-  font-family: 'Courier New', monospace;
-  text-align: center;
-  word-break: break-word;
-  max-width: 120px;
-}
-
-/* Samla användar-id och etikett i en wrapper */
-.user-id-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 8px;
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-
-/* Meddelandeikon - till höger */
-.ghostgrid-message-link {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  font-size: 2.1em;
-  color: #00ff00;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.ghostgrid-message-link:hover {
-  color: #0ff;
-}
-
-.ghostgrid-badge {
-  position: absolute;
-  top: -9px;
-  right: -9px;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #19ff19;
-  color: #111;
-  font-size: 1em;
-  font-weight: bold;
-  box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
-  border: 2px solid #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: pulseBadge 1.1s infinite alternate;
-}
-
-@keyframes pulseBadge {
-  0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
-  100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
-}
-
-/* --- Responsiv anpassning: stapla vertikalt på smala skärmar --- */
-@media (max-width: 700px) {
-  .profile-header {
-    flex-direction: column;
-    padding: 20px 12px;
-    max-width: 97vw;
-  }
-  .profile-picture {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 14px;
-  }
-  .profile-info {
-    align-items: center;
-    text-align: center;
-  }
-  .profile-username-box {
-    font-size: 1.5em;
-    padding: 8px 20px;
-    min-width: auto;
-    max-width: 100%;
-  }
-  .ghostgrid-message-link {
-    margin: 12px 0 0 0;
-    font-size: 36px;
-  }
-}
-
-/* Gör menyn mer touchvänlig på mobiler */
-.nav-links a {
-  padding: 8px 14px;
-  font-size: 1.1em;
-}
-
-.nav-mobile a {
-  font-size: 1.3em;
-  padding: 14px 20px;
-}
-
-/* Om hamburgermeny används, se till att knappen är klickbar och synlig */
-.hamburger {
-  display: flex !important;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* Extra: låt navbaren få lite padding på små skärmar */
-@media (max-width: 600px) {
-  nav.navbar {
-    padding: 0 10px;
-  }
-}
-      .profile-picture {
-        width: 70px;
-        height: 70px;
-      }
+    /* Gör så att huvudcontainern kan scrolla om innehållet blir för stort på små skärmar */
+    .main-content {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* smidigare scroll på iOS */
     }
+
+    /* --- Ny layout för profilhuvudet: bild, namn, id och meddelandesymbol bredvid varandra på desktop --- */
+    .profile-header {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto 22px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px; /* Avstånd mellan element */
+      background: rgba(18,30,40,0.90);
+      border-radius: 22px;
+      box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
+      padding: 28px 24px 14px 24px;
+      box-sizing: border-box;
+      position: relative;
+      flex-wrap: nowrap; /* Se till att de ligger på en rad */
+      flex-shrink: 0;
+    }
+
+    /* Profilbild - lite mindre och med bra marginal */
+    .profile-picture {
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
+      border: 3px solid #0ff;
+      background: #111;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    /* Användarnamn - större text och centrerat vertikalt */
     .profile-username-box {
       background: #fff;
       color: #181f21;
@@ -339,39 +196,54 @@
       border: 2.2px solid #00ffcc;
       font-family: 'Courier New', monospace;
       user-select: text;
-      margin: 0 auto 10px auto;
-      display: block;
-      word-break: break-word;
-      max-width: 98vw;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 220px;
+      flex-shrink: 0;
     }
-    .user-id-label {
+
+    /* Användar-id och etikett i en kolumn */
+    .user-id-label, .user-id {
       color: #fff;
       font-size: 1em;
-      margin: 0;
-      margin-top: 5px;
       text-shadow: 0 0 4px #0ff;
       font-weight: bold;
-    }
-    .user-id {
-      color: #bbfff5;
-      font-size: 0.95em;
-      text-align: center;
-      letter-spacing: 0.8px;
-      opacity: 0.75;
-      user-select: all;
-      font-family: 'Courier New', monospace;
-      word-break: break-all;
-      margin-bottom: 3px;
-    }
-    .ghostgrid-message-link {
-      margin: 8px auto 0 auto;
       display: block;
+      margin: 0;
+      margin-top: 5px;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      word-break: break-word;
+      max-width: 120px;
+    }
+
+    /* Samla användar-id och etikett i en wrapper */
+    .user-id-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 8px;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Meddelandeikon - till höger */
+    .ghostgrid-message-link {
+      margin: 0;
+      display: flex;
+      align-items: center;
       font-size: 2.1em;
       color: #00ff00;
-      position: absolute;
-      top: 20px;
-      right: 20px;
+      cursor: pointer;
+      flex-shrink: 0;
     }
+
+    .ghostgrid-message-link:hover {
+      color: #0ff;
+    }
+
     .ghostgrid-badge {
       position: absolute;
       top: -9px;
@@ -385,56 +257,68 @@
       font-weight: bold;
       box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
       border: 2px solid #111;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       animation: pulseBadge 1.1s infinite alternate;
     }
+
     @keyframes pulseBadge {
       0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
-    .profile-section {
-      width: 100%;
-      max-width: 950px;
-      margin: 0 auto 28px auto;
-      background: rgba(18,30,40,0.8);
-      border-radius: 24px;
-      box-shadow: 0 0 24px #00ffe522, 0 0 6px #8000ff55;
-      padding: 32px 4vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-sizing: border-box;
-    }
-    @media (max-width: 900px) {
-      .profile-section {
-        max-width: 97vw;
-        padding: 16px 2vw;
-        border-radius: 17px;
-      }
-    }
+
+    /* --- Responsiv anpassning: stapla vertikalt på smala skärmar --- */
     @media (max-width: 700px) {
-      .profile-section {
-        max-width: 100vw;
-        padding: 10px 0.5em;
-        border-radius: 7px;
+      .profile-header {
+        flex-direction: column;
+        padding: 20px 12px;
+        max-width: 97vw;
+      }
+      .profile-picture {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 14px;
+      }
+      .profile-info {
+        align-items: center;
+        text-align: center;
       }
       .profile-username-box {
-        font-size: 1.13em;
-        padding: 6px 1em;
-        min-width: 60px;
+        font-size: 1.5em;
+        padding: 8px 20px;
+        min-width: auto;
+        max-width: 100%;
+      }
+      .ghostgrid-message-link {
+        margin: 12px 0 0 0;
+        font-size: 36px;
       }
     }
-    #profile-output, .profile-section, .after-user-id, .profile-username-box {
-      max-width: 100%;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      box-sizing: border-box;
+
+    /* Gör menyn mer touchvänlig på mobiler */
+    .nav-links a {
+      padding: 8px 14px;
+      font-size: 1.1em;
     }
-    .after-user-id * {
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
+
+    .nav-mobile a {
+      font-size: 1.3em;
+      padding: 14px 20px;
+    }
+
+    /* Om hamburgermeny används, se till att knappen är klickbar och synlig */
+    .hamburger {
+      display: flex !important;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    /* Extra: låt navbaren få lite padding på små skärmar */
+    @media (max-width: 600px) {
+      nav.navbar {
+        padding: 0 10px;
+      }
     }
   </style>
 </head>
@@ -597,8 +481,10 @@
         <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
           <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-          <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
-          <span class="user-id" id="userIdTxt">${uid}</span>
+          <div class="user-id-wrapper">
+            <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
+            <span class="user-id" id="userIdTxt">${uid}</span>
+          </div>
           ${userId ? `
             <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
