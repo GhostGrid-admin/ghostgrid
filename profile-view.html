@@ -149,35 +149,142 @@
   -webkit-overflow-scrolling: touch; /* smidigare scroll på iOS */
 }
 
-/* Gör profilen mer flexibel och rörlig i mindre fönster */
+/* --- Ny layout för profilhuvudet: bild, namn, id och meddelandesymbol bredvid varandra på desktop --- */
 .profile-header {
-  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 22px auto;
+  display: flex;
+  flex-direction: row; /* Lägg elementen i rad på desktop */
   align-items: center;
+  background: rgba(18,30,40,0.90);
+  border-radius: 22px;
+  box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
+  padding: 28px 24px 14px 24px;
+  box-sizing: border-box;
+  position: relative;
+  gap: 20px;
+}
+
+.profile-picture {
+  width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
+  border: 3px solid #0ff;
+  background: #111;
+  flex-shrink: 0; /* Behåll bildens storlek */
+  margin: 0;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.profile-username-box {
+  background: #fff;
+  color: #181f21;
+  padding: 11px 36px;
+  border-radius: 16px;
+  font-size: 2em;
+  font-weight: bold;
+  min-width: 140px;
+  box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
+  letter-spacing: 0.5px;
   text-align: center;
+  border: 2.2px solid #00ffcc;
+  font-family: 'Courier New', monospace;
+  user-select: text;
+  margin: 0 0 10px 0;
+  max-width: 98vw;
 }
 
-/* Se till att bilden är mindre på små skärmar */
+.user-id-label {
+  color: #fff;
+  font-size: 1em;
+  margin: 0 0 3px 0;
+  text-shadow: 0 0 4px #0ff;
+  font-weight: bold;
+}
+
+.user-id {
+  color: #bbfff5;
+  font-size: 0.95em;
+  letter-spacing: 0.8px;
+  opacity: 0.75;
+  user-select: all;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  margin: 0;
+}
+
+.ghostgrid-message-link {
+  font-size: 44px;
+  color: #00ff00;
+  margin-left: 20px;
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.ghostgrid-message-link:hover {
+  color: #0ff;
+}
+
+.ghostgrid-badge {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #19ff19;
+  color: #111;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: 0 0 17px #14ff68, 0 0 40px #15ff66, 0 0 5px #fff;
+  border: 2px solid #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseBadge 1.1s infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
+  100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
+}
+
+/* --- Responsiv anpassning: stapla vertikalt på smala skärmar --- */
 @media (max-width: 700px) {
+  .profile-header {
+    flex-direction: column;
+    padding: 20px 12px;
+    max-width: 97vw;
+  }
   .profile-picture {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 14px;
+  }
+  .profile-info {
+    align-items: center;
+    text-align: center;
   }
   .profile-username-box {
-    font-size: 1.4em;
-    padding: 10px 15px;
-  }
-}
-
-/* Justera paddings och marginaler på väldigt små skärmar */
-@media (max-width: 400px) {
-  .profile-section {
-    padding: 12px 1em;
-    border-radius: 6px;
-  }
-  .profile-username-box {
-    font-size: 1.1em;
-    padding: 8px 10px;
+    font-size: 1.5em;
+    padding: 8px 20px;
     min-width: auto;
+    max-width: 100%;
+  }
+  .ghostgrid-message-link {
+    margin: 12px 0 0 0;
+    font-size: 36px;
   }
 }
 
