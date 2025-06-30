@@ -155,17 +155,20 @@
   max-width: 480px;
   margin: 0 auto 22px auto;
   display: flex;
-  flex-direction: row; /* Lägg elementen i rad på desktop */
   align-items: center;
+  justify-content: center;
+  gap: 18px; /* Avstånd mellan element */
   background: rgba(18,30,40,0.90);
   border-radius: 22px;
   box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
   padding: 28px 24px 14px 24px;
   box-sizing: border-box;
   position: relative;
-  gap: 20px;
+  flex-wrap: nowrap; /* Se till att de ligger på en rad */
+  flex-shrink: 0;
 }
 
+/* Profilbild - lite mindre och med bra marginal */
 .profile-picture {
   width: 115px;
   height: 115px;
@@ -174,17 +177,11 @@
   box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
   border: 3px solid #0ff;
   background: #111;
-  flex-shrink: 0; /* Behåll bildens storlek */
-  margin: 0;
+  display: block;
+  flex-shrink: 0;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-grow: 1;
-}
-
+/* Användarnamn - större text och centrerat vertikalt */
 .profile-username-box {
   background: #fff;
   color: #181f21;
@@ -199,37 +196,48 @@
   border: 2.2px solid #00ffcc;
   font-family: 'Courier New', monospace;
   user-select: text;
-  margin: 0 0 10px 0;
-  max-width: 98vw;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 220px;
+  flex-shrink: 0;
 }
 
-.user-id-label {
+/* Användar-id och etikett i en kolumn */
+.user-id-label, .user-id {
   color: #fff;
   font-size: 1em;
-  margin: 0 0 3px 0;
   text-shadow: 0 0 4px #0ff;
   font-weight: bold;
-}
-
-.user-id {
-  color: #bbfff5;
-  font-size: 0.95em;
-  letter-spacing: 0.8px;
-  opacity: 0.75;
-  user-select: all;
-  font-family: 'Courier New', monospace;
-  word-break: break-all;
+  display: block;
   margin: 0;
+  margin-top: 5px;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  word-break: break-word;
+  max-width: 120px;
 }
 
-.ghostgrid-message-link {
-  font-size: 44px;
-  color: #00ff00;
-  margin-left: 20px;
+/* Samla användar-id och etikett i en wrapper */
+.user-id-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 8px;
+  margin-right: 8px;
   flex-shrink: 0;
-  position: relative;
+}
+
+/* Meddelandeikon - till höger */
+.ghostgrid-message-link {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-size: 2.1em;
+  color: #00ff00;
   cursor: pointer;
-  transition: color 0.3s;
+  flex-shrink: 0;
 }
 
 .ghostgrid-message-link:hover {
