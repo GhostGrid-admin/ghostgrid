@@ -223,20 +223,21 @@
       text-align: center;
     }
     .profile-username-box {
-      background: #fff;
-      color: #181f21;
-      padding: 13px 5vw;
-      border-radius: 17px;
-      font-size: 2.35em;
-      font-weight: bold;
-      box-shadow: 0 0 12px #0ff5, 0 0 18px #0ff2;
-      border: 2.5px solid #00ffcc;
-      margin: 0 0 13px 0;
-      max-width: 93vw;
-      word-break: break-all;
-      text-align: center;
-      overflow-wrap: break-word;
-    }
+  background: #fff;
+  color: #181f21;
+  padding: 13px 5vw;
+  border-radius: 17px;
+  font-size: 2.35em;
+  font-weight: bold;
+  box-shadow: 0 0 12px #0ff5, 0 0 18px #0ff2;
+  border: 2.5px solid #00ffcc;
+  margin: 0 0 13px 0;
+  max-width: 93vw;
+  word-break: normal;      /* Byt från break-all */
+  overflow-wrap: normal;   /* Byt från break-word */
+  white-space: nowrap;     /* Hindra radbrytning */
+  text-align: center;
+}
     .user-id-label {
       color: #0ff;
       font-weight: bold;
