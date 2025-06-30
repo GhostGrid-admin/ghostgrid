@@ -7,15 +7,16 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     html, body {
-      background: #000;
-      color: #00ff00;
-      font-family: monospace;
+      background: #0a0a0a;
+      color: #e0ffff;
+      font-family: 'Courier New', monospace;
       margin: 0;
       min-height: 100vh;
       width: 100vw;
       box-sizing: border-box;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      padding-top: 85px;
     }
     .main-content {
       width: 100vw;
@@ -24,6 +25,7 @@
       flex-direction: column;
       align-items: center;
     }
+
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -63,7 +65,7 @@
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
-      font-family: 'Courier New', monospace; /* <-- ÄNDRAT HÄR */
+      font-family: inherit;
     }
     .nav-links a.active, .nav-links a:hover {
       background-color: #00ffcc;
@@ -90,6 +92,7 @@
       z-index: 1500;
       display: block;
     }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -173,7 +176,8 @@
       nav.navbar.hide-navbar { top: -70px; }
       .nav-mobile { min-width: 160px; width: 98vw; }
     }
-    /* ------- PROFIL & RESPONSIVITET, RESTEN RÖR EJ! ------- */
+
+    /* ---- Resten av din profil- och box-stil, samma som wall ---- */
     .profile-header {
       width: 98vw;
       max-width: 670px;
@@ -332,10 +336,27 @@
       <span></span><span></span><span></span>
     </div>
     <div class="nav-center">
-      <ul class="nav-links" id="navLinks"></ul>
+      <ul class="nav-links">
+        <li><a href="forum.html" data-i18n="forum">Forum</a></li>
+        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+        <li><a href="store.html" data-i18n="store">Butik</a></li>
+      </ul>
     </div>
-    <button class="logout-btn" id="logoutDesktopBtn"></button>
-    <div class="nav-mobile" id="navMobile"></div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <div class="nav-mobile" id="navMobile">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+    </div>
   </nav>
   <div class="main-content">
     <div id="profile-output"></div>
@@ -356,90 +377,45 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // NAVBAR (från wall.html)
-    const menuLabels = {
-      sv: {
-        forum: "Forum",
-        wall: "Väggen",
-        upload: "Ladda upp",
-        profile: "Profil",
-        friends: "Vänner",
-        ghostglow: "Ghost&Glow",
-        store: "Butik",
-        logout: "Logga ut"
-      },
-      en: {
-        forum: "Forum",
-        wall: "Wall",
-        upload: "Upload",
-        profile: "Profile",
-        friends: "Friends",
-        ghostglow: "Ghost&Glow",
-        store: "Store",
-        logout: "Logout"
-      }
-    };
-    const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
-    const menuLinks = [
-      { href: "forum.html", key: "forum" },
-      { href: "wall.html", key: "wall" },
-      { href: "upload.html", key: "upload" },
-      { href: "profile.html", key: "profile" },
-      { href: "friends.html", key: "friends" },
-      { href: "ghost&glow.html", key: "ghostglow" },
-      { href: "store.html", key: "store" }
-    ];
-    const navLinks = document.getElementById("navLinks");
-    navLinks.innerHTML = menuLinks.map(
-      m => `<li><a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a></li>`
-    ).join("");
-    Array.from(navLinks.querySelectorAll('a')).forEach(link => {
-      if (window.location.pathname.endsWith(link.getAttribute("href"))) {
-        link.classList.add("active");
-      }
-    });
-    const logoutDesktopBtn = document.getElementById("logoutDesktopBtn");
-    logoutDesktopBtn.textContent = menuLabels[lang].logout;
-    logoutDesktopBtn.onclick = doLogout;
-    const navMobile = document.getElementById("navMobile");
-    navMobile.innerHTML =
-      menuLinks.map(m =>
-        `<a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a>`
-      ).join("") +
-      `<a href="#" class="logout-link-mobile" id="logoutMobileBtn">${menuLabels[lang].logout}</a>`;
-    const hamburgerBtn = document.getElementById("hamburgerBtn");
-    hamburgerBtn.onclick = () => navMobile.classList.toggle("show");
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', function () {
-        navMobile.classList.remove('show');
-      });
-    });
-    const logoutMobileBtn = document.getElementById("logoutMobileBtn");
-    if (logoutMobileBtn) logoutMobileBtn.onclick = function(e) {
-      e.preventDefault();
-      navMobile.classList.remove('show');
-      doLogout();
-    };
-    function doLogout() {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      });
-    }
-    // HIDE NAVBAR ON SCROLL on mobile (från wall)
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
+    // NAVBAR (interaktiv)
+    document.addEventListener("DOMContentLoaded", function() {
+      // Hamburgermeny
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      if (hamburgerBtn && navMobile) {
+        hamburgerBtn.addEventListener('click', function () {
+          navMobile.classList.toggle('show');
+        });
+        navMobile.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navMobile.classList.remove('show');
+          });
+        });
+        const logoutBtn = document.getElementById("logoutMobileBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            navMobile.classList.remove('show');
+            doLogout();
+          });
         }
-        lastScrollY = window.scrollY;
-      });
-    }
+      }
+      // HIDE NAVBAR ON SCROLL MOBILE
+      if (window.innerWidth <= 600) {
+        let lastScrollY = window.scrollY;
+        let navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', function () {
+          if (window.scrollY > lastScrollY && window.scrollY > 70) {
+            navbar.classList.add('hide-navbar');
+          } else {
+            navbar.classList.remove('hide-navbar');
+          }
+          lastScrollY = window.scrollY;
+        });
+      }
+    });
 
-    // PROFILE-VIEW LOGIK
+    // ===== PROFIL-VIEW LOGIK =====
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
@@ -464,21 +440,21 @@
     async function renderProfile() {
       const snap = await getDoc(profileRef);
       if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">${lang === "sv" ? "Ingen profil hittades." : "No profile found."}</div>`;
+        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
         return;
       }
       const data = snap.data();
-      const showUsername = (data.nickname || data.username || (lang === "sv" ? "Okänd användare" : "Unknown user"));
+      const showUsername = (data.nickname || data.username || "Okänd användare");
       let profileHeader = `
         <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
           <div class="profile-info-main">
-            <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
+            <span class="username-label">Användarnamn:</span>
             <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-            <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
+            <span class="user-id-label">Användar-id:</span>
             <span class="user-id" id="userIdTxt">${uid}</span>
             ${userId ? `
-              <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
+              <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="Meddelanden">
                 <svg viewBox="0 0 54 54" width="38" height="38" class="ghostgrid-message-svg" aria-label="Meddelanden">
                   <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                   <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -493,7 +469,7 @@
       let profileHtml = `
         ${profileHeader}
         <div class="profile-section">
-          ${data.profileCode || `<p style='color:red'>${lang === "sv" ? "Ingen profilkod sparad." : "No profile code saved."}</p>`}
+          ${data.profileCode || `<p style='color:red'>Ingen profilkod sparad.</p>`}
         </div>
       `;
       profileOut.innerHTML = profileHtml;
@@ -508,6 +484,13 @@
       }
       renderProfile();
     });
+
+    function doLogout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    }
+    document.getElementById("logoutDesktopBtn").onclick = doLogout;
   </script>
 </body>
 </html>
