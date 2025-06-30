@@ -24,128 +24,159 @@
       flex-direction: column;
       align-items: center;
     }
-    /* --- Navbar centrerad --- */
+    /* ========== NAVBAR FRÅN WALL ========== */
     nav.navbar {
-      width: 100vw;
-      min-height: 54px;
-      background: #111127;
-      border-bottom: 3px solid #8000ff;
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 45px;
-      height: 45px;
-      cursor: pointer;
-      margin-left: 16px;
-      margin-right: 10px;
-    }
-    .hamburger span {
-      display: block;
-      width: 33px;
-      height: 5px;
-      margin: 4px 0;
-      background: #00ff00;
-      border-radius: 5px;
-      transition: 0.3s;
+      min-height: 60px;
+      transition: top 0.3s;
     }
     .nav-center {
       flex: 1;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
     .nav-links {
-      list-style: none;
       display: flex;
-      gap: 32px;
-      margin: 0;
+      gap: 26px;
+      list-style: none;
+      margin: 0 auto;
       padding: 0;
       align-items: center;
     }
+    .nav-links li { display: flex; }
     .nav-links a {
-      color: #fff;
+      color: white;
       text-decoration: none;
       font-size: 1.2em;
-      text-shadow: 0 0 10px #fff, 0 0 18px #8f4cff;
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      transition: 0.2s;
-      white-space: nowrap;
-      padding: 3px 6px;
-      border-radius: 7px;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+      font-family: inherit;
     }
     .nav-links a.active, .nav-links a:hover {
-      color: #0ff;
-      background: #151535;
-      text-shadow: 0 0 14px #0ff, 0 0 10px #bb00ff;
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
     }
     .logout-btn {
-      background: #1e2f29;
-      color: #00ff00;
-      font-size: 1.07em;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 19px;
-      margin-right: 17px;
-      margin-left: 7px;
-      font-family: inherit;
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 8px 24px 7px 24px;
+      font-size: 1.1em;
+      border-radius: 9px;
+      font-family: 'Courier New', monospace;
       font-weight: bold;
-      box-shadow: 0 0 13px #15ffb055;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.18s;
       cursor: pointer;
-      transition: 0.14s;
+      opacity: 0.98;
+      margin: 0;
+      z-index: 1500;
+      display: block;
     }
-    .logout-btn:hover { background: #1f3c2a; color: #fff; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 55px;
+      z-index: 2002;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 32px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+      nav.navbar { min-height: 55px; border-bottom-width: 2px;}
+    }
     .nav-mobile {
       display: none;
       flex-direction: column;
-      position: fixed;
-      top: 56px;
-      left: 0;
-      width: 100vw;
-      background: #14142cfa;
-      z-index: 1002;
-      border-bottom: 2px solid #0ff5;
-      box-shadow: 0 7px 35px #1900ff38;
-      padding-bottom: 2vw;
+      align-items: center;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1201;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
     }
     .nav-mobile.show { display: flex; }
     .nav-mobile a, .nav-mobile .logout-link-mobile {
-      color: #fff;
-      font-size: 1.23em;
-      padding: 13px 22px;
-      text-decoration: none;
-      border-bottom: 1px solid #1f0047;
-      transition: 0.16s;
-    }
-    .nav-mobile a.active, .nav-mobile a:hover {
-      color: #0ff;
-      background: #11182b;
-    }
-    .logout-link-mobile {
-      color: #0ff;
+      padding: 18px 0px;
+      font-size: 1.15em;
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
       font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0;
+      font-family: inherit;
+    }
+    .nav-mobile .logout-link-mobile {
       cursor: pointer;
-      background: #11182b;
-      text-align: left;
+      background: none;
     }
-    @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .logout-btn { display: none; }
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
     }
-    @media (min-width: 901px) {
-      .nav-mobile { display: none !important; }
+    .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-mobile { min-width: 160px; width: 98vw; }
     }
 
-    /* --- PROFILRUTA: Bild, namn, id, ikon --- */
+    /* ------- PROFIL & RESPONSIVITET, RESTEN RÖR EJ! ------- */
     .profile-header {
       width: 98vw;
       max-width: 670px;
@@ -234,10 +265,7 @@
       width: 100%;
     }
     .ghostgrid-message-link:hover { color: #0ff; }
-
-    /* PROFILTEXTEN/KOD/CITAT – Aldrig utanför! */
-    .profile-section,
-    .profile-section * {
+    .profile-section, .profile-section * {
       box-sizing: border-box;
       max-width: 98vw !important;
       word-break: break-word !important;
@@ -275,7 +303,6 @@
       border-radius: 8px;
       margin: 12px 0;
     }
-    /* Responsiv fontstorlek på små skärmar */
     @media (max-width: 700px) {
       .profile-header {
         max-width: 99vw;
@@ -300,11 +327,9 @@
         padding: 5px 2vw;
       }
     }
-</style>
+  </style>
 </head>
 <body>
-  <div class="glow-left"></div>
-  <div class="glow-right"></div>
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -334,7 +359,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // NAVBAR LOGIK
+    // =================== NAVBAR MENY/WALL ===================
     const menuLabels = {
       sv: {
         forum: "Forum",
@@ -403,8 +428,22 @@
         window.location.href = "login.html";
       });
     }
+    // HIDE NAVBAR ON SCROLL on mobile
+    if (window.innerWidth <= 600) {
+      let lastScrollY = window.scrollY;
+      let navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > lastScrollY && window.scrollY > 70) {
+          navbar.classList.add('hide-navbar');
+        } else {
+          navbar.classList.remove('hide-navbar');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
+    // =================== SLUT NAVBAR ===================
 
-    // PROFILE-VIEW LOGIK
+    // ======= PROFIL-VIEW LOGIK (RÖR EJ) =======
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
@@ -464,7 +503,6 @@
       profileOut.innerHTML = profileHtml;
     }
 
-    // Kör efter auth är klar!
     onAuthStateChanged(auth, async user => {
       userId = user ? user.uid : null;
       if (userId && userId === uid) {
