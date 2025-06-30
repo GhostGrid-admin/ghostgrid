@@ -378,17 +378,17 @@ textarea, input[type="file"], button[type="submit"], label {
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
-  <div class="upload-box" id="uploadBox">
-    <div class="upload-title">Ladda upp innehåll</div>
-    <img id="spinner" src="spinner-asg.png" alt="Laddar..." onerror="this.style.display='none'" />
-    <div class="upload-switcher">
-      <button class="switch-btn active" data-section="text">📝 Inlägg</button>
-      <button class="switch-btn" data-section="image">🖼️ Bild</button>
-      <button class="switch-btn" data-section="video">🎬 Klipp</button>
-      <button class="switch-btn" data-section="audio">🎵 Ljud</button>
-      <button class="switch-btn" data-section="mic">🎤 Röst</button>
-    </div>
-<form id="uploadForm">
+  <div class="wall-box" id="uploadBox">
+  <div class="wall-title upload-title">Ladda upp innehåll</div>
+  <div class="filter-row upload-switcher">
+    <button class="filter-btn switch-btn active" data-section="text">📝 Inlägg</button>
+    <button class="filter-btn switch-btn" data-section="image">🖼️ Bild</button>
+    <button class="filter-btn switch-btn" data-section="video">🎬 Klipp</button>
+    <button class="filter-btn switch-btn" data-section="audio">🎵 Ljud</button>
+    <button class="filter-btn switch-btn" data-section="mic">🎤 Röst</button>
+  </div>
+  <img id="spinner" src="spinner-asg.png" alt="Laddar..." onerror="this.style.display='none'" style="display:none; margin: 0 auto 10px auto;"/>
+  <form id="uploadForm">
 <div class="upload-section active" data-section="text">
   <label id="textLabel_sv" for="text_sv">Skriv ett inlägg (svenska):</label>
   <textarea id="text_sv" placeholder="Skriv på svenska..." maxlength="1500"></textarea>
