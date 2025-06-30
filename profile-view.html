@@ -24,7 +24,6 @@
       flex-direction: column;
       align-items: center;
     }
-    /* ========== NAVBAR FRÅN WALL ========== */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
@@ -64,7 +63,7 @@
       border-radius: 4px;
       text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
       transition: 0.3s;
-      font-family: inherit;
+      font-family: 'Courier New', monospace; /* <-- ÄNDRAT HÄR */
     }
     .nav-links a.active, .nav-links a:hover {
       background-color: #00ffcc;
@@ -91,7 +90,6 @@
       z-index: 1500;
       display: block;
     }
-
     .hamburger {
       display: none;
       flex-direction: column;
@@ -175,7 +173,6 @@
       nav.navbar.hide-navbar { top: -70px; }
       .nav-mobile { min-width: 160px; width: 98vw; }
     }
-
     /* ------- PROFIL & RESPONSIVITET, RESTEN RÖR EJ! ------- */
     .profile-header {
       width: 98vw;
@@ -359,7 +356,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // =================== NAVBAR MENY/WALL ===================
+    // NAVBAR (från wall.html)
     const menuLabels = {
       sv: {
         forum: "Forum",
@@ -428,7 +425,7 @@
         window.location.href = "login.html";
       });
     }
-    // HIDE NAVBAR ON SCROLL on mobile
+    // HIDE NAVBAR ON SCROLL on mobile (från wall)
     if (window.innerWidth <= 600) {
       let lastScrollY = window.scrollY;
       let navbar = document.querySelector('.navbar');
@@ -441,9 +438,8 @@
         lastScrollY = window.scrollY;
       });
     }
-    // =================== SLUT NAVBAR ===================
 
-    // ======= PROFIL-VIEW LOGIK (RÖR EJ) =======
+    // PROFILE-VIEW LOGIK
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
