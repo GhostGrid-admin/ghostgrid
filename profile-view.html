@@ -143,75 +143,68 @@
       .nav-mobile { display: none !important; }
     }
 
-    /* --- Profil och huvudlayout --- */
-    .main-content {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100vw;
-      box-sizing: border-box;
-      padding: 0 0.5em;
-      overflow-x: hidden;
-    }
-    #profile-output {
-      width: 100%;
-      max-width: 1300px;
-      margin: 40px auto;
-      background: linear-gradient(135deg,#0c0019 80%,#200024 100%);
-      border-radius: 30px;
-      box-shadow: 0 0 70px 7px #0ff2, 0 0 32px 2px #8000ff99;
-      padding: 40px 4vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 34px;
-      box-sizing: border-box;
-    }
-    @media (max-width: 900px) {
-      #profile-output {
-        max-width: 97vw;
-        padding: 20px 2vw 20px 2vw;
-      }
-    }
-    @media (max-width: 700px) {
-      #profile-output {
-        max-width: 100vw;
-        padding: 10px 0;
-        border-radius: 13px;
-      }
-    }
-    .profile-header {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto 22px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(18,30,40,0.90);
-      border-radius: 22px;
-      box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
-      padding: 28px 24px 14px 24px;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .profile-picture {
-      width: 115px;
-      height: 115px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
-      border: 3px solid #0ff;
-      background: #111;
-      display: block;
-      margin-bottom: 14px;
-    }
-    @media (max-width: 700px) {
-      .profile-header {
-        max-width: 99vw;
-        padding: 15px 0.2em 5px 0.2em;
-      }
+   /* Gör så att huvudcontainern kan scrolla om innehållet blir för stort på små skärmar */
+.main-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smidigare scroll på iOS */
+}
+
+/* Gör profilen mer flexibel och rörlig i mindre fönster */
+.profile-header {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Se till att bilden är mindre på små skärmar */
+@media (max-width: 700px) {
+  .profile-picture {
+    width: 70px;
+    height: 70px;
+  }
+  .profile-username-box {
+    font-size: 1.4em;
+    padding: 10px 15px;
+  }
+}
+
+/* Justera paddings och marginaler på väldigt små skärmar */
+@media (max-width: 400px) {
+  .profile-section {
+    padding: 12px 1em;
+    border-radius: 6px;
+  }
+  .profile-username-box {
+    font-size: 1.1em;
+    padding: 8px 10px;
+    min-width: auto;
+  }
+}
+
+/* Gör menyn mer touchvänlig på mobiler */
+.nav-links a {
+  padding: 8px 14px;
+  font-size: 1.1em;
+}
+
+.nav-mobile a {
+  font-size: 1.3em;
+  padding: 14px 20px;
+}
+
+/* Om hamburgermeny används, se till att knappen är klickbar och synlig */
+.hamburger {
+  display: flex !important;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Extra: låt navbaren få lite padding på små skärmar */
+@media (max-width: 600px) {
+  nav.navbar {
+    padding: 0 10px;
+  }
+}
       .profile-picture {
         width: 70px;
         height: 70px;
