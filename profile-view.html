@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profilvisning – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -15,12 +15,16 @@
       width: 100vw;
       box-sizing: border-box;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
-    body {
+    .main-content {
+      width: 100vw;
+      max-width: 100vw;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      align-items: center;
     }
+    /* --- Navbar centrerad --- */
     nav.navbar {
       width: 100vw;
       min-height: 54px;
@@ -99,8 +103,6 @@
       transition: 0.14s;
     }
     .logout-btn:hover { background: #1f3c2a; color: #fff; }
-
-    /* Mobilmeny */
     .nav-mobile {
       display: none;
       flex-direction: column;
@@ -143,185 +145,174 @@
       .nav-mobile { display: none !important; }
     }
 
-    .main-content {
-      width: 100%;
+    /* --- PROFILRUTA: Bild, namn, id, ikon --- */
+    .profile-header {
+      width: 98vw;
+      max-width: 670px;
+      margin: 36px auto 32px auto;
       display: flex;
       flex-direction: column;
       align-items: center;
+      background: rgba(18,30,40,0.98);
+      border-radius: 32px;
+      box-shadow: 0 0 28px #00ffe577, 0 0 18px #8000ff55;
+      padding: 48px 8vw 28px 8vw;
       box-sizing: border-box;
-      flex: 1;
-      min-height: 0;
-    }
-
-    /* --- SYMMETRISK & RESPONSIV PROFILRUTA --- */
-    .profile-header {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      max-width: 600px;
-      margin: 40px auto 26px auto;
-      padding: 34px 32px 28px 32px;
-      background: rgba(18,30,40,0.96);
-      border-radius: 28px;
-      box-shadow: 0 0 22px #00ffe580, 0 0 9px #8000ff55;
-      width: 100%;
-      gap: 32px;
-      box-sizing: border-box;
-      flex-wrap: wrap;
-      min-width: 0;
-      overflow: hidden;
       position: relative;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     .profile-picture {
-      width: 130px;
-      height: 130px;
+      width: 148px;
+      height: 148px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
-      border: 3px solid #0ff;
+      margin-bottom: 22px;
+      box-shadow: 0 0 37px #00ff80cc, 0 0 17px #0ff;
+      border: 3.5px solid #0ff;
       background: #111;
-      flex-shrink: 0;
-      margin-bottom: 0;
+      display: block;
     }
     .profile-info-main {
-      flex: 1 1 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-width: 0;
+      width: 100%;
+      max-width: 95vw;
+      text-align: center;
     }
     .username-label {
       color: #0ff;
       font-weight: bold;
-      font-size: 1em;
-      margin-bottom: 4px;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.1em;
+      font-size: 1.12em;
+      margin-bottom: 5px;
+      letter-spacing: 0.09em;
+      width: 100%;
       text-align: center;
     }
     .profile-username-box {
       background: #fff;
       color: #181f21;
-      padding: 11px 36px;
-      border-radius: 16px;
-      font-size: 2em;
+      padding: 13px 5vw;
+      border-radius: 17px;
+      font-size: 2.35em;
       font-weight: bold;
-      min-width: 120px;
-      box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
-      letter-spacing: 0.5px;
-      text-align: center;
-      border: 2.2px solid #00ffcc;
-      font-family: 'Courier New', monospace;
-      margin-bottom: 16px;
-      max-width: 98vw;
+      box-shadow: 0 0 12px #0ff5, 0 0 18px #0ff2;
+      border: 2.5px solid #00ffcc;
+      margin: 0 0 13px 0;
+      max-width: 93vw;
       word-break: break-all;
+      text-align: center;
+      overflow-wrap: break-word;
     }
-    .user-id-label, .user-id {
-      color: #fff;
-      font-size: 1em;
-      text-shadow: 0 0 4px #0ff;
+    .user-id-label {
+      color: #0ff;
       font-weight: bold;
-      margin: 0;
-      margin-top: 3px;
-      font-family: 'Courier New', monospace;
-      text-align: center;
+      font-size: 1.12em;
+      margin-top: 5px;
+      margin-bottom: 2px;
+    }
+    .user-id {
+      color: #fff;
+      font-size: 1.18em;
+      font-family: monospace;
+      background: none;
+      padding: 0;
+      border: none;
+      text-shadow: 0 0 6px #00ffe2;
       word-break: break-all;
+      overflow-wrap: break-word;
     }
     .ghostgrid-message-link {
-      margin: 10px 0 0 0;
+      margin: 16px 0 0 0;
       display: flex;
       align-items: center;
-      font-size: 2.1em;
+      justify-content: center;
+      font-size: 2.4em;
       color: #00ff00;
       cursor: pointer;
-      flex-shrink: 0;
-      transition: color 0.17s;
-    }
-    .ghostgrid-message-link:hover {
-      color: #0ff;
-    }
-    /* --- PROFILE SECTION --- */
-    .profile-section {
       width: 100%;
-      max-width: 660px;
-      background: none;
-      margin: 0 auto 34px auto;
-      padding: 0;
-      box-sizing: border-box;
-      overflow-x: auto;
-      word-break: break-word;
     }
-    /* Gör så att innehållet i profileCode ALDRIG klipper utanför */
-    .profile-section *,
-    .profile-section *:before,
-    .profile-section *:after {
-      box-sizing: border-box !important;
-      max-width: 100% !important;
-      word-break: break-word !important;
-    }
+    .ghostgrid-message-link:hover { color: #0ff; }
 
-    /* RESPONSIV: Stapla allt i headern snyggt på små skärmar */
-    @media (max-width: 650px) {
+    /* PROFILTEXTEN/KOD/CITAT – Aldrig utanför! */
+    .profile-section,
+    .profile-section * {
+      box-sizing: border-box;
+      max-width: 98vw !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: pre-line !important;
+    }
+    .profile-section {
+      margin: 18px auto 0 auto;
+      padding: 22px 4vw;
+      border-radius: 17px;
+      box-shadow: 0 0 15px #00ffe222;
+      background: linear-gradient(120deg, #0e123a 70%, #202020 100%);
+      font-size: 1.18em;
+      color: #bff;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      width: 100%;
+      max-width: 670px;
+      text-align: left;
+    }
+    .profile-section code,
+    .profile-section pre,
+    .profile-section blockquote {
+      max-width: 97vw !important;
+      word-break: break-word !important;
+      overflow-x: auto;
+      display: block;
+    }
+    .profile-section blockquote {
+      font-style: italic;
+      color: #fff;
+      background: #11182b;
+      border-left: 4px solid #00ffcc;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    /* Responsiv fontstorlek på små skärmar */
+    @media (max-width: 700px) {
       .profile-header {
-        flex-direction: column;
-        gap: 12px;
-        padding: 18px 6vw 18px 6vw;
-        max-width: 97vw;
+        max-width: 99vw;
+        padding: 21px 2vw 14px 2vw;
+        border-radius: 18px;
       }
       .profile-picture {
-        width: 88px;
-        height: 88px;
-        margin-bottom: 7px;
-      }
-      .profile-info-main {
-        width: 100%;
+        width: 89px;
+        height: 89px;
       }
       .profile-username-box {
-        font-size: 1.25em;
-        padding: 7px 7vw;
-        max-width: 95vw;
+        font-size: 1.12em;
+        padding: 7px 2vw;
       }
-    }
-    @media (max-width: 430px) {
-      .profile-header {
-        padding: 10px 1vw 10px 1vw;
+      .profile-section {
+        font-size: 0.99em;
+        padding: 8px 1vw;
+        max-width: 98vw;
       }
-      .profile-username-box {
-        font-size: 1em;
+      .profile-section code, .profile-section pre, .profile-section blockquote {
+        font-size: 0.92em;
         padding: 5px 2vw;
       }
     }
   </style>
 </head>
 <body>
+  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
     </div>
     <div class="nav-center">
-      <ul class="nav-links">
-        <li><a href="forum.html" data-i18n="forum">Forum</a></li>
-        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-        <li><a href="store.html" data-i18n="store">Butik</a></li>
-      </ul>
+      <ul class="nav-links" id="navLinks"></ul>
     </div>
-    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-    <div class="nav-mobile" id="navMobile">
-      <a href="forum.html" data-i18n="forum">Forum</a>
-      <a href="wall.html" data-i18n="wall">Väggen</a>
-      <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
-      <a href="friends.html" data-i18n="friends">Vänner</a>
-      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-      <a href="store.html" data-i18n="store">Butik</a>
-      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-    </div>
+    <button class="logout-btn" id="logoutDesktopBtn"></button>
+    <div class="nav-mobile" id="navMobile"></div>
   </nav>
   <div class="main-content">
     <div id="profile-output"></div>
@@ -343,9 +334,57 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // MENY LOGIK
+    // ----------- MENY OCH SPRÅK -----------
+    const menuLabels = {
+      sv: {
+        forum: "Forum",
+        wall: "Väggen",
+        upload: "Ladda upp",
+        profile: "Profil",
+        friends: "Vänner",
+        ghostglow: "Ghost&Glow",
+        store: "Butik",
+        logout: "Logga ut"
+      },
+      en: {
+        forum: "Forum",
+        wall: "Wall",
+        upload: "Upload",
+        profile: "Profile",
+        friends: "Friends",
+        ghostglow: "Ghost&Glow",
+        store: "Store",
+        logout: "Logout"
+      }
+    };
+    const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
+    const menuLinks = [
+      { href: "forum.html", key: "forum" },
+      { href: "wall.html", key: "wall" },
+      { href: "upload.html", key: "upload" },
+      { href: "profile.html", key: "profile" },
+      { href: "friends.html", key: "friends" },
+      { href: "ghost&glow.html", key: "ghostglow" },
+      { href: "store.html", key: "store" }
+    ];
+    const navLinks = document.getElementById("navLinks");
+    navLinks.innerHTML = menuLinks.map(
+      m => `<li><a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a></li>`
+    ).join("");
+    Array.from(navLinks.querySelectorAll('a')).forEach(link => {
+      if (window.location.pathname.endsWith(link.getAttribute("href"))) {
+        link.classList.add("active");
+      }
+    });
     const logoutDesktopBtn = document.getElementById("logoutDesktopBtn");
+    logoutDesktopBtn.textContent = menuLabels[lang].logout;
+    logoutDesktopBtn.onclick = doLogout;
     const navMobile = document.getElementById("navMobile");
+    navMobile.innerHTML =
+      menuLinks.map(m =>
+        `<a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a>`
+      ).join("") +
+      `<a href="#" class="logout-link-mobile" id="logoutMobileBtn">${menuLabels[lang].logout}</a>`;
     const hamburgerBtn = document.getElementById("hamburgerBtn");
     hamburgerBtn.onclick = () => navMobile.classList.toggle("show");
     navMobile.querySelectorAll('a').forEach(link => {
@@ -364,9 +403,8 @@
         window.location.href = "login.html";
       });
     }
-    logoutDesktopBtn.onclick = doLogout;
 
-    // PROFIL-VIEW LOGIK
+    // -------- PROFIL-VIEW LOGIK --------
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
@@ -391,27 +429,30 @@
     async function renderProfile() {
       const snap = await getDoc(profileRef);
       if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
+        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">${lang === "sv" ? "Ingen profil hittades." : "No profile found."}</div>`;
         return;
       }
       const data = snap.data();
-      const showUsername = (data.nickname || data.username || "Okänd användare");
-      // PROFILRUTAN – alltid symmetrisk och responsiv!
+      const showUsername = (data.nickname || data.username || (lang === "sv" ? "Okänd användare" : "Unknown user"));
+
+      // PROFILRUTA: Bild, namn, id, ikon
       let profileHeader = `
         <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
           <div class="profile-info-main">
-            <span class="username-label">Användarnamn:</span>
+            <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
             <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-            <span class="user-id-label">Användar-id:</span>
+            <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
             <span class="user-id" id="userIdTxt">${uid}</span>
-            <a href="messages.html?to=${uid}" class="ghostgrid-message-link" title="Meddelanden">
-              <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-                <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
+            ${userId ? `
+              <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
+                <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                  <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                  <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            ` : ""}
           </div>
         </div>
       `;
@@ -419,12 +460,13 @@
       let profileHtml = `
         ${profileHeader}
         <div class="profile-section">
-          ${data.profileCode || `<p style='color:red'>Ingen profilkod sparad.</p>`}
+          ${data.profileCode || `<p style='color:red'>${lang === "sv" ? "Ingen profilkod sparad." : "No profile code saved."}</p>`}
         </div>
       `;
       profileOut.innerHTML = profileHtml;
     }
 
+    // Kör efter auth är klar!
     onAuthStateChanged(auth, async user => {
       userId = user ? user.uid : null;
       if (userId && userId === uid) {
