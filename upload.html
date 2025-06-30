@@ -89,98 +89,129 @@
     }
 
     nav.navbar {
-      background-color: #000;
-      border-bottom: 2px solid #00ffcc;
-      padding: 0;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      box-shadow: 0 0 20px #bb00ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 60px;
-      transition: top 0.3s;
-    }
-    .nav-center {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .nav-links {
-      display: flex;
-      gap: 26px;
-      list-style: none;
-      margin: 0 auto;
-      padding: 0;
-      align-items: center;
-    }
-    .nav-links li { display: flex; }
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.2em;
-      padding: 7px 10px;
-      border-radius: 4px;
-      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
-      transition: 0.3s;
-      font-family: inherit;
-      white-space: nowrap;
-    }
-    .nav-links a:hover {
-      background-color: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 10px #ffffff;
-    }
-    .logout-btn {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      background: #000;
-      color: #00ffcc;
-      border: 2px solid #00ffcc;
-      padding: 8px 24px 7px 24px;
-      font-size: 1.1em;
-      border-radius: 9px;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
-      transition: 0.18s;
-      cursor: pointer;
-      opacity: 0.98;
-      margin: 0;
-      z-index: 1500;
-      display: block;
-    }
+  background-color: #000;
+  border-bottom: 2px solid #00ffcc;
+  padding: 0 100px 0 0; /* lägg till padding-right för utrymme till utloggning */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 0 20px #bb00ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  transition: top 0.3s;
+}
 
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 55px;
-      z-index: 2002;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .hamburger span {
-      width: 32px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 5px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-      display: block;
-    }
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200; /* se till att länkar ligger ovanför andra element */
+}
+
+.nav-links {
+  display: flex;
+  gap: 26px;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  align-items: center;
+  z-index: 1200;
+}
+
+.nav-links li {
+  display: flex;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 7px 10px;
+  border-radius: 4px;
+  text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+  transition: 0.3s;
+  font-family: inherit;
+  white-space: nowrap; /* förhindra radbrytning */
+}
+
+.nav-links a:hover {
+  background-color: #00ffcc;
+  color: #000;
+  box-shadow: 0 0 10px #ffffff;
+}
+
+.logout-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: #000;
+  color: #00ffcc;
+  border: 2px solid #00ffcc;
+  padding: 8px 24px 7px 24px;
+  font-size: 1.1em;
+  border-radius: 9px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+  transition: 0.18s;
+  cursor: pointer;
+  opacity: 0.98;
+  margin: 0;
+  z-index: 1500;
+  display: block;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 55px;
+  z-index: 2002;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 32px;
+  height: 4px;
+  background: #00ffcc;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: 0.3s;
+  display: block;
+}
+
+/* Anpassa padding när skärm är mindre */
+@media (max-width: 1100px) {
+  nav.navbar {
+    padding: 0 80px 0 0;
+  }
+}
+
+/* När skärm är liten byter vi till hamburgermeny och döljer vanliga länkar och logout */
+@media (max-width: 900px) {
+  nav.navbar {
+    padding: 0;
+  }
+  .nav-center, .logout-btn {
+    display: none !important;
+  }
+  .hamburger {
+    display: flex !important;
+  }
+}
 
     @keyframes slideDown {
       from { opacity: 0; transform: translateY(-24px) translateX(-50%); }
