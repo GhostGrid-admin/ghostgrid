@@ -14,7 +14,7 @@
       min-height: 100vh;
       width: 100vw;
       box-sizing: border-box;
-      overflow-x: hidden;
+      overflow-x: hidden !important;
       scroll-behavior: smooth;
     }
     body {
@@ -22,12 +22,13 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden !important;
     }
-    /* --- NAVBAR MOBILE ONLY --- */
+    /* NAVBAR MOBILE ONLY */
     nav.navbar {
       background-color: #000;
       border-bottom: 2px solid #00ffcc;
-      padding: 0;
       position: fixed;
       width: 100vw;
       top: 0;
@@ -38,6 +39,7 @@
       align-items: center;
       justify-content: center;
       min-height: 60px;
+      padding: 0;
     }
     .hamburger {
       display: none;
@@ -99,6 +101,7 @@
       display: block;
       margin: 0;
       font-family: inherit;
+      word-break: break-all;
     }
     .nav-mobile .logout-link-mobile {
       cursor: pointer;
@@ -120,14 +123,15 @@
       nav.navbar, .nav-mobile, .hamburger { display: none !important; }
     }
     .main-content {
-      margin-top: 72px;
+      margin-top: 70px;
       width: 100vw;
       min-height: 60vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow-x: hidden !important;
+      padding-bottom: 30px;
     }
-    /* --- Profil-styling (som du haft innan) --- */
     .profile-header {
       width: 100%;
       max-width: 480px;
@@ -135,23 +139,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 12px;
       background: rgba(18,30,40,0.90);
       border-radius: 22px;
       box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
-      padding: 28px 24px 14px 24px;
+      padding: 22px 10px 12px 10px;
       box-sizing: border-box;
       position: relative;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       flex-shrink: 0;
+      min-width: 0;
+      overflow-x: auto;
     }
     .profile-picture {
-      width: 115px;
-      height: 115px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 0 28px #00ff80cc, 0 0 12px #0ff;
-      border: 3px solid #0ff;
+      box-shadow: 0 0 18px #00ff80cc, 0 0 9px #0ff;
+      border: 2.5px solid #0ff;
       background: #111;
       display: block;
       flex-shrink: 0;
@@ -159,8 +165,8 @@
     .username-label {
       color: #0ff;
       font-weight: bold;
-      font-size: 0.95em;
-      margin-bottom: 4px;
+      font-size: 0.9em;
+      margin-bottom: 3px;
       font-family: 'Courier New', monospace;
       letter-spacing: 0.1em;
       text-align: center;
@@ -169,27 +175,30 @@
     .profile-username-box {
       background: #fff;
       color: #181f21;
-      padding: 11px 36px;
-      border-radius: 16px;
-      font-size: 2em;
+      padding: 7px 12px;
+      border-radius: 13px;
+      font-size: 1.2em;
       font-weight: bold;
-      min-width: 140px;
+      min-width: 0;
+      max-width: 99vw;
       box-shadow: 0 0 10px #0ff5, 0 0 18px #0ff2;
       letter-spacing: 0.5px;
       text-align: center;
-      border: 2.2px solid #00ffcc;
+      border: 2px solid #00ffcc;
       font-family: 'Courier New', monospace;
       user-select: text;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      max-width: 220px;
-      flex-shrink: 0;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      flex-shrink: 1;
     }
     .user-id-label, .user-id {
       color: #fff;
-      font-size: 1em;
+      font-size: 0.97em;
       text-shadow: 0 0 4px #0ff;
       font-weight: bold;
       display: block;
@@ -197,22 +206,22 @@
       margin-top: 5px;
       font-family: 'Courier New', monospace;
       text-align: center;
-      word-break: break-word;
+      word-break: break-all;
       max-width: 120px;
     }
     .user-id-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-left: 8px;
-      margin-right: 8px;
-      flex-shrink: 0;
+      margin-left: 4px;
+      margin-right: 4px;
+      flex-shrink: 1;
     }
     .ghostgrid-message-link {
       margin: 0;
       display: flex;
       align-items: center;
-      font-size: 2.1em;
+      font-size: 2em;
       color: #00ff00;
       cursor: pointer;
       flex-shrink: 0;
@@ -240,16 +249,39 @@
       0%   { box-shadow: 0 0 17px #14ff68, 0 0 40px #19ff19, 0 0 5px #fff; }
       100% { box-shadow: 0 0 32px #24ffae, 0 0 70px #00ff7f, 0 0 13px #fff;}
     }
+    .profile-section {
+      max-width: 99vw;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      white-space: pre-line;
+      padding: 8px 3vw 18px 3vw;
+      box-sizing: border-box;
+    }
     @media (max-width: 700px) {
-      .profile-header { flex-direction: column; padding: 20px 12px; max-width: 97vw; }
-      .profile-picture { width: 80px; height: 80px; margin-bottom: 14px; }
-      .profile-username-box { font-size: 1.5em; padding: 8px 20px; min-width: auto; max-width: 100%; }
-      .ghostgrid-message-link { margin: 12px 0 0 0; font-size: 36px; }
+      .profile-header {
+        flex-direction: column;
+        padding: 12px 3vw;
+        max-width: 97vw;
+      }
+      .profile-picture {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 9px;
+      }
+      .profile-username-box {
+        font-size: 1em;
+        padding: 7px 5vw;
+        min-width: 0;
+        max-width: 90vw;
+      }
+      .ghostgrid-message-link {
+        margin: 8px 0 0 0;
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- NAVBAR: Bara synlig på små skärmar -->
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -265,7 +297,6 @@
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
-
   <div class="main-content">
     <div id="profile-output"></div>
   </div>
@@ -286,7 +317,6 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // MENY/HAMBURGER
     document.addEventListener("DOMContentLoaded", function() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
@@ -350,10 +380,8 @@
       let profileHeader = `
         <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
-          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0; min-width: 120px;">
-            <span class="username-label">
-              ${lang === "sv" ? "Användarnamn:" : "Username:"}
-            </span>
+          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0; min-width: 70px;">
+            <span class="username-label">${lang === "sv" ? "Användarnamn:" : "Username:"}</span>
             <span class="profile-username-box" id="userNameBox">${showUsername}</span>
           </div>
           <div class="user-id-wrapper">
