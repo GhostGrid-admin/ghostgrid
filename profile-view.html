@@ -33,54 +33,117 @@
       top: 0;
       z-index: 1000;
     }
-    .nav-content {
-      display: flex;
-      gap: 38px;
+    .hamburger {
+      display: none;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      width: 45px;
+      height: 45px;
+      cursor: pointer;
+      margin-left: 16px;
+      margin-right: 10px;
     }
-    .nav-content a {
+    .hamburger span {
+      display: block;
+      width: 33px;
+      height: 5px;
+      margin: 4px 0;
+      background: #00ff00;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .nav-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+    .nav-links a {
       color: #fff;
       text-decoration: none;
-      font-size: 1.3em;
-      letter-spacing: 1px;
+      font-size: 1.2em;
       text-shadow: 0 0 10px #fff, 0 0 18px #8f4cff;
       font-family: 'Courier New', monospace;
       font-weight: 700;
       transition: 0.2s;
       white-space: nowrap;
+      padding: 3px 6px;
+      border-radius: 7px;
     }
-    .nav-content a:hover {
+    .nav-links a.active, .nav-links a:hover {
       color: #0ff;
+      background: #151535;
       text-shadow: 0 0 14px #0ff, 0 0 10px #bb00ff;
     }
-    #menuBtn {
-      display: none;
-      background: none;
+    .logout-btn {
+      background: #1e2f29;
+      color: #00ff00;
+      font-size: 1.07em;
       border: none;
-      color: #fff;
-      font-size: 2em;
-      position: absolute;
-      right: 20px;
-      top: 7px;
+      border-radius: 8px;
+      padding: 8px 19px;
+      margin-right: 17px;
+      margin-left: 7px;
+      font-family: inherit;
+      font-weight: bold;
+      box-shadow: 0 0 13px #15ffb055;
       cursor: pointer;
-      z-index: 1001;
+      transition: 0.14s;
     }
-    @media (max-width: 800px) {
-      .nav-content {
-        flex-direction: column;
-        background: #0a0020f7;
-        position: absolute;
-        width: 100vw;
-        left: 0; top: 54px;
-        padding: 12px 0;
-        gap: 17px;
-        display: none;
-        z-index: 1000;
-      }
-      .nav-content.active { display: flex; }
-      #menuBtn { display: block; }
+    .logout-btn:hover { background: #1f3c2a; color: #fff; }
+
+    /* Mobilmeny */
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 100vw;
+      background: #14142cfa;
+      z-index: 1002;
+      border-bottom: 2px solid #0ff5;
+      box-shadow: 0 7px 35px #1900ff38;
+      padding-bottom: 2vw;
     }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      color: #fff;
+      font-size: 1.23em;
+      padding: 13px 22px;
+      text-decoration: none;
+      border-bottom: 1px solid #1f0047;
+      transition: 0.16s;
+    }
+    .nav-mobile a.active, .nav-mobile a:hover {
+      color: #0ff;
+      background: #11182b;
+    }
+    .logout-link-mobile {
+      color: #0ff;
+      font-weight: bold;
+      cursor: pointer;
+      background: #11182b;
+      text-align: left;
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .logout-btn { display: none; }
+    }
+    @media (min-width: 901px) {
+      .nav-mobile { display: none !important; }
+    }
+
+    /* --- Profil och huvudlayout --- */
     .main-content {
       flex: 1 1 auto;
       min-height: 0;
@@ -105,13 +168,6 @@
       align-items: center;
       gap: 34px;
       box-sizing: border-box;
-    }
-    @media (min-width: 1100px) {
-      #profile-output {
-        width: 70vw;
-        max-width: 1300px;
-        padding: 40px 4vw;
-      }
     }
     @media (max-width: 900px) {
       #profile-output {
@@ -138,6 +194,7 @@
       box-shadow: 0 0 16px #00ffe533, 0 0 6px #8000ff33;
       padding: 28px 24px 14px 24px;
       box-sizing: border-box;
+      position: relative;
     }
     .profile-picture {
       width: 115px;
@@ -203,6 +260,9 @@
       display: block;
       font-size: 2.1em;
       color: #00ff00;
+      position: absolute;
+      top: 20px;
+      right: 20px;
     }
     .ghostgrid-badge {
       position: absolute;
@@ -256,7 +316,6 @@
         min-width: 60px;
       }
     }
-    /* Säkra så profilkoden aldrig sticker ut */
     #profile-output, .profile-section, .after-user-id, .profile-username-box {
       max-width: 100%;
       word-break: break-word;
@@ -273,39 +332,26 @@
 </head>
 <body>
   <nav class="navbar">
-  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-    <span></span><span></span><span></span>
-  </div>
-  <div class="nav-center">
-    <ul class="nav-links">
-      <li><a href="forum.html" data-i18n="forum">Forum</a></li>
-      <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-      <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-      <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-      <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-      <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-      <li><a href="store.html" data-i18n="store">Butik</a></li>
-    </ul>
-  </div>
-  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-  <div class="nav-mobile" id="navMobile">
-    <a href="forum.html" data-i18n="forum">Forum</a>
-    <a href="wall.html" data-i18n="wall">Väggen</a>
-    <a href="upload.html" data-i18n="upload">Ladda upp</a>
-    <a href="profile.html" data-i18n="profile">Profil</a>
-    <a href="friends.html" data-i18n="friends">Vänner</a>
-    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-    <a href="store.html" data-i18n="store">Butik</a>
-    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-  </div>
-</nav>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links" id="navLinks">
+        <!-- JS fyller menyn -->
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn"></button>
+    <div class="nav-mobile" id="navMobile">
+      <!-- JS fyller mobilmeny -->
+    </div>
+  </nav>
   <div class="main-content">
     <div id="profile-output"></div>
   </div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     // ---- FIREBASE INIT ----
     const firebaseConfig = {
       apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
@@ -319,19 +365,88 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    
-    const lang = localStorage.getItem("lang") || "sv";
-    const navLinks = document.getElementById("navLinks");
-    navLinks.innerHTML = menuItems[lang].map(
-      m => `<a href="${m.href}">${m.label}</a>`
-    ).join("");
-    const menuBtn = document.getElementById("menuBtn");
-    menuBtn.onclick = () => navLinks.classList.toggle("active");
-    navLinks.querySelectorAll('a').forEach(a =>
-      a.onclick = () => navLinks.classList.remove("active")
-    );
+    // ----------- MENY OCH SPRÅK -----------
+    const menuLabels = {
+      sv: {
+        forum: "Forum",
+        wall: "Väggen",
+        upload: "Ladda upp",
+        profile: "Profil",
+        friends: "Vänner",
+        ghostglow: "Ghost&Glow",
+        store: "Butik",
+        logout: "Logga ut"
+      },
+      en: {
+        forum: "Forum",
+        wall: "Wall",
+        upload: "Upload",
+        profile: "Profile",
+        friends: "Friends",
+        ghostglow: "Ghost&Glow",
+        store: "Store",
+        logout: "Logout"
+      }
+    };
+    const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
 
-    // ---- PROFIL-VIEW LOGIK ----
+    // Menystruktur (håller ordning)
+    const menuLinks = [
+      { href: "forum.html", key: "forum" },
+      { href: "wall.html", key: "wall" },
+      { href: "upload.html", key: "upload" },
+      { href: "profile.html", key: "profile" },
+      { href: "friends.html", key: "friends" },
+      { href: "ghost&glow.html", key: "ghostglow" },
+      { href: "store.html", key: "store" }
+    ];
+    // Desktopmeny
+    const navLinks = document.getElementById("navLinks");
+    navLinks.innerHTML = menuLinks.map(
+      m => `<li><a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a></li>`
+    ).join("");
+    // Sätt rätt active-meny
+    Array.from(navLinks.querySelectorAll('a')).forEach(link => {
+      if (window.location.pathname.endsWith(link.getAttribute("href"))) {
+        link.classList.add("active");
+      }
+    });
+
+    // Logga ut-knapp desktop
+    const logoutDesktopBtn = document.getElementById("logoutDesktopBtn");
+    logoutDesktopBtn.textContent = menuLabels[lang].logout;
+    logoutDesktopBtn.onclick = doLogout;
+
+    // Mobilmeny
+    const navMobile = document.getElementById("navMobile");
+    navMobile.innerHTML =
+      menuLinks.map(m =>
+        `<a href="${m.href}" data-i18n="${m.key}">${menuLabels[lang][m.key]}</a>`
+      ).join("") +
+      `<a href="#" class="logout-link-mobile" id="logoutMobileBtn">${menuLabels[lang].logout}</a>`;
+    // Hamburger
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    hamburgerBtn.onclick = () => navMobile.classList.toggle("show");
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', function () {
+        navMobile.classList.remove('show');
+      });
+    });
+    // Logga ut mobil
+    const logoutMobileBtn = document.getElementById("logoutMobileBtn");
+    if (logoutMobileBtn) logoutMobileBtn.onclick = function(e) {
+      e.preventDefault();
+      navMobile.classList.remove('show');
+      doLogout();
+    };
+
+    function doLogout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    }
+
+    // ------------- PROFIL-VIEW LOGIK -------------
     const uid = new URLSearchParams(window.location.search).get("uid");
     const profileOut = document.getElementById("profile-output");
     let profileRef = doc(db, "profiles", uid);
@@ -358,11 +473,11 @@
     async function renderProfile() {
       const snap = await getDoc(profileRef);
       if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
+        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">${lang === "sv" ? "Ingen profil hittades." : "No profile found."}</div>`;
         return;
       }
       const data = snap.data();
-      const showUsername = (data.nickname || data.username || "Okänd användare");
+      const showUsername = (data.nickname || data.username || (lang === "sv" ? "Okänd användare" : "Unknown user"));
       profileReactions.heart = Array.isArray(data.heartUsers) ? data.heartUsers : [];
       profileReactions.thumb = Array.isArray(data.thumbUsers) ? data.thumbUsers : [];
       profileReactions.smile = Array.isArray(data.smileUsers) ? data.smileUsers : [];
@@ -370,15 +485,14 @@
       picReactions.thumb = Array.isArray(data.picThumbUsers) ? data.picThumbUsers : [];
       picReactions.smile = Array.isArray(data.picSmileUsers) ? data.picSmileUsers : [];
 
-      // Bygg headern, alltid EN container
       let profileHeader = `
-        <div class="profile-header" style="position:relative;">
+        <div class="profile-header">
           ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
           <span class="profile-username-box" id="userNameBox">${showUsername}</span>
           <span class="user-id-label">${lang === "sv" ? "Användar-id:" : "User id:"}</span>
           <span class="user-id" id="userIdTxt">${uid}</span>
           ${userId ? `
-            <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}" style="position:absolute;top:20px;right:20px;">
+            <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="${lang === 'sv' ? 'Meddelanden' : 'Messages'}">
               <svg viewBox="0 0 54 54" width="44" height="44" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -392,13 +506,11 @@
 
       let profileHtml = profileHeader + `
         <div class="profile-section">
-          ${data.profileCode || "<p style='color:red'>Ingen profilkod sparad.</p>"}
+          ${data.profileCode || `<p style='color:red'>${lang === "sv" ? "Ingen profilkod sparad." : "No profile code saved."}</p>`}
         </div>
       `;
 
       profileOut.innerHTML = profileHtml;
-
-      // Reaktioner (tomma, men låt dem vara)
       updateReactionUI();
       setupReactionEvents();
     }
