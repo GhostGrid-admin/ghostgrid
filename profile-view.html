@@ -439,42 +439,51 @@
     }
 
     async function renderProfile() {
-      const snap = await getDoc(profileRef);
-      if (!snap.exists()) {
-        profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
-        return;
-      }
-      const data = snap.data();
-      const showUsername = (data.nickname || data.username || "Okänd användare");
-      let profileHeader = `
-        <div class="profile-header">
-          ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
-          <div class="profile-info-main">
-            <span class="username-label">Användarnamn:</span>
-            <span class="profile-username-box" id="userNameBox">${showUsername}</span>
-            <span class="user-id-label">Användar-id:</span>
-            <span class="user-id" id="userIdTxt">${uid}</span>
-            ${userId ? `
-              <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="Meddelanden">
-                <svg viewBox="0 0 54 54" width="38" height="38" class="ghostgrid-message-svg" aria-label="Meddelanden">
-                  <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
-                  <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                ${(userId === uid && unreadTotal > 0) ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
-              </a>
-            ` : ""}
-          </div>
-        </div>
-      `;
-      let profileHtml = `
-        ${profileHeader}
-        <div class="profile-section">
-          ${data.profileCode || `<p style='color:red'>Ingen profilkod sparad.</p>`}
-        </div>
-      `;
-      profileOut.innerHTML = profileHtml;
+  try {
+    const snap = await getDoc(profileRef);
+    if (!snap.exists()) {
+      profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
+      return;
     }
+    const data = snap.data();
+    const showUsername = (data.nickname || data.username || "Okänd användare");
+    let profileHeader = `
+      <div class="profile-header">
+        ${data.profilePicUrl ? `<img src="${data.profilePicUrl}" alt="Profilbild" class="profile-picture" id="profilePicOnView">` : ""}
+        <div class="profile-info-main">
+          <span class="username-label">Användarnamn:</span>
+          <span class="profile-username-box" id="userNameBox">${showUsername}</span>
+          <span class="user-id-label">Användar-id:</span>
+          <span class="user-id" id="userIdTxt">${uid}</span>
+          ${userId ? `
+            <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="Meddelanden">
+              <svg viewBox="0 0 54 54" width="38" height="38" class="ghostgrid-message-svg" aria-label="Meddelanden">
+                <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
+                <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              ${(userId === uid && unreadTotal > 0) ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+            </a>
+          ` : ""}
+        </div>
+      </div>
+    `;
+    let profileHtml = `
+      ${profileHeader}
+      <div class="profile-section">
+        ${data.profileCode || `<p style='color:red'>Ingen profilkod sparad.</p>`}
+      </div>
+    `;
+    profileOut.innerHTML = profileHtml;
+  } catch (err) {
+    // Visa felmeddelande istället för svart skärm
+    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
+      Kunde inte ladda profil.<br>${err.message}
+      <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
+      Om du försöker visa din egen profil och får detta fel, kontakta admin.
+    </div>`;
+  }
+}
 
     onAuthStateChanged(auth, async user => {
       userId = user ? user.uid : null;
