@@ -384,9 +384,9 @@ const profileOut = document.getElementById("profile-output");
 let userId = null;
 let unreadTotal = 0;
 
-// Extra global errorhantering: visar alltid felet på sidan!
 window.onerror = function(msg, url, line, col, error) {
-  profileOut.innerHTML = "<div style='color:red;'>JavaScript-fel: " + msg + "<br>" + (error ? error.stack : '') + "</div>";
+  profileOut.innerHTML = "<div style='color:red;'>JS-fel: " + msg + "<br>" + (error ? error.stack : '') + "</div>";
+  console.error("Global JS error:", msg, error);
 };
 
 async function getUnreadMessagesCount() {
@@ -404,17 +404,15 @@ async function getUnreadMessagesCount() {
   return total;
 }
 
-async function renderProfile() {
-  profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
+async function renderProfile(step = "") {
+  profileOut.innerHTML = `<div style='color:#0ff;font-size:1.1em;'>[${step}] Laddar profil... userId: ${userId} | uid: ${uid}</div>`;
   try {
     const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
-
     if (!snap.exists()) {
-      profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
+      profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">[${step}] Ingen profil hittades. userId: ${userId}</div>`;
       return;
     }
-
     const data = snap.data();
     const showUsername = (data.nickname || data.username || "Okänd användare");
     let profileHeader = `
@@ -442,22 +440,28 @@ async function renderProfile() {
       ${profileHeader}
       <div class="profile-section">
         ${data.profileCode || `<p style='color:red'>Ingen profilkod sparad.</p>`}
+        <div style="margin-top:20px;color:#0ff;font-size:0.92em;opacity:0.65;">
+          [${step}] userId: ${userId}, uid: ${uid}
+        </div>
       </div>
     `;
     profileOut.innerHTML = profileHtml;
 
+    // LOG IN CONSOLE
+    console.log(`[${step}] PROFIL LADDADE`, { userId, uid, data });
   } catch (err) {
     profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
-      Kunde inte ladda profil.<br>${err.message || err}
-      <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
-      Om du försöker visa din egen profil och får detta fel, kontakta admin.
+      [${step}] Kunde inte ladda profil.<br>${err.message || err}
+      <br><br>userId: ${userId} | uid: ${uid}
     </div>`;
+    console.error(`[${step}] CATCH ERROR:`, err);
   }
 }
 
-// Nu körs ALL logik BARA när auth-status är klar:
 onAuthStateChanged(auth, async user => {
   userId = user ? user.uid : null;
+  console.log("[onAuthStateChanged] Körs – userId:", userId, "| uid:", uid);
+
   if (!userId) {
     profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
       Du är inte inloggad.<br>
@@ -470,10 +474,9 @@ onAuthStateChanged(auth, async user => {
   } else {
     unreadTotal = 0;
   }
-  renderProfile();
+  renderProfile("auth");
 });
 
-// LOGGA UT KNAPP
 function doLogout() {
   signOut(auth).then(() => {
     window.location.href = "login.html";
