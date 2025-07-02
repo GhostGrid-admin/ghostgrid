@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -25,68 +25,155 @@
       flex-direction: column;
       align-items: center;
     }
-    /* UFO LOADER */
-    #ufo-loader {
+    nav.navbar {
+      background-color: #000;
+      border-bottom: 2px solid #00ffcc;
+      padding: 0;
       position: fixed;
-      top: 105px;
+      width: 100%;
+      top: 0;
       left: 0;
-      width: 100vw;
-      height: 160px;
-      z-index: 3100;
+      z-index: 1000;
+      box-shadow: 0 0 20px #bb00ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+      transition: top 0.3s;
+    }
+    .nav-center {
+      flex: 1;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
+    }
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      align-items: center;
+    }
+    .nav-links li { display: flex; }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      padding: 7px 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
+      transition: 0.3s;
+      font-family: inherit;
+    }
+    .nav-links a.active, .nav-links a:hover {
+      background-color: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 10px #ffffff;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #000;
+      color: #00ffcc;
+      border: 2px solid #00ffcc;
+      padding: 8px 24px 7px 24px;
+      font-size: 1.1em;
+      border-radius: 9px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
+      transition: 0.18s;
+      cursor: pointer;
+      opacity: 0.98;
+      margin: 0;
+      z-index: 1500;
+      display: block;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 55px;
+      z-index: 2002;
       background: none;
-      pointer-events: none;
-      transition: opacity .22s;
+      border: none;
+      cursor: pointer;
     }
-    #ufo-loader.hide { opacity: 0; pointer-events: none; }
-
-    .ufo-wrap {
-      width: 110px; height: 70px; position: relative;
-      animation: ufo-float 1.15s ease-in-out infinite alternate;
+    .hamburger span {
+      width: 32px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
     }
-    @keyframes ufo-float {
-      0% { transform: translateY(0px);}
-      100% { transform: translateY(14px);}
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+      nav.navbar { min-height: 55px; border-bottom-width: 2px;}
     }
-    .ufo-body {
-      width: 84px; height: 34px;
-      background: radial-gradient(ellipse at 60% 80%, #0ff 55%, #098 100%);
-      border-radius: 49% 52% 37% 37% / 69% 98% 100% 78%;
-      position: absolute; left: 13px; top: 18px;
-      box-shadow: 0 6px 30px #00ffe588, 0 0 12px #8000ff66;
-      border-bottom: 7px solid #044; border-top: 4px solid #c0fffe77;
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1201;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
     }
-    .ufo-glass {
-      width: 38px; height: 21px;
-      background: radial-gradient(ellipse at 60% 60%, #c7ffffb8 70%, #0ee7 100%);
-      border-radius: 44% 53% 46% 48% / 65% 98% 96% 79%;
-      position: absolute; left: 36px; top: 3px;
-      box-shadow: 0 3px 11px #c7fff844;
-      border-top: 2.5px solid #fff;
-      border-bottom: 1.7px solid #6ef;
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      padding: 18px 0px;
+      font-size: 1.15em;
+      width: 100%;
+      border-radius: 0;
+      text-align: center;
+      border-bottom: 1px solid #3fffd966;
+      background: none;
+      color: #00ffcc;
+      font-weight: bold;
+      border: none;
+      box-shadow: none;
+      display: block;
+      margin: 0;
+      font-family: inherit;
     }
-    .ufo-lights {
-      position: absolute; left: 13px; top: 40px; width: 84px; height: 13px;
-      display: flex; justify-content: space-between; align-items: center;
-      pointer-events: none;
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
     }
-    .ufo-lights::before, .ufo-lights::after, .ufo-lights span {
-      content: ""; display: block;
-      width: 11px; height: 11px; border-radius: 50%;
-      background: radial-gradient(circle, #ff0 60%, #ff0a 90%, #fff0 100%);
-      box-shadow: 0 0 8px 2px #ffe06699, 0 0 1px #fff;
-      animation: ufo-lights 1.1s infinite alternate;
+    .nav-mobile a:last-child {
+      margin-top: 8px;
+      background: #000;
+      color: #00ffcc;
+      border-bottom: 1px solid #3fffd966;
+      font-weight: bold;
     }
-    .ufo-lights::before { background: #0ff; animation-delay: 0s;}
-    .ufo-lights span    { background: #0f0; animation-delay: 0.4s;}
-    .ufo-lights::after  { background: #f0f; animation-delay: 0.8s;}
-    @keyframes ufo-lights {
-      0% { filter: brightness(0.9) drop-shadow(0 0 2px #fff);}
-      100% { filter: brightness(1.8) drop-shadow(0 0 8px #fff);}
+    .nav-mobile a:hover { background: #00ffcc; color: #000; }
+    @media (max-width: 600px) {
+      nav.navbar { transition: top 0.3s; }
+      nav.navbar.hide-navbar { top: -70px; }
+      .nav-mobile { min-width: 160px; width: 98vw; }
     }
-
     /* ---- Resten av din profil- och box-stil, samma som wall ---- */
     .profile-header {
       width: 98vw;
@@ -242,14 +329,6 @@
   </style>
 </head>
 <body>
-  <!-- UFO Loader -->
-  <div id="ufo-loader">
-    <div class="ufo-wrap">
-      <div class="ufo-body"></div>
-      <div class="ufo-glass"></div>
-      <div class="ufo-lights"><span></span></div>
-    </div>
-  </div>
   <nav class="navbar">
     <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
       <span></span><span></span><span></span>
@@ -300,16 +379,11 @@ const auth = getAuth(app);
 
 const uid = new URLSearchParams(window.location.search).get("uid");
 const profileOut = document.getElementById("profile-output");
-const ufoLoader = document.getElementById("ufo-loader");
 let userId = null;
 let unreadTotal = 0;
 
-function showUFO(show = true) {
-  if (show) ufoLoader.classList.remove("hide");
-  else ufoLoader.classList.add("hide");
-}
-
 function showStatus(text, color = "#0ff") {
+  // Visa bara felmeddelanden/utloggad, aldrig någon laddtext!
   profileOut.innerHTML = `<div style="color:${color};font-size:1.15em;">${text}</div>`;
 }
 
@@ -331,17 +405,15 @@ async function getUnreadMessagesCount() {
 }
 
 async function renderProfile() {
-  showUFO(true);
+  // INGEN "Laddar profil..." här!
   try {
     if (!uid) {
-      showUFO(false);
       showStatus("Ingen användare angiven.", "red");
       return;
     }
     const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
     if (!snap.exists()) {
-      showUFO(false);
       showStatus("Ingen profil hittades.", "red");
       return;
     }
@@ -375,9 +447,7 @@ async function renderProfile() {
       </div>
     `;
     profileOut.innerHTML = profileHtml;
-    showUFO(false);
   } catch (err) {
-    showUFO(false);
     showStatus("Kunde inte ladda profil.<br>" + err.message, "red");
   }
 }
@@ -386,7 +456,6 @@ async function renderProfile() {
 onAuthStateChanged(auth, async user => {
   userId = user ? user.uid : null;
   if (!userId) {
-    showUFO(false);
     showStatus('Du är inte inloggad.<br><a href="login.html" style="color:#0ff;">Logga in här</a>', "red");
     return;
   }
