@@ -366,6 +366,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
   authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -382,6 +383,11 @@ const uid = new URLSearchParams(window.location.search).get("uid");
 const profileOut = document.getElementById("profile-output");
 let userId = null;
 let unreadTotal = 0;
+
+// Extra global errorhantering: visar alltid felet på sidan!
+window.onerror = function(msg, url, line, col, error) {
+  profileOut.innerHTML = "<div style='color:red;'>JavaScript-fel: " + msg + "<br>" + (error ? error.stack : '') + "</div>";
+};
 
 async function getUnreadMessagesCount() {
   if (!userId) return 0;
@@ -403,10 +409,12 @@ async function renderProfile() {
   try {
     const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
+
     if (!snap.exists()) {
       profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
       return;
     }
+
     const data = snap.data();
     const showUsername = (data.nickname || data.username || "Okänd användare");
     let profileHeader = `
@@ -437,16 +445,17 @@ async function renderProfile() {
       </div>
     `;
     profileOut.innerHTML = profileHtml;
+
   } catch (err) {
     profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
-      Kunde inte ladda profil.<br>${err.message}
+      Kunde inte ladda profil.<br>${err.message || err}
       <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
       Om du försöker visa din egen profil och får detta fel, kontakta admin.
     </div>`;
   }
 }
 
-// Den ENDA platsen där något renderas – alltid, oavsett auth:
+// Nu körs ALL logik BARA när auth-status är klar:
 onAuthStateChanged(auth, async user => {
   userId = user ? user.uid : null;
   if (!userId) {
