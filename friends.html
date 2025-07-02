@@ -468,9 +468,9 @@
     function createUserRow(user, actions = [], note = "") {
       let row = document.createElement("div");
       row.className = "friend-row";
-      row.innerHTML = `<span><b>${user.nickname}</b>${
-        user.uid === currentUid ? ` <span style="color:#888">(${t("me")})</span>` : ""
-      }${note}</span>`;
+      row.innerHTML = `<span><b><a href="profile-view.html?uid=${encodeURIComponent(user.uid)}" style="color:#00ffcc; text-decoration:none;">${user.nickname}</a></b>${
+  user.uid === currentUid ? ` <span style="color:#888">(${t("me")})</span>` : ""
+}${note}</span>`;
       let actionsDiv = document.createElement("div");
       actionsDiv.className = "friend-actions";
       actions.forEach((a) => actionsDiv.appendChild(a));
