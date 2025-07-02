@@ -363,82 +363,81 @@
     <div id="profile-output"></div>
   </div>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.appspot.com",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd18a31163968"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
+  authDomain: "ghostgrid-fb278.firebaseapp.com",
+  projectId: "ghostgrid-fb278",
+  storageBucket: "ghostgrid-fb278.appspot.com",
+  messagingSenderId: "283208202937",
+  appId: "1:283208202937:web:11c0cea81fd18a31163968"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-    // NAVBAR (interaktiv)
-    document.addEventListener("DOMContentLoaded", function() {
-      // Hamburgermeny
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navMobile = document.getElementById('navMobile');
-      if (hamburgerBtn && navMobile) {
-        hamburgerBtn.addEventListener('click', function () {
-          navMobile.classList.toggle('show');
-        });
-        navMobile.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            navMobile.classList.remove('show');
-          });
-        });
-        const logoutBtn = document.getElementById("logoutMobileBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            navMobile.classList.remove('show');
-            doLogout();
-          });
-        }
-      }
-      // HIDE NAVBAR ON SCROLL MOBILE
-      if (window.innerWidth <= 600) {
-        let lastScrollY = window.scrollY;
-        let navbar = document.querySelector('.navbar');
-        window.addEventListener('scroll', function () {
-          if (window.scrollY > lastScrollY && window.scrollY > 70) {
-            navbar.classList.add('hide-navbar');
-          } else {
-            navbar.classList.remove('hide-navbar');
-          }
-          lastScrollY = window.scrollY;
-        });
-      }
+// NAVBAR (interaktiv) – samma som innan
+document.addEventListener("DOMContentLoaded", function() {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMobile = document.getElementById('navMobile');
+  if (hamburgerBtn && navMobile) {
+    hamburgerBtn.addEventListener('click', function () {
+      navMobile.classList.toggle('show');
     });
-
-    // ===== PROFIL-VIEW LOGIK =====
-    const uid = new URLSearchParams(window.location.search).get("uid");
-    const profileOut = document.getElementById("profile-output");
-    let profileRef = doc(db, "profiles", uid);
-    let userId = null;
-    let unreadTotal = 0;
-
-    async function getUnreadMessagesCount() {
-      if (!userId) return 0;
-      let total = 0;
-      const convosRef = collection(db, "conversations");
-      const q = query(convosRef, where("participants", "array-contains", userId));
-      const snap = await getDocs(q);
-      snap.forEach(docu => {
-        const data = docu.data();
-        if (data.unread && typeof data.unread[userId] === "number") {
-          total += data.unread[userId];
-        }
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMobile.classList.remove('show');
       });
-      return total;
+    });
+    const logoutBtn = document.getElementById("logoutMobileBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      });
     }
+  }
+  if (window.innerWidth <= 600) {
+    let lastScrollY = window.scrollY;
+    let navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > lastScrollY && window.scrollY > 70) {
+        navbar.classList.add('hide-navbar');
+      } else {
+        navbar.classList.remove('hide-navbar');
+      }
+      lastScrollY = window.scrollY;
+    });
+  }
+});
 
-    async function renderProfile() {
+// ===== PROFIL-VIEW LOGIK =====
+const uid = new URLSearchParams(window.location.search).get("uid");
+const profileOut = document.getElementById("profile-output");
+let profileRef = doc(db, "profiles", uid);
+let userId = null;
+let unreadTotal = 0;
+
+async function getUnreadMessagesCount() {
+  if (!userId) return 0;
+  let total = 0;
+  const convosRef = collection(db, "conversations");
+  const q = query(convosRef, where("participants", "array-contains", userId));
+  const snap = await getDocs(q);
+  snap.forEach(docu => {
+    const data = docu.data();
+    if (data.unread && typeof data.unread[userId] === "number") {
+      total += data.unread[userId];
+    }
+  });
+  return total;
+}
+
+async function renderProfile() {
+  profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
   try {
     const snap = await getDoc(profileRef);
     if (!snap.exists()) {
@@ -476,8 +475,7 @@
     `;
     profileOut.innerHTML = profileHtml;
   } catch (err) {
-    // Visa felmeddelande istället för svart skärm
-    profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
+    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
       Kunde inte ladda profil.<br>${err.message}
       <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
       Om du försöker visa din egen profil och får detta fel, kontakta admin.
@@ -485,15 +483,23 @@
   }
 }
 
-    onAuthStateChanged(auth, async user => {
-      userId = user ? user.uid : null;
-      if (userId && userId === uid) {
-        unreadTotal = await getUnreadMessagesCount();
-      } else {
-        unreadTotal = 0;
-      }
-      renderProfile();
-    });
+// **Nu korrekt authhantering:**
+onAuthStateChanged(auth, async user => {
+  userId = user ? user.uid : null;
+  if (!userId) {
+    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
+      Du är inte inloggad.<br>
+      <a href="login.html" style="color:#0ff;">Logga in här</a>
+    </div>`;
+    return;
+  }
+  if (userId === uid) {
+    unreadTotal = await getUnreadMessagesCount();
+  } else {
+    unreadTotal = 0;
+  }
+  renderProfile();
+});
 
     function doLogout() {
       signOut(auth).then(() => {
