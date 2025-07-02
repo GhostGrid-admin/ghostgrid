@@ -477,7 +477,7 @@
     profileOut.innerHTML = profileHtml;
   } catch (err) {
     // Visa felmeddelande istället för svart skärm
-    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
+    profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
       Kunde inte ladda profil.<br>${err.message}
       <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
       Om du försöker visa din egen profil och får detta fel, kontakta admin.
