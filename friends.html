@@ -292,7 +292,7 @@
     <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
       <div class="section-title" data-i18n="search_friends">Sök användare eller användar-ID</div>
-      <input type="text" id="friendSearch" placeholder="Användarnamn eller användar-ID..." autocomplete="off" />
+      <input type="text" id="friendSearch" placeholder="Användarnamn, användar-ID, e-post..." autocomplete="off" />
       <button id="searchBtn">Sök</button>
       <div id="searchResults"></div>
     </div>
@@ -427,6 +427,8 @@
         el.textContent = t(el.getAttribute("data-i18n"));
       });
       document.title = "GhostGrid – " + t("friends");
+      document.getElementById("friendSearch").placeholder = t("search_friends");
+      document.getElementById("searchBtn").textContent = t("search_friends").split(" ")[0];
     }
     applyTranslations();
 
@@ -493,7 +495,7 @@
         if (!fSnap.exists()) continue;
         const user = {
           uid: friendUid,
-          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+          nickname: fSnap.data().nickname || fSnap.data().displayName || fSnap.data().userId || fSnap.data().email || "?",
         };
         const msgBtn = document.createElement("button");
         msgBtn.className = "icon-btn";
@@ -545,7 +547,7 @@
         if (!fSnap.exists()) continue;
         const user = {
           uid: rUid,
-          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+          nickname: fSnap.data().nickname || fSnap.data().displayName || fSnap.data().userId || fSnap.data().email || "?",
         };
         const accBtn = document.createElement("button");
         accBtn.textContent = t("accept");
@@ -589,7 +591,7 @@
         if (!fSnap.exists()) continue;
         const user = {
           uid: bUid,
-          nickname: fSnap.data().nickname || fSnap.data().displayName || "?",
+          nickname: fSnap.data().nickname || fSnap.data().displayName || fSnap.data().userId || fSnap.data().email || "?",
         };
         const unblockBtn = document.createElement("button");
         unblockBtn.textContent = t("unblock");
@@ -619,10 +621,19 @@
       qSnap.forEach((docu) => {
         if (docu.id === currentUid) return;
         let data = docu.data();
-        let match = false;
-        if (data.nickname && data.nickname.toLowerCase().includes(valLower)) match = true;
-        if (docu.id === val) match = true;
-        if (match) hits.push({ uid: docu.id, nickname: data.nickname || data.displayName || "?" });
+        // Sök på uid, nickname, displayName, userId, och epost
+        if (
+          (data.nickname && data.nickname.toLowerCase().includes(valLower)) ||
+          (data.displayName && data.displayName.toLowerCase().includes(valLower)) ||
+          (data.userId && data.userId.toLowerCase().includes(valLower)) ||
+          (data.email && data.email.toLowerCase().includes(valLower)) ||
+          docu.id.toLowerCase() === valLower
+        ) {
+          hits.push({
+            uid: docu.id,
+            nickname: data.nickname || data.displayName || data.userId || data.email || docu.id
+          });
+        }
       });
       if (!hits.length) {
         resultsDiv.innerHTML = `<div style="color:#0ff;text-align:center">${t("no_results")}</div>`;
