@@ -360,7 +360,7 @@
     </div>
   </nav>
   <div class="main-content">
-    <div id="profile-output"></div>
+    <div id="profile-output" style="color:#0ff;font-size:1.1em;">Laddar profil...</div>
   </div>
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
@@ -378,46 +378,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// NAVBAR (interaktiv) – samma som innan
-document.addEventListener("DOMContentLoaded", function() {
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const navMobile = document.getElementById('navMobile');
-  if (hamburgerBtn && navMobile) {
-    hamburgerBtn.addEventListener('click', function () {
-      navMobile.classList.toggle('show');
-    });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navMobile.classList.remove('show');
-      });
-    });
-    const logoutBtn = document.getElementById("logoutMobileBtn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        navMobile.classList.remove('show');
-        doLogout();
-      });
-    }
-  }
-  if (window.innerWidth <= 600) {
-    let lastScrollY = window.scrollY;
-    let navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > lastScrollY && window.scrollY > 70) {
-        navbar.classList.add('hide-navbar');
-      } else {
-        navbar.classList.remove('hide-navbar');
-      }
-      lastScrollY = window.scrollY;
-    });
-  }
-});
-
-// ===== PROFIL-VIEW LOGIK =====
 const uid = new URLSearchParams(window.location.search).get("uid");
 const profileOut = document.getElementById("profile-output");
-let profileRef = doc(db, "profiles", uid);
 let userId = null;
 let unreadTotal = 0;
 
@@ -439,6 +401,7 @@ async function getUnreadMessagesCount() {
 async function renderProfile() {
   profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
   try {
+    const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
     if (!snap.exists()) {
       profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
@@ -483,7 +446,7 @@ async function renderProfile() {
   }
 }
 
-// **Nu korrekt authhantering:**
+// Den ENDA platsen där något renderas – alltid, oavsett auth:
 onAuthStateChanged(auth, async user => {
   userId = user ? user.uid : null;
   if (!userId) {
@@ -501,12 +464,13 @@ onAuthStateChanged(auth, async user => {
   renderProfile();
 });
 
-    function doLogout() {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      });
-    }
-    document.getElementById("logoutDesktopBtn").onclick = doLogout;
+// LOGGA UT KNAPP
+function doLogout() {
+  signOut(auth).then(() => {
+    window.location.href = "login.html";
+  });
+}
+document.getElementById("logoutDesktopBtn").onclick = doLogout;
   </script>
 </body>
 </html>
