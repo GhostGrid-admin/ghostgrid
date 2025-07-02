@@ -17,7 +17,6 @@
       justify-content: center;
       align-items: center;
     }
-
     .login-container {
       background: rgba(0, 0, 0, 0.85);
       padding: 40px;
@@ -28,18 +27,8 @@
       max-width: 400px;
       text-align: center;
     }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      margin-top: 15px;
-      font-size: 0.95em;
-    }
-
+    h1 { margin-bottom: 20px; }
+    label { display: block; text-align: left; margin-top: 15px; font-size: 0.95em; }
     input {
       width: 100%;
       padding: 10px;
@@ -49,7 +38,6 @@
       background: black;
       color: #00ff00;
     }
-
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -59,27 +47,10 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #003300;
-    }
-
-    .extra-options {
-      margin-top: 15px;
-      font-size: 0.9em;
-    }
-
-    .extra-options a {
-      color: #00ff00;
-      text-decoration: underline;
-    }
-
-    .theme-toggle-container {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-    }
-
+    button:hover { background-color: #003300; }
+    .extra-options { margin-top: 15px; font-size: 0.9em; }
+    .extra-options a { color: #00ff00; text-decoration: underline; }
+    .theme-toggle-container { position: fixed; bottom: 10px; right: 10px; }
     #themeToggle {
       background: none;
       border: 1px solid #00ff00;
@@ -97,50 +68,59 @@
     <form id="registerForm">
       <label for="username" data-i18n="label_username">Användarnamn</label>
       <input type="text" id="username" name="username" required placeholder="" data-i18n="placeholder_username" />
-
       <label for="email" data-i18n="label_email">E-postadress</label>
       <input type="email" id="email" name="email" required placeholder="" data-i18n="placeholder_email" />
-
       <label for="password" data-i18n="label_password">Lösenord</label>
       <input type="password" id="password" name="password" required placeholder="" data-i18n="placeholder_password" />
-
       <button type="submit" data-i18n="button_register">Registrera</button>
-
       <div class="extra-options">
         <p data-i18n="text_have_account">Har du redan ett konto? <a href="login.html" data-i18n="link_login">Logga in här</a></p>
       </div>
     </form>
   </div>
-
   <div class="theme-toggle-container">
     <button id="themeToggle">🎨 Byt tema</button>
   </div>
-
   <script src="theme-toggle.js"></script>
   <script src="language.js"></script>
 
   <script type="module">
-    import { auth } from "./scripts/firebase-init.js";
+    import { auth, db } from "./scripts/firebase-init.js";
     import {
       createUserWithEmailAndPassword,
       updateProfile,
       sendEmailVerification
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import {
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
     document.getElementById("registerForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      const username = document.getElementById("username").value;
-      const email = document.getElementById("email").value;
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-        await updateProfile(userCredential.user, {
-          displayName: username
+        // Spara displayName (användarnamn) i Auth-profilen
+        await updateProfile(userCredential.user, { displayName: username });
+
+        // Skapa users-dokument i Firestore!
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          nickname: username,
+          email: email,
+          userId: userCredential.user.uid,
+          friends: [],
+          friendRequests: [],
+          blocked: [],
+          created: new Date().toISOString()
         });
 
+        // Skicka verifieringsmejl
         await sendEmailVerification(userCredential.user);
 
         alert("Konto skapat! Ett verifieringsmejl har skickats.");
