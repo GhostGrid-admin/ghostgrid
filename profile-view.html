@@ -375,6 +375,7 @@ const firebaseConfig = {
   messagingSenderId: "283208202937",
   appId: "1:283208202937:web:11c0cea81fd18a31163968"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -382,34 +383,42 @@ const auth = getAuth(app);
 const uid = new URLSearchParams(window.location.search).get("uid");
 const profileOut = document.getElementById("profile-output");
 
-// Hjälpfunktion
-function log(...args) {
-  console.log("[PROFILE]", ...args);
+let userId = null;
+let unreadTotal = 0;
+
+function doLogout() {
+  signOut(auth).then(() => {
+    window.location.href = "login.html";
+  });
 }
 
-async function getUnreadMessagesCount(userId) {
-  if (!userId) return 0;
+// Alltid knappen klar!
+document.getElementById("logoutDesktopBtn").onclick = doLogout;
+
+// Hämta olästa meddelanden
+async function getUnreadMessagesCount(myId) {
+  if (!myId) return 0;
   let total = 0;
   const convosRef = collection(db, "conversations");
-  const q = query(convosRef, where("participants", "array-contains", userId));
+  const q = query(convosRef, where("participants", "array-contains", myId));
   const snap = await getDocs(q);
   snap.forEach(docu => {
     const data = docu.data();
-    if (data.unread && typeof data.unread[userId] === "number") {
-      total += data.unread[userId];
+    if (data.unread && typeof data.unread[myId] === "number") {
+      total += data.unread[myId];
     }
   });
   return total;
 }
 
-async function renderProfile(userId, unreadTotal) {
+// Visa profil
+async function renderProfile(myUid, unreadTotal) {
   profileOut.innerHTML = "<div style='color:#0ff;font-size:1.1em;'>Laddar profil...</div>";
   try {
     const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
     if (!snap.exists()) {
       profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Ingen profil hittades.</div>`;
-      log("Profil hittades inte:", uid);
       return;
     }
     const data = snap.data();
@@ -422,14 +431,14 @@ async function renderProfile(userId, unreadTotal) {
           <span class="profile-username-box" id="userNameBox">${showUsername}</span>
           <span class="user-id-label">Användar-id:</span>
           <span class="user-id" id="userIdTxt">${uid}</span>
-          ${userId ? `
-            <a href="${userId === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="Meddelanden">
+          ${myUid ? `
+            <a href="${myUid === uid ? 'messages.html' : 'messages.html?to=' + uid}" class="ghostgrid-message-link" title="Meddelanden">
               <svg viewBox="0 0 54 54" width="38" height="38" class="ghostgrid-message-svg" aria-label="Meddelanden">
                 <rect x="2.5" y="6.5" rx="12" ry="12" width="49" height="41" fill="#171c19" stroke="#19ff19" stroke-width="3"/>
                 <polyline points="7,11 27,33 47,11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <polyline points="7,43 18,27 27,37 36,27 47,43" fill="none" stroke="#19ff19" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              ${(userId === uid && unreadTotal > 0) ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
+              ${(myUid === uid && unreadTotal > 0) ? `<span class="ghostgrid-badge">${unreadTotal}</span>` : ""}
             </a>
           ` : ""}
         </div>
@@ -442,35 +451,30 @@ async function renderProfile(userId, unreadTotal) {
       </div>
     `;
     profileOut.innerHTML = profileHtml;
-    log("Profil laddad:", uid, "auth:", userId);
   } catch (err) {
     profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
       Kunde inte ladda profil.<br>${err.message}
       <br><br>Om du försöker visa någon annans profil och den är tom, saknar användaren profil.<br>
       Om du försöker visa din egen profil och får detta fel, kontakta admin.
     </div>`;
-    log("Profilfel:", err.message, "uid:", uid, "auth:", userId);
   }
 }
 
-// Enda platsen där något får laddas!
+// Hämta auth och rendera profil!
 onAuthStateChanged(auth, async user => {
-  if (!uid) {
-    profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">Fel: Ingen användare vald.</div>`;
-    log("Ingen uid i URL");
-    return;
-  }
   if (!user) {
     profileOut.innerHTML = `<div style="color:red;font-size:1.4em;">
       Du är inte inloggad.<br>
       <a href="login.html" style="color:#0ff;">Logga in här</a>
     </div>`;
-    log("Ej inloggad när profil försökte laddas.");
     return;
   }
-  let userId = user.uid;
-  let unreadTotal = (userId === uid) ? await getUnreadMessagesCount(userId) : 0;
-  log("Startar profilvisning. auth:", userId, "uid:", uid);
+  userId = user.uid;
+  if (userId === uid) {
+    unreadTotal = await getUnreadMessagesCount(userId);
+  } else {
+    unreadTotal = 0;
+  }
   renderProfile(userId, unreadTotal);
 });
 
