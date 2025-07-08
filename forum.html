@@ -220,33 +220,32 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-center">
-      <ul class="nav-links">
-        <li><a href="forum.html" data-i18n="forum">Forum</a></li>
-        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-        <li><a href="store.html" data-i18n="store">Butik</a></li>
-      </ul>
-    </div>
-    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-    <!-- Mobile Menu (hidden by default) -->
-    <div class="nav-mobile" id="navMobile">
-      <a href="forum.html" data-i18n="forum">Forum</a>
-      <a href="wall.html" data-i18n="wall">Väggen</a>
-      <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
-      <a href="friends.html" data-i18n="friends">Vänner</a>
-      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-      <a href="store.html" data-i18n="store">Butik</a>
-      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-    </div>
-  </nav>
+  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
+      <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+      <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+      <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+      <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+      <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+      <li><a href="store.html" data-i18n="store">Butik</a></li>
+    </ul>
+  </div>
+  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+  <div class="nav-mobile" id="navMobile">
+    <a href="forum.html" data-i18n="forum" class="active">Forum</a>
+    <a href="wall.html" data-i18n="wall">Väggen</a>
+    <a href="upload.html" data-i18n="upload">Ladda upp</a>
+    <a href="profile.html" data-i18n="profile">Profil</a>
+    <a href="friends.html" data-i18n="friends">Vänner</a>
+    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+    <a href="store.html" data-i18n="store">Butik</a>
+    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+  </div>
+</nav>
   <!-- NAVBAR END -->
 
   <div class="forum-box">
@@ -287,19 +286,43 @@
     }, 6000);
 
     // --- Hamburgermeny logik ---
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMobile = document.getElementById('navMobile');
+    document.addEventListener("DOMContentLoaded", function() {
+  // HAMBURGERMENY
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMobile = document.getElementById('navMobile');
+  if (hamburgerBtn && navMobile) {
     hamburgerBtn.addEventListener('click', function () {
       navMobile.classList.toggle('show');
     });
     navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+      link.addEventListener('click', () => {
+        navMobile.classList.remove('show');
+      });
     });
-    document.getElementById("logoutMobileBtn").addEventListener("click", function (e) {
-      e.preventDefault();
-      navMobile.classList.remove('show');
-      doLogout();
+    const logoutBtn = document.getElementById("logoutMobileBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        navMobile.classList.remove('show');
+        doLogout();
+      });
+    }
+  }
+
+  // NAVBAR HIDE VID SCROLL PÅ MOBIL
+  if (window.innerWidth <= 600) {
+    let lastScrollY = window.scrollY;
+    let navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > lastScrollY && window.scrollY > 70) {
+        navbar.classList.add('hide-navbar');
+      } else {
+        navbar.classList.remove('hide-navbar');
+      }
+      lastScrollY = window.scrollY;
     });
+  }
+});
 
     // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
     if (window.innerWidth <= 600) {
