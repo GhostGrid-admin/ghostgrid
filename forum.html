@@ -91,34 +91,83 @@
       .hamburger { display: flex !important; }
     }
     .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      margin-left: 18px;
-      z-index: 1110;
-    }
-    .hamburger span {
-      width: 29px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 4px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      position: fixed;
-      left: 0; right: 0;
-      top: 58px;
-      background: #181f26;
-      box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1101;
-      padding-bottom: 20px;
-      gap: 0;
-      align-items: center;
-    }
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 55px;
+  z-index: 2002;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 32px;
+  height: 4px;
+  background: #00ffcc;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: 0.3s;
+  display: block;
+}
+.nav-mobile {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  width: 92vw;
+  max-width: 400px;
+  background: #181f26;
+  box-shadow: 0 4px 28px #00ffcc77;
+  z-index: 1201;
+  padding-bottom: 20px;
+  border-radius: 0 0 16px 16px;
+  animation: dropin 0.16s;
+  text-align: center;
+}
+.nav-mobile.show { display: flex; }
+.nav-mobile a, .nav-mobile .logout-link-mobile {
+  padding: 18px 0px;
+  font-size: 1.15em;
+  width: 100%;
+  border-radius: 0;
+  text-align: center;
+  border-bottom: 1px solid #3fffd966;
+  background: none;
+  color: #00ffcc;
+  font-weight: bold;
+  border: none;
+  box-shadow: none;
+  display: block;
+  margin: 0;
+  font-family: inherit;
+}
+.nav-mobile .logout-link-mobile {
+  cursor: pointer;
+  background: none;
+}
+.nav-mobile a:last-child {
+  margin-top: 8px;
+  background: #000;
+  color: #00ffcc;
+  border-bottom: 1px solid #3fffd966;
+  font-weight: bold;
+}
+.nav-mobile a:hover { background: #00ffcc; color: #000; }
+@media (max-width: 600px) {
+  nav.navbar { transition: top 0.3s; }
+  nav.navbar.hide-navbar { top: -70px; }
+  .nav-mobile { min-width: 160px; width: 98vw; }
+}
     .nav-mobile.show { display: flex; }
     .nav-mobile a {
       padding: 18px 10px;
