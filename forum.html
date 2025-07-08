@@ -85,20 +85,21 @@
       display: block;
     }
     .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      left: 24px;
-      width: 60px;
-      height: 60px;
-      z-index: 2002;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;     /* ändrat från absolute till fixed */
+  top: 13px;           /* margin från toppen, justera om du vill */
+  left: 50%;           /* EXAKT MITT */
+  transform: translateX(-50%);
+  width: 60px;
+  height: 55px;
+  z-index: 2002;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
     .hamburger span {
       width: 32px;
       height: 4px;
