@@ -19,18 +19,20 @@
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
 
     nav.navbar {
-      background-color: #000;
+      background: #000;
       border-bottom: 2px solid #00ffcc;
-      padding: 12px 0;
+      padding: 0;
       position: fixed;
       width: 100%;
       top: 0;
+      left: 0;
       z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       align-items: center;
-      transition: top 0.3s;
       justify-content: center;
+      min-height: 60px;
+      transition: top 0.3s, border-bottom 0.3s;
     }
     .nav-center {
       flex: 1;
@@ -57,7 +59,7 @@
       transition: 0.3s;
       font-family: inherit;
     }
-    .nav-links a:hover {
+    .nav-links a.active, .nav-links a:hover {
       background-color: #00ffcc;
       color: #000;
       box-shadow: 0 0 10px #ffffff;
@@ -82,97 +84,54 @@
       z-index: 1500;
       display: block;
     }
-    @media (max-width: 950px) {
-      .nav-links { gap: 14px; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 24px;
+      width: 60px;
+      height: 60px;
+      z-index: 2002;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
-    /* Dölj nav-center och logga ut-knapp, men inte navbar! */
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex !important; }
+    .hamburger span {
+      width: 32px;
+      height: 4px;
+      background: #00ffcc;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+      display: block;
     }
-    hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 55px;
-  z-index: 2002;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.hamburger span {
-  width: 32px;
-  height: 4px;
-  background: #00ffcc;
-  margin: 5px 0;
-  border-radius: 2px;
-  transition: 0.3s;
-  display: block;
-}
-.nav-mobile {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 55px;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 220px;
-  width: 92vw;
-  max-width: 400px;
-  background: #181f26;
-  box-shadow: 0 4px 28px #00ffcc77;
-  z-index: 1201;
-  padding-bottom: 20px;
-  border-radius: 0 0 16px 16px;
-  animation: dropin 0.16s;
-  text-align: center;
-}
-.nav-mobile.show { display: flex; }
-.nav-mobile a, .nav-mobile .logout-link-mobile {
-  padding: 18px 0px;
-  font-size: 1.15em;
-  width: 100%;
-  border-radius: 0;
-  text-align: center;
-  border-bottom: 1px solid #3fffd966;
-  background: none;
-  color: #00ffcc;
-  font-weight: bold;
-  border: none;
-  box-shadow: none;
-  display: block;
-  margin: 0;
-  font-family: inherit;
-}
-.nav-mobile .logout-link-mobile {
-  cursor: pointer;
-  background: none;
-}
-.nav-mobile a:last-child {
-  margin-top: 8px;
-  background: #000;
-  color: #00ffcc;
-  border-bottom: 1px solid #3fffd966;
-  font-weight: bold;
-}
-.nav-mobile a:hover { background: #00ffcc; color: #000; }
-@media (max-width: 600px) {
-  nav.navbar { transition: top 0.3s; }
-  nav.navbar.hide-navbar { top: -70px; }
-  .nav-mobile { min-width: 160px; width: 98vw; }
-}
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      width: 92vw;
+      max-width: 400px;
+      background: #181f26;
+      box-shadow: 0 4px 28px #00ffcc77;
+      z-index: 1201;
+      padding-bottom: 20px;
+      border-radius: 0 0 16px 16px;
+      animation: dropin 0.16s;
+      text-align: center;
+    }
     .nav-mobile.show { display: flex; }
-    .nav-mobile a {
-      padding: 18px 10px;
+    .nav-mobile a, .nav-mobile .logout-link-mobile {
+      padding: 18px 0px;
       font-size: 1.15em;
-      width: 100vw;
+      width: 100%;
       border-radius: 0;
       text-align: center;
       border-bottom: 1px solid #3fffd966;
@@ -182,9 +141,14 @@
       border: none;
       box-shadow: none;
       display: block;
-      margin: 0 auto;
+      margin: 0;
       font-family: inherit;
     }
+    .nav-mobile .logout-link-mobile {
+      cursor: pointer;
+      background: none;
+    }
+    .nav-mobile a.active, .nav-mobile a:hover { background: #00ffcc; color: #000; }
     .nav-mobile a:last-child {
       margin-top: 8px;
       background: #000;
@@ -192,10 +156,18 @@
       border-bottom: 1px solid #3fffd966;
       font-weight: bold;
     }
-    .nav-mobile a:hover { background: #00ffcc; color: #000; }
+
+    @media (max-width: 950px) {
+      .nav-links { gap: 14px; }
+    }
+    @media (max-width: 900px) {
+      .nav-center, .logout-btn { display: none !important; }
+      .hamburger { display: flex !important; }
+    }
     @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s; }
-      nav.navbar.hide-navbar { top: -70px; }
+      nav.navbar { transition: top 0.3s, border-bottom 0.3s;}
+      nav.navbar.hide-navbar { top: -70px; border-bottom: 0 !important; }
+      .nav-mobile { min-width: 160px; width: 98vw; }
     }
 
     .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
@@ -269,32 +241,32 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-    <span></span><span></span><span></span>
-  </div>
-  <div class="nav-center">
-    <ul class="nav-links">
-      <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
-      <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-      <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-      <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-      <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-      <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-      <li><a href="store.html" data-i18n="store">Butik</a></li>
-    </ul>
-  </div>
-  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-  <div class="nav-mobile" id="navMobile">
-    <a href="forum.html" data-i18n="forum" class="active">Forum</a>
-    <a href="wall.html" data-i18n="wall">Väggen</a>
-    <a href="upload.html" data-i18n="upload">Ladda upp</a>
-    <a href="profile.html" data-i18n="profile">Profil</a>
-    <a href="friends.html" data-i18n="friends">Vänner</a>
-    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-    <a href="store.html" data-i18n="store">Butik</a>
-    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-  </div>
-</nav>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
+        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+        <li><a href="store.html" data-i18n="store">Butik</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <div class="nav-mobile" id="navMobile">
+      <a href="forum.html" data-i18n="forum" class="active">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+    </div>
+  </nav>
   <!-- NAVBAR END -->
 
   <div class="forum-box">
@@ -334,58 +306,42 @@
       updateBanners();
     }, 6000);
 
-    // --- Hamburgermeny logik ---
-    document.addEventListener("DOMContentLoaded", function() {
-  // HAMBURGERMENY
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const navMobile = document.getElementById('navMobile');
-  if (hamburgerBtn && navMobile) {
-    hamburgerBtn.addEventListener('click', function () {
-      navMobile.classList.toggle('show');
-    });
-    navMobile.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navMobile.classList.remove('show');
-      });
-    });
-    const logoutBtn = document.getElementById("logoutMobileBtn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        navMobile.classList.remove('show');
-        doLogout();
-      });
-    }
-  }
-
-  // NAVBAR HIDE VID SCROLL PÅ MOBIL
-  if (window.innerWidth <= 600) {
-    let lastScrollY = window.scrollY;
-    let navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > lastScrollY && window.scrollY > 70) {
-        navbar.classList.add('hide-navbar');
-      } else {
-        navbar.classList.remove('hide-navbar');
-      }
-      lastScrollY = window.scrollY;
-    });
-  }
-});
-
-    // --- NAVBAR HIDE VID SCROLL PÅ MOBIL ---
-    if (window.innerWidth <= 600) {
-      let lastScrollY = window.scrollY;
-      let navbar = document.querySelector('.navbar');
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > lastScrollY && window.scrollY > 70) {
-          navbar.classList.add('hide-navbar');
-        } else {
-          navbar.classList.remove('hide-navbar');
+    // HAMBURGERMENY & NAVBAR SCROLL HIDE
+    document.addEventListener("DOMContentLoaded", function () {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      if (hamburgerBtn && navMobile) {
+        hamburgerBtn.addEventListener('click', function () {
+          navMobile.classList.toggle('show');
+        });
+        navMobile.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navMobile.classList.remove('show');
+          });
+        });
+        const logoutBtn = document.getElementById("logoutMobileBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            navMobile.classList.remove('show');
+            doLogout();
+          });
         }
-        lastScrollY = window.scrollY;
-      });
-    }
+      }
+      // Hide navbar and border-bottom on mobile scroll
+      if (window.innerWidth <= 600) {
+        let lastScrollY = window.scrollY;
+        let navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', function () {
+          if (window.scrollY > lastScrollY && window.scrollY > 70) {
+            navbar.classList.add('hide-navbar');
+          } else {
+            navbar.classList.remove('hide-navbar');
+          }
+          lastScrollY = window.scrollY;
+        });
+      }
+    });
 
     // --- TRANSLATIONS
     const translations = {
