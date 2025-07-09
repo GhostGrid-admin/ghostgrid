@@ -224,8 +224,15 @@
       measurementId: "G-B0WCKJCNT9"
     };
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+let currentUser = null;
+
+auth.onAuthStateChanged(function(user) {
+  currentUser = user;
+  loadThreads();
+});
   </script>
 </head>
 <body>
