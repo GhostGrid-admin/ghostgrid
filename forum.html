@@ -228,9 +228,11 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser = null;
+let userMap = {}; // Lägg till om du använder userMap längre ner
 
 auth.onAuthStateChanged(function(user) {
   currentUser = user;
+  console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
   loadThreads();
 });
   </script>
@@ -410,7 +412,6 @@ auth.onAuthStateChanged(function(user) {
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
     // --- FIREBASE LOGIK (trådar, poster, kommentarer, reaktioner osv) ---
-let currentUser = null;
 let userMap = {};
 const emojis = [
   { emoji: "👍", key: "thumbsup" },
