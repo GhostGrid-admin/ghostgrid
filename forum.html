@@ -412,6 +412,7 @@ auth.onAuthStateChanged(function(user) {
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
     // --- FIREBASE LOGIK (trådar, poster, kommentarer, reaktioner osv) ---
+let currentUser = null;
 let userMap = {};
 const emojis = [
   { emoji: "👍", key: "thumbsup" },
@@ -468,7 +469,7 @@ function escapeHTML(str) {
 function addThreadListeners(threads) {
   threads.forEach(thread => {
     loadPosts(thread.id);
-    
+
     const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
     if (delBtn) {
       delBtn.onclick = async () => {
@@ -478,7 +479,7 @@ function addThreadListeners(threads) {
         }
       }
     }
-    
+
     const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
     postForm.onsubmit = async function (e) {
       e.preventDefault();
@@ -558,12 +559,12 @@ async function renderPostReactions(threadId, postId) {
     }).filter(Boolean).join(" ") : "";
 }
 
-// Kommentarslogik (ändras ej, redan bra)
+// --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
 async function loadComments(threadId, postId, parentId, containerId) { /* samma kod */ }
 function renderComment(threadId, postId, c) { /* samma kod */ }
 function addCommentListeners(threadId, postId, c, parentContainerId) { /* samma kod */ }
 
-// SKAPA TRÅD (fixad och redo!)
+// --- SKAPA TRÅD
 document.getElementById("threadForm").onsubmit = async function (e) {
   e.preventDefault();
   if (!currentUser) { alert(t("login_to_comment")); return; }
