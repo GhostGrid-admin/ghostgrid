@@ -440,7 +440,7 @@
         <div class="thread-desc">${escapeHTML(thread.description)}</div>
         <div class="thread-content" id="threadContent-${thread.id}"></div>
         <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea rows="2" maxlength="280" placeholder="${t("post_placeholder")}"></textarea>
+          <textarea id="threadDesc" rows="4" maxlength="2000"></textarea>
           <button type="submit">${t("add_post")}</button>
         </form>
       </div>`;
