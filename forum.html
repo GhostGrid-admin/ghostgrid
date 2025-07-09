@@ -425,7 +425,7 @@
     async function loadThreads() {
       await fetchUsers();
       const lang = localStorage.lang === "en" ? "en" : "sv";
-      let q = db.collection("threads").orderBy("createdAt", "desc");
+      let q = db.collection("forumThreads").orderBy("createdAt", "desc");
       const threadsSnap = await q.get();
       const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
@@ -457,7 +457,7 @@
         if (delBtn) {
           delBtn.onclick = async function () {
             if (confirm(t("delete_thread_confirm"))) {
-              await db.collection("threads").doc(thread.id).delete();
+              await db.collection("forumThreads").doc(thread.id).delete();
               loadThreads();
             }
           }
@@ -470,7 +470,7 @@
           const textarea = this.querySelector("textarea");
           const text = textarea.value.trim();
           if (!text) return;
-          await db.collection("threads").doc(thread.id).collection("posts").add({
+          await db.collection("forumThreads").doc(thread.id).collection("posts").add({
             text, user: currentUser.uid, createdAt: new Date()
           });
           textarea.value = "";
@@ -479,7 +479,7 @@
       });
     }
     async function loadPosts(threadId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
+      const q = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
       const posts = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       document.getElementById(`threadContent-${threadId}`).innerHTML =
         posts.map(post => renderPost(threadId, post)).join("");
