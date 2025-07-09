@@ -430,14 +430,16 @@ auth.onAuthStateChanged(function(user) {
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
     async function loadThreads() {
-      await fetchUsers();
-      const lang = localStorage.lang === "en" ? "en" : "sv";
-      let q = db.collection("forumThreads").orderBy("createdAt", "desc");
-      const threadsSnap = await q.get();
-      const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
-      addThreadListeners(threads);
-    }
+  console.log("loadThreads körs");   // <-- RAD 1, högst upp
+  await fetchUsers();
+  const lang = localStorage.lang === "en" ? "en" : "sv";
+  let q = db.collection("forumThreads").orderBy("createdAt", "desc");
+  const threadsSnap = await q.get();
+  console.log("Antal trådar:", threadsSnap.docs.length); // <-- RAD 2, direkt efter q.get()
+  const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
+  addThreadListeners(threads);
+}
     function renderThread(thread) {
       return `<div class="thread" data-threadid="${thread.id}">
         <div class="thread-header">
