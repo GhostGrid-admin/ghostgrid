@@ -508,7 +508,7 @@
         btn.onclick = async function () {
           if (!currentUser) return alert(t("login_to_react"));
           const emojiKey = this.dataset.emoji;
-          const ref = db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
+          const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
           const snap = await ref.get();
           if (snap.exists && snap.data().emoji === emojiKey) {
             await ref.delete();
@@ -529,7 +529,7 @@
         const textarea = this.querySelector("textarea");
         const text = textarea.value.trim();
         if (!text) return;
-        await db.collection("threads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
+        await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
           text, user: currentUser.uid, parent: null, createdAt: new Date()
         });
         textarea.value = "";
@@ -537,7 +537,7 @@
       };
     }
     async function renderPostReactions(threadId, postId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
+      const q = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
       const reactions = q.docs.map(doc => doc.data());
       if (!reactions.length) { document.getElementById(`postReactions-${threadId}-${postId}`).textContent = ""; return; }
       let counts = {};
@@ -546,7 +546,7 @@
         Object.entries(counts).map(([k, v]) => `${emojis.find(e => e.key === k)?.emoji || ""} ${v}`).join(" ");
     }
     async function loadComments(threadId, postId, parentId, containerId) {
-      const q = await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
+      const q = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("comments")
         .where("parent", "==", parentId).orderBy("createdAt", "asc").get();
       const comments = q.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       document.getElementById(containerId).innerHTML = comments.map(c => renderComment(threadId, postId, c)).join("");
@@ -576,7 +576,7 @@
         btn.onclick = async function () {
           if (!currentUser) return alert(t("login_to_react"));
           const emojiKey = this.dataset.emoji;
-          const ref = db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments")
+          const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("comments")
             .doc(c.id).collection("reactions").doc(currentUser.uid);
           const snap = await ref.get();
           if (snap.exists && snap.data().emoji === emojiKey) {
@@ -612,7 +612,6 @@
     }
     document.getElementById("threadForm").onsubmit = async function (e) {
   e.preventDefault();
-  // Säkerställ att currentUser alltid är satt!
   if (!auth.currentUser) {
     alert(t("login_to_comment"));
     return;
@@ -620,14 +619,17 @@
   const title = document.getElementById("threadTitle").value.trim();
   const desc = document.getElementById("threadDesc").value.trim();
   if (!title || !desc) return alert(t("all_fields"));
-  await db.collection("threads").add({
-    title, description: desc, user: auth.currentUser.uid, createdAt: new Date(),
+  await db.collection("forumThreads").add({
+    title,
+    description: desc,
+    user: auth.currentUser.uid,
+    createdAt: new Date(),
     lang: localStorage.lang === "en" ? "en" : "sv"
   });
   document.getElementById("threadTitle").value = "";
   document.getElementById("threadDesc").value = "";
   loadThreads();
-    };
+};
   </script>
 </body>
 </html>
