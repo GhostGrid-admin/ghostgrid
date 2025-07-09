@@ -696,42 +696,43 @@ function setupEmojiRow() {
     }
     // ----- Visa vilka som reagerat -----
     row.querySelectorAll('.emoji-summary-item').forEach(sumBtn => {
-  sumBtn.onclick = async function(ev) {
-    ev.stopPropagation();
-    // TOGGLE: Om redan öppen på denna emoji -> stäng!
-    if (viewer.classList.contains('show') && viewer.dataset.emoji === sumBtn.dataset.emoji) {
-      viewer.classList.remove('show');
-      viewer.style.display = "none";
-      viewer.dataset.emoji = "";
-      return;
-    }
-    // Stäng ALLA andra öppna viewer-listor!
-    document.querySelectorAll('.emoji-viewer-list.show').forEach(openViewer => {
-      openViewer.classList.remove('show');
-      openViewer.style.display = "none";
-      openViewer.dataset.emoji = "";
+      sumBtn.onclick = async function(ev) {
+        ev.stopPropagation();
+        // TOGGLE: Om redan öppen på denna emoji -> stäng!
+        if (viewer.classList.contains('show') && viewer.dataset.emoji === sumBtn.dataset.emoji) {
+          viewer.classList.remove('show');
+          viewer.style.display = "none";
+          viewer.dataset.emoji = "";
+          return;
+        }
+        // Stäng ALLA andra öppna viewer-listor!
+        document.querySelectorAll('.emoji-viewer-list.show').forEach(openViewer => {
+          openViewer.classList.remove('show');
+          openViewer.style.display = "none";
+          openViewer.dataset.emoji = "";
+        });
+        // Visa och fyll denna viewer
+        viewer.innerHTML = `<span class="emoji-head">${t('reacted_by')} ${emojis.find(e => e.key === sumBtn.dataset.emoji)?.emoji || ""}</span><ul></ul>`;
+        viewer.classList.add('show');
+        viewer.style.display = "block";
+        viewer.dataset.emoji = sumBtn.dataset.emoji;
+        // Hämta reaktioner på just denna emoji
+        const snap = await getDocs(collection(db, "wall", postId, "reactions"));
+        const reacts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(r => r.emoji === sumBtn.dataset.emoji);
+        const ul = viewer.querySelector('ul');
+        ul.innerHTML = reacts.length
+          ? reacts.map(r =>
+            `<li>
+              <a href="profile-view.html?uid=${r.user}" class="profile-link">${userMap[r.user] || t("guest")}</a>
+              <span class="emoji-key">${emojis.find(e => e.key === r.emoji)?.emoji || ""}</span>
+            </li>`
+            ).join("")
+          : `<li style="color:#bbb;">${t('no_posts')}</li>`;
+      };
     });
-    // Visa och fyll denna viewer
-    viewer.innerHTML = `<span class="emoji-head">${t('reacted_by')} ${emojis.find(e => e.key === sumBtn.dataset.emoji)?.emoji || ""}</span><ul></ul>`;
-    viewer.classList.add('show');
-    viewer.style.display = "block";
-    viewer.dataset.emoji = sumBtn.dataset.emoji;
-    // Hämta reaktioner på just denna emoji
-    const snap = await getDocs(collection(db, "wall", postId, "reactions"));
-    const reacts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(r => r.emoji === sumBtn.dataset.emoji);
-    const ul = viewer.querySelector('ul');
-    ul.innerHTML = reacts.length
-      ? reacts.map(r =>
-        `<li>
-          <a href="profile-view.html?uid=${r.user}" class="profile-link">${userMap[r.user] || t("guest")}</a>
-          <span class="emoji-key">${emojis.find(e => e.key === r.emoji)?.emoji || ""}</span>
-        </li>`
-        ).join("")
-      : `<li style="color:#bbb;">${t('no_posts')}</li>`;
-  };
-});
-}
+  }); // slut på forEach .emoji-row-collapsed
+} // <-- Stänger setupEmojiRow här!
                                                             
 // ---- DELETE KNAPP ----
 function addDeleteListeners() {
