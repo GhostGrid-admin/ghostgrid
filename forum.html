@@ -600,7 +600,7 @@
         const textarea = this.querySelector("textarea");
         const text = textarea.value.trim();
         if (!text) return;
-        await db.collection("threads").doc(threadId).collection("posts").doc(postId).collection("comments").add({
+        await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("comments").add({
           text, user: currentUser.uid, parent: c.id, createdAt: new Date()
         });
         textarea.value = "";
@@ -616,7 +616,7 @@
       const title = document.getElementById("threadTitle").value.trim();
       const desc = document.getElementById("threadDesc").value.trim();
       if (!title || !desc) return alert(t("all_fields"));
-      await db.collection("threads").add({
+      await db.collection("forumThreads").add({
         title, description: desc, user: currentUser.uid, createdAt: new Date(),
         lang: localStorage.lang === "en" ? "en" : "sv"
       });
