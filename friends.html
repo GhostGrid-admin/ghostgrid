@@ -17,16 +17,17 @@
       position: relative;
       overflow-x: hidden;
     }
-    /* ----------- Z-INDEX FIX ----------- */
     nav.navbar { z-index: 3000; }
     .hamburger { z-index: 3200; }
     .nav-mobile { z-index: 3100; }
     .logout-btn { z-index: 3300; }
-    .side-banner, .side-banner .banner-inner { z-index: 20 !important; }
-    .glow-left, .glow-right { z-index: 10 !important; }
-    /* ----------- REST OF YOUR STYLE ----------- */
+    /* Viktigt! Inget block får ha pointer-events över navbar/nav-mobile */
+    .glow-left, .glow-right { z-index: 10 !important; pointer-events: none; }
+    .side-banner { z-index: 20 !important; pointer-events: none; }
+    .side-banner .banner-inner, .side-banner img { pointer-events: none !important; }
+    /* Resten som du hade */
     .glow-left, .glow-right {
-      position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none;
+      position: fixed; top: 0; width: 136px; height: 100vh;
     }
     .glow-left {
       left: 0;
@@ -41,17 +42,17 @@
     .side-banner {
       position: fixed; top: 87px; bottom: 0; width: 136px;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-      background: none; pointer-events: none;
+      background: none;
     }
     .side-banner .banner-inner {
       width: 120px; height: 100%; background: transparent;
       border-radius: 12px; box-shadow: 0 0 18px #7b00ff99;
-      overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto;
+      overflow: hidden; display: flex; flex-direction: column; align-items: center;
     }
     .side-banner img {
       width: 100%; height: 100%; object-fit: cover; border-radius: 10px;
       background: #220043; cursor: pointer; transition: box-shadow 0.3s;
-      box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px;
+      box-shadow: 0 0 10px #8800ff70; min-height: 200px;
     }
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
     @media (max-width: 1100px) {
@@ -292,6 +293,23 @@
       <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
     </div>
   </nav>
+
+  <!-- Hamburger-meny JavaScript, KLAR! -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      hamburgerBtn.addEventListener('click', function () {
+        navMobile.classList.toggle('show');
+      });
+      // Stäng menyn vid klick på länk
+      navMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('show');
+        });
+      });
+    });
+  </script>
   <div class="friends-main">
     <!-- SÖKRUTA FÖR VÄN -->
     <div class="wall-box search-friends-box">
