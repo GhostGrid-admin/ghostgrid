@@ -17,8 +17,16 @@
       position: relative;
       overflow-x: hidden;
     }
+    /* ----------- Z-INDEX FIX ----------- */
+    nav.navbar { z-index: 3000; }
+    .hamburger { z-index: 3200; }
+    .nav-mobile { z-index: 3100; }
+    .logout-btn { z-index: 3300; }
+    .side-banner, .side-banner .banner-inner { z-index: 20 !important; }
+    .glow-left, .glow-right { z-index: 10 !important; }
+    /* ----------- REST OF YOUR STYLE ----------- */
     .glow-left, .glow-right {
-      position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none; z-index: 0;
+      position: fixed; top: 0; width: 136px; height: 100vh; pointer-events: none;
     }
     .glow-left {
       left: 0;
@@ -33,7 +41,7 @@
     .side-banner {
       position: fixed; top: 87px; bottom: 0; width: 136px;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-      z-index: 1002; background: none; pointer-events: none;
+      background: none; pointer-events: none;
     }
     .side-banner .banner-inner {
       width: 120px; height: 100%; background: transparent;
@@ -59,7 +67,6 @@
       width: 100%;
       top: 0;
       left: 0;
-      z-index: 1000;
       box-shadow: 0 0 20px #bb00ff;
       display: flex;
       align-items: center;
@@ -114,7 +121,6 @@
       cursor: pointer;
       opacity: 0.98;
       margin: 0;
-      z-index: 1500;
       display: block;
     }
     .hamburger {
@@ -128,7 +134,6 @@
       transform: translateX(-50%);
       width: 60px;
       height: 55px;
-      z-index: 2002;
       background: none;
       border: none;
       cursor: pointer;
@@ -160,7 +165,6 @@
       max-width: 400px;
       background: #181f26;
       box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1201;
       padding-bottom: 20px;
       border-radius: 0 0 16px 16px;
       animation: dropin 0.16s;
