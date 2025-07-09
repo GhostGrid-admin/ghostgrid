@@ -612,7 +612,7 @@
     }
     document.getElementById("threadForm").onsubmit = async function (e) {
   e.preventDefault();
-  if (!auth.currentUser) {
+  if (!currentUser) {
     alert(t("login_to_comment"));
     return;
   }
@@ -622,7 +622,7 @@
   await db.collection("forumThreads").add({
     title,
     description: desc,
-    user: auth.currentUser.uid,
+    user: currentUser.uid,
     createdAt: new Date(),
     lang: localStorage.lang === "en" ? "en" : "sv"
   });
