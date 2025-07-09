@@ -611,22 +611,22 @@
       loadComments(threadId, postId, c.id, `subComments-${threadId}-${postId}-${c.id}`);
     }
     document.getElementById("threadForm").onsubmit = async function (e) {
-      e.preventDefault();
-      if (!currentUser) { alert(t("login_to_comment")); return; }
-      const title = document.getElementById("threadTitle").value.trim();
-      const desc = document.getElementById("threadDesc").value.trim();
-      if (!title || !desc) return alert(t("all_fields"));
-      await db.collection("forumThreads").add({
-        title, description: desc, user: currentUser.uid, createdAt: new Date(),
-        lang: localStorage.lang === "en" ? "en" : "sv"
-      });
-      document.getElementById("threadTitle").value = "";
-      document.getElementById("threadDesc").value = "";
-      loadThreads();
-    }
-    auth.onAuthStateChanged(user => {
-      currentUser = user;
-      loadThreads();
+  e.preventDefault();
+  // Säkerställ att currentUser alltid är satt!
+  if (!auth.currentUser) {
+    alert(t("login_to_comment"));
+    return;
+  }
+  const title = document.getElementById("threadTitle").value.trim();
+  const desc = document.getElementById("threadDesc").value.trim();
+  if (!title || !desc) return alert(t("all_fields"));
+  await db.collection("threads").add({
+    title, description: desc, user: auth.currentUser.uid, createdAt: new Date(),
+    lang: localStorage.lang === "en" ? "en" : "sv"
+  });
+  document.getElementById("threadTitle").value = "";
+  document.getElementById("threadDesc").value = "";
+  loadThreads();
     });
   </script>
 </body>
