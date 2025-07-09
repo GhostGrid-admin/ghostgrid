@@ -89,9 +89,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;     /* ändrat från absolute till fixed */
-  top: 13px;           /* margin från toppen, justera om du vill */
-  left: 50%;           /* EXAKT MITT */
+  position: absolute;      /* SKA vara absolute, ej fixed */
+  top: 0;
+  left: 50%;
   transform: translateX(-50%);
   width: 60px;
   height: 55px;
@@ -100,15 +100,20 @@
   border: none;
   cursor: pointer;
 }
-    .hamburger span {
-      width: 32px;
-      height: 4px;
-      background: #00ffcc;
-      margin: 5px 0;
-      border-radius: 2px;
-      transition: 0.3s;
-      display: block;
-    }
+.hamburger span {
+  width: 32px;
+  height: 4px;
+  background: #00ffcc;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: 0.3s;
+  display: block;
+}
+@media (max-width: 900px) {
+  .nav-center, .logout-btn { display: none !important; }
+  .hamburger { display: flex !important; }
+  nav.navbar { min-height: 55px; border-bottom-width: 2px;}
+}
     .nav-mobile {
       display: none;
       flex-direction: column;
@@ -242,32 +247,32 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-center">
-      <ul class="nav-links">
-        <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
-        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-        <li><a href="store.html" data-i18n="store">Butik</a></li>
-      </ul>
-    </div>
-    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-    <div class="nav-mobile" id="navMobile">
-      <a href="forum.html" data-i18n="forum" class="active">Forum</a>
-      <a href="wall.html" data-i18n="wall">Väggen</a>
-      <a href="upload.html" data-i18n="upload">Ladda upp</a>
-      <a href="profile.html" data-i18n="profile">Profil</a>
-      <a href="friends.html" data-i18n="friends">Vänner</a>
-      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-      <a href="store.html" data-i18n="store">Butik</a>
-      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-    </div>
-  </nav>
+  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
+      <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+      <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+      <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+      <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+      <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+      <li><a href="store.html" data-i18n="store">Butik</a></li>
+    </ul>
+  </div>
+  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+  <div class="nav-mobile" id="navMobile">
+    <a href="forum.html" data-i18n="forum" class="active">Forum</a>
+    <a href="wall.html" data-i18n="wall">Väggen</a>
+    <a href="upload.html" data-i18n="upload">Ladda upp</a>
+    <a href="profile.html" data-i18n="profile">Profil</a>
+    <a href="friends.html" data-i18n="friends">Vänner</a>
+    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+    <a href="store.html" data-i18n="store">Butik</a>
+    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+  </div>
+</nav>
   <!-- NAVBAR END -->
 
   <div class="forum-box">
