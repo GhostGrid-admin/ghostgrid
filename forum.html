@@ -17,165 +17,25 @@
     .side-banner.left { left: 0; } .side-banner.right { right: 0; }
     @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
     @media (max-width: 700px) { .side-banner, .glow-left, .glow-right { display: none; } }
-
-    nav.navbar {
-      background: #000;
-      border-bottom: 2px solid #00ffcc;
-      padding: 0;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      box-shadow: 0 0 20px #bb00ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 60px;
-      transition: top 0.3s, border-bottom 0.3s;
-    }
-    .nav-center {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .nav-links {
-      display: flex;
-      gap: 26px;
-      list-style: none;
-      margin: 0 auto;
-      padding: 0;
-      align-items: center;
-    }
+    nav.navbar { background: #000; border-bottom: 2px solid #00ffcc; padding: 0; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; align-items: center; justify-content: center; min-height: 60px; transition: top 0.3s, border-bottom 0.3s; }
+    .nav-center { flex: 1; display: flex; justify-content: center; align-items: center; }
+    .nav-links { display: flex; gap: 26px; list-style: none; margin: 0 auto; padding: 0; align-items: center; }
     .nav-links li { display: flex; }
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.2em;
-      padding: 7px 10px;
-      border-radius: 4px;
-      text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff;
-      transition: 0.3s;
-      font-family: inherit;
-    }
-    .nav-links a.active, .nav-links a:hover {
-      background-color: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 10px #ffffff;
-    }
-    .logout-btn {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      background: #000;
-      color: #00ffcc;
-      border: 2px solid #00ffcc;
-      padding: 8px 24px 7px 24px;
-      font-size: 1.1em;
-      border-radius: 9px;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99;
-      transition: 0.18s;
-      cursor: pointer;
-      opacity: 0.98;
-      margin: 0;
-      z-index: 1500;
-      display: block;
-    }
-    .hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;      /* SKA vara absolute, ej fixed */
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 55px;
-  z-index: 2002;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.hamburger span {
-  width: 32px;
-  height: 4px;
-  background: #00ffcc;
-  margin: 5px 0;
-  border-radius: 2px;
-  transition: 0.3s;
-  display: block;
-}
-@media (max-width: 900px) {
-  .nav-center, .logout-btn { display: none !important; }
-  .hamburger { display: flex !important; }
-  nav.navbar { min-height: 55px; border-bottom-width: 2px;}
-}
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      position: absolute;
-      top: 55px;
-      left: 50%;
-      transform: translateX(-50%);
-      min-width: 220px;
-      width: 92vw;
-      max-width: 400px;
-      background: #181f26;
-      box-shadow: 0 4px 28px #00ffcc77;
-      z-index: 1201;
-      padding-bottom: 20px;
-      border-radius: 0 0 16px 16px;
-      animation: dropin 0.16s;
-      text-align: center;
-    }
+    .nav-links a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; font-family: inherit; }
+    .nav-links a.active, .nav-links a:hover { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
+    .logout-btn { position: fixed; top: 12px; right: 12px; background: #000; color: #00ffcc; border: 2px solid #00ffcc; padding: 8px 24px 7px 24px; font-size: 1.1em; border-radius: 9px; font-family: 'Courier New', monospace; font-weight: bold; box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99; transition: 0.18s; cursor: pointer; opacity: 0.98; margin: 0; z-index: 1500; display: block;}
+    .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 55px; z-index: 2002; background: none; border: none; cursor: pointer;}
+    .hamburger span { width: 32px; height: 4px; background: #00ffcc; margin: 5px 0; border-radius: 2px; transition: 0.3s; display: block; }
+    @media (max-width: 900px) { .nav-center, .logout-btn { display: none !important; } .hamburger { display: flex !important; } nav.navbar { min-height: 55px; border-bottom-width: 2px;}}
+    .nav-mobile { display: none; flex-direction: column; align-items: center; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); min-width: 220px; width: 92vw; max-width: 400px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1201; padding-bottom: 20px; border-radius: 0 0 16px 16px; animation: dropin 0.16s; text-align: center; }
     .nav-mobile.show { display: flex; }
-    .nav-mobile a, .nav-mobile .logout-link-mobile {
-      padding: 18px 0px;
-      font-size: 1.15em;
-      width: 100%;
-      border-radius: 0;
-      text-align: center;
-      border-bottom: 1px solid #3fffd966;
-      background: none;
-      color: #00ffcc;
-      font-weight: bold;
-      border: none;
-      box-shadow: none;
-      display: block;
-      margin: 0;
-      font-family: inherit;
-    }
-    .nav-mobile .logout-link-mobile {
-      cursor: pointer;
-      background: none;
-    }
+    .nav-mobile a, .nav-mobile .logout-link-mobile { padding: 18px 0px; font-size: 1.15em; width: 100%; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; background: none; color: #00ffcc; font-weight: bold; border: none; box-shadow: none; display: block; margin: 0; font-family: inherit; }
+    .nav-mobile .logout-link-mobile { cursor: pointer; background: none; }
     .nav-mobile a.active, .nav-mobile a:hover { background: #00ffcc; color: #000; }
-    .nav-mobile a:last-child {
-      margin-top: 8px;
-      background: #000;
-      color: #00ffcc;
-      border-bottom: 1px solid #3fffd966;
-      font-weight: bold;
-    }
-
-    @media (max-width: 950px) {
-      .nav-links { gap: 14px; }
-    }
-    @media (max-width: 900px) {
-      .nav-center, .logout-btn { display: none !important; }
-      .hamburger { display: flex !important; }
-    }
-    @media (max-width: 600px) {
-      nav.navbar { transition: top 0.3s, border-bottom 0.3s;}
-      nav.navbar.hide-navbar { top: -70px; border-bottom: 0 !important; }
-      .nav-mobile { min-width: 160px; width: 98vw; }
-    }
-
+    .nav-mobile a:last-child { margin-top: 8px; background: #000; color: #00ffcc; border-bottom: 1px solid #3fffd966; font-weight: bold; }
+    @media (max-width: 950px) { .nav-links { gap: 14px; } }
+    @media (max-width: 900px) { .nav-center, .logout-btn { display: none !important; } .hamburger { display: flex !important; } }
+    @media (max-width: 600px) { nav.navbar { transition: top 0.3s, border-bottom 0.3s;} nav.navbar.hide-navbar { top: -70px; border-bottom: 0 !important; } .nav-mobile { min-width: 160px; width: 98vw; } }
     .forum-box { border: 2px solid #66ffcc; border-radius: 12px; padding: 30px 20px 22px 20px; margin: 36px auto 32px auto; max-width: 650px; background-color: rgba(0, 0, 0, 0.88); box-shadow: 0 0 15px #00ffcc33; position: relative; z-index: 2;}
     .forum-title { font-size: 2.4em; text-align: center; color: #f5f5f5; margin: 16px 0 28px 0; text-shadow: 0 2px 12px #222, 0 1px 0 #fff; font-weight: bold; letter-spacing: 0.04em; }
     .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
@@ -212,32 +72,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script>
-    // -- DIN KONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.appspot.com",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968",
-      measurementId: "G-B0WCKJCNT9"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
-    // --- GLOBALA VARIABLER (ENDAST EN GÅNG!) ---
-    let currentUser = null;
-    let userMap = {};
-
-    // --- AUTH & LADDA TRÅDAR ---
-    auth.onAuthStateChanged(function(user) {
-      currentUser = user;
-      console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
-      loadThreads();
-    });
-  </script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -295,6 +129,7 @@
     </form>
     <div id="threadList" class="thread-list"></div>
   </div>
+
   <script>
     // SIDBANNER ROTATION
     const banners = [
@@ -323,7 +158,7 @@
       updateBanners();
     }, 6000);
 
-    // HAMBURGERMENY & NAVBAR SCROLL HIDE
+    // HAMBURGER & NAVBAR
     document.addEventListener("DOMContentLoaded", function () {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
@@ -345,7 +180,7 @@
           });
         }
       }
-      // Hide navbar and border-bottom on mobile scroll
+      // Hide navbar on scroll mobile
       if (window.innerWidth <= 600) {
         let lastScrollY = window.scrollY;
         let navbar = document.querySelector('.navbar');
@@ -360,7 +195,7 @@
       }
     });
 
-    // --- TRANSLATIONS
+    // --- ÖVERSÄTTNING
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -373,8 +208,7 @@
         max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
         login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
         add_post: "Lägg till inlägg", post: "Inlägg", delete_thread: "Ta bort tråd", delete_thread_confirm: "Vill du verkligen ta bort tråden?",
-        logout: "Logga ut",
-        user: "Användare"
+        logout: "Logga ut", user: "Användare"
       },
       en: {
         forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow",
@@ -387,8 +221,7 @@
         max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
         login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
         add_post: "Add post", post: "Post", delete_thread: "Delete thread", delete_thread_confirm: "Do you really want to delete the thread?",
-        logout: "Logout",
-        user: "User"
+        logout: "Logout", user: "User"
       }
     };
     function t(key) {
@@ -407,208 +240,197 @@
     }
     applyTranslations();
 
-    // --- LOGOUT FUNCTION
-    <script type="module">
-import { auth, db } from "./scripts/firebase-init.js";
-import {
-  collection, query, orderBy, getDocs, doc, deleteDoc, addDoc, serverTimestamp, setDoc, getDoc
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    // --- FIREBASE LOGIK ---
+    const emojis = [
+      { emoji: "👍", key: "thumbsup" },
+      { emoji: "😂", key: "laugh" },
+      { emoji: "😃", key: "bigsmile" },
+      { emoji: "🙂", key: "smile" },
+      { emoji: "😇", key: "angel" },
+      { emoji: "😳", key: "embarrassed" },
+      { emoji: "😕", key: "confused" },
+      { emoji: "🙁", key: "sad" },
+      { emoji: "😢", key: "cry" },
+      { emoji: "😡", key: "angry" },
+      { emoji: "👎", key: "thumbsdown" }
+    ];
 
-let currentUser = null;
-let userMap = {};
+    let currentUser = null;
+    let userMap = {};
 
-const emojis = [
-  { emoji: "👍", key: "thumbsup" },
-  { emoji: "😂", key: "laugh" },
-  { emoji: "😃", key: "bigsmile" },
-  { emoji: "🙂", key: "smile" },
-  { emoji: "😇", key: "angel" },
-  { emoji: "😳", key: "embarrassed" },
-  { emoji: "😕", key: "confused" },
-  { emoji: "🙁", key: "sad" },
-  { emoji: "😢", key: "cry" },
-  { emoji: "😡", key: "angry" },
-  { emoji: "👎", key: "thumbsdown" }
-];
+    function escapeHTML(str) {
+      return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
+    }
 
-const threadList = document.getElementById("threadList");
-const threadForm = document.getElementById("threadForm");
+    async function fetchUsers() {
+      const snap = await db.collection("profiles").get();
+      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
+    }
 
-// Escape
-function escapeHTML(str) {
-  return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
-}
+    async function loadThreads() {
+      await fetchUsers();
+      const threadsSnap = await db.collection("forumThreads").orderBy("createdAt", "desc").get();
+      const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
+      addThreadListeners(threads);
+    }
 
-// Ladda alla användare för visningsnamn
-async function fetchUsers() {
-  const snap = await getDocs(collection(db, "profiles"));
-  snap.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || "Gäst");
-}
-
-// Ladda trådar
-async function loadThreads() {
-  await fetchUsers();
-  threadList.innerHTML = "Laddar trådar...";
-  const q = query(collection(db, "forumThreads"), orderBy("createdAt", "desc"));
-  const threadsSnap = await getDocs(q);
-  let html = "";
-  threadsSnap.forEach(docu => {
-    const data = docu.data();
-    html += `
-      <div class="thread" data-threadid="${docu.id}">
+    function renderThread(thread) {
+      return `<div class="thread" data-threadid="${thread.id}">
         <div class="thread-header">
-          <span>${escapeHTML(data.title)}</span>
-          ${(currentUser && data.user === currentUser.uid) ? `<button class="thread-delete-btn" data-threadid="${docu.id}" title="Ta bort tråd">✖</button>` : ""}
+          <span>${escapeHTML(thread.title)}</span>
+          ${(currentUser && thread.user === currentUser.uid) ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>` : ""}
         </div>
-        <div class="thread-desc">${escapeHTML(data.description)}</div>
-        <div class="thread-content" id="threadContent-${docu.id}"></div>
-        <form class="add-post-form" data-threadid="${docu.id}">
-          <textarea id="postDesc-${docu.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">Lägg till inlägg</button>
+        <div class="thread-desc">${escapeHTML(thread.description)}</div>
+        <div class="thread-content" id="threadContent-${thread.id}"></div>
+        <form class="add-post-form" data-threadid="${thread.id}">
+          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+          <button type="submit">${t("add_post")}</button>
         </form>
-      </div>
-    `;
-  });
-  threadList.innerHTML = html;
-  document.querySelectorAll('.thread-delete-btn').forEach(btn => {
-    btn.onclick = async () => {
-      if (confirm("Vill du verkligen ta bort tråden?")) {
-        await deleteDoc(doc(db, "forumThreads", btn.dataset.threadid));
-        loadThreads();
-      }
-    };
-  });
-  document.querySelectorAll('.add-post-form').forEach(form => {
-    form.onsubmit = async function(e) {
-      e.preventDefault();
-      if (!currentUser) return alert("Logga in för att skriva inlägg!");
-      const threadId = form.getAttribute("data-threadid");
-      const textarea = document.getElementById(`postDesc-${threadId}`);
-      const text = textarea.value.trim();
-      if (!text) return;
-      await addDoc(collection(db, "forumThreads", threadId, "posts"), {
-        text, user: currentUser.uid, createdAt: serverTimestamp()
+      </div>`;
+    }
+
+    function addThreadListeners(threads) {
+      threads.forEach(thread => {
+        loadPosts(thread.id);
+        const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
+        if (delBtn) {
+          delBtn.onclick = async () => {
+            if (confirm(t("delete_thread_confirm"))) {
+              await db.collection("forumThreads").doc(thread.id).delete();
+              loadThreads();
+            }
+          }
+        }
+        const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
+        postForm.onsubmit = async function (e) {
+          e.preventDefault();
+          if (!currentUser) { alert(t("login_to_comment")); return; }
+          const textarea = document.getElementById(`postDesc-${thread.id}`);
+          const text = textarea.value.trim();
+          if (!text) return;
+          await db.collection("forumThreads").doc(thread.id).collection("posts").add({
+            text, user: currentUser.uid, createdAt: new Date()
+          });
+          textarea.value = "";
+          loadPosts(thread.id);
+        }
       });
-      textarea.value = "";
-      loadPosts(threadId);
-    };
-  });
-  threadsSnap.forEach(docu => loadPosts(docu.id));
-}
+    }
 
-// Ladda inlägg (posts) per tråd
-async function loadPosts(threadId) {
-  const postsDiv = document.getElementById(`threadContent-${threadId}`);
-  const q = query(collection(db, "forumThreads", threadId, "posts"), orderBy("createdAt", "asc"));
-  const postsSnap = await getDocs(q);
-  let html = "";
-  postsSnap.forEach(docu => {
-    html += renderPost(threadId, docu.id, docu.data());
-  });
-  postsDiv.innerHTML = html;
-  postsSnap.forEach(docu => addPostListeners(threadId, docu.id, docu.data()));
-}
+    async function loadPosts(threadId) {
+      const postsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
+      const posts = postsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      document.getElementById(`threadContent-${threadId}`).innerHTML =
+        posts.map(post => renderPost(threadId, post)).join("");
+      posts.forEach(post => addPostListeners(threadId, post));
+    }
 
-// Rendera ett post
-function renderPost(threadId, postId, post) {
-  const name = userMap[post.user] || "Gäst";
-  return `<div class="post" data-postid="${postId}">
-    <div class="post-header">Användare: ${name}</div>
-    <div class="post-content">${escapeHTML(post.text)}</div>
-    <div class="emoji-row">${emojis.map(e =>
-      `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`).join("")}
-      <span class="reactions-view" id="postReactions-${threadId}-${postId}"></span>
-    </div>
-    <div class="comments-block" id="postComments-${threadId}-${postId}"></div>
-    <form class="add-comment-form" data-threadid="${threadId}" data-postid="${postId}">
-      <textarea rows="1" placeholder="Kommentera..." maxlength="200"></textarea>
-      <button type="submit">Kommentera</button>
-    </form>
-  </div>`;
-}
+    function renderPost(threadId, post) {
+      const name = userMap[post.user] || t("guest");
+      return `<div class="post" data-postid="${post.id}">
+        <div class="post-header">${t("user")}: ${name}</div>
+        <div class="post-content">${escapeHTML(post.text)}</div>
+        <div class="emoji-row">${emojis.map(e =>
+          `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`).join("")}
+          <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
+        </div>
+        <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+        <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+          <button type="submit">${t("comment")}</button>
+        </form>
+      </div>`;
+    }
 
-// Post-funktioner: reaktioner, kommentarer
-function addPostListeners(threadId, postId, post) {
-  document.querySelectorAll(`.post[data-postid="${postId}"] .emoji-btn`).forEach(btn => {
-    btn.onclick = async () => {
-      if (!currentUser) return alert("Logga in för att reagera!");
-      const emojiKey = btn.dataset.emoji;
-      const ref = doc(db, "forumThreads", threadId, "posts", postId, "reactions", currentUser.uid);
-      const snap = await getDoc(ref);
-      if (snap.exists() && snap.data().emoji === emojiKey) {
-        await deleteDoc(ref);
-      } else {
-        await setDoc(ref, { emoji: emojiKey, user: currentUser.uid });
+    function addPostListeners(threadId, post) {
+      document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
+        btn.onclick = async () => {
+          if (!currentUser) return alert(t("login_to_react"));
+          const emojiKey = btn.dataset.emoji;
+          const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
+          const snap = await ref.get();
+          snap.exists && snap.data().emoji === emojiKey ? await ref.delete() : await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          renderPostReactions(threadId, post.id);
+        };
+      });
+      renderPostReactions(threadId, post.id);
+      loadComments(threadId, post.id);
+
+      document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function (e) {
+        e.preventDefault();
+        if (!currentUser) { alert(t("login_to_comment")); return; }
+        const textarea = this.querySelector("textarea");
+        const text = textarea.value.trim();
+        if (!text) return;
+        await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
+          text, user: currentUser.uid, parent: null, createdAt: new Date()
+        });
+        textarea.value = "";
+        loadComments(threadId, post.id);
+      };
+    }
+
+    async function renderPostReactions(threadId, postId) {
+      const reactionsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
+      const reactions = reactionsSnap.docs.map(doc => doc.data());
+      document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
+        reactions.length ? emojis.map(e => {
+          const count = reactions.filter(r => r.emoji === e.key).length;
+          return count ? `${e.emoji} ${count}` : "";
+        }).filter(Boolean).join(" ") : "";
+    }
+
+    async function loadComments(threadId, postId) {
+      const commentsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("comments").orderBy("createdAt", "asc").get();
+      let html = "";
+      commentsSnap.docs.forEach(docu => {
+        const c = docu.data();
+        const name = userMap[c.user] || t("guest");
+        html += `<div class="comment"><span style="color:#0ff">${name}</span>: ${escapeHTML(c.text)}</div>`;
+      });
+      document.getElementById(`postComments-${threadId}-${postId}`).innerHTML = html;
+    }
+
+    // LOGOUT
+    function doLogout() {
+      auth.signOut().then(() => { window.location.href = "login.html"; });
+    }
+    document.getElementById("logoutDesktopBtn").onclick = doLogout;
+    document.getElementById("logoutMobileBtn").onclick = doLogout;
+
+    // HANDEL LOGIN & LADDA TRÅDAR
+    auth.onAuthStateChanged(function(user) {
+      currentUser = user;
+      if (!user) {
+        document.getElementById("threadList").innerHTML = `
+          <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
+            Du måste vara inloggad för att se forumet.<br><br>
+            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
+          </div>
+        `;
+        return;
       }
-      renderPostReactions(threadId, postId);
-    };
-  });
-  renderPostReactions(threadId, postId);
-  loadComments(threadId, postId);
+      loadThreads();
 
-  // Kommentera
-  document.querySelector(`.post[data-postid="${postId}"] .add-comment-form`).onsubmit = async function(e) {
-    e.preventDefault();
-    if (!currentUser) return alert("Logga in för att kommentera!");
-    const textarea = this.querySelector("textarea");
-    const text = textarea.value.trim();
-    if (!text) return;
-    await addDoc(collection(db, "forumThreads", threadId, "posts", postId, "comments"), {
-      text, user: currentUser.uid, createdAt: serverTimestamp()
+      document.getElementById("threadForm").onsubmit = async function (e) {
+        e.preventDefault();
+        if (!currentUser) { alert(t("login_to_comment")); return; }
+        const title = document.getElementById("threadTitle").value.trim();
+        const desc = document.getElementById("threadDesc").value.trim();
+        if (!title || !desc) return alert(t("all_fields"));
+        await db.collection("forumThreads").add({
+          title,
+          description: desc,
+          user: currentUser.uid,
+          createdAt: new Date(),
+          lang: localStorage.lang || "sv"
+        });
+        document.getElementById("threadTitle").value = "";
+        document.getElementById("threadDesc").value = "";
+        loadThreads();
+      };
     });
-    textarea.value = "";
-    loadComments(threadId, postId);
-  };
-}
-
-// Visa emoji-reaktioner
-async function renderPostReactions(threadId, postId) {
-  const reactionsSnap = await getDocs(collection(db, "forumThreads", threadId, "posts", postId, "reactions"));
-  const reactions = [];
-  reactionsSnap.forEach(doc => reactions.push(doc.data()));
-  document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
-    reactions.length ? emojis.map(e => {
-      const count = reactions.filter(r => r.emoji === e.key).length;
-      return count ? `${e.emoji} ${count}` : "";
-    }).filter(Boolean).join(" ") : "";
-}
-
-// Visa kommentarer
-async function loadComments(threadId, postId) {
-  const commentsDiv = document.getElementById(`postComments-${threadId}-${postId}`);
-  const q = query(collection(db, "forumThreads", threadId, "posts", postId, "comments"), orderBy("createdAt", "asc"));
-  const snap = await getDocs(q);
-  let html = "";
-  snap.forEach(docu => {
-    const c = docu.data();
-    const name = userMap[c.user] || "Gäst";
-    html += `<div class="comment"><span style="color:#0ff">${name}</span>: ${escapeHTML(c.text)}</div>`;
-  });
-  commentsDiv.innerHTML = html;
-}
-
-// Logga ut
-function doLogout() {
-  signOut(auth).then(() => { window.location.href = "login.html"; });
-}
-document.getElementById("logoutDesktopBtn").onclick = doLogout;
-document.getElementById("logoutMobileBtn").onclick = doLogout;
-
-// Hantera login
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if (!user) {
-    threadList.innerHTML = `
-      <div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
-        Du måste vara inloggad för att se forumet.<br><br>
-        <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
-      </div>
-    `;
-    return;
-  }
-  loadThreads();
-});
-</script>
+  </script>
 </body>
 </html>
