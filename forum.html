@@ -414,147 +414,147 @@
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
     // --- FIREBASE LOGIK (trådar, poster, kommentarer, reaktioner osv) ---
-    const emojis = [
-      { emoji: "👍", key: "thumbsup" },
-      { emoji: "😂", key: "laugh" },
-      { emoji: "😃", key: "bigsmile" },
-      { emoji: "🙂", key: "smile" },
-      { emoji: "😇", key: "angel" },
-      { emoji: "😳", key: "embarrassed" },
-      { emoji: "😕", key: "confused" },
-      { emoji: "🙁", key: "sad" },
-      { emoji: "😢", key: "cry" },
-      { emoji: "😡", key: "angry" },
-      { emoji: "👎", key: "thumbsdown" }
-    ];
+const emojis = [
+  { emoji: "👍", key: "thumbsup" },
+  { emoji: "😂", key: "laugh" },
+  { emoji: "😃", key: "bigsmile" },
+  { emoji: "🙂", key: "smile" },
+  { emoji: "😇", key: "angel" },
+  { emoji: "😳", key: "embarrassed" },
+  { emoji: "😕", key: "confused" },
+  { emoji: "🙁", key: "sad" },
+  { emoji: "😢", key: "cry" },
+  { emoji: "😡", key: "angry" },
+  { emoji: "👎", key: "thumbsdown" }
+];
 
-    async function fetchUsers() {
-      const snap = await db.collection("profiles").get();
-      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
-    }
+async function fetchUsers() {
+  const snap = await db.collection("profiles").get();
+  snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
+}
 
-    async function loadThreads() {
-      await fetchUsers();
-      const threadsSnap = await db.collection("forumThreads").orderBy("createdAt", "desc").get();
-      const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
-      addThreadListeners(threads);
-    }
+async function loadThreads() {
+  await fetchUsers();
+  const threadsSnap = await db.collection("forumThreads").orderBy("createdAt", "desc").get();
+  const threads = threadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  document.getElementById("threadList").innerHTML = threads.map(thread => renderThread(thread)).join("");
+  addThreadListeners(threads);
+}
 
-    function renderThread(thread) {
-      return <div class="thread" data-threadid="${thread.id}">
-        <div class="thread-header">
-          <span>${escapeHTML(thread.title)}</span>
-          ${(currentUser && thread.user === currentUser.uid) ? <button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button> : ""}
-        </div>
-        <div class="thread-desc">${escapeHTML(thread.description)}</div>
-        <div class="thread-content" id="threadContent-${thread.id}"></div>
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">${t("add_post")}</button>
-        </form>
-      </div>;
-    }
+function renderThread(thread) {
+  return `<div class="thread" data-threadid="${thread.id}">
+    <div class="thread-header">
+      <span>${escapeHTML(thread.title)}</span>
+      ${(currentUser && thread.user === currentUser.uid) ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>` : ""}
+    </div>
+    <div class="thread-desc">${escapeHTML(thread.description)}</div>
+    <div class="thread-content" id="threadContent-${thread.id}"></div>
+    <form class="add-post-form" data-threadid="${thread.id}">
+      <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+      <button type="submit">${t("add_post")}</button>
+    </form>
+  </div>`;
+}
 
-    function escapeHTML(str) {
-      return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
-    }
+function escapeHTML(str) {
+  return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
+}
 
-    function addThreadListeners(threads) {
-      threads.forEach(thread => {
-        loadPosts(thread.id);
+function addThreadListeners(threads) {
+  threads.forEach(thread => {
+    loadPosts(thread.id);
 
-        const delBtn = document.querySelector(.thread[data-threadid="${thread.id}"] .thread-delete-btn);
-        if (delBtn) {
-          delBtn.onclick = async () => {
-            if (confirm(t("delete_thread_confirm"))) {
-              await db.collection("forumThreads").doc(thread.id).delete();
-              loadThreads();
-            }
-          }
+    const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
+    if (delBtn) {
+      delBtn.onclick = async () => {
+        if (confirm(t("delete_thread_confirm"))) {
+          await db.collection("forumThreads").doc(thread.id).delete();
+          loadThreads();
         }
+      }
+    }
 
-        const postForm = document.querySelector(.thread[data-threadid="${thread.id}"] .add-post-form);
-        postForm.onsubmit = async function (e) {
-          e.preventDefault();
-          if (!currentUser) { alert(t("login_to_comment")); return; }
-          const textarea = document.getElementById(postDesc-${thread.id});
-          const text = textarea.value.trim();
-          if (!text) return;
-          await db.collection("forumThreads").doc(thread.id).collection("posts").add({
-            text, user: currentUser.uid, createdAt: new Date()
-          });
-          textarea.value = "";
-          loadPosts(thread.id);
-        }
+    const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
+    postForm.onsubmit = async function (e) {
+      e.preventDefault();
+      if (!currentUser) { alert(t("login_to_comment")); return; }
+      const textarea = document.getElementById(`postDesc-${thread.id}`);
+      const text = textarea.value.trim();
+      if (!text) return;
+      await db.collection("forumThreads").doc(thread.id).collection("posts").add({
+        text, user: currentUser.uid, createdAt: new Date()
       });
+      textarea.value = "";
+      loadPosts(thread.id);
     }
+  });
+}
 
-    async function loadPosts(threadId) {
-      const postsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
-      const posts = postsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      document.getElementById(threadContent-${threadId}).innerHTML =
-        posts.map(post => renderPost(threadId, post)).join("");
-      posts.forEach(post => addPostListeners(threadId, post));
-    }
+async function loadPosts(threadId) {
+  const postsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
+  const posts = postsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  document.getElementById(`threadContent-${threadId}`).innerHTML =
+    posts.map(post => renderPost(threadId, post)).join("");
+  posts.forEach(post => addPostListeners(threadId, post));
+}
 
-    function renderPost(threadId, post) {
-      const name = userMap[post.user] || t("guest");
-      return <div class="post" data-postid="${post.id}">
-        <div class="post-header">${t("user")}: ${name}</div>
-        <div class="post-content">${escapeHTML(post.text)}</div>
-        <div class="emoji-row">${emojis.map(e =>
-          <button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>).join("")}
-          <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
-        </div>
-        <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-        <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
-          <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-          <button type="submit">${t("comment")}</button>
-        </form>
-      </div>;
-    }
+function renderPost(threadId, post) {
+  const name = userMap[post.user] || t("guest");
+  return `<div class="post" data-postid="${post.id}">
+    <div class="post-header">${t("user")}: ${name}</div>
+    <div class="post-content">${escapeHTML(post.text)}</div>
+    <div class="emoji-row">${emojis.map(e =>
+      `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`).join("")}
+      <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
+    </div>
+    <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+    <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+      <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+      <button type="submit">${t("comment")}</button>
+    </form>
+  </div>`;
+}
 
-    function addPostListeners(threadId, post) {
-      document.querySelectorAll(.post[data-postid="${post.id}"] .emoji-btn).forEach(btn => {
-        btn.onclick = async () => {
-          if (!currentUser) return alert(t("login_to_react"));
-          const emojiKey = btn.dataset.emoji;
-          const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
-          const snap = await ref.get();
-          snap.exists && snap.data().emoji === emojiKey ? await ref.delete() : await ref.set({ emoji: emojiKey, user: currentUser.uid });
-          renderPostReactions(threadId, post.id);
-        };
-      });
+function addPostListeners(threadId, post) {
+  document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
+    btn.onclick = async () => {
+      if (!currentUser) return alert(t("login_to_react"));
+      const emojiKey = btn.dataset.emoji;
+      const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
+      const snap = await ref.get();
+      snap.exists && snap.data().emoji === emojiKey ? await ref.delete() : await ref.set({ emoji: emojiKey, user: currentUser.uid });
       renderPostReactions(threadId, post.id);
-      loadComments(threadId, post.id, null, postComments-${threadId}-${post.id});
+    };
+  });
+  renderPostReactions(threadId, post.id);
+  loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
 
-      document.querySelector(.post[data-postid="${post.id}"] .add-comment-form).onsubmit = async function (e) {
-        e.preventDefault();
-        if (!currentUser) { alert(t("login_to_comment")); return; }
-        const textarea = this.querySelector("textarea");
-        const text = textarea.value.trim();
-        if (!text) return;
-        await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
-          text, user: currentUser.uid, parent: null, createdAt: new Date()
-        });
-        textarea.value = "";
-        loadComments(threadId, post.id, null, postComments-${threadId}-${post.id});
-      };
-    }
+  document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function (e) {
+    e.preventDefault();
+    if (!currentUser) { alert(t("login_to_comment")); return; }
+    const textarea = this.querySelector("textarea");
+    const text = textarea.value.trim();
+    if (!text) return;
+    await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
+      text, user: currentUser.uid, parent: null, createdAt: new Date()
+    });
+    textarea.value = "";
+    loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
+  };
+}
 
-    async function renderPostReactions(threadId, postId) {
-      const reactionsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
-      const reactions = reactionsSnap.docs.map(doc => doc.data());
-      document.getElementById(postReactions-${threadId}-${postId}).textContent =
-        reactions.length ? emojis.map(e => {
-          const count = reactions.filter(r => r.emoji === e.key).length;
-          return count ? ${e.emoji} ${count} : "";
-        }).filter(Boolean).join(" ") : "";
-    }
+async function renderPostReactions(threadId, postId) {
+  const reactionsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
+  const reactions = reactionsSnap.docs.map(doc => doc.data());
+  document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
+    reactions.length ? emojis.map(e => {
+      const count = reactions.filter(r => r.emoji === e.key).length;
+      return count ? `${e.emoji} ${count}` : "";
+    }).filter(Boolean).join(" ") : "";
+}
 
-    // --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
-    auth.onAuthStateChanged(function(user) {
+// --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
+auth.onAuthStateChanged(function(user) {
   currentUser = user;
   console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
   loadThreads();
