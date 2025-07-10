@@ -213,32 +213,31 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script>
-    
-  // -- DIN KONFIG
-  const firebaseConfig = {
-    apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
-    authDomain: "ghostgrid-fb278.firebaseapp.com",
-    projectId: "ghostgrid-fb278",
-    storageBucket: "ghostgrid-fb278.appspot.com",
-    messagingSenderId: "283208202937",
-    appId: "1:283208202937:web:11c0cea81fd81a31163968",
-    measurementId: "G-B0WCKJCNT9"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
+    // -- DIN KONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+      authDomain: "ghostgrid-fb278.firebaseapp.com",
+      projectId: "ghostgrid-fb278",
+      storageBucket: "ghostgrid-fb278.appspot.com",
+      messagingSenderId: "283208202937",
+      appId: "1:283208202937:web:11c0cea81fd81a31163968",
+      measurementId: "G-B0WCKJCNT9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
 
-  // --- GLOBALA VARIABLER (ENDAST EN GÅNG!) ---
-  let currentUser = null;
-  let userMap = {};
+    // --- GLOBALA VARIABLER (ENDAST EN GÅNG!) ---
+    let currentUser = null;
+    let userMap = {};
 
-  // --- AUTH & LADDA TRÅDAR ---
-  auth.onAuthStateChanged(function(user) {
-    currentUser = user;
-    console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
-    loadThreads();
-  });
-</script>
+    // --- AUTH & LADDA TRÅDAR ---
+    auth.onAuthStateChanged(function(user) {
+      currentUser = user;
+      console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
+      loadThreads();
+    });
+  </script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -259,32 +258,32 @@
   </div>
   <!-- NAVBAR START -->
   <nav class="navbar">
-  <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-    <span></span><span></span><span></span>
-  </div>
-  <div class="nav-center">
-    <ul class="nav-links">
-      <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
-      <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
-      <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
-      <li><a href="profile.html" data-i18n="profile">Profil</a></li>
-      <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
-      <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
-      <li><a href="store.html" data-i18n="store">Butik</a></li>
-    </ul>
-  </div>
-  <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
-  <div class="nav-mobile" id="navMobile">
-    <a href="forum.html" data-i18n="forum" class="active">Forum</a>
-    <a href="wall.html" data-i18n="wall">Väggen</a>
-    <a href="upload.html" data-i18n="upload">Ladda upp</a>
-    <a href="profile.html" data-i18n="profile">Profil</a>
-    <a href="friends.html" data-i18n="friends">Vänner</a>
-    <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
-    <a href="store.html" data-i18n="store">Butik</a>
-    <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
-  </div>
-</nav>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
+        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+        <li><a href="store.html" data-i18n="store">Butik</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn">Logga ut</button>
+    <div class="nav-mobile" id="navMobile">
+      <a href="forum.html" data-i18n="forum" class="active">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn">Logga ut</a>
+    </div>
+  </nav>
   <!-- NAVBAR END -->
 
   <div class="forum-box">
@@ -415,8 +414,6 @@
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
     // --- FIREBASE LOGIK (trådar, poster, kommentarer, reaktioner osv) ---
-    // OBS! currentUser & userMap redan deklarerat högst upp!
-
     const emojis = [
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
@@ -430,8 +427,6 @@
       { emoji: "😡", key: "angry" },
       { emoji: "👎", key: "thumbsdown" }
     ];
-
-    // auth.onAuthStateChanged finns redan högst upp, behövs inte igen!
 
     async function fetchUsers() {
       const snap = await db.collection("profiles").get();
@@ -532,49 +527,49 @@
         };
       });
       renderPostReactions(threadId, post.id);
-      loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id
+      loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
 
-  document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function (e) {
-    e.preventDefault();
-    if (!currentUser) { alert(t("login_to_comment")); return; }
-    const textarea = this.querySelector("textarea");
-    const text = textarea.value.trim();
-    if (!text) return;
-    await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
-      text, user: currentUser.uid, parent: null, createdAt: new Date()
-    });
-    textarea.value = "";
-    loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
-  };
-}
+      document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function (e) {
+        e.preventDefault();
+        if (!currentUser) { alert(t("login_to_comment")); return; }
+        const textarea = this.querySelector("textarea");
+        const text = textarea.value.trim();
+        if (!text) return;
+        await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
+          text, user: currentUser.uid, parent: null, createdAt: new Date()
+        });
+        textarea.value = "";
+        loadComments(threadId, post.id, null, `postComments-${threadId}-${post.id}`);
+      };
+    }
 
-async function renderPostReactions(threadId, postId) {
-  const reactionsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
-  const reactions = reactionsSnap.docs.map(doc => doc.data());
-  document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
-    reactions.length ? emojis.map(e => {
-      const count = reactions.filter(r => r.emoji === e.key).length;
-      return count ? `${e.emoji} ${count}` : "";
-    }).filter(Boolean).join(" ") : "";
-}
+    async function renderPostReactions(threadId, postId) {
+      const reactionsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").doc(postId).collection("reactions").get();
+      const reactions = reactionsSnap.docs.map(doc => doc.data());
+      document.getElementById(`postReactions-${threadId}-${postId}`).textContent =
+        reactions.length ? emojis.map(e => {
+          const count = reactions.filter(r => r.emoji === e.key).length;
+          return count ? `${e.emoji} ${count}` : "";
+        }).filter(Boolean).join(" ") : "";
+    }
 
-// --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
-async function loadComments(threadId, postId, parentId, containerId) { /* samma kod */ }
-function renderComment(threadId, postId, c) { /* samma kod */ }
-function addCommentListeners(threadId, postId, c, parentContainerId) { /* samma kod */ }
+    // --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
+    async function loadComments(threadId, postId, parentId, containerId) { /* samma kod */ }
+    function renderComment(threadId, postId, c) { /* samma kod */ }
+    function addCommentListeners(threadId, postId, c, parentContainerId) { /* samma kod */ }
 
-// --- SKAPA TRÅD
-document.getElementById("threadForm").onsubmit = async function (e) {
-  e.preventDefault();
-  if (!currentUser) { alert(t("login_to_comment")); return; }
-  const title = document.getElementById("threadTitle").value.trim();
-  const desc = document.getElementById("threadDesc").value.trim();
-  if (!title || !desc) return alert(t("all_fields"));
-  await db.collection("forumThreads").add({ title, description: desc, user: currentUser.uid, createdAt: new Date(), lang: localStorage.lang || "sv" });
-  document.getElementById("threadTitle").value = "";
-  document.getElementById("threadDesc").value = "";
-  loadThreads();
-};
+    // --- SKAPA TRÅD
+    document.getElementById("threadForm").onsubmit = async function (e) {
+      e.preventDefault();
+      if (!currentUser) { alert(t("login_to_comment")); return; }
+      const title = document.getElementById("threadTitle").value.trim();
+      const desc = document.getElementById("threadDesc").value.trim();
+      if (!title || !desc) return alert(t("all_fields"));
+      await db.collection("forumThreads").add({ title, description: desc, user: currentUser.uid, createdAt: new Date(), lang: localStorage.lang || "sv" });
+      document.getElementById("threadTitle").value = "";
+      document.getElementById("threadDesc").value = "";
+      loadThreads();
+    };
   </script>
 </body>
 </html>
