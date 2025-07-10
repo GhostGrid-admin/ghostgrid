@@ -554,22 +554,24 @@
     }
 
     // --- KOMMENTARSTRÄD: Behåll din tidigare kod för dessa tre:
-    async function loadComments(threadId, postId, parentId, containerId) { /* samma kod */ }
-    function renderComment(threadId, postId, c) { /* samma kod */ }
-    function addCommentListeners(threadId, postId, c, parentContainerId) { /* samma kod */ }
+    auth.onAuthStateChanged(function(user) {
+  currentUser = user;
+  console.log("Inloggad användare:", currentUser ? currentUser.uid : "ingen inloggad");
+  loadThreads();
 
-    // --- SKAPA TRÅD
-    document.getElementById("threadForm").onsubmit = async function (e) {
-      e.preventDefault();
-      if (!currentUser) { alert(t("login_to_comment")); return; }
-      const title = document.getElementById("threadTitle").value.trim();
-      const desc = document.getElementById("threadDesc").value.trim();
-      if (!title || !desc) return alert(t("all_fields"));
-      await db.collection("forumThreads").add({ title, description: desc, user: currentUser.uid, createdAt: new Date(), lang: localStorage.lang || "sv" });
-      document.getElementById("threadTitle").value = "";
-      document.getElementById("threadDesc").value = "";
-      loadThreads();
-    };
+  // --- SKAPA TRÅD ---
+  document.getElementById("threadForm").onsubmit = async function (e) {
+    e.preventDefault();
+    if (!currentUser) { alert(t("login_to_comment")); return; }
+    const title = document.getElementById("threadTitle").value.trim();
+    const desc = document.getElementById("threadDesc").value.trim();
+    if (!title || !desc) return alert(t("all_fields"));
+    await db.collection("forumThreads").add({ title, description: desc, user: currentUser.uid, createdAt: new Date(), lang: localStorage.lang || "sv" });
+    document.getElementById("threadTitle").value = "";
+    document.getElementById("threadDesc").value = "";
+    loadThreads();
+  };
+});
   </script>
 </body>
 </html>
