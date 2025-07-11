@@ -72,10 +72,6 @@
     .search-bar input{flex:1;padding:7px 11px;font-size:1.1em;border-radius:7px;border:1.5px solid #00ffcc;background:#222;color:#e0ffff;}
     .search-bar button{background:#00ffcc;color:#181f26;border-radius:6px;font-weight:bold;border:none;padding:7px 16px;box-shadow:0 0 5px #00ffcc80;cursor:pointer;}
   </style>
-  <!-- FIREBASE SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -138,8 +134,11 @@
     <div id="threadList" class="thread-list"></div>
   </div>
 
-  <script>
-    // SIDBANNER ROTATION (oförändrad)
+  <script type="module">
+    import { auth, db } from "./scripts/firebase-init.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    // SIDBANNER ROTATION
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -248,25 +247,12 @@
     }
     applyTranslations();
 
-    // FIREBASE INIT
-    const firebaseConfig = {
-      apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
-      authDomain: "ghostgrid-fb278.firebaseapp.com",
-      projectId: "ghostgrid-fb278",
-      storageBucket: "ghostgrid-fb278.appspot.com",
-      messagingSenderId: "283208202937",
-      appId: "1:283208202937:web:11c0cea81fd81a31163968",
-      measurementId: "G-B0WCKJCNT9"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
+    // --- FIREBASE AUTH STATE ---
     let currentUser = null;
     let userMap = {};
     let threadsGlobal = [];
 
-    auth.onAuthStateChanged(function(user) {
+    onAuthStateChanged(auth, function(user) {
       currentUser = user;
       loadThreads(); // Ladda trådar när auth är klar!
     });
@@ -369,7 +355,7 @@
               .add({
                 text,
                 creatorUid: currentUser.uid,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: new Date()
               });
             textarea.value = "";
             loadPosts(thread.id);
@@ -428,7 +414,7 @@
         const text = textarea.value.trim();
         if (!text) return;
         await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
-          text, creatorUid: currentUser.uid, parent: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          text, creatorUid: currentUser.uid, parent: null, createdAt: new Date()
         });
         textarea.value = "";
         loadComments(threadId, post.id);
@@ -463,7 +449,7 @@
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
     document.getElementById("logoutMobileBtn").onclick = doLogout;
 
-    // TRÅDSKAPANDE (helt synkat mot wall och rätt fält)
+    // TRÅDSKAPANDE (synkat mot wall och rätt fält)
     document.getElementById("threadForm").onsubmit = async function (e) {
       e.preventDefault();
       if (!currentUser) { alert(t("login_to_create_thread")); return; }
@@ -474,7 +460,7 @@
         title,
         description: desc,
         creatorUid: currentUser.uid,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: new Date(),
         lang: localStorage.lang || "sv"
       });
       document.getElementById("threadTitle").value = "";
