@@ -248,10 +248,25 @@ alert(typeof db); <!DOCTYPE html>
     }
     applyTranslations();
 
-    // FIREBASE LOGIK
-    const db = window.db;
-    const auth = window.auth;
-    const emojis = [
+    <!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script>
+  // EXAKT som i din wall.html
+  const firebaseConfig = {
+    apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
+    authDomain: "ghostgrid-fb278.firebaseapp.com",
+    projectId: "ghostgrid-fb278",
+    storageBucket: "ghostgrid-fb278.appspot.com",
+    messagingSenderId: "283208202937",
+    appId: "1:283208202937:web:11c0cea81fd81a31163968",
+    measurementId: "G-B0WCKJCNT9"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+</script>
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
       { emoji: "😃", key: "bigsmile" },
