@@ -6,6 +6,7 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    /* --- Samma CSS som innan --- */
     html { overflow-y: scroll; }
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
     .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
@@ -138,7 +139,7 @@
   </div>
 
   <script>
-    // SIDBANNER ROTATION
+    // SIDBANNER ROTATION (oförändrad)
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -261,10 +262,14 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
+    let currentUser = null;
+    let userMap = {};
+    let threadsGlobal = [];
+
     auth.onAuthStateChanged(function(user) {
-  currentUser = user;
-  loadThreads(); // Ladda trådar när auth är klar!
-});
+      currentUser = user;
+      loadThreads(); // Ladda trådar när auth är klar!
+    });
 
     const emojis = [
       { emoji: "👍", key: "thumbsup" },
@@ -279,10 +284,6 @@
       { emoji: "😡", key: "angry" },
       { emoji: "👎", key: "thumbsdown" }
     ];
-
-    let currentUser = null;
-    let userMap = {};
-    let threadsGlobal = [];
 
     function escapeHTML(str) {
       return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
@@ -311,80 +312,71 @@
     }
 
     function renderThreadListItem(thread) {
-  return `
-    <div class="thread" data-threadid="${thread.id}">
-      <div class="thread-header">
-        <span>${escapeHTML(thread.title)}</span>
-        ${(currentUser && thread.creatorUid === currentUser.uid)
-          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
-          : ""}
+      return `
+      <div class="thread" data-threadid="${thread.id}">
+        <div class="thread-header">
+          <span>${escapeHTML(thread.title)}</span>
+          ${(currentUser && thread.creatorUid === currentUser.uid)
+            ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
+            : ""}
+        </div>
+        <div class="thread-desc">${escapeHTML(thread.description)}</div>
+        <div class="thread-content" id="threadContent-${thread.id}"></div>
+        ${currentUser ? `
+          <form class="add-post-form" data-threadid="${thread.id}">
+            <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+            <button type="submit">${t("add_post")}</button>
+          </form>
+        ` : `
+          <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+        `}
       </div>
-      <div class="thread-desc">${escapeHTML(thread.description)}</div>
-      <div class="thread-content" id="threadContent-${thread.id}"></div>
-      ${currentUser ? `
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">${t("add_post")}</button>
-        </form>
-      ` : `
-        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-      `}
-    </div>
-  `;
-}
-
-    function addThreadListeners(threads) {
-  threads.forEach(thread => {
-    // 1) Ladda in redan existerande inlägg
-    loadPosts(thread.id);
-
-    // 2) Ta bort‑knappen (endast ägaren ser den)
-    const delBtn = document.querySelector(
-      `.thread[data-threadid="${thread.id}"] .thread-delete-btn`
-    );
-    if (delBtn) {
-      delBtn.onclick = async () => {
-        if (confirm(t("delete_thread_confirm"))) {
-          await db.collection("forumThreads").doc(thread.id).delete();
-          loadThreads();  // ladda om listan
-        }
-      };
+      `;
     }
 
-    // 3) Hitta formuläret för nya inlägg i just den här tråden
-    const postForm = document.querySelector(
-      `.thread[data-threadid="${thread.id}"] .add-post-form`
-    );
+    function addThreadListeners(threads) {
+      threads.forEach(thread => {
+        loadPosts(thread.id);
 
-    // 4) Bind submit‑händelsen
-    postForm.onsubmit = async function(e) {
-      e.preventDefault();                   // hindra vanlig sida‑laddning
-      if (!currentUser) {                   // visa fel om ej inloggad
-        alert(t("login_to_comment"));
-        return;
-      }
-      const textarea = document.getElementById(`postDesc-${thread.id}`);
-      const text = textarea.value.trim();
-      if (!text) return;                    // inga tomma inlägg
+        // Delete thread
+        const delBtn = document.querySelector(
+          `.thread[data-threadid="${thread.id}"] .thread-delete-btn`
+        );
+        if (delBtn) {
+          delBtn.onclick = async () => {
+            if (confirm(t("delete_thread_confirm"))) {
+              await db.collection("forumThreads").doc(thread.id).delete();
+              loadThreads();
+            }
+          };
+        }
 
-      // 5) Spara inlägget i Firestore
-      await db
-        .collection("forumThreads")
-        .doc(thread.id)
-        .collection("posts")
-        .add({
-          text,
-          user: currentUser.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-      // 6) Rensa textarea och ladda om inlägg
-      textarea.value = "";
-      loadPosts(thread.id);
-    };
-  });
-}
-
+        // Add post
+        const postForm = document.querySelector(
+          `.thread[data-threadid="${thread.id}"] .add-post-form`
+        );
+        if (postForm) {
+          postForm.onsubmit = async function(e) {
+            e.preventDefault();
+            if (!currentUser) { alert(t("login_to_comment")); return; }
+            const textarea = document.getElementById(`postDesc-${thread.id}`);
+            const text = textarea.value.trim();
+            if (!text) return;
+            await db
+              .collection("forumThreads")
+              .doc(thread.id)
+              .collection("posts")
+              .add({
+                text,
+                creatorUid: currentUser.uid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            textarea.value = "";
+            loadPosts(thread.id);
+          };
+        }
+      });
+    }
 
     async function loadPosts(threadId) {
       const postsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
@@ -395,26 +387,25 @@
     }
 
     function renderPost(threadId, post) {
-  const name = userMap[post.user] || t("guest");
-  return `
-    <div class="post" data-postid="${post.id}">
-      <div class="post-header">${t("user")}: ${name}</div>
-      <div class="post-content">${escapeHTML(post.text)}</div>
-      <div class="emoji-row">
-        ${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`
-        ).join("")}
-        <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
-      </div>
-      <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-      <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
-        <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-        <button type="submit">${t("comment")}</button>
-      </form>
-    </div>
-  `;
-}
-
+      const name = userMap[post.creatorUid] || t("guest");
+      return `
+        <div class="post" data-postid="${post.id}">
+          <div class="post-header">${t("user")}: ${name}</div>
+          <div class="post-content">${escapeHTML(post.text)}</div>
+          <div class="emoji-row">
+            ${emojis.map(e =>
+              `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`
+            ).join("")}
+            <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
+          </div>
+          <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+          <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+            <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+            <button type="submit">${t("comment")}</button>
+          </form>
+        </div>
+      `;
+    }
 
     function addPostListeners(threadId, post) {
       document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
@@ -423,7 +414,7 @@
           const emojiKey = btn.dataset.emoji;
           const ref = db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("reactions").doc(currentUser.uid);
           const snap = await ref.get();
-          snap.exists && snap.data().emoji === emojiKey ? await ref.delete() : await ref.set({ emoji: emojiKey, user: currentUser.uid });
+          snap.exists && snap.data().emoji === emojiKey ? await ref.delete() : await ref.set({ emoji: emojiKey, creatorUid: currentUser.uid });
           renderPostReactions(threadId, post.id);
         };
       });
@@ -437,7 +428,7 @@
         const text = textarea.value.trim();
         if (!text) return;
         await db.collection("forumThreads").doc(threadId).collection("posts").doc(post.id).collection("comments").add({
-          text, user: currentUser.uid, parent: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          text, creatorUid: currentUser.uid, parent: null, createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         textarea.value = "";
         loadComments(threadId, post.id);
@@ -459,7 +450,7 @@
       let html = "";
       commentsSnap.docs.forEach(docu => {
         const c = docu.data();
-        const name = userMap[c.user] || t("guest");
+        const name = userMap[c.creatorUid] || t("guest");
         html += `<div class="comment"><span style="color:#0ff">${name}</span>: ${escapeHTML(c.text)}</div>`;
       });
       document.getElementById(`postComments-${threadId}-${postId}`).innerHTML = html;
@@ -472,45 +463,24 @@
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
     document.getElementById("logoutMobileBtn").onclick = doLogout;
 
-    // LOGIN & LADDA TRÅDAR
-    function renderThread(thread) {
-  return `
-    <div class="thread" data-threadid="${thread.id}">
-      <div class="thread-header">
-        <span>${escapeHTML(thread.title)}</span>
-        ${(currentUser && thread.user === currentUser.uid)
-          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
-          : ""}
-      </div>
-      <div class="thread-desc">${escapeHTML(thread.description)}</div>
-      <div class="thread-content" id="threadContent-${thread.id}"></div>
-      ${currentUser ? `
-      <form class="add-post-form" data-threadid="${thread.id}">
-        <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-        <button type="submit">${t("add_post")}</button>
-      </form>
-      ` : `<div style="padding:7px;color:#aaa;font-size:1em;">${t("login_to_comment")}</div>`}
-    </div>
-  `;
-}
-
-      document.getElementById("threadForm").onsubmit = async function (e) {
-  e.preventDefault();
-  if (!currentUser) { alert(t("login_to_create_thread")); return; }
-  const title = document.getElementById("threadTitle").value.trim();
-  const desc = document.getElementById("threadDesc").value.trim();
-  if (!title || !desc) return alert(t("all_fields"));
-  await db.collection("forumThreads").add({
-    title,
-    description: desc,
-    creatorUid: currentUser.uid, // <-- KORREKT FÄLT!
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    lang: localStorage.lang || "sv"
-  });
-  document.getElementById("threadTitle").value = "";
-  document.getElementById("threadDesc").value = "";
-  loadThreads();
-};
+    // TRÅDSKAPANDE (helt synkat mot wall och rätt fält)
+    document.getElementById("threadForm").onsubmit = async function (e) {
+      e.preventDefault();
+      if (!currentUser) { alert(t("login_to_create_thread")); return; }
+      const title = document.getElementById("threadTitle").value.trim();
+      const desc = document.getElementById("threadDesc").value.trim();
+      if (!title || !desc) return alert(t("all_fields"));
+      await db.collection("forumThreads").add({
+        title,
+        description: desc,
+        creatorUid: currentUser.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lang: localStorage.lang || "sv"
+      });
+      document.getElementById("threadTitle").value = "";
+      document.getElementById("threadDesc").value = "";
+      loadThreads();
+    };
 
     // SÖKTRÅDAR
     const searchInput = document.getElementById("threadSearch");
