@@ -214,7 +214,7 @@
         max_200: "Max 200 tecken per kommentar!", no_spam: "Du kan inte spamma!", wait: "Vänta några sekunder innan du kommenterar igen.",
         login_to_react: "Logga in för att reagera.", comment_empty: "Kommentaren får ej vara tom.", delete_confirm: "Radera kommentaren?", all_fields: "Alla fält måste fyllas i.",
         add_post: "Lägg till inlägg", post: "Inlägg", delete_thread: "Ta bort tråd", delete_thread_confirm: "Vill du verkligen ta bort tråden?",
-        logout: "Logga ut", user: "Användare"
+        logout: "Logga ut", user: "Användare", login_to_create_thread: "Logga in för att skapa tråd."
       },
       en: {
         forum: "Forum", store: "Store", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow",
@@ -227,7 +227,7 @@
         max_200: "Max 200 characters per comment!", no_spam: "You can't spam!", wait: "Wait a few seconds before commenting again.",
         login_to_react: "Login to react.", comment_empty: "Comment cannot be empty.", delete_confirm: "Delete this comment?", all_fields: "All fields are required.",
         add_post: "Add post", post: "Post", delete_thread: "Delete thread", delete_thread_confirm: "Do you really want to delete the thread?",
-        logout: "Logout", user: "User"
+        logout: "Logout", user: "User", login_to_create_thread: "Log in to create thread."
       }
     };
     function t(key) {
@@ -427,7 +427,7 @@
 
       document.querySelector(`.post[data-postid="${post.id}"] .add-comment-form`).onsubmit = async function (e) {
         e.preventDefault();
-        if (!currentUser) { alert(t("login_to_comment")); return; }
+        if (!currentUser) { alert(t("login_to_create_thread")); return; }
         const textarea = this.querySelector("textarea");
         const text = textarea.value.trim();
         if (!text) return;
