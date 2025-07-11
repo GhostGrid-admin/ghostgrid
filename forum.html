@@ -75,7 +75,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="firebase-config.js"></script> <!-- DIN EGEN FIREBASE KONFIGURATION -->
+  <script src="firebase-config.js"></script>
 </head>
 <body>
   <div class="glow-left"></div>
@@ -188,7 +188,6 @@
           });
         }
       }
-      // Hide navbar on scroll mobile
       if (window.innerWidth <= 600) {
         let lastScrollY = window.scrollY;
         let navbar = document.querySelector('.navbar');
@@ -203,7 +202,7 @@
       }
     });
 
-    // --- ÖVERSÄTTNING
+    // ÖVERSÄTTNING
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -249,7 +248,7 @@
     }
     applyTranslations();
 
-    // --- FIREBASE LOGIK ---
+    // FIREBASE LOGIK
     const db = firebase.firestore();
     const auth = firebase.auth();
     const emojis = [
@@ -426,7 +425,7 @@
     document.getElementById("logoutDesktopBtn").onclick = doLogout;
     document.getElementById("logoutMobileBtn").onclick = doLogout;
 
-    // HANDEL LOGIN & LADDA TRÅDAR
+    // LOGIN & LADDA TRÅDAR
     auth.onAuthStateChanged(function(user) {
       currentUser = user;
       if (!user) {
