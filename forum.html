@@ -301,7 +301,7 @@
           (thread.description && thread.description.toLowerCase().includes(q))
         );
       }
-      document.getElementById("threadList").innerHTML = filtered.map(thread => renderThread(thread)).join("");
+      document.getElementById("threadList").innerHTML = filtered.map(thread => renderThreadListItem(thread)).join("")
       addThreadListeners(filtered);
     }
 
