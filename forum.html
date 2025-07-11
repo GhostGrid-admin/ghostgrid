@@ -361,23 +361,27 @@
     }
 
     function renderPost(threadId, post) {
-      const name = userMap[post.user] || t("guest");
-      return `
-        <div class="post" data-postid="${post.id}">
-          <div class="post-header">${t("user")}: ${name}</div>
-          <div class="post-content">${escapeHTML(post.text)}</div>
-          <div class="emoji-row">${emojis.map(e =>
-            `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`).join("")}
-            <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
-          </div>
-          <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-          <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
-            <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-            <button type="submit">${t("comment")}</button>
-          </form>
-        </div>
-      `;
-    }
+  const name = userMap[post.user] || t("guest");
+  return `
+    <div class="post" data-postid="${post.id}">
+      <div class="post-header">${t("user")}: ${name}</div>
+      <div class="post-content">${escapeHTML(post.text)}</div>
+      <div class="emoji-row">
+        ${emojis.map(e =>
+          `<button class="emoji-btn" data-emoji="${e.key}" ${!currentUser ? "disabled style='filter: grayscale(0.8);opacity:0.55;'" : ""}>${e.emoji}</button>`
+        ).join("")}
+        <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
+      </div>
+      <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+      ${currentUser ? `
+      <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+        <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+        <button type="submit">${t("comment")}</button>
+      </form>
+      ` : `<div style="padding:5px 0;color:#aaa;font-size:0.96em;">${t("login_to_comment")}</div>`}
+    </div>
+  `;
+}
 
     function addPostListeners(threadId, post) {
       document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
@@ -436,17 +440,26 @@
     document.getElementById("logoutMobileBtn").onclick = doLogout;
 
     // LOGIN & LADDA TRÅDAR
-    auth.onAuthStateChanged(function(user) {
-      currentUser = user;
-      if (!user) {
-        document.getElementById("threadList").innerHTML =
-          `<div style="text-align:center;padding:36px 0;font-size:1.23em;color:#ff7788;">
-            Du måste vara inloggad för att se forumet.<br><br>
-            <a href="login.html" style="color:#00ffcc;font-weight:bold;">Logga in här</a>
-          </div>`;
-        return;
-      }
-      loadThreads();
+    function renderThread(thread) {
+  return `
+    <div class="thread" data-threadid="${thread.id}">
+      <div class="thread-header">
+        <span>${escapeHTML(thread.title)}</span>
+        ${(currentUser && thread.user === currentUser.uid)
+          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
+          : ""}
+      </div>
+      <div class="thread-desc">${escapeHTML(thread.description)}</div>
+      <div class="thread-content" id="threadContent-${thread.id}"></div>
+      ${currentUser ? `
+      <form class="add-post-form" data-threadid="${thread.id}">
+        <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+        <button type="submit">${t("add_post")}</button>
+      </form>
+      ` : `<div style="padding:7px;color:#aaa;font-size:1em;">${t("login_to_comment")}</div>`}
+    </div>
+  `;
+}
 
       document.getElementById("threadForm").onsubmit = async function (e) {
         e.preventDefault();
