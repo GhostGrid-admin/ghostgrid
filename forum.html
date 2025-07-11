@@ -315,7 +315,7 @@
     <div class="thread" data-threadid="${thread.id}">
       <div class="thread-header">
         <span>${escapeHTML(thread.title)}</span>
-        ${(currentUser && thread.user === currentUser.uid)
+        ${(currentUser && thread.creatorUid === currentUser.uid)
           ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
           : ""}
       </div>
@@ -323,9 +323,9 @@
       <div class="thread-content" id="threadContent-${thread.id}"></div>
       ${currentUser ? `
         <form class="add-post-form" data-threadid="${thread.id}">
-  <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-  <button type="submit">${t("add_post")}</button>
-</form>
+          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+          <button type="submit">${t("add_post")}</button>
+        </form>
       ` : `
         <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
       `}
@@ -495,22 +495,22 @@
 }
 
       document.getElementById("threadForm").onsubmit = async function (e) {
-        e.preventDefault();
-        if (!currentUser) { alert(t("login_to_create_thread")); return; }
-        const title = document.getElementById("threadTitle").value.trim();
-        const desc = document.getElementById("threadDesc").value.trim();
-        if (!title || !desc) return alert(t("all_fields"));
-        await db.collection("forumThreads").add({
-          title,
-          description: desc,
-          user: currentUser.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          lang: localStorage.lang || "sv"
-        });
-        document.getElementById("threadTitle").value = "";
-        document.getElementById("threadDesc").value = "";
-        loadThreads();
-      };
+  e.preventDefault();
+  if (!currentUser) { alert(t("login_to_create_thread")); return; }
+  const title = document.getElementById("threadTitle").value.trim();
+  const desc = document.getElementById("threadDesc").value.trim();
+  if (!title || !desc) return alert(t("all_fields"));
+  await db.collection("forumThreads").add({
+    title,
+    description: desc,
+    creatorUid: currentUser.uid, // <-- KORREKT FÄLT!
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    lang: localStorage.lang || "sv"
+  });
+  document.getElementById("threadTitle").value = "";
+  document.getElementById("threadDesc").value = "";
+  loadThreads();
+};
 
     // SÖKTRÅDAR
     const searchInput = document.getElementById("threadSearch");
