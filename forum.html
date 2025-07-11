@@ -306,23 +306,27 @@
     }
 
     function renderThread(thread) {
-      return `
-        <div class="thread" data-threadid="${thread.id}">
-          <div class="thread-header">
-            <span>${escapeHTML(thread.title)}</span>
-            ${(currentUser && thread.user === currentUser.uid)
-              ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
-              : ""}
-          </div>
-          <div class="thread-desc">${escapeHTML(thread.description)}</div>
-          <div class="thread-content" id="threadContent-${thread.id}"></div>
-          <form class="add-post-form" data-threadid="${thread.id}">
-            <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-            <button type="submit">${t("add_post")}</button>
-          </form>
-        </div>
-      `;
-    }
+  return `
+    <div class="thread" data-threadid="${thread.id}">
+      <div class="thread-header">
+        <span>${escapeHTML(thread.title)}</span>
+        ${(currentUser && thread.user === currentUser.uid)
+          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
+          : ""}
+      </div>
+      <div class="thread-desc">${escapeHTML(thread.description)}</div>
+      <div class="thread-content" id="threadContent-${thread.id}"></div>
+      ${currentUser ? `
+        <form class="add-post-form" data-threadid="${thread.id}">
+          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+          <button type="submit">${t("add_post")}</button>
+        </form>
+      ` : `
+        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+      `}
+    </div>
+  `;
+}
 
     function addThreadListeners(threads) {
       threads.forEach(thread => {
