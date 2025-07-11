@@ -372,20 +372,19 @@
       <div class="post-content">${escapeHTML(post.text)}</div>
       <div class="emoji-row">
         ${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}" ${!currentUser ? "disabled style='filter: grayscale(0.8);opacity:0.55;'" : ""}>${e.emoji}</button>`
+          `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`
         ).join("")}
         <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
       </div>
       <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-      ${currentUser ? `
       <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
         <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
         <button type="submit">${t("comment")}</button>
       </form>
-      ` : `<div style="padding:5px 0;color:#aaa;font-size:0.96em;">${t("login_to_comment")}</div>`}
     </div>
   `;
 }
+
 
     function addPostListeners(threadId, post) {
       document.querySelectorAll(`.post[data-postid="${post.id}"] .emoji-btn`).forEach(btn => {
