@@ -279,27 +279,33 @@
     }
 
     function renderThreadListItem(thread) {
-      return `
-      <div class="thread" data-threadid="${thread.id}">
-        <div class="thread-header">
-          <span>${escapeHTML(thread.title)}</span>
-          ${(currentUser && thread.creatorUid === currentUser.uid)
-            ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
-            : ""}
-        </div>
-        <div class="thread-desc">${escapeHTML(thread.description)}</div>
-        <div class="thread-content" id="threadContent-${thread.id}"></div>
-        ${currentUser ? `
-          <form class="add-post-form" data-threadid="${thread.id}">
-            <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-            <button type="submit">${t("add_post")}</button>
-          </form>
-        ` : `
-          <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-        `}
+  const name = userMap[thread.creatorUid] || t("guest");
+  return `
+    <div class="thread" data-threadid="${thread.id}">
+      <div class="thread-header">
+        <span>${escapeHTML(thread.title)}</span>
+        <span style="margin-left:12px;font-size:0.9em;">
+          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
+            ${name}
+          </a>
+        </span>
+        ${(currentUser && thread.creatorUid === currentUser.uid)
+          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
+          : ""}
       </div>
-      `;
-    }
+      <div class="thread-desc">${escapeHTML(thread.description)}</div>
+      <div class="thread-content" id="threadContent-${thread.id}"></div>
+      ${currentUser ? `
+        <form class="add-post-form" data-threadid="${thread.id}">
+          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+          <button type="submit">${t("add_post")}</button>
+        </form>
+      ` : `
+        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+      `}
+    </div>
+  `;
+}
 
     function addThreadListeners(threads) {
       threads.forEach(thread => {
