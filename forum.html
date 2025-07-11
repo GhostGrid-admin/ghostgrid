@@ -249,8 +249,8 @@
     applyTranslations();
 
     // FIREBASE LOGIK
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+    const db = window.db;
+    const auth = window.auth;
     const emojis = [
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
