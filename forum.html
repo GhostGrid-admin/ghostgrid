@@ -318,9 +318,9 @@
       <div class="thread-content" id="threadContent-${thread.id}"></div>
       ${currentUser ? `
         <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">${t("add_post")}</button>
-        </form>
+  <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+  <button type="submit">${t("add_post")}</button>
+</form>
       ` : `
         <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
       `}
@@ -329,32 +329,57 @@
 }
 
     function addThreadListeners(threads) {
-      threads.forEach(thread => {
-        loadPosts(thread.id);
-        const delBtn = document.querySelector(`.thread[data-threadid="${thread.id}"] .thread-delete-btn`);
-        if (delBtn) {
-          delBtn.onclick = async () => {
-            if (confirm(t("delete_thread_confirm"))) {
-              await db.collection("forumThreads").doc(thread.id).delete();
-              loadThreads();
-            }
-          }
+  threads.forEach(thread => {
+    // 1) Ladda in redan existerande inlägg
+    loadPosts(thread.id);
+
+    // 2) Ta bort‑knappen (endast ägaren ser den)
+    const delBtn = document.querySelector(
+      `.thread[data-threadid="${thread.id}"] .thread-delete-btn`
+    );
+    if (delBtn) {
+      delBtn.onclick = async () => {
+        if (confirm(t("delete_thread_confirm"))) {
+          await db.collection("forumThreads").doc(thread.id).delete();
+          loadThreads();  // ladda om listan
         }
-        const postForm = document.querySelector(`.thread[data-threadid="${thread.id}"] .add-post-form`);
-        postForm.onsubmit = async function (e) {
-          e.preventDefault();
-          if (!currentUser) { alert(t("login_to_comment")); return; }
-          const textarea = document.getElementById(`postDesc-${thread.id}`);
-          const text = textarea.value.trim();
-          if (!text) return;
-          await db.collection("forumThreads").doc(thread.id).collection("posts").add({
-            text, user: currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          textarea.value = "";
-          loadPosts(thread.id);
-        }
-      });
+      };
     }
+
+    // 3) Hitta formuläret för nya inlägg i just den här tråden
+    const postForm = document.querySelector(
+      `.thread[data-threadid="${thread.id}"] .add-post-form`
+    );
+
+    // 4) Bind submit‑händelsen
+    postForm.onsubmit = async function(e) {
+      e.preventDefault();                   // hindra vanlig sida‑laddning
+      if (!currentUser) {                   // visa fel om ej inloggad
+        alert(t("login_to_comment"));
+        return;
+      }
+      const textarea = document.getElementById(`postDesc-${thread.id}`);
+      const text = textarea.value.trim();
+      if (!text) return;                    // inga tomma inlägg
+
+      // 5) Spara inlägget i Firestore
+      await db
+        .collection("forumThreads")
+        .doc(thread.id)
+        .collection("posts")
+        .add({
+          text,
+          user: currentUser.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+      // 6) Rensa textarea och ladda om inlägg
+      textarea.value = "";
+      loadPosts(thread.id);
+    };
+  });
+}
+
 
     async function loadPosts(threadId) {
       const postsSnap = await db.collection("forumThreads").doc(threadId).collection("posts").orderBy("createdAt", "asc").get();
