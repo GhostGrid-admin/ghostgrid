@@ -450,16 +450,16 @@
 </div>
 <script type="module">
 // -- JS börjar här --
-// Automatisk active-länk i navbar beroende på aktuell sida
-  const path = window.location.pathname.split('/').pop();
-  document.querySelectorAll('.nav-links a, .nav-mobile a').forEach(link => {
-    link.classList.remove('active');
-    // "active" om exakt rätt sida eller (index.html & tom path)
-    if (link.getAttribute('href') === path ||
-        (path === '' && link.getAttribute('href').includes('index.html'))) {
-      link.classList.add('active');
-    }
+// Sätt endast "Väggen" (eller "Wall") som aktiv på wall.html/wall
+const isWall = location.pathname.endsWith('/wall') || location.pathname.endsWith('/wall.html');
+document.querySelectorAll('.nav-links a, .nav-mobile a').forEach(link => {
+  link.classList.remove('active');
+});
+if (isWall) {
+  document.querySelectorAll('.nav-links a[data-i18n="wall"], .nav-mobile a[data-i18n="wall"]').forEach(link => {
+    link.classList.add('active');
   });
+}
   
 const translations = {
   sv: {
