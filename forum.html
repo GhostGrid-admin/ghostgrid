@@ -52,9 +52,25 @@
     .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
     .post-content { font-size: 1.19em;}
     .emoji-row { margin: 7px 0 3px 0; display: flex; flex-wrap: wrap; gap: 7px; }
-    .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; position: relative; }
+    .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
+    .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
+    .reactions-view { margin-left: 6px; font-size: 1.18em;}
+    .reaction-emoji { cursor: pointer; position: relative; }
+    .emoji-btn { position: relative; }
     .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 7px #00ffcc); }
-    .emoji-count { font-size: 0.99em; color: #00ffd9; font-weight: bold; margin-left: 3px; background: #181f26; border-radius: 8px; padding: 1px 7px; display: inline-block; border: 1.5px solid #00ffd9; position: relative; top: -3px; }
+    .emoji-count {
+      font-size: 0.99em;
+      color: #00ffd9;
+      font-weight: bold;
+      margin-left: 3px;
+      background: #181f26;
+      border-radius: 8px;
+      padding: 1px 7px;
+      display: inline-block;
+      border: 1.5px solid #00ffd9;
+      position: relative;
+      top: -3px;
+    }
     .emoji-popup {
       display: none;
       min-width: 130px;
@@ -70,6 +86,13 @@
       left: 48px;
       top: 0;
       animation: fadein 0.13s;
+    }
+    @media (max-width: 600px) {
+      .emoji-popup {
+        left: 0 !important;
+        top: 35px !important;
+        min-width: 120px;
+      }
     }
     @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
   </style>
@@ -138,7 +161,7 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     import { collection, query, orderBy, getDocs, addDoc, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Emoji-rad med hjärta först, krossat hjärta sist
+    // EMOJI-REACTIONER (SOM WALL – ENDAST MED REAKTION!)
     const emojis = [
       { emoji: "❤️", key: "heart" },
       { emoji: "👍", key: "thumbsup" },
@@ -159,7 +182,7 @@
     let userMap = {};
     let threadsGlobal = [];
 
-    // Hämta användar-namn (profiles)
+    // Hämta alla användare
     async function fetchUsers() {
       userMap = {};
       const snap = await getDocs(collection(db, "profiles"));
@@ -216,13 +239,13 @@
       `;
     }
 
-    // Visa emoji-reaktioner och popup
+    // Visa emoji-reaktioner exakt som på wall (en och en, popup, namnrad)
     async function renderThreadReactions(threadId) {
       const reactionsRef = collection(db, "forumThreads", threadId, "reactions");
       const reactionsSnap = await getDocs(reactionsRef);
       const reactions = reactionsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-      // Grupp reaktioner per emoji
+      // Endast emojis som har minst en reaktion
       const grouped = {};
       reactions.forEach(r => {
         if (!grouped[r.emoji]) grouped[r.emoji] = [];
@@ -236,25 +259,23 @@
         if (mine) myReaction = mine.emoji;
       }
 
-      // Visa endast emojis som används
-      let html = emojis.map(e => {
-        const arr = grouped[e.key] || [];
-        const count = arr.length;
-        if (!count) return ""; // Visa bara emojis med reaktioner
-        return `
-          <button class="emoji-btn${myReaction === e.key ? " selected" : ""}" data-emoji="${e.key}" data-threadid="${threadId}" style="position:relative;">
-            ${e.emoji}${count ? `<span class="emoji-count">${count}</span>` : ""}
-            <span class="emoji-popup" id="popup-${threadId}-${e.key}">
-              <div style="font-weight:bold;margin-bottom:6px;">
-                ${e.emoji} <span style="color:#00ffd9">${count} st:</span>
-              </div>
-              <div style="max-height:170px;overflow-y:auto;">
-                ${arr.map(u => `<div>${userMap[u.user]||"Gäst"}</div>`).join("")}
-              </div>
-            </span>
-          </button>
-        `;
-      }).join("");
+      // Rendera endast de emojis som HAR reaktioner (och i rätt ordning!)
+      let html = emojis.filter(e => grouped[e.key])
+        .map(e => {
+          const arr = grouped[e.key] || [];
+          const count = arr.length;
+          // Samla namnrad för popup
+          const namnrad = arr.map(u => userMap[u.user] || "Gäst").join(", ");
+          return `
+            <button class="emoji-btn${myReaction === e.key ? " selected" : ""}" data-emoji="${e.key}" data-threadid="${threadId}" style="position:relative;">
+              ${e.emoji}<span class="emoji-count">${count}</span>
+              <span class="emoji-popup" id="popup-${threadId}-${e.key}">
+                <b>${e.emoji} ${count} st</b><br>
+                <span style="color:#fff;font-size:1em;">${namnrad || "<i>Inga reaktioner</i>"}</span>
+              </span>
+            </button>
+          `;
+        }).join("");
       document.getElementById(`threadReactions-${threadId}`).innerHTML = html;
 
       // Emoji-klick (lägg till/byt/ta bort reaktion)
