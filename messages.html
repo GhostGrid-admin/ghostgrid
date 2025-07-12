@@ -6,8 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { background: #101918; color: #b2ffb2; font-family: 'Share Tech Mono', monospace; margin: 0; }
-    .messages-container { max-width: 950px; margin: 30px auto 0; padding: 32px 12px; background: #1d2b26bb; border-radius: 28px; box-shadow: 0 0 60px #21ff2144; display: flex; gap: 32px; }
+    body { background: #101918; color: #b2ffb2; font-family: 'Share Tech Mono', monospace; margin: 0; padding-top: 85px;}
+    .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0;}
+    .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;}
+    .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;}
+    .side-banner { position: fixed; top: 87px; bottom: 0; width: 170px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 1002; background: none; pointer-events: none; }
+    .side-banner .banner-inner { width: 150px; height: 100%; background: transparent; border-radius: 12px; box-shadow: 0 0 18px #7b00ff99; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: auto;}
+    .side-banner img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: #220043; cursor: pointer; transition: box-shadow 0.3s; box-shadow: 0 0 10px #8800ff70; pointer-events: auto; min-height: 200px;}
+    .side-banner.left { left: 0; } .side-banner.right { right: 0; }
+    @media (max-width: 1100px) { .side-banner, .glow-left, .glow-right { width: 85px; } .side-banner .banner-inner { width: 75px; } }
+    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
+    nav.navbar { background-color: #000; border-bottom: 2px solid #00ffcc; padding: 0; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 0 20px #bb00ff; display: flex; align-items: center; justify-content: center; min-height: 60px; transition: top 0.3s; }
+    .nav-center { flex: 1; display: flex; justify-content: center; align-items: center; }
+    .nav-links { display: flex; gap: 26px; list-style: none; margin: 0 auto; padding: 0; align-items: center; }
+    .nav-links li { display: flex; }
+    .nav-links a { color: white; text-decoration: none; font-size: 1.2em; padding: 7px 10px; border-radius: 4px; text-shadow: 0 0 8px #00ffcc, 0 0 6px #bb00ff; transition: 0.3s; font-family: inherit;}
+    .nav-links a:hover, .nav-links a.active { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #ffffff; }
+    .logout-btn { position: fixed; top: 12px; right: 12px; background: #000; color: #00ffcc; border: 2px solid #00ffcc; padding: 8px 24px 7px 24px; font-size: 1.1em; border-radius: 9px; font-family: 'Courier New', monospace; font-weight: bold; box-shadow: 0 0 15px #00ffcc88, 0 0 8px #bb00ff99; transition: 0.18s; cursor: pointer; opacity: 0.98; margin: 0; z-index: 1500; display: block;}
+    .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 55px; z-index: 2002; background: none; border: none; cursor: pointer;}
+    .hamburger span { width: 32px; height: 4px; background: #00ffcc; margin: 5px 0; border-radius: 2px; transition: 0.3s; display: block;}
+    @media (max-width: 900px) { .nav-center, .logout-btn { display: none !important; } .hamburger { display: flex !important; } nav.navbar { min-height: 55px; border-bottom-width: 2px;}}
+    .nav-mobile { display: none; flex-direction: column; align-items: center; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); min-width: 220px; width: 92vw; max-width: 400px; background: #181f26; box-shadow: 0 4px 28px #00ffcc77; z-index: 1201; padding-bottom: 20px; border-radius: 0 0 16px 16px; animation: dropin 0.16s; text-align: center;}
+    .nav-mobile.show { display: flex; }
+    .nav-mobile a, .nav-mobile .logout-link-mobile { padding: 18px 0px; font-size: 1.15em; width: 100%; border-radius: 0; text-align: center; border-bottom: 1px solid #3fffd966; background: none; color: #00ffcc; font-weight: bold; border: none; box-shadow: none; display: block; margin: 0; font-family: inherit;}
+    .nav-mobile .logout-link-mobile { cursor: pointer; background: none;}
+    .nav-mobile a:last-child { margin-top: 8px; background: #000; color: #00ffcc; border-bottom: 1px solid #3fffd966; font-weight: bold;}
+    .nav-mobile a:hover, .nav-mobile a.active { background: #00ffcc; color: #000; }
+    @media (max-width: 600px) { nav.navbar { transition: top 0.3s; } nav.navbar.hide-navbar { top: -70px; } .nav-mobile { min-width: 160px; width: 98vw; } }
+    /* ----- Messages-specific under ------ */
+    .messages-container { max-width: 950px; margin: 30px auto 0; padding: 32px 12px; background: #1d2b26bb; border-radius: 28px; box-shadow: 0 0 60px #21ff2144; display: flex; gap: 32px;}
     .convo-list { min-width: 220px; max-width: 320px; border-right: 2px solid #21ff21aa; }
     .convo { display: flex; align-items: center; padding: 12px 14px; border-radius: 18px; margin-bottom: 6px; background: #19221e; cursor: pointer; transition: background 0.2s;}
     .convo.active, .convo:hover { background: #203b24; }
@@ -25,40 +52,138 @@
     .send-btn { background: #21ff21; color: #222; font-weight: bold; border: none; border-radius: 14px; padding: 8px 26px; font-size: 1em; cursor: pointer; }
     .delete-btn { background: #ff4040; color: #fff; border: none; border-radius: 10px; padding: 6px 16px; font-size: 1em; cursor: pointer; margin-bottom: 12px; margin-left: 6px; }
     .msg-checkbox { transform: scale(1.35); accent-color: #00ff7e; margin-right: 6px;}
-    .block-btn, .unblock-btn {
-      background: #222; border: 2px solid #ff4444; color: #ff4444;
-      padding: 6px 18px; border-radius: 14px; margin-bottom: 16px; margin-top: 4px;
-      font-weight: bold; cursor: pointer; font-size: 1em; transition: all 0.15s;
-    }
+    .block-btn, .unblock-btn { background: #222; border: 2px solid #ff4444; color: #ff4444; padding: 6px 18px; border-radius: 14px; margin-bottom: 16px; margin-top: 4px; font-weight: bold; cursor: pointer; font-size: 1em; transition: all 0.15s;}
     .block-btn:hover, .unblock-btn:hover { background: #ff4444; color: #fff; }
-    .blocked-warning {
-      color: #ff4444; background: #330000bb; border-radius: 10px;
-      padding: 8px 15px; font-weight: bold; margin-bottom: 10px; margin-top: 10px; text-align: center;
-    }
+    .blocked-warning { color: #ff4444; background: #330000bb; border-radius: 10px; padding: 8px 15px; font-weight: bold; margin-bottom: 10px; margin-top: 10px; text-align: center; }
     .chat-image { max-width: 150px; max-height: 150px; border-radius: 10px; box-shadow: 0 0 10px #21ff21aa;}
-    @media (max-width: 900px) {
-      .messages-container { flex-direction: column; gap: 8px; padding: 8px;}
-      .convo-list, .chat-window { width: 100%; max-width: 100%; display: block;}
-      .chat-window { padding-left: 0; }
-      .chat-bubble { max-width: 90vw;}
-    }
+    @media (max-width: 900px) { .messages-container { flex-direction: column; gap: 8px; padding: 8px;} .convo-list, .chat-window { width: 100%; max-width: 100%; display: block;} .chat-window { padding-left: 0; } .chat-bubble { max-width: 90vw;}}
   </style>
 </head>
 <body>
-  <div class="messages-container">
-    <div class="convo-list" id="convo-list">
-      <h2 style="text-align:center; color:#19ff19; margin:12px 0;">Meddelanden</h2>
-    </div>
-    <div class="chat-window" id="chat-window">
-      <div style="text-align:center; margin-top:42px; color:#6ad96a;">Välj en konversation eller börja skriva till någon!</div>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+  <div class="side-banner left">
+    <div class="banner-inner">
+      <a id="leftBannerLink" href="#" target="_blank">
+        <img id="leftBannerImg" src="https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
+      </a>
     </div>
   </div>
+  <div class="side-banner right">
+    <div class="banner-inner">
+      <a id="rightBannerLink" href="#" target="_blank">
+        <img id="rightBannerImg" src="https://dummyimage.com/150x1800/222299/fff&text=Reklam+2" alt="Reklam" />
+      </a>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="forum.html" data-i18n="forum">Forum</a></li>
+        <li><a href="wall.html" data-i18n="wall">Väggen</a></li>
+        <li><a href="upload.html" data-i18n="upload">Ladda upp</a></li>
+        <li><a href="profile.html" data-i18n="profile">Profil</a></li>
+        <li><a href="friends.html" data-i18n="friends">Vänner</a></li>
+        <li><a href="messages.html" data-i18n="messages" class="active">Meddelanden</a></li>
+        <li><a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a></li>
+        <li><a href="store.html" data-i18n="store">Butik</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn" id="logoutDesktopBtn" data-i18n="logout">Logga ut</button>
+    <div class="nav-mobile" id="navMobile">
+      <a href="forum.html" data-i18n="forum">Forum</a>
+      <a href="wall.html" data-i18n="wall">Väggen</a>
+      <a href="upload.html" data-i18n="upload">Ladda upp</a>
+      <a href="profile.html" data-i18n="profile">Profil</a>
+      <a href="friends.html" data-i18n="friends">Vänner</a>
+      <a href="messages.html" data-i18n="messages" class="active">Meddelanden</a>
+      <a href="ghost&glow.html" data-i18n="ghostglow">Ghost&Glow</a>
+      <a href="store.html" data-i18n="store">Butik</a>
+      <a href="#" class="logout-link-mobile" id="logoutMobileBtn" data-i18n="logout">Logga ut</a>
+    </div>
+  </nav>
+  <div class="messages-container">
+    <div class="convo-list" id="convo-list">
+      <h2 id="msgTitle" style="text-align:center; color:#19ff19; margin:12px 0;">Meddelanden</h2>
+    </div>
+    <div class="chat-window" id="chat-window">
+      <div id="msgWelcome" style="text-align:center; margin-top:42px; color:#6ad96a;">Välj en konversation eller börja skriva till någon!</div>
+    </div>
+  </div>
+
+  <!-- SPRÅKSTÖD -->
+  <script>
+    const translations = {
+      sv: {
+        forum: "Forum", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", messages: "Meddelanden", ghostglow: "Ghost&Glow", store: "Butik",
+        logout: "Logga ut", "select_convo": "Välj en konversation eller börja skriva till någon!", msg_title: "Meddelanden", msg_delete: "Radera markerade", msg_block: "Blockera användare", msg_unblock: "Avblockera", msg_blocked: "Du har blockerat denna användare.", msg_blocked_by_other: "Du är blockerad av denna användare.", msg_send: "Skicka", msg_placeholder: "Skriv meddelande...", msg_none: "Inga konversationer än.", msg_uploading: "Laddar upp bild...", msg_login: "Du är inte inloggad.<br><a href='login.html' style='color:#22ffff;font-size:1.2em;'>Logga in här</a>", msg_confirm_delete: "Är du säker på att du vill radera valda meddelanden?"
+      },
+      en: {
+        forum: "Forum", wall: "Wall", upload: "Upload", profile: "Profile", friends: "Friends", messages: "Messages", ghostglow: "Ghost&Glow", store: "Store",
+        logout: "Log out", "select_convo": "Select a conversation or start messaging someone!", msg_title: "Messages", msg_delete: "Delete selected", msg_block: "Block user", msg_unblock: "Unblock", msg_blocked: "You have blocked this user.", msg_blocked_by_other: "You are blocked by this user.", msg_send: "Send", msg_placeholder: "Type a message...", msg_none: "No conversations yet.", msg_uploading: "Uploading image...", msg_login: "You are not logged in.<br><a href='login.html' style='color:#22ffff;font-size:1.2em;'>Log in here</a>", msg_confirm_delete: "Are you sure you want to delete selected messages?"
+      }
+    };
+    function t(key) {
+      const lang = localStorage.lang === "en" ? "en" : "sv";
+      return translations[lang][key] || key;
+    }
+    function applyTranslations() {
+      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+      document.title = "GhostGrid – " + t("messages");
+      document.getElementById("msgTitle").textContent = t("msg_title");
+      document.getElementById("msgWelcome").textContent = t("select_convo");
+      document.getElementById("logoutDesktopBtn").textContent = t("logout");
+      document.getElementById("logoutMobileBtn").textContent = t("logout");
+      // Översätt mobillänkar (för säkerhets skull)
+      document.querySelectorAll(".nav-mobile a, .nav-links a").forEach(a => {
+        if (a.dataset.i18n) a.textContent = t(a.dataset.i18n);
+      });
+    }
+    document.addEventListener("DOMContentLoaded", applyTranslations);
+  </script>
+  <!-- NAV LOGIK + LOGGA UT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navMobile = document.getElementById('navMobile');
+      if (hamburgerBtn && navMobile) {
+        hamburgerBtn.addEventListener('click', function () {
+          navMobile.classList.toggle('show');
+        });
+        navMobile.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navMobile.classList.remove('show');
+          });
+        });
+        const logoutBtn = document.getElementById("logoutMobileBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            navMobile.classList.remove('show');
+            doLogout();
+          });
+        }
+      }
+      document.getElementById("logoutDesktopBtn").onclick = doLogout;
+    });
+    function doLogout() {
+      import('https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js')
+        .then(({ getAuth, signOut }) => {
+          const auth = getAuth();
+          signOut(auth).then(() => { window.location.href = "login.html"; });
+        });
+    }
+  </script>
+
+  <!-- FIREBASE LOGIK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, orderBy, getDocs, addDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
-
     const firebaseConfig = {
       apiKey: "AIzaSyCjWQB0hAO1r686hVdpBKBJkaIYMXOM8l8",
       authDomain: "ghostgrid-fb278.firebaseapp.com",
@@ -71,10 +196,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
     const storage = getStorage(app);
-
     let currentUser, conversations = [], activeConvoId = null, activeOtherUser = null, convoUserProfiles = {}, blockedMap = {};
-
-    // Hjälpfunktioner
     function getConversationId(uid1, uid2) {
       return [uid1, uid2].sort().join("_");
     }
@@ -88,19 +210,13 @@
         photoURL: data.profilePicUrl || "default-avatar.png"
       };
     }
-
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        document.body.innerHTML = `<div style="text-align:center;margin-top:110px;font-size:1.4em;color:#f66;">
-          Du är inte inloggad.<br>
-          <a href="login.html" style="color:#22ffff;font-size:1.2em;">Logga in här</a>
-        </div>`;
+        document.body.innerHTML = `<div style="text-align:center;margin-top:110px;font-size:1.4em;color:#f66;">${t("msg_login")}</div>`;
         return;
       }
       currentUser = user;
       await loadConversations();
-
-      // Hantera ?to=
       const params = new URLSearchParams(window.location.search);
       const toUserId = params.get('to');
       if (toUserId) {
@@ -122,7 +238,6 @@
         openConversation(convoId, toUserId);
       }
     });
-
     async function loadConversations() {
       const q = query(collection(db, "conversations"), where("users", "array-contains", currentUser.uid), orderBy("updatedAt", "desc"));
       const snap = await getDocs(q);
@@ -145,12 +260,11 @@
       }
       renderConversations();
     }
-
     function renderConversations() {
       const list = document.getElementById('convo-list');
-      list.innerHTML = `<h2 style="text-align:center; color:#19ff19; margin:12px 0;">Meddelanden</h2>`;
+      list.innerHTML = `<h2 id="msgTitle" style="text-align:center; color:#19ff19; margin:12px 0;">${t("msg_title")}</h2>`;
       if (conversations.length === 0) {
-        list.innerHTML += `<div style="color:#85ff7e; text-align:center; margin-top:44px;">Inga konversationer än.</div>`;
+        list.innerHTML += `<div style="color:#85ff7e; text-align:center; margin-top:44px;">${t("msg_none")}</div>`;
         return;
       }
       conversations.forEach(convo => {
@@ -159,7 +273,7 @@
             <img src="${convo.other.photoURL}" alt="Profilbild" />
             <div>
               <div class="name">${convo.other.displayName}</div>
-              <div style="font-size:0.9em; color:#6bffbb">${convo.lastMessage ? convo.lastMessage.slice(0, 32) : "Ingen konvo än."}</div>
+              <div style="font-size:0.9em; color:#6bffbb">${convo.lastMessage ? convo.lastMessage.slice(0, 32) : t("msg_none")}</div>
             </div>
             ${convo.unread > 0 ? `<div class="badge">${convo.unread}</div>` : ""}
             ${(convo.blocked && (convo.blocked[currentUser.uid] || convo.blocked[convo.users.find(u => u !== currentUser.uid)])) ? `<span style="color:#ff4444;margin-left:8px;">🚫</span>` : ''}
@@ -167,16 +281,12 @@
         `;
       });
     }
-
     window.openConversation = openConversation;
     async function openConversation(convoId, otherId=null) {
       activeConvoId = convoId;
       renderConversations();
-
       const chatDiv = document.getElementById('chat-window');
       chatDiv.innerHTML = `<div style="color:#99ffbb;text-align:center;">Laddar...</div>`;
-
-      // Hämta eller skapa konvo
       let convoRef = doc(db, 'conversations', convoId);
       let convoDoc = await getDoc(convoRef);
       let convoData = convoDoc.exists() ? convoDoc.data() : null;
@@ -191,26 +301,20 @@
         convoDoc = await getDoc(convoRef);
         convoData = convoDoc.data();
       }
-      // Blockeringsstatus
       const blockedObj = convoData && convoData.blocked ? convoData.blocked : {};
       const isBlockedByMe = blockedObj[currentUser.uid];
       const isBlockedByOther = convoData && convoData.users && convoData.users.length === 2
         ? blockedObj[convoData.users.find(u => u !== currentUser.uid)] : false;
-
-      // Ladda meddelanden
       const messagesSnap = await getDocs(query(collection(convoRef, "messages"), orderBy("sentAt", "asc")));
       let html = '';
-      // Blockeringsinfo & knappar
       if (isBlockedByMe) {
-        html += `<div class="blocked-warning">Du har blockerat denna användare.<br><button class="unblock-btn" onclick="window.unblockUser('${convoId}')">Avblockera</button></div>`;
+        html += `<div class="blocked-warning">${t("msg_blocked")}<br><button class="unblock-btn" onclick="window.unblockUser('${convoId}')">${t("msg_unblock")}</button></div>`;
       } else if (isBlockedByOther) {
-        html += `<div class="blocked-warning">Du är blockerad av denna användare.</div>`;
+        html += `<div class="blocked-warning">${t("msg_blocked_by_other")}</div>`;
       } else {
-        html += `<button class="block-btn" style="float:right;" onclick="window.blockUser('${convoId}')">Blockera användare</button>`;
+        html += `<button class="block-btn" style="float:right;" onclick="window.blockUser('${convoId}')">${t("msg_block")}</button>`;
       }
-      // Radera-knapp
-      html += `<button class="delete-btn" onclick="window.deleteSelectedMessages()">Radera markerade</button>`;
-      // Meddelanden
+      html += `<button class="delete-btn" onclick="window.deleteSelectedMessages()">${t("msg_delete")}</button>`;
       html += `<div class="chat-messages" id="chat-messages">`;
       messagesSnap.forEach(docu => {
         const m = docu.data();
@@ -221,33 +325,28 @@
             <div class="chat-bubble${isMine ? ' me' : ''}">
               ${m.text ? m.text : ""}
               ${m.imageUrl ? `<br><img src="${m.imageUrl}" class="chat-image" alt="Bildmeddelande"/>` : ""}
-              <div class="chat-meta">${m.from === currentUser.uid ? 'Du' : 'Den andre'} – ${m.sentAt && m.sentAt.seconds ? new Date(m.sentAt.seconds*1000).toLocaleString("sv-SE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : ""}</div>
+              <div class="chat-meta">${m.from === currentUser.uid ? 'Du' : 'Den andre'} – ${m.sentAt && m.sentAt.seconds ? new Date(m.sentAt.seconds*1000).toLocaleString(localStorage.lang === "en" ? "en-GB" : "sv-SE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }) : ""}</div>
             </div>
           </div>
         `;
       });
       html += `</div>
         <form id="sendForm" class="chat-input-row" autocomplete="off" enctype="multipart/form-data">
-          <input type="text" id="msgInput" class="chat-input" placeholder="Skriv meddelande..." maxlength="2000" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}/>
+          <input type="text" id="msgInput" class="chat-input" placeholder="${t("msg_placeholder")}" maxlength="2000" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}/>
           <label for="fileInput" style="cursor:pointer; margin-right:6px;">
             <img src="image-icon.svg" style="width:30px;vertical-align:middle;" title="Bifoga bild"/>
           </label>
           <input type="file" id="fileInput" accept="image/*" style="display:none;" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}/>
-          <button class="send-btn" type="submit" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}>Skicka</button>
+          <button class="send-btn" type="submit" ${isBlockedByMe || isBlockedByOther ? "disabled" : ""}>${t("msg_send")}</button>
         </form>
         <div id="uploadingStatus" style="color:#0ff; margin-top:2px;"></div>
       `;
       chatDiv.innerHTML = html;
-
       setTimeout(() => {
         const cm = document.getElementById('chat-messages');
         if (cm) cm.scrollTop = 99999;
       }, 100);
-
-      // Nollställ notiser när man öppnar
       await updateDoc(convoRef, { [`unread.${currentUser.uid}`]: 0 });
-
-      // Skicka meddelande (med bild)
       document.getElementById('sendForm').onsubmit = async (e) => {
         e.preventDefault();
         const msg = document.getElementById('msgInput').value.trim();
@@ -257,7 +356,7 @@
           const file = fileInput.files[0];
           const ext = file.name.split('.').pop();
           const imgRef = storageRef(storage, `conversations/${activeConvoId}/${Date.now()}.${ext}`);
-          document.getElementById('uploadingStatus').innerText = "Laddar upp bild...";
+          document.getElementById('uploadingStatus').innerText = t("msg_uploading");
           await uploadBytes(imgRef, file);
           imageUrl = await getDownloadURL(imgRef);
           document.getElementById('uploadingStatus').innerText = "";
@@ -269,7 +368,6 @@
           from: currentUser.uid,
           sentAt: serverTimestamp()
         });
-        // Uppdatera konvo med sista meddelandet + notis för andra
         let otherUser = (convoData ? convoData.users : [currentUser.uid, otherId]).find(u => u !== currentUser.uid);
         await updateDoc(convoRef, {
           lastMessage: msg || "[Bild]",
@@ -282,8 +380,6 @@
         await loadConversations();
       };
     }
-
-    // === Blockera/avblockera ===
     window.blockUser = async function(convoId) {
       const convoRef = doc(db, 'conversations', convoId);
       await updateDoc(convoRef, { [`blocked.${currentUser.uid}`]: true });
@@ -296,12 +392,10 @@
       openConversation(convoId);
       await loadConversations();
     };
-
-    // === RADERA MARKERADE MEDDELANDEN ===
     window.deleteSelectedMessages = async function() {
       const boxes = document.querySelectorAll('.msg-checkbox:checked');
       if (boxes.length === 0) return;
-      if (!confirm("Är du säker på att du vill radera valda meddelanden?")) return;
+      if (!confirm(t("msg_confirm_delete"))) return;
       const convoRef = doc(db, 'conversations', activeConvoId);
       for (const box of boxes) {
         await deleteDoc(doc(convoRef, "messages", box.value));
