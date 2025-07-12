@@ -485,7 +485,7 @@
       const navLinks = document.querySelectorAll('.nav-links a');
       const navMobileLinks = document.querySelectorAll('#navMobile a:not(.logout-link-mobile)');
       if (lang === 'en') {
-        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Ghost&Glow', 'Store'];
+        const texts = ['Forum', 'Wall', 'Upload', 'Profile', 'Friends', 'Messages', 'Ghost&Glow', 'Store'];
         navLinks.forEach((a,i) => a.textContent = texts[i]);
         navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
         safeSet('#logoutDesktopBtn', 'textContent', 'Log out');
@@ -513,7 +513,7 @@
         safeSetHTML('label[for="temporary"]', `<input type="checkbox" id="temporary" /> Make this a temporary post (disappears in 24h)`);
         safeSet('button[type="submit"]', 'textContent', 'Upload');
       } else {
-        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Ghost&Glow', 'Butik'];
+        const texts = ['Forum', 'Väggen', 'Ladda upp', 'Profil', 'Vänner', 'Meddelanden', 'Ghost&Glow', 'Butik'];
         navLinks.forEach((a,i) => a.textContent = texts[i]);
         navMobileLinks.forEach((a,i) => a.textContent = texts[i]);
         safeSet('#logoutDesktopBtn', 'textContent', 'Logga ut');
