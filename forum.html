@@ -6,7 +6,6 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* --- Samma CSS som innan, ingen ändring --- */
     html { overflow-y: scroll; }
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
     .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
@@ -56,6 +55,7 @@
     .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
     .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
     .reactions-view { margin-left: 6px; font-size: 1.18em;}
+    .reaction-emoji { cursor: pointer; position: relative; }
     .comments-block { margin-top: 13px; padding-top: 13px; border-top: 1px solid #333; }
     .comment { margin-bottom: 11px; border-radius: 5px; background: #141923; padding: 8px 9px 6px 9px; }
     .comment .comment-meta { color: #00ffd9; font-size: 0.96em; }
@@ -119,7 +119,6 @@
     </div>
   </nav>
   <!-- NAVBAR END -->
-
   <div class="forum-box">
     <div class="forum-title" data-i18n="forum_title">Forum</div>
     <div class="search-bar">
@@ -133,13 +132,30 @@
     </form>
     <div id="threadList" class="thread-list"></div>
   </div>
-
   <script type="module">
     import { auth, db } from "./scripts/firebase-init.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    import { collection, query, orderBy, getDocs, addDoc, doc, setDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { collection, query, orderBy, getDocs, addDoc, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // --- SIDBANNER ROTATION ---
+    const emojis = [
+      { emoji: "👍", key: "thumbsup" },
+      { emoji: "😂", key: "laugh" },
+      { emoji: "😃", key: "bigsmile" },
+      { emoji: "🙂", key: "smile" },
+      { emoji: "😇", key: "angel" },
+      { emoji: "😳", key: "embarrassed" },
+      { emoji: "😕", key: "confused" },
+      { emoji: "🙁", key: "sad" },
+      { emoji: "😢", key: "cry" },
+      { emoji: "😡", key: "angry" },
+      { emoji: "👎", key: "thumbsdown" }
+    ];
+
+    let currentUser = null;
+    let userMap = {};
+    let threadsGlobal = [];
+
+    // Banners
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
@@ -161,12 +177,9 @@
       document.getElementById('rightBannerLink').href = right.url;
     }
     updateBanners();
-    setInterval(() => {
-      bannerIndex = (bannerIndex + 1) % banners.length;
-      updateBanners();
-    }, 6000);
+    setInterval(() => { bannerIndex = (bannerIndex + 1) % banners.length; updateBanners(); }, 6000);
 
-    // --- HAMBURGER & NAVBAR ---
+    // Hamburger och navbar
     document.addEventListener("DOMContentLoaded", function () {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navMobile = document.getElementById('navMobile');
@@ -175,16 +188,12 @@
           navMobile.classList.toggle('show');
         });
         navMobile.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            navMobile.classList.remove('show');
-          });
+          link.addEventListener('click', () => { navMobile.classList.remove('show'); });
         });
         const logoutBtn = document.getElementById("logoutMobileBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            navMobile.classList.remove('show');
-            doLogout();
+            e.preventDefault(); navMobile.classList.remove('show'); doLogout();
           });
         }
       }
@@ -202,7 +211,7 @@
       }
     });
 
-    // --- TRANSLATION ---
+    // TRANSLATION
     const translations = {
       sv: {
         forum: "Forum", store: "Butik", wall: "Väggen", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow",
@@ -248,18 +257,14 @@
     }
     applyTranslations();
 
-    let currentUser = null;
-    let userMap = {};
-    let threadsGlobal = [];
-
-    // --- Hämta användar-namn (profiles) ---
+    // Hämta användar-namn (profiles)
     async function fetchUsers() {
       userMap = {};
       const snap = await getDocs(collection(db, "profiles"));
       snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
     }
 
-    // --- Ladda trådar ---
+    // Ladda trådar
     async function loadThreads(searchTerm = "") {
       await fetchUsers();
       const q = query(collection(db, "forumThreads"), orderBy("createdAt", "desc"));
@@ -278,38 +283,63 @@
       addThreadListeners(filtered);
     }
 
+    // Rendera tråd med emoji-reaktioner
     function renderThreadListItem(thread) {
-  const name = userMap[thread.creatorUid] || t("guest");
-  return `
-    <div class="thread" data-threadid="${thread.id}">
-      <div class="thread-header">
-        <span>${escapeHTML(thread.title)}</span>
-        <span style="margin-left:12px;font-size:0.9em;">
-          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
-            ${name}
-          </a>
-        </span>
-        ${(currentUser && thread.creatorUid === currentUser.uid)
-          ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
-          : ""}
-      </div>
-      <div class="thread-desc">${escapeHTML(thread.description)}</div>
-      <div class="thread-content" id="threadContent-${thread.id}"></div>
-      ${currentUser ? `
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">${t("add_post")}</button>
-        </form>
-      ` : `
-        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-      `}
-    </div>
-  `;
-}
+      const name = userMap[thread.creatorUid] || t("guest");
+      return `
+        <div class="thread" data-threadid="${thread.id}">
+          <div class="thread-header">
+            <span>${escapeHTML(thread.title)}</span>
+            <span style="margin-left:12px;font-size:0.9em;">
+              <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
+                ${name}
+              </a>
+            </span>
+            ${(currentUser && thread.creatorUid === currentUser.uid)
+              ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="${t("delete_thread")}">✖</button>`
+              : ""}
+          </div>
+          <div class="thread-desc">${escapeHTML(thread.description)}</div>
+          <div class="emoji-row" id="threadEmojiRow-${thread.id}">
+            ${emojis.map(e => `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`).join("")}
+            <span class="reactions-view" id="threadReactions-${thread.id}"></span>
+          </div>
+          <div class="thread-content" id="threadContent-${thread.id}"></div>
+          ${currentUser ? `
+            <form class="add-post-form" data-threadid="${thread.id}">
+              <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+              <button type="submit">${t("add_post")}</button>
+            </form>
+          ` : `<div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>`}
+        </div>
+      `;
+    }
 
+    // Emoji-reaktioner på tråd
     function addThreadListeners(threads) {
       threads.forEach(thread => {
+        loadThreadReactions(thread.id);
         loadPosts(thread.id);
+
+        // Emoji-reaktion
+        emojis.forEach(e => {
+          const emojiBtn = document.querySelector(
+            `.thread[data-threadid="${thread.id}"] .emoji-btn[data-emoji="${e.key}"]`
+          );
+          if (emojiBtn) {
+            emojiBtn.onclick = async () => {
+              if (!currentUser) return alert(t("login_to_react"));
+              const ref = doc(db, "forumThreads", thread.id, "reactions", currentUser.uid);
+              const snap = await getDoc(ref);
+              if (snap.exists() && snap.data().emoji === e.key) {
+                await deleteDoc(ref);
+              } else {
+                await setDoc(ref, { emoji: e.key, user: currentUser.uid });
+              }
+              loadThreadReactions(thread.id);
+            };
+          }
+        });
 
         // Delete thread
         const delBtn = document.querySelector(
@@ -347,6 +377,38 @@
       });
     }
 
+    // Ladda och rendera emoji-reaktioner (popup)
+    async function loadThreadReactions(threadId) {
+      const reactionsSnap = await getDocs(collection(db, "forumThreads", threadId, "reactions"));
+      const reactions = reactionsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      const emojiCounts = {};
+      emojis.forEach(e => emojiCounts[e.key] = []);
+      reactions.forEach(r => emojiCounts[r.emoji]?.push(r.user));
+      let html = "";
+      emojis.forEach(e => {
+        const users = emojiCounts[e.key];
+        if (users.length) {
+          html += `
+            <span class="reaction-emoji" data-emoji="${e.key}">
+              ${e.emoji} <span style="font-weight:bold">${users.length > 1 ? users.length : ""}</span>
+              <span class="emoji-popup" style="display:none;position:absolute;top:30px;left:0;background:#181f26;padding:6px 14px;border-radius:9px;box-shadow:0 4px 18px #00ffcc77;color:#fff;z-index:20;">
+                ${users.map(uid => userMap[uid] || t("guest")).join("<br>")}
+              </span>
+            </span>
+          `;
+        }
+      });
+      const reactView = document.getElementById(`threadReactions-${threadId}`);
+      if (reactView) reactView.innerHTML = html;
+
+      document.querySelectorAll(`#threadReactions-${threadId} .reaction-emoji`).forEach(span => {
+        const popup = span.querySelector('.emoji-popup');
+        span.onmouseenter = () => popup.style.display = 'block';
+        span.onmouseleave = () => popup.style.display = 'none';
+      });
+    }
+
+    // Ladda och rendera inlägg (posts) – originalkod här nedan!
     async function loadPosts(threadId) {
       const q = query(collection(db, "forumThreads", threadId, "posts"), orderBy("createdAt", "asc"));
       const postsSnap = await getDocs(q);
@@ -357,34 +419,28 @@
     }
 
     function renderPost(threadId, post) {
-  const name = userMap[post.creatorUid] || t("guest");
-  return `
-    <div class="post" data-postid="${post.id}">
-      <div class="post-header">
-        <span style="color:#00ffd9;">Användare: 
-          <a href="profile-view.html?uid=${post.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
-            ${name}
-          </a>
-        </span>
-      </div>
-      <div class="post-content">${escapeHTML(post.text)}</div>
-      <div class="emoji-row">
-        ${emojis.map(e =>
-          `<button class="emoji-btn" data-emoji="${e.key}">${e.emoji}</button>`
-        ).join("")}
-        <span class="reactions-view" id="postReactions-${threadId}-${post.id}"></span>
-      </div>
-      <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
-      <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
-        <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
-        <button type="submit">${t("comment")}</button>
-      </form>
-    </div>
-  `;
-}
+      const name = userMap[post.creatorUid] || t("guest");
+      return `
+        <div class="post" data-postid="${post.id}">
+          <div class="post-header">
+            <span style="color:#00ffd9;">${t("user")}: 
+              <a href="profile-view.html?uid=${post.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
+                ${name}
+              </a>
+            </span>
+          </div>
+          <div class="post-content">${escapeHTML(post.text)}</div>
+          <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+          <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
+            <textarea rows="1" placeholder="${t("comment_placeholder")}" maxlength="200"></textarea>
+            <button type="submit">${t("comment")}</button>
+          </form>
+        </div>
+      `;
+    }
 
     function addPostListeners(threadId, post) {
-      // Ingen reaktions- eller kommentarlogik i detta minimalistiska forumexempel (lägg till om du vill!)
+      // Du kan bygga vidare med t.ex. kommentarer på inlägg om du vill!
     }
 
     // LOGOUT
@@ -417,19 +473,16 @@
     const searchInput = document.getElementById("threadSearch");
     const clearBtn = document.getElementById("clearSearch");
     if (searchInput) {
-      searchInput.addEventListener("input", e => {
-        loadThreads(searchInput.value);
-      });
-      clearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        loadThreads("");
-      });
+      searchInput.addEventListener("input", e => { loadThreads(searchInput.value); });
+      clearBtn.addEventListener("click", () => { searchInput.value = ""; loadThreads(""); });
     }
 
-    // AUTH STATE/INIT
+    // Escape HTML
     function escapeHTML(str) {
       return str ? str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])) : "";
     }
+
+    // AUTH STATE/INIT
     onAuthStateChanged(auth, user => {
       currentUser = user;
       loadThreads();
