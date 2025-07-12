@@ -6,7 +6,6 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* --- Samma stil som wall och tidigare kod, inkl. responsiv meny, emoji m.m. --- */
     body {
       background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace;
       min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;
@@ -42,6 +41,7 @@
     .thread-form { display: flex; flex-direction: column; gap: 9px; margin-bottom: 36px; }
     .thread-form input, .thread-form textarea, .thread-form select { width: 100%; padding: 10px; font-size: 1.1em; border-radius: 6px; border: 1.5px solid #00ffcc; background: #181f26; color: #baffff; box-sizing: border-box;}
     .thread-form button { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 9px 0; border-radius: 7px; font-size: 1.13em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer; margin-top: 3px; }
+    .thread-form button[disabled] { opacity: 0.55; cursor: not-allowed; }
     .suggest-btn { margin-top: 7px; background: #222; color: #0ff; border: 1px solid #00ffcc; border-radius: 6px; padding: 7px 0; font-size: 1.04em;}
     .thread-list { margin-top: 12px; }
     .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22; }
@@ -50,10 +50,10 @@
     .thread-content { padding: 10px 18px 18px 18px; }
     .add-post-form textarea { width: 100%; padding: 7px; border-radius: 6px; background: #181f26; color: #fff; border: 1.5px solid #66ffcc; margin-bottom: 6px;}
     .add-post-form button { background: #00ffcc; color: #000; border-radius: 5px; font-weight: bold; border: none; padding: 7px 16px; box-shadow: 0 0 5px #00ffcc80; cursor: pointer;}
+    .add-post-form button[disabled] { opacity: 0.55; cursor: not-allowed; }
     .post { background: #13181f; border: 1.5px solid #66ffcc; border-radius: 9px; margin: 17px 0; padding: 12px 8px 8px 8px; }
     .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
     .post-content { font-size: 1.19em;}
-    /* ===== EMOJI COLLAPSE ===== */
     .emoji-row-collapsed { display: flex; align-items: center; gap: 8px; margin: 7px 0 3px 0; user-select: none; width: fit-content; position: relative; }
     .emoji-main-btn { font-size: 1.3em; background: none; border: none; cursor: pointer; outline: none; padding: 2px 6px; }
     .emoji-toggle-arrow { font-size: 1.3em; margin-left: 2px; transition: transform 0.18s; display: inline-block; user-select: none; cursor: pointer; }
@@ -66,7 +66,6 @@
     .emoji-user-pick { margin-left: 6px; font-size: 1.24em; background: none; border: none; padding: 2px 6px; border-radius: 6px; outline: none; cursor: pointer; color: #0a0a0a; background: #00ffcc; font-weight: bold; box-shadow: 0 0 7px #00ffcc7a;}
     .emoji-user-pick:hover { background: #19ffc5; }
     .emoji-summary { margin-left: 9px; font-size: 1.11em; color: #00ffd9; cursor: pointer; }
-    /* ========================= */
     .emoji-viewer-list { display: none; position: absolute; left: 0; top: 110%; z-index: 2000; min-width: 200px; background: #191d2b; color: #fff; border: 1.5px solid #00ffcc; border-radius: 11px; box-shadow: 0 0 16px #00ffcc77; padding: 10px 13px 7px 13px; font-size: 1.1em; text-align: left; max-height: 300px; overflow-y: auto; }
     .emoji-viewer-list.show { display: block; animation: fadeIn 0.15s; }
     .emoji-viewer-list .emoji-head { font-size:1.12em; font-weight:600; margin-bottom:7px; color:#00ffd9;}
@@ -141,8 +140,8 @@
 <script type="module">
 // ==== Translations & Emoji ====
 const translations = {
-  sv: { forum: "Forum", forum_title: "Forum", wall: "Väggen", store: "Butik", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow", logout: "Logga ut", login_to_react: "Logga in för att reagera.", login_to_comment: "Logga in för att kommentera.", guest: "Gäst", user: "Användare", delete_confirm: "Vill du verkligen ta bort tråden?", reacted_by: "Reagerat med", loading: "Laddar trådar...", no_threads: "Inga trådar hittades.", },
-  en: { forum: "Forum", forum_title: "Forum", wall: "Wall", store: "Store", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow", logout: "Log out", login_to_react: "Login to react.", login_to_comment: "Login to comment.", guest: "Guest", user: "User", delete_confirm: "Delete this thread?", reacted_by: "Reacted by", loading: "Loading threads...", no_threads: "No threads found.", }
+  sv: { forum: "Forum", forum_title: "Forum", wall: "Väggen", store: "Butik", upload: "Ladda upp", profile: "Profil", friends: "Vänner", ghostglow: "Ghost&Glow", logout: "Logga ut", login_to_react: "Logga in för att reagera.", login_to_comment: "Logga in för att kommentera.", login_to_post: "Logga in för att posta eller skapa tråd.", guest: "Gäst", user: "Användare", delete_confirm: "Vill du verkligen ta bort tråden?", reacted_by: "Reagerat med", loading: "Laddar trådar...", no_threads: "Inga trådar hittades.", },
+  en: { forum: "Forum", forum_title: "Forum", wall: "Wall", store: "Store", upload: "Upload", profile: "Profile", friends: "Friends", ghostglow: "Ghost&Glow", logout: "Log out", login_to_react: "Login to react.", login_to_comment: "Login to comment.", login_to_post: "Login to post or create thread.", guest: "Guest", user: "User", delete_confirm: "Delete this thread?", reacted_by: "Reacted by", loading: "Loading threads...", no_threads: "No threads found.", }
 };
 function t(key) {
   const lang = localStorage.lang === "en" ? "en" : "sv";
@@ -166,16 +165,13 @@ function escapeHTML(str) {
   if (!str) return "";
   return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
 }
-
-// === FIREBASE IMPORT (för dig: byt till egna init vid behov) ===
+// === FIREBASE IMPORT ===
 import { auth, db } from "./scripts/firebase-init.js";
-import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 let currentUser = null;
 let userMap = {};
 let threadsGlobal = [];
-
-// ---- KATEGORIER ----
 const DEFAULT_CATEGORIES = [
   "Allmänt", "Introduktioner", "Nyheter", "Programmering", "Webbutveckling",
   "Teknik", "Spel", "Film & TV", "Musik", "Livsstil", "Drömmar",
@@ -207,7 +203,7 @@ document.getElementById('categorySelect').addEventListener('change', function ()
   }
 });
 document.getElementById('suggestCategoryBtn').addEventListener('click', async function () {
-  if (!currentUser) { alert("Du måste vara inloggad!"); return; }
+  if (!currentUser) { alert(t("login_to_post")); return; }
   const cat = prompt("Föreslå namn på din kategori:");
   if (cat && cat.length >= 3 && cat.length <= 30) {
     await addDoc(collection(db, "forumCategories"), {
@@ -220,8 +216,6 @@ document.getElementById('suggestCategoryBtn').addEventListener('click', async fu
   }
 });
 fillCategorySelect();
-// ---- END kategori
-
 // --- NAV ---
 document.addEventListener("DOMContentLoaded", function() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -241,7 +235,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 });
-// LOGOUT
 function doLogout() { signOut(auth).then(() => { window.location.href = "login.html"; }); }
 async function fetchUsers() {
   userMap = {};
@@ -294,9 +287,9 @@ async function renderThreads() {
         </div>
         <div class="thread-desc">${escapeHTML(thread.description)}</div>
         <div class="emoji-row-collapsed" data-threadid="${thread.id}">
-          <button class="emoji-main-btn" type="button">😊</button>
-          <span class="emoji-toggle-arrow">&#9654;</span>
-          ${userReaction
+          <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
+          <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
+          ${userReaction && currentUser
             ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
             : ""}
           <span class="emoji-summary">${emojiSummary(reactions)}</span>
@@ -324,6 +317,9 @@ function setupEmojiRow() {
     const arrow = row.querySelector('.emoji-toggle-arrow');
     const btn = row.querySelector('.emoji-main-btn');
     const viewer = row.querySelector('.emoji-viewer-list');
+    // Aktivera/dölj beroende på inloggning
+    if (btn && !currentUser) btn.disabled = true;
+    if (arrow && !currentUser) arrow.style.pointerEvents = 'none';
     if (popup.childElementCount === 0) {
       emojis.forEach(e => {
         const emojiBtn = document.createElement('button');
@@ -331,6 +327,7 @@ function setupEmojiRow() {
         emojiBtn.innerText = e.emoji;
         emojiBtn.title = e.emoji;
         emojiBtn.dataset.emoji = e.key;
+        emojiBtn.disabled = !currentUser;
         emojiBtn.onclick = async function(ev) {
           ev.stopPropagation();
           if (!currentUser) return alert(t("login_to_react"));
@@ -348,16 +345,17 @@ function setupEmojiRow() {
       });
     }
     function togglePopup(e) {
+      if (!currentUser) return;
       e.stopPropagation();
       const open = popup.classList.toggle('show');
       if (open) arrow.classList.add('open');
       else arrow.classList.remove('open');
     }
-    btn.onclick = togglePopup;
-    arrow.onclick = togglePopup;
+    if (btn) btn.onclick = togglePopup;
+    if (arrow) arrow.onclick = togglePopup;
     popup.onclick = e => e.stopPropagation();
     const userPick = row.querySelector('.emoji-user-pick');
-    if (userPick) {
+    if (userPick && currentUser) {
       userPick.onclick = async function(ev) {
         ev.stopPropagation();
         if (!currentUser) return;
@@ -467,6 +465,14 @@ onAuthStateChanged(auth, user => {
   document.getElementById("logoutMobileBtn").onclick = doLogout;
   fillCategorySelect();
   loadThreads();
+  // Disable/enable UI för skapa tråd/post utifrån inloggning
+  setTimeout(() => {
+    document.getElementById("threadTitle").disabled = !currentUser;
+    document.getElementById("threadDesc").disabled = !currentUser;
+    document.getElementById("categorySelect").disabled = !currentUser;
+    document.getElementById("addThreadBtn").disabled = !currentUser;
+    document.getElementById("suggestCategoryBtn").disabled = !currentUser;
+  }, 200);
 });
 document.addEventListener('click', function() {
   document.querySelectorAll('.emoji-popup').forEach(popup => popup.classList.remove('show'));
@@ -477,10 +483,9 @@ document.addEventListener('click', function() {
     viewer.dataset.emoji = "";
   });
 });
-// ---- Skapa tråd ----
 document.getElementById('threadForm').onsubmit = async function(e) {
   e.preventDefault();
-  if (!currentUser) { alert("Du måste vara inloggad!"); return; }
+  if (!currentUser) { alert(t("login_to_post")); return; }
   const title = document.getElementById('threadTitle').value.trim();
   const desc = document.getElementById('threadDesc').value.trim();
   const catSel = document.getElementById('categorySelect');
