@@ -6,16 +6,8 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      background: #0a0a0a;
-      color: #e0ffff;
-      font-family: 'Courier New', monospace;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 85px;
-      position: relative;
-      overflow-x: hidden;
-    }
+    /* --- Samma GhostGrid-stil som wall, inklusive emoji-popup, nav, box, responsivitet --- */
+    body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
     .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0; }
     .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
     .glow-right { right: 0; background: radial-gradient(circle at right, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66; }
@@ -87,25 +79,11 @@
 <body>
   <div class="glow-left"></div>
   <div class="glow-right"></div>
-  <div class="side-banner left">
-    <div class="banner-inner">
-      <a id="leftBannerLink" href="#" target="_blank">
-        <img id="leftBannerImg" src="https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" />
-      </a>
-    </div>
-  </div>
-  <div class="side-banner right">
-    <div class="banner-inner">
-      <a id="rightBannerLink" href="#" target="_blank">
-        <img id="rightBannerImg" src="https://dummyimage.com/150x1800/222299/fff&text=Reklam+2" alt="Reklam" />
-      </a>
-    </div>
-  </div>
+  <div class="side-banner left"><div class="banner-inner"><a id="leftBannerLink" href="#" target="_blank"><img id="leftBannerImg" src="https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1" alt="Reklam" /></a></div></div>
+  <div class="side-banner right"><div class="banner-inner"><a id="rightBannerLink" href="#" target="_blank"><img id="rightBannerImg" src="https://dummyimage.com/150x1800/222299/fff&text=Reklam+2" alt="Reklam" /></a></div></div>
   <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Meny" tabindex="0"><span></span><span></span><span></span></div>
     <div class="nav-center">
       <ul class="nav-links">
         <li><a href="forum.html" data-i18n="forum" class="active">Forum</a></li>
@@ -167,7 +145,7 @@ function escapeHTML(str) {
   return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
 }
 import { auth, db } from "./scripts/firebase-init.js";
-import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 let currentUser = null;
 let userMap = {};
@@ -199,6 +177,26 @@ async function fetchUsers() {
   const snap = await getDocs(collection(db, "profiles"));
   snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || t("guest"));
 }
+// =================== SKAPA NY TRÅD =====================
+document.getElementById("threadForm").onsubmit = async function (e) {
+  e.preventDefault();
+  if (!currentUser) { alert(t("login_to_comment")); return; }
+  const title = document.getElementById("threadTitle").value.trim();
+  const description = document.getElementById("threadDesc").value.trim();
+  if (!title || !description) return;
+  document.getElementById("addThreadBtn").disabled = true;
+  await addDoc(collection(db, "forumThreads"), {
+    title,
+    description,
+    creatorUid: currentUser.uid,
+    createdAt: new Date()
+  });
+  document.getElementById("threadTitle").value = "";
+  document.getElementById("threadDesc").value = "";
+  document.getElementById("addThreadBtn").disabled = false;
+  loadThreads();
+};
+// =================== /SKAPA NY TRÅD =====================
 async function loadThreads() {
   document.getElementById("threadList").innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
   await fetchUsers();
