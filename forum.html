@@ -52,49 +52,69 @@
     .post-header { font-size: 1em; color: #00ffd9; margin-bottom: 6px;}
     .post-content { font-size: 1.19em;}
     .emoji-row { margin: 7px 0 3px 0; display: flex; flex-wrap: wrap; gap: 7px; }
-    .emoji-btn { background: none; border: none; font-size: 1.36em; cursor: pointer; transition: filter 0.1s; }
-    .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 5px #00ffcc); }
-    .reactions-view { margin-left: 6px; font-size: 1.18em;}
-    .reaction-emoji { cursor: pointer; position: relative; }
-    .emoji-btn { position: relative; }
-    .emoji-btn.selected, .emoji-btn:hover { filter: brightness(1.3) drop-shadow(0 0 7px #00ffcc); }
-    .emoji-count {
-      font-size: 0.99em;
-      color: #00ffd9;
-      font-weight: bold;
-      margin-left: 3px;
-      background: #181f26;
-      border-radius: 8px;
-      padding: 1px 7px;
-      display: inline-block;
-      border: 1.5px solid #00ffd9;
-      position: relative;
-      top: -3px;
+    .comment { margin-bottom: 11px; border-radius: 5px; background: #141923; padding: 8px 9px 6px 9px; }
+    .comment .comment-meta { color: #00ffd9; font-size: 0.96em; }
+    .comment .comment-text { margin: 4px 0 2px 0;}
+    .comment .emoji-row { margin-top: 1px;}
+    .comment-actions { font-size: 0.9em; color: #8ef; margin-top: 2px;}
+    .comment-actions a { margin-right: 9px; color: #00ccff; text-decoration: underline; cursor: pointer;}
+    .comment-actions a:hover { color: #00ffcc; }
+    .thread-delete-btn { background: none; border: none; color: #fa99bb; font-weight: bold; font-size: 1em; cursor: pointer;}
+    .thread-delete-btn:hover { color: #ff0055;}
+    @media (max-width: 900px) { .side-banner, .glow-left, .glow-right { display: none; } }
+    @media (max-width: 700px) { .forum-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
+    .search-bar {width:100%;max-width:380px;margin:0 auto 18px auto;display:flex;gap:8px;}
+    .search-bar input{flex:1;padding:7px 11px;font-size:1.1em;border-radius:7px;border:1.5px solid #00ffcc;background:#222;color:#e0ffff;}
+    .search-bar button{background:#00ffcc;color:#181f26;border-radius:6px;font-weight:bold;border:none;padding:7px 16px;box-shadow:0 0 5px #00ffcc80;cursor:pointer;}
+    /* WALL-STYLE EMOJI PICKER */
+    .emoji-trigger-btn {
+      display: inline-flex; align-items: center;
+      background: #191e25; color: #0ff; border: 1.5px solid #00ffcc;
+      border-radius: 11px; padding: 7px 16px; font-size: 1.25em;
+      cursor: pointer; margin-right: 7px; transition: filter .15s;
+      box-shadow: 0 0 7px #00ffcc60; font-family: inherit; font-weight: 600;
     }
-    .emoji-popup {
-      display: none;
-      min-width: 130px;
-      background: #181f26;
-      border: 2px solid #00ffcc;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #00ffcc99;
-      padding: 10px 14px;
-      font-size: 1.1em;
-      color: #0ff;
-      z-index: 9999;
-      position: absolute;
-      left: 48px;
-      top: 0;
-      animation: fadein 0.13s;
+    .emoji-trigger-btn:hover, .emoji-trigger-btn:focus {
+      filter: brightness(1.18); background: #10141a;
     }
-    @media (max-width: 600px) {
-      .emoji-popup {
-        left: 0 !important;
-        top: 35px !important;
-        min-width: 120px;
-      }
+    .emoji-chooser-row {
+      display: flex; gap: 10px; background: #15191f; padding: 9px 14px 10px 14px;
+      border: 1.5px solid #00ffcc; border-radius: 11px; box-shadow: 0 0 12px #00ffcc44;
+      position: absolute; left: 60px; top: 0; z-index: 5; animation: emojiin .13s;
     }
-    @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes emojiin { from {opacity:0; left:35px;} to {opacity:1; left:60px;} }
+    .emoji-chooser-row .emoji-btn {
+      background: none; border: none; font-size: 1.36em; cursor: pointer;
+      padding: 0 6px; border-radius: 6px; transition: filter 0.13s, background 0.12s;
+    }
+    .emoji-chooser-row .emoji-btn:hover, .emoji-chooser-row .emoji-btn.selected {
+      filter: brightness(1.35) drop-shadow(0 0 5px #00ffcc);
+      background: #161e25;
+    }
+    .emoji-picked-btn {
+      display: inline-flex; align-items: center; background: #191e25; color: #00ffd9;
+      border: 1.5px solid #00ffd9; border-radius: 10px; padding: 7px 18px 7px 12px;
+      font-size: 1.3em; font-weight: 700; cursor: pointer; margin-right: 7px; margin-bottom: 2px;
+      box-shadow: 0 0 8px #00ffd980; transition: filter .14s; position: relative;
+    }
+    .emoji-picked-btn .emoji-count {
+      margin-left: 7px; color: #fff; font-size: 1em; background: #00ffd9;
+      border-radius: 7px; padding: 2px 9px 2px 9px; font-weight: bold;
+    }
+    .emoji-picked-btn .emoji-popup {
+      display: none; min-width: 130px; background: #191e25; border: 2px solid #00ffd9;
+      border-radius: 8px; box-shadow: 0 0 10px #00ffd999; padding: 11px 14px 10px 14px;
+      font-size: 1.1em; color: #00ffd9; z-index: 9999; position: absolute; left: 45px; top: 0;
+      animation: fadein .12s;
+    }
+    .emoji-picked-btn:hover .emoji-popup, .emoji-picked-btn:focus .emoji-popup {
+      display: block;
+    }
+    .emoji-picked-btn .emoji-popup b { color: #fff; }
+    .emoji-picked-btn .emoji-popup i { color: #888; }
+    @media (max-width:600px) {
+      .emoji-chooser-row { left: 0; top: 45px; flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
@@ -161,8 +181,8 @@
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     import { collection, query, orderBy, getDocs, addDoc, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // EMOJI-REACTIONER (SOM WALL – ENDAST MED REAKTION!)
-    const emojis = [
+    // WALL-STYLE EMOJI PICKER
+    const emojiList = [
       { emoji: "❤️", key: "heart" },
       { emoji: "👍", key: "thumbsup" },
       { emoji: "😂", key: "laugh" },
@@ -182,11 +202,13 @@
     let userMap = {};
     let threadsGlobal = [];
 
-    // Hämta alla användare
+    // Hämta alla användare, så namn synkas live
     async function fetchUsers() {
       userMap = {};
       const snap = await getDocs(collection(db, "profiles"));
-      snap.docs.forEach(docu => userMap[docu.id] = docu.data().nickname || docu.data().displayName || "Gäst");
+      snap.docs.forEach(docu => {
+        userMap[docu.id] = docu.data().nickname || docu.data().displayName || "Gäst";
+      });
     }
 
     // Ladda trådar
@@ -239,70 +261,114 @@
       `;
     }
 
-    // Visa emoji-reaktioner exakt som på wall (en och en, popup, namnrad)
+    // WALL-STYLE EMOJI PICKER till forum
     async function renderThreadReactions(threadId) {
       const reactionsRef = collection(db, "forumThreads", threadId, "reactions");
       const reactionsSnap = await getDocs(reactionsRef);
       const reactions = reactionsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-      // Endast emojis som har minst en reaktion
+      // Vilken emoji har JAG valt?
+      let myReaction = null;
+      if (currentUser) {
+        myReaction = reactions.find(r => r.id === currentUser.uid);
+      }
+
+      // Gruppera reaktioner för namn, antal
       const grouped = {};
       reactions.forEach(r => {
         if (!grouped[r.emoji]) grouped[r.emoji] = [];
         grouped[r.emoji].push(r);
       });
 
-      // Hitta om currentUser har reagerat
-      let myReaction = "";
+      // Om användaren redan valt en emoji: visa den, annars visa smiley + pil
+      let html = "";
       if (currentUser) {
-        const mine = reactions.find(r => r.id === currentUser.uid);
-        if (mine) myReaction = mine.emoji;
-      }
-
-      // Rendera endast de emojis som HAR reaktioner (och i rätt ordning!)
-      let html = emojis.filter(e => grouped[e.key])
-        .map(e => {
+        if (myReaction) {
+          const e = emojiList.find(e => e.key === myReaction.emoji) || emojiList[4]; // default: 🙂
           const arr = grouped[e.key] || [];
           const count = arr.length;
-          // Samla namnrad för popup
           const namnrad = arr.map(u => userMap[u.user] || "Gäst").join(", ");
-          return `
-            <button class="emoji-btn${myReaction === e.key ? " selected" : ""}" data-emoji="${e.key}" data-threadid="${threadId}" style="position:relative;">
-              ${e.emoji}<span class="emoji-count">${count}</span>
-              <span class="emoji-popup" id="popup-${threadId}-${e.key}">
-                <b>${e.emoji} ${count} st</b><br>
-                <span style="color:#fff;font-size:1em;">${namnrad || "<i>Inga reaktioner</i>"}</span>
-              </span>
+          html += `
+            <button class="emoji-picked-btn" id="threadEmojiTrigger-${threadId}" type="button" tabindex="0">
+              ${e.emoji}
+              ${count ? `<span class="emoji-count">${count}</span>` : ""}
+              <svg style="margin-left:10px;margin-bottom:2px;" width="15" height="15" viewBox="0 0 22 22"><polyline points="5,8 11,14 17,8" fill="none" stroke="#00ffd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="emoji-popup"><b>${e.emoji} ${count} st</b><br>${namnrad || "<i>Inga reaktioner</i>"}</span>
             </button>
           `;
-        }).join("");
+        } else {
+          html += `
+            <button class="emoji-trigger-btn" id="threadEmojiTrigger-${threadId}" type="button" tabindex="0">
+              😃 <svg style="margin-left:7px;margin-bottom:2px;" width="16" height="16" viewBox="0 0 22 22"><polyline points="5,8 11,14 17,8" fill="none" stroke="#00ffd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          `;
+        }
+        // Utdragsbar emoji-rad (gömd, visas vid klick)
+        html += `
+          <div class="emoji-chooser-row" id="threadEmojiChooser-${threadId}" style="display:none;">
+            ${emojiList.map(e => `
+              <button class="emoji-btn${myReaction && myReaction.emoji === e.key ? " selected" : ""}" 
+                data-emoji="${e.key}" data-threadid="${threadId}" title="${e.emoji}">
+                ${e.emoji}
+              </button>
+            `).join("")}
+          </div>
+        `;
+      } else {
+        html = `<span style="color:#aaa;font-size:1em;padding:4px 0 2px 0;">Logga in för att reagera.</span>`;
+      }
       document.getElementById(`threadReactions-${threadId}`).innerHTML = html;
 
-      // Emoji-klick (lägg till/byt/ta bort reaktion)
-      document.querySelectorAll(`.thread[data-threadid="${threadId}"] .emoji-btn`).forEach(btn => {
-        btn.onclick = async function (e) {
+      if (!currentUser) return;
+
+      // Emoji-trigger click: visa/dölj rad
+      const triggerBtn = document.getElementById(`threadEmojiTrigger-${threadId}`);
+      const chooserRow = document.getElementById(`threadEmojiChooser-${threadId}`);
+      if (triggerBtn) {
+        triggerBtn.onclick = e => {
+          e.stopPropagation();
+          chooserRow.style.display = (chooserRow.style.display === "none" || !chooserRow.style.display) ? "flex" : "none";
+        };
+        triggerBtn.onblur = () => setTimeout(() => { chooserRow.style.display = "none"; }, 180);
+      }
+      // Klick på emoji i raden = välj, uppdatera Firestore och stäng raden
+      document.querySelectorAll(`#threadEmojiChooser-${threadId} .emoji-btn`).forEach(btn => {
+        btn.onclick = async function(e) {
           e.stopPropagation();
           if (!currentUser) return alert("Logga in för att reagera!");
           const emojiKey = btn.dataset.emoji;
           const ref = doc(db, "forumThreads", threadId, "reactions", currentUser.uid);
           const snap = await getDoc(ref);
           if (snap.exists() && snap.data().emoji === emojiKey) {
-            await deleteDoc(ref); // Ta bort reaktion
+            await deleteDoc(ref); // Avmarkera reaktion
           } else {
             await setDoc(ref, { emoji: emojiKey, user: currentUser.uid });
           }
+          chooserRow.style.display = "none";
           renderThreadReactions(threadId);
         };
-
-        // Visa popup vid hover
-        btn.onmouseenter = function(e) {
-          document.querySelectorAll('.emoji-popup').forEach(el=>el.style.display='none');
-          btn.querySelector('.emoji-popup').style.display = 'block';
-        };
-        btn.onmouseleave = function() {
-          btn.querySelector('.emoji-popup').style.display = 'none';
-        };
       });
+
+      // Visa popup (antal + namn) om användaren har valt emoji, när man hovrar
+      const pickedBtn = document.querySelector(`#threadEmojiTrigger-${threadId}.emoji-picked-btn`);
+      if (pickedBtn) {
+        pickedBtn.onmouseenter = function() {
+          pickedBtn.querySelector(".emoji-popup").style.display = "block";
+        };
+        pickedBtn.onmouseleave = function() {
+          pickedBtn.querySelector(".emoji-popup").style.display = "none";
+        };
+        pickedBtn.onclick = e => {
+          e.stopPropagation();
+          chooserRow.style.display = (chooserRow.style.display === "none" || !chooserRow.style.display) ? "flex" : "none";
+        };
+      }
+      // Klick utanför stänger utdragsraden
+      document.addEventListener("click", function hideChooser(event) {
+        if (chooserRow && !chooserRow.contains(event.target) && !triggerBtn.contains(event.target)) {
+          chooserRow.style.display = "none";
+        }
+      }, { once: true });
     }
 
     // Tråd-funktionalitet
@@ -369,10 +435,11 @@
           </div>
           <div class="post-content">${escapeHTML(post.text)}</div>
           <div class="comments-block" id="postComments-${threadId}-${post.id}"></div>
+          ${currentUser ? `
           <form class="add-comment-form" data-threadid="${threadId}" data-postid="${post.id}">
             <textarea rows="1" placeholder="Kommentera..." maxlength="200"></textarea>
             <button type="submit">Kommentera</button>
-          </form>
+          </form>` : ""}
         </div>
       `;
     }
@@ -425,7 +492,7 @@
     const banners = [
       {
         left: { src: "https://dummyimage.com/150x1800/7b00ff/fff&text=Reklam+1", alt: "Reklam Banner 1", url: "#" },
-        right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam+2", alt: "Reklam Banner 2", url: "#" }
+        right: { src: "https://dummyimage.com/150x1800/222299/fff&text=Reklam Banner 2", url: "#" }
       },
       {
         left: { src: "https://dummyimage.com/150x1800/ff0088/fff&text=Bli+medlem!", alt: "Bli medlem", url: "register.html" },
