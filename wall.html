@@ -523,12 +523,30 @@ let searchTerm = "";
 let currentFilter = "all";
 
 // --- NAV, FILTER, LOGOUT ---
+// 1. Lägg funktionen först, utanför DOMContentLoaded!
+function updateMenuActive() { 
+  // Ta bort aktiv klass från alla
+  document.querySelectorAll('.nav-links a, .nav-mobile a').forEach(link => {
+    link.classList.remove('active');
+  });
+
+  // Sätt aktiv klass på rätt länk (för väggen)
+  if (location.pathname.endsWith('/wall.html') || location.pathname.endsWith('/wall')) {
+    document.querySelectorAll('.nav-links a[data-i18n="wall"], .nav-mobile a[data-i18n="wall"]').forEach(link => link.classList.add('active'));
+  }
+  // Lägg till fler ifs för t.ex. forum, profile, osv om du vill
+}
+
+// 2. Nu själva DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
+  updateMenuActive(); // <-- Anropa här!
+
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navMobile = document.getElementById('navMobile');
   if (hamburgerBtn && navMobile) {
     hamburgerBtn.addEventListener('click', function () {
       navMobile.classList.toggle('show');
+      updateMenuActive(); // <-- Också här, för att mobilen alltid visar rätt!
     });
     navMobile.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
@@ -544,6 +562,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   }
+});
   // FILTER
   const filterRow = document.getElementById("filterRow");
   if (filterRow) {
