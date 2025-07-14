@@ -59,6 +59,53 @@
     .emoji-viewer-list li { margin-bottom: 2px; list-style: disc; }
     .emoji-viewer-list .emoji-key { margin-right: 6px;}
     @media (max-width: 700px) { .forum-box { padding: 12px 2vw 10px 2vw; max-width: 99vw; } }
+    /* Tar bort blå outline och extra fokus-effekt från checkbox-knappar */
+input[type="checkbox"], input[type="checkbox"]:focus, input[type="checkbox"]:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.category-checkbox-label {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Om du har specialknappar för kategori, lägg också till: */
+.category-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid #00ffcc;
+  background: transparent;
+  border-radius: 7px;
+  margin: 7px 7px 0 0;
+  padding: 7px 14px;
+  color: #00ffcc;
+  font-weight: bold;
+  font-family: inherit;
+  transition: background 0.18s, color 0.18s, border 0.16s;
+  cursor: pointer;
+  min-width: 100px;
+  min-height: 36px;
+  box-shadow: none !important;
+}
+
+.category-checkbox-label.checked {
+  background: #00ffcc33;
+  color: #000;
+  border: 2px solid #00ffcc;
+}
+
+.category-checkbox-label input[type="checkbox"] {
+  margin-right: 9px;
+  accent-color: #00ffcc;
+  width: 18px;
+  height: 18px;
+}
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
