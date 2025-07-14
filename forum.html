@@ -248,6 +248,39 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
   box-shadow: 0 0 20px #00ffcc, 0 0 12px #bb00ff;
   text-shadow: 0 0 6px #fff, 0 0 8px #00ffcc;
 }
+    .search-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 3vw; /* liten marginal på sidorna på alla skärmar */
+  box-sizing: border-box;
+}
+
+.search-box {
+  width: 100%;
+  max-width: 390px; /* max storlek på desktop */
+  min-width: 0;
+  font-size: 1.08em;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1.5px solid #00ffcc;
+  background: #13181f;
+  color: #e0ffff;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .search-box {
+    max-width: 98vw;
+    font-size: 1em;
+    padding: 10px 8px;
+  }
+  .search-container {
+    padding: 0 1.5vw;
+  }
+}
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
