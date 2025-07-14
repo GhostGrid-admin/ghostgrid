@@ -444,6 +444,52 @@
   </nav>
 <div class="wall-box">
   <div class="wall-title" data-i18n="wall_title">Väggen</div>
+  <button id="toggleUploadBtn" class="switch-btn" style="display:block;width:100%;max-width:330px;margin:0 auto 17px auto;font-size:1.1em;">Ladda upp</button>
+
+  <!-- UPLOAD FORM: Dold som standard -->
+  <div id="uploadSection" style="display:none; margin-bottom:32px;">
+    <form id="uploadForm">
+      <div class="upload-switcher" style="display:flex;gap:10px;justify-content:center;margin-bottom:12px;">
+        <button class="switch-btn active" data-section="text" type="button">📝 Inlägg</button>
+        <button class="switch-btn" data-section="image" type="button">🖼️ Bild</button>
+        <button class="switch-btn" data-section="video" type="button">🎬 Klipp</button>
+        <button class="switch-btn" data-section="audio" type="button">🎵 Ljud</button>
+        <button class="switch-btn" data-section="mic" type="button">🎤 Röst</button>
+      </div>
+      <div class="upload-section active" data-section="text">
+        <label for="text_sv">Skriv ett inlägg (svenska):</label>
+        <textarea id="text_sv" maxlength="1500" placeholder="Skriv på svenska..."></textarea>
+      </div>
+      <div class="upload-section" data-section="image" style="display:none;">
+        <label for="image">Ladda upp en bild (max 5 MB):</label>
+        <input type="file" id="image" accept="image/*" />
+      </div>
+      <div class="upload-section" data-section="video" style="display:none;">
+        <label for="video">Ladda upp ett klipp (max 30 MB):</label>
+        <input type="file" id="video" accept="video/mp4,video/webm,video/ogg" />
+      </div>
+      <div class="upload-section" data-section="audio" style="display:none;">
+        <label for="audio">Ladda upp ljudfil (max 5 MB):</label>
+        <input type="file" id="audio" accept="audio/*" />
+      </div>
+      <div class="upload-section" data-section="mic" style="display:none;">
+        <label>Mikrofoninspelning (max 2 MB):</label>
+        <button type="button" id="recordButton">🎤 Starta inspelning</button>
+        <button type="button" id="stopButton" disabled>🛑 Stoppa</button>
+        <audio id="audioPreview" controls></audio>
+      </div>
+      <label style="margin-top:18px;">
+        <input type="checkbox" id="temporary" />
+        Gör detta till ett tillfälligt inlägg (försvinner om 24h)
+      </label>
+      <button type="submit" id="submitBtn">Ladda upp</button>
+    </form>
+    <div id="uploadSpinner" style="display:none;text-align:center;margin-top:10px;">
+      <img src="spinner-asg.png" alt="Laddar..." style="width:40px;" />
+    </div>
+  </div>
+  
+  <!-- FILTER, SÖK, INLÄGGSLISTA -->
   <div class="filter-row" id="filterRow">
     <button class="filter-btn active" data-type="all" data-i18n="all">Alla</button>
     <button class="filter-btn" data-type="text" data-i18n="post">Inlägg</button>
@@ -452,6 +498,11 @@
     <button class="filter-btn" data-type="audio" data-i18n="audio">Ljud</button>
     <button class="filter-btn" data-type="mic" data-i18n="mic">Röst</button>
   </div>
+  <div class="wall-search-row">
+    <input type="text" id="wallSearchInput" autocomplete="off" placeholder="Sök i valda kategorin...">
+  </div>
+  <div id="postList" class="post-list"></div>
+</div>
   <div class="wall-search-row">
     <input type="text" id="wallSearchInput" autocomplete="off" placeholder="Sök i valda kategorin...">
   </div>
@@ -844,6 +895,27 @@ document.addEventListener('click', function() {
     viewer.style.display = "none";
     viewer.dataset.emoji = "";
   });
+});
+  // Toggle-formulär på/av
+const uploadBtn = document.getElementById('toggleUploadBtn');
+const uploadSection = document.getElementById('uploadSection');
+let formOpen = false;
+uploadBtn.onclick = function() {
+  formOpen = !formOpen;
+  uploadSection.style.display = formOpen ? "block" : "none";
+  uploadBtn.textContent = formOpen ? "Avbryt" : "Ladda upp";
+};
+
+// Sektion-bytes (text/bild/video/ljud/mic)
+document.querySelectorAll('.upload-switcher .switch-btn').forEach(btn => {
+  btn.onclick = function() {
+    document.querySelectorAll('.upload-switcher .switch-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const section = btn.getAttribute('data-section');
+    document.querySelectorAll('.upload-section').forEach(sec => {
+      sec.style.display = sec.getAttribute('data-section') === section ? "block" : "none";
+    });
+  };
 });
     
 </script>
