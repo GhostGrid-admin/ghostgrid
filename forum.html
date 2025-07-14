@@ -334,28 +334,50 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
   </div>
 </nav>
   <div class="forum-box">
-    <div class="forum-title" data-i18n="forum_title">Forum</div>
-    <div class="search-container">
-      <input type="text" id="searchBox" class="search-box" placeholder="Sök bland trådar, inlägg, kommentarer, användare..." />
-    </div>
-    <form class="thread-form" id="threadForm" autocomplete="off">
-      <input type="text" id="threadTitle" placeholder="Titel på tråd..." maxlength="60" required>
-      <textarea id="threadDesc" placeholder="Beskrivning..." rows="4" maxlength="2000" required></textarea>
-      <div class="multi-categories-box" id="multiCategoriesBox"></div>
-      <div class="own-category-row">
-        <input type="text" class="own-category-input" id="ownCategoryInput" maxlength="30" placeholder="Egen kategori...">
-        <button type="button" class="own-category-btn" id="addOwnCategoryBtn">Lägg till</button>
-      </div>
-      <button type="submit" id="addThreadBtn">Skapa ny tråd</button>
-    </form>
-    <div id="threadList" class="thread-list"></div>
+  <div class="forum-title" data-i18n="forum_title">Forum</div>
+  <div class="search-container">
+    <input type="text" id="searchBox" class="search-box" placeholder="Sök bland trådar, inlägg, kommentarer, användare..." />
   </div>
+  <button id="showThreadFormBtn" style="width:100%;max-width:390px;margin:0 auto 18px auto;display:block;font-size:1.2em;background:#00ffcc;color:#191f26;border:none;padding:13px 0;border-radius:8px;font-weight:bold;box-shadow:0 0 10px #00ffcc90;">Skapa ny tråd</button>
+  <form class="thread-form" id="threadForm" autocomplete="off" style="display:none;">
+    <input type="text" id="threadTitle" placeholder="Titel på tråd..." maxlength="60" required>
+    <textarea id="threadDesc" placeholder="Beskrivning..." rows="4" maxlength="2000" required></textarea>
+    <div class="multi-categories-box" id="multiCategoriesBox"></div>
+    <div class="own-category-row">
+      <input type="text" class="own-category-input" id="ownCategoryInput" maxlength="30" placeholder="Egen kategori...">
+      <button type="button" class="own-category-btn" id="addOwnCategoryBtn">Lägg till</button>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button type="submit" id="addThreadBtn">Skapa ny tråd</button>
+      <button type="button" id="cancelThreadFormBtn" style="background:#222;color:#00ffcc;border:1.5px solid #00ffcc;border-radius:7px;font-weight:bold;">Avbryt</button>
+    </div>
+  </form>
+  <div id="threadList" class="thread-list"></div>
+</div>
   <script type="module">
     import { auth, db } from "./scripts/firebase-init.js";
     import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-    // --- NAVBAR LOGIK för hamburger/mobile ---
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
+  // --- Visa/Göm skapa ny tråd-formuläret ---
+  const showBtn = document.getElementById('showThreadFormBtn');
+  const form = document.getElementById('threadForm');
+  const cancelBtn = document.getElementById('cancelThreadFormBtn');
+  if (showBtn && form) {
+    showBtn.addEventListener('click', function () {
+      showBtn.style.display = 'none';
+      form.style.display = 'flex';
+      form.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+  if (cancelBtn && form && showBtn) {
+    cancelBtn.addEventListener('click', function () {
+      form.style.display = 'none';
+      showBtn.style.display = 'block';
+    });
+  }
+
+  // --- NAVBAR LOGIK för hamburger/mobile ---
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navMobile = document.getElementById('navMobile');
   if (hamburgerBtn && navMobile) {
