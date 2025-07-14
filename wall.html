@@ -390,9 +390,9 @@
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
     // -- DIN KONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyCR8q40Dc4wcfYBDlxdpOriA2e3RTmAesg",
@@ -406,6 +406,73 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const auth = firebase.auth();
+  const storage = firebase.storage(); // Lägg till storage-objekt
+
+document.getElementById('uploadForm').onsubmit = async function(e) {
+  e.preventDefault();
+  if (!currentUser) return alert("Du måste vara inloggad!");
+
+  const spinner = document.getElementById('uploadSpinner');
+  spinner.style.display = "block";
+  const section = document.querySelector('.upload-switcher .switch-btn.active').getAttribute('data-section');
+
+  let postData = {
+    user: currentUser.uid,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    type: section
+  };
+
+  try {
+    if (section === "text") {
+      const text_sv = document.getElementById('text_sv').value.trim();
+      if (!text_sv) throw "Texten får inte vara tom!";
+      postData.text_sv = text_sv;
+    }
+    else if (section === "image") {
+      const file = document.getElementById('image').files[0];
+      if (!file) throw "Välj en bild!";
+      // Ladda upp filen till Firebase Storage
+      const fileRef = storage.ref("wall_images/" + Date.now() + "_" + file.name);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+      postData.imageUrl = url;
+    }
+    else if (section === "video") {
+      const file = document.getElementById('video').files[0];
+      if (!file) throw "Välj ett videoklipp!";
+      const fileRef = storage.ref("wall_videos/" + Date.now() + "_" + file.name);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+      postData.videoUrl = url;
+    }
+    else if (section === "audio") {
+      const file = document.getElementById('audio').files[0];
+      if (!file) throw "Välj en ljudfil!";
+      const fileRef = storage.ref("wall_audio/" + Date.now() + "_" + file.name);
+      await fileRef.put(file);
+      const url = await fileRef.getDownloadURL();
+      postData.audioUrl = url;
+    }
+    // Mikrofondelen hanteras separat här om du önskar (lägg till liknande logik om du har blobs)
+
+    // Om man valt "tillfälligt inlägg"
+    postData.temporary = document.getElementById('temporary').checked;
+
+    // Spara till Firestore
+    await db.collection("wall").add(postData);
+
+    // Nollställ form
+    document.getElementById('uploadForm').reset();
+    spinner.style.display = "none";
+    uploadBtn.click(); // Stäng rutan
+
+    loadWallPosts(); // Uppdatera väggen
+
+  } catch (err) {
+    spinner.style.display = "none";
+    alert(err);
+  }
+};
   </script>
 </head>
 <body>
