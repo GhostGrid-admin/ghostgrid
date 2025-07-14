@@ -6,6 +6,19 @@
   <title>GhostGrid – Väggen</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    #uploadSection {
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: all 0.25s cubic-bezier(.47,1.64,.41,.8);
+  pointer-events: none;
+  display: none;
+}
+#uploadSection.show {
+  display: block;
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
     body {
       background: #0a0a0a;
       color: #e0ffff;
@@ -444,10 +457,30 @@
   </nav>
 <div class="wall-box">
   <div class="wall-title" data-i18n="wall_title">Väggen</div>
-  <button id="toggleUploadBtn" class="switch-btn" style="display:block;width:100%;max-width:330px;margin:0 auto 17px auto;font-size:1.1em;">Ladda upp</button>
-
-  <!-- UPLOAD FORM: Dold som standard -->
-  <div id="uploadSection" style="display:none; margin-bottom:32px;">
+  <!-- Snygg Ladda upp-knapp -->
+<div id="uploadSectionToggleWrap" style="text-align:center;margin-bottom:15px;">
+  <button id="toggleUploadBtn"
+    style="
+      background: linear-gradient(90deg, #00ffcc 40%, #7b00ff 95%);
+      color: #111;
+      border: none;
+      font-size: 1.18em;
+      padding: 13px 38px;
+      border-radius: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00ffcc, 0 0 16px #7b00ff77;
+      transition: 0.18s;
+      cursor: pointer;
+      margin: 0 auto 6px auto;
+      display: inline-block;
+      letter-spacing: 0.01em;
+    ">
+    ➕ Ladda upp
+  </button>
+</div>
+  <!-- NY AVGRÄNSAD BOX -->
+<div id="uploadSection" style="display:none;max-width:470px;margin:0 auto 30px auto;border: 2px solid #66ffcc; border-radius: 12px; padding: 28px 18px 18px 18px; background: rgba(0,0,0,0.88); box-shadow: 0 0 15px #00ffcc44;">
     <form id="uploadForm">
       <div class="upload-switcher" style="display:flex;gap:10px;justify-content:center;margin-bottom:12px;">
         <button class="switch-btn active" data-section="text" type="button">📝 Inlägg</button>
@@ -902,8 +935,19 @@ const uploadSection = document.getElementById('uploadSection');
 let formOpen = false;
 uploadBtn.onclick = function() {
   formOpen = !formOpen;
-  uploadSection.style.display = formOpen ? "block" : "none";
-  uploadBtn.textContent = formOpen ? "Avbryt" : "Ladda upp";
+  if(formOpen){
+    uploadSection.classList.add('show');
+    uploadSection.style.display = "block";
+  } else {
+    uploadSection.classList.remove('show');
+    setTimeout(()=>{uploadSection.style.display = "none";},220); // matchar transition-tiden
+  }
+  uploadBtn.textContent = formOpen ? "Avbryt" : "➕ Ladda upp";
+  uploadBtn.style.background = formOpen
+    ? "linear-gradient(90deg, #222 30%, #7b00ff 99%)"
+    : "linear-gradient(90deg, #00ffcc 40%, #7b00ff 95%)";
+  uploadBtn.style.color = formOpen ? "#00ffcc" : "#111";
+  if (formOpen) setTimeout(() => uploadSection.scrollIntoView({behavior:'smooth',block:'center'}), 60);
 };
 
 // Sektion-bytes (text/bild/video/ljud/mic)
