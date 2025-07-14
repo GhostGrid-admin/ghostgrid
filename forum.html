@@ -155,7 +155,59 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
     max-width: 120px;
     font-size: 0.97em;
   }
-}   
+}
+    /* ---- NAVBAR HAMBURGER / RESPONSIVE ---- */
+.hamburger, .nav-mobile { display: none; }
+
+@media (max-width: 900px) {
+  .nav-links { display: none !important; }
+  .hamburger { display: flex !important; flex-direction: column; justify-content: center; cursor: pointer; margin-left: 7px; z-index: 1010;}
+  .hamburger span {
+    display: block;
+    width: 28px;
+    height: 4px;
+    margin: 3px 0;
+    background: #00ffcc;
+    border-radius: 3px;
+    transition: 0.3s;
+  }
+  .nav-mobile {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 62px;
+    left: 0;
+    width: 100vw;
+    background: #0a0a0a;
+    z-index: 1200;
+    padding: 30px 0 24px 0;
+    box-shadow: 0 10px 30px #00ffcc40;
+    border-bottom: 2px solid #00ffcc;
+    border-top: 1px solid #333;
+    align-items: center;
+    gap: 16px;
+    transform: translateY(-110%);
+    transition: 0.22s;
+  }
+  .nav-mobile.show { transform: translateY(0); }
+  .nav-mobile a {
+    color: #00ffcc;
+    text-decoration: none;
+    font-size: 1.33em;
+    padding: 8px 0;
+    font-family: 'Share Tech Mono', monospace;
+    transition: 0.18s;
+  }
+  .nav-mobile a.active, .nav-mobile a:hover {
+    color: #000;
+    background: #00ffcc;
+    border-radius: 7px;
+    font-weight: bold;
+    padding: 8px 14px;
+    box-shadow: 0 0 8px #00ffcc70;
+  }
+  .logout-btn { display: none; }
+}
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
