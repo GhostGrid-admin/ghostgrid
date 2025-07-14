@@ -106,6 +106,56 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
   width: 18px;
   height: 18px;
 }
+ .category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 17px; /* Mellanrum (rader, kolumner) */
+  margin-bottom: 20px;
+}
+
+.category-checkbox-label {
+  display: flex;
+  align-items: center;
+  min-width: 165px;    /* Gör alla lika breda, testa 150-180px */
+  max-width: 170px;
+  min-height: 42px;
+  justify-content: center;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  background: transparent;
+  font-family: inherit;
+  color: #00ffcc;
+  font-weight: 600;
+  font-size: 1.07em;
+  transition: background 0.18s, color 0.18s, border 0.14s;
+  margin: 0;
+  padding: 6px 10px 6px 10px;
+  box-shadow: none !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.category-checkbox-label.checked {
+  background: #00ffcc33;
+  color: #000;
+  border: 2px solid #00ffcc;
+}
+
+.category-checkbox-label input[type="checkbox"] {
+  margin-right: 9px;
+  accent-color: #00ffcc;
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 750px) {
+  .category-checkbox-label, .category-checkbox-label.checked {
+    min-width: 110px;
+    max-width: 120px;
+    font-size: 0.97em;
+  }
+}   
   </style>
   <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
