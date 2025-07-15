@@ -6,7 +6,7 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .thread-header {
+.thread-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -18,7 +18,7 @@
 .thread-main {
   flex: 1;
   min-width: 0;
-  padding-right: 120px; /* Gör plats för skapare-rutan till höger */
+  padding-right: 110px; /* Gör plats för skaparrutan */
 }
 
 .thread-title {
@@ -46,49 +46,39 @@
 
 .thread-creator-info {
   position: absolute;
-  top: 12px;
-  right: 18px;
+  top: 16px;
+  right: 22px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   width: 88px;
   z-index: 2;
   background: none;
   padding: 0;
 }
 
-.creator-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #00ffcc;
-  margin-bottom: 4px;
-  object-fit: cover;
-  background: #0a0a0a;
-  box-shadow: 0 0 10px #00ffcc55;
-}
-
 .creator-label {
-  font-size: 0.98em;
+  font-size: 1.02em;
   color: #d0d0d0;
   margin-bottom: 2px;
-  text-align: center;
+  text-align: right;
   white-space: nowrap;
+  line-height: 1.14;
 }
 
 .creator-name {
-  font-size: 1.04em;
+  font-size: 1.13em;
   font-weight: bold;
   color: #20ffe0 !important;
   margin: 0 0 0 0;
-  text-align: center;
+  text-align: right;
   text-decoration: underline;
-  word-break: break-word;
-  line-height: 1.15;
-  max-width: 100%;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: block;
+  max-width: 110px;
+  line-height: 1.16;
 }
 
 .thread-delete-btn {
@@ -633,7 +623,6 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
     </div>
   </div>
   <div class="thread-creator-info">
-    <img src="${userObj.photoURL}" alt="profilbild" class="creator-avatar">
     <div class="creator-label">Skapare:</div>
     <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
     ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
