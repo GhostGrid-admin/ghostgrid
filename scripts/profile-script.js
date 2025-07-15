@@ -77,6 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
       codeField.value = data.profileCode || "";
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
       document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
+
+      // ======= NYTT: Sätt färgpicker till sparad färg =======
+  if (data.nameColor) {
+    document.getElementById('nameColorPicker').value = data.nameColor;
+  }
       // Sätt valt tema i listan (om sparat)
       if (data.profileTheme && themeSelect) {
         themeSelect.value = data.profileTheme;
