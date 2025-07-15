@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = snap.data();
       codeField.value = data.profileCode || "";
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
+      // Om du har "profile-username" på sidan
       if (document.getElementById("profile-username")) {
         document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
       }
