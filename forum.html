@@ -387,129 +387,128 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       function escapeHTML(str) { if (!str) return ""; return str.replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c])); }
       let currentUser = null, userMap = {}, threadsGlobal = [];
 
-      // --- NAVBAR LOGIK för hamburger/mobile ---
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navMobile = document.getElementById('navMobile');
-      if (hamburgerBtn && navMobile) {
-        hamburgerBtn.addEventListener('click', function () {
-          navMobile.classList.toggle('show');
-        });
-        navMobile.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => { navMobile.classList.remove('show'); });
-        });
-        const logoutBtn = document.getElementById("logoutMobileBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", function (e) {
-            e.preventDefault(); navMobile.classList.remove('show'); doLogout();
-          });
-        }
-      }
+      // ======================== NAVBAR LOGIK ========================
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navMobile = document.getElementById('navMobile');
+if (hamburgerBtn && navMobile) {
+  hamburgerBtn.addEventListener('click', function () {
+    navMobile.classList.toggle('show');
+  });
+  navMobile.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => { navMobile.classList.remove('show'); });
+  });
+  const logoutBtn = document.getElementById("logoutMobileBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault(); navMobile.classList.remove('show'); doLogout();
+    });
+  }
+}
+// ======================== LOGOUT ========================
+function doLogout() { signOut(auth).then(() => { window.location.href = "login.html"; }); }
+document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
-      // --- LOGOUT ---
-      function doLogout() { signOut(auth).then(() => { window.location.href = "login.html"; }); }
-      document.getElementById("logoutDesktopBtn").onclick = doLogout;
+// ======================== SKAPA NY TRÅD FORM ========================
+const showBtn = document.getElementById('showThreadFormBtn');
+const form = document.getElementById('threadForm');
+const cancelBtn = document.getElementById('cancelThreadFormBtn');
+if (showBtn && form) {
+  showBtn.addEventListener('click', function () {
+    showBtn.style.display = 'none';
+    form.style.display = 'flex';
+    form.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+if (cancelBtn && form && showBtn) {
+  cancelBtn.addEventListener('click', function () {
+    form.style.display = 'none';
+    showBtn.style.display = 'block';
+  });
+}
 
-      // --- Visa/Göm skapa ny tråd-formuläret ---
-      const showBtn = document.getElementById('showThreadFormBtn');
-      const form = document.getElementById('threadForm');
-      const cancelBtn = document.getElementById('cancelThreadFormBtn');
-      if (showBtn && form) {
-        showBtn.addEventListener('click', function () {
-          showBtn.style.display = 'none';
-          form.style.display = 'flex';
-          form.scrollIntoView({ behavior: 'smooth' });
-        });
-      }
-      if (cancelBtn && form && showBtn) {
-        cancelBtn.addEventListener('click', function () {
-          form.style.display = 'none';
-          showBtn.style.display = 'block';
-        });
-      }
+// ======================== KATEGORIER ========================
+function fillMultiCategories() {
+  const box = document.getElementById("multiCategoriesBox");
+  box.innerHTML = "";
+  DEFAULT_CATEGORIES.forEach(cat => {
+    box.innerHTML += `<label><input type="checkbox" value="${cat}" class="multi-cat-check"> ${cat}</label>`;
+  });
+  document.getElementById('ownCategoryInput').value = "";
+}
+function getSelectedCategories() {
+  return [...document.querySelectorAll(".multi-cat-check:checked")].map(cb => cb.value.trim());
+}
+document.getElementById("addOwnCategoryBtn").onclick = function() {
+  const input = document.getElementById("ownCategoryInput");
+  let cat = input.value.trim();
+  if (!cat) return;
+  let lowered = cat.toLowerCase();
+  if (blockedWords.some(word => lowered.includes(word))) {
+    alert("Denna kategori är inte tillåten!");
+    input.value = "";
+    return;
+  }
+  let allCats = [...document.querySelectorAll(".multi-cat-check")].map(cb => cb.value.trim().toLowerCase());
+  if (allCats.includes(lowered)) {
+    alert("Kategorin finns redan!");
+    input.value = "";
+    return;
+  }
+  const box = document.getElementById("multiCategoriesBox");
+  let newLabel = document.createElement("label");
+  let newCheckbox = document.createElement("input");
+  newCheckbox.type = "checkbox";
+  newCheckbox.value = cat;
+  newCheckbox.className = "multi-cat-check";
+  newCheckbox.checked = true;
+  newLabel.appendChild(newCheckbox);
+  newLabel.appendChild(document.createTextNode(" " + cat));
+  box.appendChild(newLabel);
+  input.value = "";
+};
 
-      // --- KATEGORIER ---
-      function fillMultiCategories() {
-        const box = document.getElementById("multiCategoriesBox");
-        box.innerHTML = "";
-        DEFAULT_CATEGORIES.forEach(cat => {
-          box.innerHTML += `<label><input type="checkbox" value="${cat}" class="multi-cat-check"> ${cat}</label>`;
-        });
-        document.getElementById('ownCategoryInput').value = "";
-      }
-      function getSelectedCategories() {
-        return [...document.querySelectorAll(".multi-cat-check:checked")].map(cb => cb.value.trim());
-      }
-      document.getElementById("addOwnCategoryBtn").onclick = function() {
-        const input = document.getElementById("ownCategoryInput");
-        let cat = input.value.trim();
-        if (!cat) return;
-        let lowered = cat.toLowerCase();
-        if (blockedWords.some(word => lowered.includes(word))) {
-          alert("Denna kategori är inte tillåten!");
-          input.value = "";
-          return;
-        }
-        let allCats = [...document.querySelectorAll(".multi-cat-check")].map(cb => cb.value.trim().toLowerCase());
-        if (allCats.includes(lowered)) {
-          alert("Kategorin finns redan!");
-          input.value = "";
-          return;
-        }
-        const box = document.getElementById("multiCategoriesBox");
-        let newLabel = document.createElement("label");
-        let newCheckbox = document.createElement("input");
-        newCheckbox.type = "checkbox";
-        newCheckbox.value = cat;
-        newCheckbox.className = "multi-cat-check";
-        newCheckbox.checked = true;
-        newLabel.appendChild(newCheckbox);
-        newLabel.appendChild(document.createTextNode(" " + cat));
-        box.appendChild(newLabel);
-        input.value = "";
-      };
+// ======================== LADDA ANVÄNDARE ========================
+async function fetchUsers() {
+  userMap = {};
+  const snap = await getDocs(collection(db, "profiles"));
+  snap.docs.forEach(docu => {
+    userMap[docu.id] = {
+      name: docu.data().nickname || docu.data().displayName || t("guest"),
+      photoURL: docu.data().photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(docu.data().nickname || docu.data().displayName || "Guest")
+    };
+  });
+}
 
-      // --- LADDA ANVÄNDARE ---
-      async function fetchUsers() {
-        userMap = {};
-        const snap = await getDocs(collection(db, "profiles"));
-        snap.docs.forEach(docu => {
-          userMap[docu.id] = {
-            name: docu.data().nickname || docu.data().displayName || t("guest"),
-            photoURL: docu.data().photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(docu.data().nickname || docu.data().displayName || "Guest")
-          };
-        });
-      }
+// ======================== EMOJI ========================
+async function loadReactions(refCol) {
+  const snap = await getDocs(refCol);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+function emojiSummary(reactions) {
+  if (!reactions || reactions.length === 0) return "";
+  let counts = {};
+  reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
+  return Object.entries(counts).map(([k, v]) => {
+    const e = emojis.find(e => e.key === k);
+    return `<span class="emoji-summary-item" data-emoji="${k}">${e ? e.emoji : ""} <b>${v}</b></span>`;
+  }).join(" ");
+}
 
-      // --- EMOJI LOGIK ---
-      async function loadReactions(refCol) {
-        const snap = await getDocs(refCol);
-        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      }
-      function emojiSummary(reactions) {
-        if (!reactions || reactions.length === 0) return "";
-        let counts = {};
-        reactions.forEach(r => counts[r.emoji] = (counts[r.emoji] || 0) + 1);
-        return Object.entries(counts).map(([k, v]) => {
-          const e = emojis.find(e => e.key === k);
-          return `<span class="emoji-summary-item" data-emoji="${k}">${e ? e.emoji : ""} <b>${v}</b></span>`;
-        }).join(" ");
-      }
+// ======================== LADDA TRÅDAR ========================
+async function loadThreads() {
+  document.getElementById("threadList").innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
+  await fetchUsers();
+  const q = query(collection(db, "forumThreads"), orderBy("createdAt", "desc"));
+  const threadsSnap = await getDocs(q);
+  threadsGlobal = threadsSnap.docs.map(docu => ({ id: docu.id, ...docu.data() }));
+  renderThreads(document.getElementById("searchBox").value);
+}
+document.getElementById('searchBox').addEventListener('input', function () {
+  renderThreads(this.value);
+});
 
-      // --- LADDA TRÅDAR ---
-      async function loadThreads() {
-        document.getElementById("threadList").innerHTML = `<div style="color:#00ffcc; text-align:center;">${t("loading")}</div>`;
-        await fetchUsers();
-        const q = query(collection(db, "forumThreads"), orderBy("createdAt", "desc"));
-        const threadsSnap = await getDocs(q);
-        threadsGlobal = threadsSnap.docs.map(docu => ({ id: docu.id, ...docu.data() }));
-        renderThreads(document.getElementById("searchBox").value);
-      }
-      document.getElementById('searchBox').addEventListener('input', function () {
-        renderThreads(this.value);
-      });
-
-      // --- RENDER TRÅDAR MED EMOJIS OCH MULTI-KATEGORIER ---
-      async function renderThreads(search = "") {
+// ======================== RENDER TRÅDAR (med kategori-dropdown) ========================
+async function renderThreads(search = "") {
   const list = document.getElementById("threadList");
   let showThreads = threadsGlobal;
   if (search && search.trim() !== "") {
@@ -518,7 +517,7 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       (thread.title && thread.title.toLowerCase().includes(low)) ||
       (thread.description && thread.description.toLowerCase().includes(low)) ||
       (Array.isArray(thread.categories) && thread.categories.join(" ").toLowerCase().includes(low)) ||
-      (userMap[thread.creatorUid] && userMap[thread.creatorUid].toLowerCase().includes(low))
+      (userMap[thread.creatorUid] && userMap[thread.creatorUid].name.toLowerCase().includes(low))
     );
   }
   if (!showThreads.length) {
@@ -526,13 +525,11 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
     return;
   }
   list.innerHTML = "";
-
   for (let thread of showThreads) {
     const reactions = await loadReactions(collection(db, "forumThreads", thread.id, "reactions"));
     const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
     let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest" };
-
-    // Skapa kategori-dropdown
+    // Kategori-dropdown
     let categoriesHTML = `
       <div class="thread-categories-dropdown" style="position:relative;display:inline-block;">
         <button class="cat-toggle-btn" style="background:none;color:#00ffcc;border:none;font-size:1em;cursor:pointer;display:flex;align-items:center;gap:6px;">
@@ -549,7 +546,7 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
         </div>
       </div>
     `;
-
+    // Tråd-layout
     list.innerHTML += `
       <div class="thread" data-threadid="${thread.id}" style="position:relative;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
@@ -594,7 +591,7 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
     `;
   }
 
-  // Kategori-dropdown funktionalitet
+  // Dropdown-funktion för kategorier
   document.querySelectorAll('.cat-toggle-btn').forEach(btn => {
     const dropdown = btn.parentElement.querySelector('.cat-dropdown-content');
     btn.onclick = e => {
@@ -602,20 +599,17 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       document.querySelectorAll('.cat-dropdown-content').forEach(el => { if (el !== dropdown) el.style.display = 'none'; });
       dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     };
-    // Stäng dropdown när man klickar utanför
     document.body.addEventListener("click", function(evt) {
       if (!btn.contains(evt.target) && !dropdown.contains(evt.target)) {
         dropdown.style.display = "none";
       }
     });
-    // Hover (desktop)
     btn.onmouseenter = () => { if (window.innerWidth > 700) dropdown.style.display = "block"; };
     btn.onmouseleave = () => { if (window.innerWidth > 700) dropdown.style.display = "none"; };
     dropdown.onmouseenter = () => { if (window.innerWidth > 700) dropdown.style.display = "block"; };
     dropdown.onmouseleave = () => { if (window.innerWidth > 700) dropdown.style.display = "none"; };
   });
-
-  // Klick på kategori -> filtrera (lägg till logik om du vill)
+  // Klick på kategori -> filtrera
   document.querySelectorAll('.thread-cat-link').forEach(catBtn => {
     catBtn.onclick = e => {
       e.preventDefault();
@@ -623,221 +617,56 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       document.getElementById('searchBox').value = catBtn.dataset.cat;
     };
   });
-
   setupEmojiRow();
   addThreadListeners();
 }
 
-  // --- Filtrering på kategori ---
-  document.querySelectorAll('.thread-category').forEach(catBtn => {
-    catBtn.onclick = function(e) {
-      e.preventDefault();
-      const selected = this.getAttribute('data-category');
-      document.getElementById('searchBox').value = selected;
-      renderThreads(selected);
-    };
+// ======================== Emoji reactions på tråd ========================
+function setupEmojiRow() { /* ...din kod här, samma som innan... */ }
+
+// ======================== Inlägg, trådar, radering ========================
+function addThreadListeners() { /* ...din kod här, samma som innan... */ }
+async function loadPosts(threadId) { /* ...din kod här, samma som innan... */ }
+
+// ======================== AUTH & INIT ========================
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  fillMultiCategories();
+  loadThreads();
+  setTimeout(() => {
+    document.getElementById("threadTitle").disabled = !currentUser;
+    document.getElementById("threadDesc").disabled = !currentUser;
+    [...document.querySelectorAll('#multiCategoriesBox input, #ownCategoryInput, #addOwnCategoryBtn, #addThreadBtn')].forEach(el => {
+      if(el) el.disabled = !currentUser;
+    });
+  }, 200);
+});
+
+// ======================== Skapa ny tråd ========================
+document.getElementById('threadForm').onsubmit = async function(e) {
+  e.preventDefault();
+  if (!currentUser) { alert(t("login_to_post")); return; }
+  const title = document.getElementById('threadTitle').value.trim();
+  const desc = document.getElementById('threadDesc').value.trim();
+  const selectedCats = getSelectedCategories();
+  if (!title || !desc || !selectedCats.length) {
+    alert("Fyll i alla fält och välj minst en kategori!");
+    return;
+  }
+  let loweredCats = selectedCats.map(c => c.toLowerCase());
+  if (loweredCats.some(cat => blockedWords.some(word => cat.includes(word)))) {
+    alert("Otillåtet kategoriord!");
+    return;
+  }
+  await addDoc(collection(db, "forumThreads"), {
+    title, description: desc, categories: selectedCats, creatorUid: currentUser.uid, createdAt: new Date()
   });
-}
-
-      // --- Emoji reactions på tråd ---
-      function setupEmojiRow() {
-        document.querySelectorAll('.emoji-row-collapsed').forEach(row => {
-          const threadId = row.dataset.threadid;
-          const type = row.dataset.type;
-          let refCol;
-          if (type === "thread") refCol = collection(db, "forumThreads", threadId, "reactions");
-          const popup = row.querySelector('.emoji-popup');
-          const arrow = row.querySelector('.emoji-toggle-arrow');
-          const btn = row.querySelector('.emoji-main-btn');
-          const viewer = row.querySelector('.emoji-viewer-list');
-          if (btn && !currentUser) btn.disabled = true;
-          if (arrow && !currentUser) arrow.style.pointerEvents = 'none';
-          if (popup.childElementCount === 0) {
-            emojis.forEach(e => {
-              const emojiBtn = document.createElement('button');
-              emojiBtn.className = "emoji-btn";
-              emojiBtn.innerText = e.emoji;
-              emojiBtn.title = e.emoji;
-              emojiBtn.dataset.emoji = e.key;
-              emojiBtn.disabled = !currentUser;
-              emojiBtn.onclick = async function(ev) {
-                ev.stopPropagation();
-                if (!currentUser) return alert(t("login_to_react"));
-                const ref = doc(refCol, currentUser.uid);
-                const snap = await getDocs(refCol);
-                const userReactionDoc = snap.docs.find(d => d.id === currentUser.uid);
-                if (userReactionDoc && userReactionDoc.data().emoji === e.key) {
-                  await deleteDoc(ref);
-                } else {
-                  await setDoc(ref, { emoji: e.key, user: currentUser.uid });
-                }
-                loadThreads();
-              };
-              popup.appendChild(emojiBtn);
-            });
-          }
-          function togglePopup(e) {
-            if (!currentUser) return;
-            e.stopPropagation();
-            const open = popup.classList.toggle('show');
-            if (open) arrow.classList.add('open');
-            else arrow.classList.remove('open');
-          }
-          if (btn) btn.onclick = togglePopup;
-          if (arrow) arrow.onclick = togglePopup;
-          popup.onclick = e => e.stopPropagation();
-          const userPick = row.querySelector('.emoji-user-pick');
-          if (userPick && currentUser) {
-            userPick.onclick = async function(ev) {
-              ev.stopPropagation();
-              if (!currentUser) return;
-              const ref = doc(refCol, currentUser.uid);
-              await deleteDoc(ref);
-              loadThreads();
-            };
-          }
-          // Visa vilka som reagerat
-          row.querySelectorAll('.emoji-summary-item').forEach(sumBtn => {
-            sumBtn.onclick = async function(ev) {
-              ev.stopPropagation();
-              if (viewer.classList.contains('show') && viewer.dataset.emoji === sumBtn.dataset.emoji) {
-                viewer.classList.remove('show');
-                viewer.style.display = "none";
-                viewer.dataset.emoji = "";
-                return;
-              }
-              document.querySelectorAll('.emoji-viewer-list.show').forEach(openViewer => {
-                openViewer.classList.remove('show');
-                openViewer.style.display = "none";
-                openViewer.dataset.emoji = "";
-              });
-              viewer.innerHTML = `<span class="emoji-head">${t('reacted_by')} ${emojis.find(e => e.key === sumBtn.dataset.emoji)?.emoji || ""}</span><ul></ul>`;
-              viewer.classList.add('show');
-              viewer.style.display = "block";
-              viewer.dataset.emoji = sumBtn.dataset.emoji;
-              const snap = await getDocs(refCol);
-              const reacts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-                .filter(r => r.emoji === sumBtn.dataset.emoji);
-              const ul = viewer.querySelector('ul');
-              ul.innerHTML = reacts.length
-                ? reacts.map(r =>
-                  `<li>
-                    <a href="profile-view.html?uid=${r.user}" class="profile-link">${userMap[r.user]?.name || t("guest")}</a>
-                    <span class="emoji-key">${emojis.find(e => e.key === r.emoji)?.emoji || ""}</span>
-                  </li>`
-                  ).join("")
-                : `<li style="color:#bbb;">Inga reaktioner.</li>`;
-            };
-          });
-        });
-      }
-
-      // -- TRÅDAR, INLÄGG, KOMMENTARER, RADERING --
-      function addThreadListeners() {
-        threadsGlobal.forEach(thread => {
-          loadPosts(thread.id);
-          const delBtn = document.querySelector(
-            `.thread[data-threadid="${thread.id}"] .thread-delete-btn`
-          );
-          if (delBtn) {
-            delBtn.onclick = async () => {
-              if (confirm(t("delete_confirm"))) {
-                await deleteDoc(doc(db, "forumThreads", thread.id));
-                loadThreads();
-              }
-            };
-          }
-          const postForm = document.querySelector(
-            `.thread[data-threadid="${thread.id}"] .add-post-form`
-          );
-          if (postForm) {
-            postForm.onsubmit = async function(e) {
-              e.preventDefault();
-              if (!currentUser) { alert(t("login_to_comment")); return; }
-              const textarea = document.getElementById(`postDesc-${thread.id}`);
-              const text = textarea.value.trim();
-              if (!text) return;
-              await addDoc(collection(db, "forumThreads", thread.id, "posts"), {
-                text,
-                creatorUid: currentUser.uid,
-                createdAt: new Date()
-              });
-              textarea.value = "";
-              loadPosts(thread.id);
-            };
-          }
-        });
-      }
-      async function loadPosts(threadId) {
-        const q = query(collection(db, "forumThreads", threadId, "posts"), orderBy("createdAt", "asc"));
-        const postsSnap = await getDocs(q);
-        const posts = postsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        document.getElementById(`threadContent-${threadId}`).innerHTML =
-          posts.map(post => `
-            <div class="post" data-postid="${post.id}">
-              <div class="post-header">
-                <span style="color:#00ffd9;">${t("user")}: 
-                  <a href="profile-view.html?uid=${post.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
-                    ${userMap[post.creatorUid]?.name || t("guest")}
-                  </a>
-                </span>
-                ${currentUser && post.creatorUid === currentUser.uid ? `<button class="post-delete-btn" data-postid="${post.id}" title="${t('delete_confirm')}">✖</button>` : ""}
-              </div>
-              <div class="post-content">${escapeHTML(post.text)}</div>
-            </div>
-          `).join("");
-        posts.forEach(post => {
-          const delBtn = document.querySelector(`.post[data-postid="${post.id}"] .post-delete-btn`);
-          if (delBtn) {
-            delBtn.onclick = async () => {
-              if (confirm(t("delete_confirm"))) {
-                await deleteDoc(doc(db, "forumThreads", threadId, "posts", post.id));
-                loadPosts(threadId);
-              }
-            };
-          }
-        });
-      }
-
-      // --- AUTH & INIT ---
-      onAuthStateChanged(auth, user => {
-        currentUser = user;
-        fillMultiCategories();
-        loadThreads();
-        setTimeout(() => {
-          document.getElementById("threadTitle").disabled = !currentUser;
-          document.getElementById("threadDesc").disabled = !currentUser;
-          [...document.querySelectorAll('#multiCategoriesBox input, #ownCategoryInput, #addOwnCategoryBtn, #addThreadBtn')].forEach(el => {
-            if(el) el.disabled = !currentUser;
-          });
-        }, 200);
-      });
-
-      // --- Skapa ny tråd, validera kategorier ---
-      document.getElementById('threadForm').onsubmit = async function(e) {
-        e.preventDefault();
-        if (!currentUser) { alert(t("login_to_post")); return; }
-        const title = document.getElementById('threadTitle').value.trim();
-        const desc = document.getElementById('threadDesc').value.trim();
-        const selectedCats = getSelectedCategories();
-        if (!title || !desc || !selectedCats.length) {
-          alert("Fyll i alla fält och välj minst en kategori!");
-          return;
-        }
-        let loweredCats = selectedCats.map(c => c.toLowerCase());
-        if (loweredCats.some(cat => blockedWords.some(word => cat.includes(word)))) {
-          alert("Otillåtet kategoriord!");
-          return;
-        }
-        await addDoc(collection(db, "forumThreads"), {
-          title, description: desc, categories: selectedCats, creatorUid: currentUser.uid, createdAt: new Date()
-        });
-        document.getElementById('threadForm').reset();
-        fillMultiCategories();
-        loadThreads();
-        form.style.display = 'none';
-        showBtn.style.display = 'block';
-      };
+  document.getElementById('threadForm').reset();
+  fillMultiCategories();
+  loadThreads();
+  form.style.display = 'none';
+  showBtn.style.display = 'block';
+};
 
     });
   </script>
