@@ -50,26 +50,42 @@ const t = translations[lang];
 const emojis      = ["👍","👎","❤️","💔","😂","😢","😡","😮","😇","😳"];
 const emojiLabels = ["like","dislike","love","broken","laugh","cry","angry","wow","angel","shy"];
 
-// 6. När DOM är klar
+// 6. Färgfunktion för användarnamn
+async function renderColoredUsername(uid, element, fallbackEmail = "") {
+  try {
+    const snap = await getDoc(doc(db, "profiles", uid));
+    if (snap.exists()) {
+      const data = snap.data();
+      element.textContent = data.username || fallbackEmail || "Användare";
+      if (data.nameColor) element.style.color = data.nameColor;
+      else element.style.color = "";
+    } else {
+      element.textContent = fallbackEmail || "Användare";
+      element.style.color = "";
+    }
+  } catch (err) {
+    element.textContent = fallbackEmail || "Användare";
+    element.style.color = "";
+  }
+}
+
+// 7. När DOM är klar
 document.addEventListener("DOMContentLoaded", () => {
-  // Sätt UI‑texter
   document.getElementById("forum-title").innerText     = t.title;
   document.getElementById("create-btn").innerText      = t.createButton;
   document.getElementById("threadTitle").placeholder   = t.threadTitle;
   document.getElementById("threadContent").placeholder = t.threadContent;
   document.getElementById("submit-btn").innerText      = t.submit;
-
-  // Ladda in trådar
   loadThreads();
 });
 
-// 7. Visa/dölj formulär
+// 8. Visa/dölj formulär
 export function toggleForm() {
   const f = document.getElementById("formSection");
   f.style.display = f.style.display === "block" ? "none" : "block";
 }
 
-// 8. Skapa ny tråd
+// 9. Skapa ny tråd (spara även uid)
 export async function submitThread() {
   const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
@@ -82,7 +98,11 @@ export async function submitThread() {
 
   try {
     await addDoc(collection(db, "threads"), {
-      title, content, user: user.email, timestamp: Date.now()
+      title,
+      content,
+      user: user.email,
+      uid: user.uid, // <-- Lägg till UID!
+      timestamp: Date.now()
     });
     document.getElementById("threadTitle").value   = "";
     document.getElementById("threadContent").value = "";
@@ -94,7 +114,7 @@ export async function submitThread() {
   }
 }
 
-// 9. Ladda och rendera trådar
+// 10. Ladda och rendera trådar
 async function loadThreads() {
   const container = document.getElementById("thread-list");
   container.innerHTML = "";
@@ -110,6 +130,7 @@ async function loadThreads() {
     div.innerHTML = `
       <h3>${data.title}</h3>
       <p>${data.content}</p>
+      <span class="user-name" id="thread-user-${id}"></span>
       <div class="reactions" id="reactions-${id}"></div>
       <div class="comment-section" id="comments-${id}"></div>
       <div class="comment-form">
@@ -118,12 +139,18 @@ async function loadThreads() {
       </div>
     `;
     container.appendChild(div);
+    // Färgat namn för trådskapare
+    if (data.uid)
+      renderColoredUsername(data.uid, div.querySelector(`#thread-user-${id}`), data.user);
+    else
+      div.querySelector(`#thread-user-${id}`).textContent = data.user || "Användare";
+
     renderReactions(id);
     loadComments(id);
   });
 }
 
-// 10. Räkna och visa reaktioner
+// 11. Räkna och visa reaktioner
 async function renderReactions(threadId) {
   const container = document.getElementById(`reactions-${threadId}`);
   container.innerHTML = "";
@@ -142,7 +169,7 @@ async function renderReactions(threadId) {
   }
 }
 
-// 11. Ge användare en reaktion
+// 12. Ge användare en reaktion
 async function react(threadId, type) {
   const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
@@ -158,7 +185,7 @@ async function react(threadId, type) {
   renderReactions(threadId);
 }
 
-// 12. Kommentera
+// 13. Kommentera (spara även uid)
 export async function submitComment(threadId) {
   const user = auth.currentUser;
   if (!user) return alert(t.loginRequired);
@@ -168,13 +195,16 @@ export async function submitComment(threadId) {
   if (!txt || txt.length > 200) return;
 
   await addDoc(collection(db, "threads", threadId, "comments"), {
-    content: txt, user: user.email, timestamp: Date.now()
+    content: txt,
+    user: user.email,
+    uid: user.uid, // <-- Lägg till UID!
+    timestamp: Date.now()
   });
   ta.value = "";
   loadComments(threadId);
 }
 
-// 13. Visa kommentarer
+// 14. Visa kommentarer (med färg på namn)
 async function loadComments(threadId) {
   const container = document.getElementById(`comments-${threadId}`);
   container.innerHTML = "";
@@ -184,7 +214,20 @@ async function loadComments(threadId) {
   snap.forEach(d => {
     const div = document.createElement("div");
     div.className = "comment";
-    div.innerText = `${d.data().user}: ${d.data().content}`;
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "user-name";
+    div.appendChild(nameSpan);
+
+    const commentContent = document.createElement("span");
+    commentContent.textContent = `: ${d.data().content}`;
+    div.appendChild(commentContent);
+
     container.appendChild(div);
+
+    if (d.data().uid)
+      renderColoredUsername(d.data().uid, nameSpan, d.data().user);
+    else
+      nameSpan.textContent = d.data().user || "Användare";
   });
 }
