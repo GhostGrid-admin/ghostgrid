@@ -7,20 +7,30 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const codeField = document.getElementById("custom-code");
-  const saveBtn = document.getElementById("saveBtn");
-  const viewBtn = document.querySelector("button[data-i18n='view_profile']");
-  const editBtn = document.getElementById("editProfileBtn");
-  const preview = document.getElementById("fullscreenPreview");
-  const profileContent = document.getElementById("profileContent");
+  // Alla elementreferenser EN gång i toppen
+  const codeField     = document.getElementById("custom-code");
+  const saveBtn       = document.getElementById("saveBtn");
+  const viewBtn       = document.getElementById("btn-view-profile");
+  const editBtn       = document.getElementById("editProfileBtn");
+  const preview       = document.getElementById("fullscreenPreview");
+  const profileContent= document.getElementById("profileContent");
   const profilePicInput = document.getElementById("profile-pic");
-  const notice = document.getElementById("saveNotice");
-  const themeSelect = document.getElementById("theme");
-  const saveColorBtn = document.getElementById("saveNameColorBtn");
-  const colorPicker = document.getElementById("nameColorPicker");
+  const notice        = document.getElementById("saveNotice");
+  const themeSelect   = document.getElementById("theme");
+  const saveColorBtn  = document.getElementById("saveNameColorBtn");
+  const colorPicker   = document.getElementById("nameColorPicker");
   const colorSavedMsg = document.getElementById("colorSavedMsg");
+  const logoutLink    = document.getElementById("logoutLink");
 
-  // Koder för teman:
+  // Skydd: om någon ID saknas, sluta
+  if (!codeField || !saveBtn || !viewBtn || !editBtn || !preview ||
+      !profileContent || !profilePicInput || !notice || !themeSelect ||
+      !saveColorBtn || !colorPicker || !colorSavedMsg || !logoutLink) {
+    alert("Fel i profilsidans HTML. Kontrollera att ALLA id finns!");
+    return;
+  }
+
+  // Temamallar
   const themeTemplates = {
     "50s": `<div style="background:#f6e6d7; border-radius:20px; padding:24px; text-align:center;">
       <h1 style="color:#cc0066; font-family: 'Pacifico', cursive; font-size:2.6em;">🍦 50-talets Stjärna</h1>
@@ -68,65 +78,57 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>`
   };
 
+  let currentUser = null;
+
   auth.onAuthStateChanged(async user => {
     if (!user) return location.href = "login.html";
+    currentUser = user;
     const uid = user.uid;
     const profileRef = doc(db, "profiles", uid);
+
+    // Hämta profil
     const snap = await getDoc(profileRef);
-
-    // === Färgväljare: ENDA RÄTTA FUNKTIONEN ===
-    if (saveColorBtn && colorPicker && colorSavedMsg) {
-      saveColorBtn.addEventListener("click", async () => {
-        const color = colorPicker.value;
-        await setDoc(profileRef, { nameColor: color }, { merge: true });
-        colorSavedMsg.style.display = "block";
-        setTimeout(() => { colorSavedMsg.style.display = "none"; }, 2000);
-      });
-    }
-
-    // Hämta sparad profil
     if (snap.exists()) {
       const data = snap.data();
       codeField.value = data.profileCode || "";
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
-      document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
-
-      // Sätt färg på picker om sparat
-      if (data.nameColor) {
-        colorPicker.value = data.nameColor;
+      if (document.getElementById("profile-username")) {
+        document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
       }
-      // Sätt valt tema i listan (om sparat)
-      if (data.profileTheme && themeSelect) {
-        themeSelect.value = data.profileTheme;
-      }
+      if (data.nameColor) colorPicker.value = data.nameColor;
+      if (data.profileTheme) themeSelect.value = data.profileTheme;
     }
 
-    // När användaren väljer ett tema – byt kod automatiskt!
+    // Temabyte = byt kod
     themeSelect.addEventListener("change", () => {
       codeField.value = themeTemplates[themeSelect.value] || "";
     });
 
-    // Spara kod + tema
-    saveBtn.addEventListener("click", async () => {
+    // SPARA FÄRG
+    saveColorBtn.onclick = async () => {
+      const color = colorPicker.value;
+      await setDoc(profileRef, { nameColor: color }, { merge: true });
+      colorSavedMsg.style.display = "block";
+      setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
+    };
+
+    // SPARA KOD + TEMA
+    saveBtn.onclick = async () => {
       await setDoc(profileRef, {
         profileCode: codeField.value,
         profileTheme: themeSelect.value
       }, { merge: true });
       notice.style.display = "block";
       setTimeout(() => notice.style.display = "none", 3000);
-    });
+    };
 
-    // Visa profil
-    viewBtn.addEventListener("click", () => {
+    // Visa profil (preview)
+    viewBtn.onclick = () => {
       profileContent.innerHTML = codeField.value;
       preview.classList.remove("hidden");
       editBtn.classList.remove("hidden");
-    });
-
-    // Tillbaka till redigering
-    editBtn.addEventListener("click", () => {
-      preview.classList.add("hidden");
-    });
+    };
+    editBtn.onclick = () => preview.classList.add("hidden");
 
     // Profilbild-uppdatering
     profilePicInput.addEventListener("change", async (e) => {
@@ -152,15 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Logga ut
-    document.getElementById("logoutLink").addEventListener("click", () => {
+    logoutLink.onclick = () => {
       auth.signOut().then(() => location.href = "login.html");
-    });
-
-    // Extra-mall-knapp (om du använder denna)
-    // if (useTemplateBtn) {
-    //   useTemplateBtn.addEventListener("click", () => {
-    //     codeField.value = ... ;
-    //   });
-    // }
+    };
   });
 });
