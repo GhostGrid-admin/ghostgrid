@@ -408,7 +408,7 @@ if (hamburgerBtn && navMobile) {
 function doLogout() { signOut(auth).then(() => { window.location.href = "login.html"; }); }
 document.getElementById("logoutDesktopBtn").onclick = doLogout;
 
-// ======================== SKAPA NY TRÅD FORM ========================
+// ======================== SKAPA NY TRÅD FORM ======================== 
 const showBtn = document.getElementById('showThreadFormBtn');
 const form = document.getElementById('threadForm');
 const cancelBtn = document.getElementById('cancelThreadFormBtn');
@@ -590,7 +590,6 @@ async function renderThreads(search = "") {
       </div>
     `;
   }
-
   // Dropdown-funktion för kategorier
   document.querySelectorAll('.cat-toggle-btn').forEach(btn => {
     const dropdown = btn.parentElement.querySelector('.cat-dropdown-content');
@@ -620,7 +619,6 @@ async function renderThreads(search = "") {
   setupEmojiRow();
   addThreadListeners();
 }
-
 // ======================== Emoji reactions på tråd ========================
 function setupEmojiRow() { /* ...din kod här, samma som innan... */ }
 
