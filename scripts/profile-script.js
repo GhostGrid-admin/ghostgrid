@@ -90,6 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const snap = await getDoc(profileRef);
     if (snap.exists()) {
       const data = snap.data();
+
+      // Debugg-logg 1 – visa exakt vad du laddar!
+      console.log("Profile data loaded:", data);
+
       codeField.value = data.profileCode || "";
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
 
@@ -110,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorPicker.value = "#00ffe0"; // fallback om ingen färg finns
         const profileNameElem = document.getElementById("profile-username");
         if (profileNameElem) profileNameElem.style.color = "#00ffe0";
+        console.log("Ingen färg hittad, default #00ffe0");
       }
 
       if (data.profileTheme) themeSelect.value = data.profileTheme;
@@ -131,6 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       colorSavedMsg.style.display = "block";
       setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
+
+      // Debugg-logg 2 – logga exakt vad som sparas
       console.log("Sparad färg till Firestore:", color);
     };
 
