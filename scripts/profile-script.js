@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const profilePicInput = document.getElementById("profile-pic");
   const notice = document.getElementById("saveNotice");
   const themeSelect = document.getElementById("theme");
+  const saveColorBtn = document.getElementById("saveNameColorBtn");
+  const colorPicker = document.getElementById("nameColorPicker");
+  const colorSavedMsg = document.getElementById("colorSavedMsg");
 
   // Koder för teman:
   const themeTemplates = {
@@ -71,6 +74,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileRef = doc(db, "profiles", uid);
     const snap = await getDoc(profileRef);
 
+    // === Färgväljare: ENDA RÄTTA FUNKTIONEN ===
+    if (saveColorBtn && colorPicker && colorSavedMsg) {
+      saveColorBtn.addEventListener("click", async () => {
+        const color = colorPicker.value;
+        await setDoc(profileRef, { nameColor: color }, { merge: true });
+        colorSavedMsg.style.display = "block";
+        setTimeout(() => { colorSavedMsg.style.display = "none"; }, 2000);
+      });
+    }
+
     // Hämta sparad profil
     if (snap.exists()) {
       const data = snap.data();
@@ -78,24 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
       document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
 
-      // Lägg in detta precis EFTER att du har definierat user, uid och profileRef
-const saveColorBtn = document.getElementById("saveNameColorBtn");
-const colorPicker = document.getElementById("nameColorPicker");
-const colorSavedMsg = document.getElementById("colorSavedMsg");
-
-if (saveColorBtn && colorPicker && colorSavedMsg) {
-  saveColorBtn.addEventListener("click", async () => {
-    const color = colorPicker.value;
-    await setDoc(profileRef, { nameColor: color }, { merge: true });
-    colorSavedMsg.style.display = "block";
-    setTimeout(() => { colorSavedMsg.style.display = "none"; }, 2000);
-  });
-}
-
-      // ======= NYTT: Sätt färgpicker till sparad färg =======
-  if (data.nameColor) {
-    document.getElementById('nameColorPicker').value = data.nameColor;
-  }
+      // Sätt färg på picker om sparat
+      if (data.nameColor) {
+        colorPicker.value = data.nameColor;
+      }
       // Sätt valt tema i listan (om sparat)
       if (data.profileTheme && themeSelect) {
         themeSelect.value = data.profileTheme;
