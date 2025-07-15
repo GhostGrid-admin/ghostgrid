@@ -510,73 +510,91 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
 
       // --- RENDER TRÅDAR MED EMOJIS OCH MULTI-KATEGORIER ---
       async function renderThreads(search = "") {
-        const list = document.getElementById("threadList");
-        let showThreads = threadsGlobal;
-        if (search && search.trim() !== "") {
-          const low = search.toLowerCase();
-          showThreads = threadsGlobal.filter(thread =>
-            (thread.title && thread.title.toLowerCase().includes(low)) ||
-            (thread.description && thread.description.toLowerCase().includes(low)) ||
-            (Array.isArray(thread.categories) && thread.categories.join(" ").toLowerCase().includes(low)) ||
-            (userMap[thread.creatorUid] && userMap[thread.creatorUid].name && userMap[thread.creatorUid].name.toLowerCase().includes(low))
-          );
-        }
-        if (!showThreads.length) {
-          list.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_threads")}</div>`;
-          return;
-        }
-        list.innerHTML = "";
-        for (let thread of showThreads) {
-          const reactions = await loadReactions(collection(db, "forumThreads", thread.id, "reactions"));
-          const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
-          let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest" };
-          const canDelete = currentUser && thread.creatorUid === currentUser.uid;
-          list.innerHTML += `
-  <div class="thread" data-threadid="${thread.id}">
-    <div class="thread-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-      <div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <span style="font-size:1.17em;font-weight:700;">${escapeHTML(thread.title)}</span>
-          ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span style="font-size:0.77em;color:#0ff;background:#181f26;padding:2px 10px;border-radius:9px;margin-left:4px;">${escapeHTML(c)}</span>`).join("") : ""}
+  const list = document.getElementById("threadList");
+  let showThreads = threadsGlobal;
+  if (search && search.trim() !== "") {
+    const low = search.toLowerCase();
+    showThreads = threadsGlobal.filter(thread =>
+      (thread.title && thread.title.toLowerCase().includes(low)) ||
+      (thread.description && thread.description.toLowerCase().includes(low)) ||
+      (Array.isArray(thread.categories) && thread.categories.join(" ").toLowerCase().includes(low)) ||
+      (userMap[thread.creatorUid] && userMap[thread.creatorUid].name?.toLowerCase().includes(low))
+    );
+  }
+  if (!showThreads.length) {
+    list.innerHTML = `<div style='color:#00ffcc; text-align:center;'>${t("no_threads")}</div>`;
+    return;
+  }
+  list.innerHTML = "";
+  for (let thread of showThreads) {
+    const reactions = await loadReactions(collection(db, "forumThreads", thread.id, "reactions"));
+    const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
+    let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest" };
+
+    list.innerHTML += `
+    <div class="thread" data-threadid="${thread.id}">
+      <div class="thread-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+        <div style="flex:1;">
+          <span style="font-size:1.17em;font-weight:700;display:block;">${escapeHTML(thread.title)}</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px 7px;margin:8px 0;">
+            ${
+              Array.isArray(thread.categories)
+                ? thread.categories
+                    .map(
+                      c =>
+                        `<a href="#" class="thread-category" data-category="${escapeHTML(c)}" style="font-size:0.87em;color:#00ffd9;background:#161f26;padding:3px 13px;border-radius:12px;text-decoration:underline;transition:background 0.13s;">${escapeHTML(c)}</a>`
+                    )
+                    .join("")
+                : ""
+            }
+          </div>
+          <div class="thread-desc" style="font-size:1.11em;color:#e0ffff;margin-bottom:0.5em;">${escapeHTML(thread.description)}</div>
         </div>
-        <div style="font-size:0.93em;color:#8fffff;">
-          Skapare:
-          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;font-size:1.02em;">
+        <div style="min-width:110px;max-width:150px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:0.88em;color:#b8fff6;margin-bottom:1px;font-weight:600;">Skapare:</div>
+          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;font-size:1.07em;text-decoration:underline;font-weight:700;margin-bottom:1px;">
             ${userObj.name}
           </a>
+          <img src="${userObj.photoURL}" alt="profilbild" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #00ffcc;box-shadow:0 0 6px #00ffcc80;">
+          ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-top:2px;">✖</button>` : ""}
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:7px;">
-        <img src="${userObj.photoURL}" alt="profilbild" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #00ffcc;box-shadow:0 0 6px #00ffcc80;">
-        ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-left:3px;">✖</button>` : ""}
+      <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
+        <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
+        <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
+        ${userReaction && currentUser
+          ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
+          : ""}
+        <span class="emoji-summary">${emojiSummary(reactions)}</span>
+        <div class="emoji-popup"></div>
+        <div class="emoji-viewer-list"></div>
       </div>
+      <div class="thread-content" id="threadContent-${thread.id}"></div>
+      ${currentUser ? `
+        <form class="add-post-form" data-threadid="${thread.id}">
+          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+          <button type="submit">Lägg till inlägg</button>
+        </form>
+      ` : `
+        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+      `}
     </div>
-    <div class="thread-desc">${escapeHTML(thread.description)}</div>
-    <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
-      <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
-      <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
-      ${userReaction && currentUser
-        ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
-        : ""}
-      <span class="emoji-summary">${emojiSummary(reactions)}</span>
-      <div class="emoji-popup"></div>
-      <div class="emoji-viewer-list"></div>
-    </div>
-    <div class="thread-content" id="threadContent-${thread.id}"></div>
-    ${currentUser ? `
-      <form class="add-post-form" data-threadid="${thread.id}">
-        <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-        <button type="submit">Lägg till inlägg</button>
-      </form>
-    ` : `
-      <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-    `}
-  </div>
-`;
-        }
-        setupEmojiRow();
-        addThreadListeners();
-      }
+    `;
+  }
+
+  setupEmojiRow();
+  addThreadListeners();
+
+  // --- Filtrering på kategori ---
+  document.querySelectorAll('.thread-category').forEach(catBtn => {
+    catBtn.onclick = function(e) {
+      e.preventDefault();
+      const selected = this.getAttribute('data-category');
+      document.getElementById('searchBox').value = selected;
+      renderThreads(selected);
+    };
+  });
+}
 
       // --- Emoji reactions på tråd ---
       function setupEmojiRow() {
