@@ -518,7 +518,7 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       (thread.title && thread.title.toLowerCase().includes(low)) ||
       (thread.description && thread.description.toLowerCase().includes(low)) ||
       (Array.isArray(thread.categories) && thread.categories.join(" ").toLowerCase().includes(low)) ||
-      (userMap[thread.creatorUid] && userMap[thread.creatorUid].name?.toLowerCase().includes(low))
+      (userMap[thread.creatorUid] && userMap[thread.creatorUid].toLowerCase().includes(low))
     );
   }
   if (!showThreads.length) {
@@ -526,64 +526,107 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
     return;
   }
   list.innerHTML = "";
+
   for (let thread of showThreads) {
     const reactions = await loadReactions(collection(db, "forumThreads", thread.id, "reactions"));
     const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
     let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest" };
 
+    // Skapa kategori-dropdown
+    let categoriesHTML = `
+      <div class="thread-categories-dropdown" style="position:relative;display:inline-block;">
+        <button class="cat-toggle-btn" style="background:none;color:#00ffcc;border:none;font-size:1em;cursor:pointer;display:flex;align-items:center;gap:6px;">
+          <span style="font-weight:bold;">${t("categories") || "Kategorier"}</span> <span style="font-size:1.3em;">▼</span>
+        </button>
+        <div class="cat-dropdown-content" style="display:none;position:absolute;left:0;top:100%;background:#171f22;border-radius:8px;padding:10px 12px;min-width:160px;box-shadow:0 0 9px #00ffd988;z-index:10;">
+          ${
+            Array.isArray(thread.categories)
+            ? thread.categories.map(c =>
+                `<a href="#" class="thread-cat-link" data-cat="${escapeHTML(c)}" style="display:block;padding:6px 0;color:#00ffd9;font-size:0.96em;text-decoration:underline;cursor:pointer;">${escapeHTML(c)}</a>`
+              ).join("")
+            : "<span style='color:#bbb;'>Inga kategorier</span>"
+          }
+        </div>
+      </div>
+    `;
+
     list.innerHTML += `
-    <div class="thread" data-threadid="${thread.id}">
-      <div class="thread-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
-        <div style="flex:1;">
-          <span style="font-size:1.17em;font-weight:700;display:block;">${escapeHTML(thread.title)}</span>
-          <div style="display:flex;flex-wrap:wrap;gap:8px 7px;margin:8px 0;">
-            ${
-              Array.isArray(thread.categories)
-                ? thread.categories
-                    .map(
-                      c =>
-                        `<a href="#" class="thread-category" data-category="${escapeHTML(c)}" style="font-size:0.87em;color:#00ffd9;background:#161f26;padding:3px 13px;border-radius:12px;text-decoration:underline;transition:background 0.13s;">${escapeHTML(c)}</a>`
-                    )
-                    .join("")
-                : ""
-            }
+      <div class="thread" data-threadid="${thread.id}" style="position:relative;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+          <div style="flex:1;">
+            <div style="font-size:1.20em;font-weight:700;color:#00ffd9;margin-bottom:5px;text-align:left;">
+              ${escapeHTML(thread.title)}
+            </div>
+            <div style="margin-bottom:2px;">
+              ${categoriesHTML}
+            </div>
+            <div class="thread-desc" style="margin:8px 0 0 0;color:#e0ffff;text-align:left;">
+              ${escapeHTML(thread.description)}
+            </div>
           </div>
-          <div class="thread-desc" style="font-size:1.11em;color:#e0ffff;margin-bottom:0.5em;">${escapeHTML(thread.description)}</div>
+          <div style="min-width:110px;max-width:120px;text-align:right;">
+            <div style="font-size:0.97em;color:#0ff;font-weight:600;">Skapare:</div>
+            <div style="font-size:1.02em;font-weight:700;color:#00ffd9;word-break:break-word;">${escapeHTML(userObj.name)}</div>
+            <img src="${userObj.photoURL}" alt="profilbild" style="width:44px;height:44px;border-radius:50%;object-fit:cover;margin-top:5px;border:2px solid #00ffcc;box-shadow:0 0 6px #00ffcc80;">
+            ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-left:3px;">✖</button>` : ""}
+          </div>
         </div>
-        <div style="min-width:110px;max-width:150px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <div style="font-size:0.88em;color:#b8fff6;margin-bottom:1px;font-weight:600;">Skapare:</div>
-          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;font-size:1.07em;text-decoration:underline;font-weight:700;margin-bottom:1px;">
-            ${userObj.name}
-          </a>
-          <img src="${userObj.photoURL}" alt="profilbild" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #00ffcc;box-shadow:0 0 6px #00ffcc80;">
-          ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-top:2px;">✖</button>` : ""}
+        <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread" style="margin-top:8px;">
+          <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
+          <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
+          ${userReaction && currentUser
+            ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
+            : ""}
+          <span class="emoji-summary">${emojiSummary(reactions)}</span>
+          <div class="emoji-popup"></div>
+          <div class="emoji-viewer-list"></div>
         </div>
+        <div class="thread-content" id="threadContent-${thread.id}"></div>
+        ${currentUser ? `
+          <form class="add-post-form" data-threadid="${thread.id}">
+            <textarea id="postDesc-${thread.id}" rows="3" maxlength="2000" style="width:98%;margin:7px 0 0 0;"></textarea>
+            <button type="submit">Lägg till inlägg</button>
+          </form>
+        ` : `
+          <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+        `}
       </div>
-      <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
-        <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
-        <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
-        ${userReaction && currentUser
-          ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
-          : ""}
-        <span class="emoji-summary">${emojiSummary(reactions)}</span>
-        <div class="emoji-popup"></div>
-        <div class="emoji-viewer-list"></div>
-      </div>
-      <div class="thread-content" id="threadContent-${thread.id}"></div>
-      ${currentUser ? `
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">Lägg till inlägg</button>
-        </form>
-      ` : `
-        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-      `}
-    </div>
     `;
   }
 
+  // Kategori-dropdown funktionalitet
+  document.querySelectorAll('.cat-toggle-btn').forEach(btn => {
+    const dropdown = btn.parentElement.querySelector('.cat-dropdown-content');
+    btn.onclick = e => {
+      e.preventDefault();
+      document.querySelectorAll('.cat-dropdown-content').forEach(el => { if (el !== dropdown) el.style.display = 'none'; });
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    };
+    // Stäng dropdown när man klickar utanför
+    document.body.addEventListener("click", function(evt) {
+      if (!btn.contains(evt.target) && !dropdown.contains(evt.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+    // Hover (desktop)
+    btn.onmouseenter = () => { if (window.innerWidth > 700) dropdown.style.display = "block"; };
+    btn.onmouseleave = () => { if (window.innerWidth > 700) dropdown.style.display = "none"; };
+    dropdown.onmouseenter = () => { if (window.innerWidth > 700) dropdown.style.display = "block"; };
+    dropdown.onmouseleave = () => { if (window.innerWidth > 700) dropdown.style.display = "none"; };
+  });
+
+  // Klick på kategori -> filtrera (lägg till logik om du vill)
+  document.querySelectorAll('.thread-cat-link').forEach(catBtn => {
+    catBtn.onclick = e => {
+      e.preventDefault();
+      renderThreads(catBtn.dataset.cat);
+      document.getElementById('searchBox').value = catBtn.dataset.cat;
+    };
+  });
+
   setupEmojiRow();
   addThreadListeners();
+}
 
   // --- Filtrering på kategori ---
   document.querySelectorAll('.thread-category').forEach(catBtn => {
