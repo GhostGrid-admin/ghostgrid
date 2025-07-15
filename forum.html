@@ -6,6 +6,59 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    .thread-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+.thread-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.thread-creator-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  min-width: 90px;
+  margin-left: 18px;
+  margin-top: 0;
+  position: relative;
+}
+.creator-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #00ffcc;
+  margin-bottom: 4px;
+  object-fit: cover;
+  background: #0a0a0a;
+  box-shadow: 0 0 10px #00ffcc55;
+}
+.creator-label {
+  font-size: 0.95em;
+  color: #d0d0d0;
+  margin-bottom: 1px;
+}
+.creator-name {
+  font-size: 1.09em;
+  font-weight: bold;
+  color: #20ffe0 !important;
+  margin-bottom: 0;
+  margin-top: 1px;
+  text-align: center;
+  text-decoration: underline;
+  word-break: break-all;
+}
+.thread-delete-btn {
+  background: none;
+  border: none;
+  color: #ff008a;
+  font-size: 1.18em;
+  cursor: pointer;
+  margin-top: 4px;
+}
     body { background: #0a0a0a; color: #e0ffff; font-family: 'Courier New', monospace; min-height: 100vh; margin: 0; padding-top: 85px; position: relative; overflow-x: hidden;}
     .glow-left, .glow-right { position: fixed; top: 0; width: 170px; height: 100vh; pointer-events: none; z-index: 0;}
     .glow-left { left: 0; background: radial-gradient(circle at left, #d900ff 0%, #7200ffcc 40%, transparent 85%); box-shadow: 0 0 80px 40px #d900ffbb, 0 0 240px 80px #00ffe0aa, 0 0 400px 120px #9400ff66;}
@@ -37,7 +90,6 @@
     .own-category-btn { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 7px 14px; border-radius: 7px; font-size: 1.04em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer;}
     .thread-list { margin-top: 12px;}
     .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22;}
-    .thread-header { padding: 16px 18px 6px 18px; font-size: 1.32em; font-weight: bold; color: #00ffd9; display: flex; justify-content: space-between; align-items: center;}
     .thread-desc { font-size: 1.11em; color: #e0ffff; padding: 0 18px 8px 18px;}
     .thread-content { padding: 10px 18px 18px 18px;}
     .emoji-row-collapsed { display: flex; align-items: center; gap: 8px; margin: 7px 0 3px 0; user-select: none; width: fit-content; position: relative;}
@@ -533,24 +585,20 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
           const canDelete = currentUser && thread.creatorUid === currentUser.uid;
           list.innerHTML += `
   <div class="thread" data-threadid="${thread.id}">
-    <div class="thread-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-      <div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <span style="font-size:1.17em;font-weight:700;">${escapeHTML(thread.title)}</span>
-          ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span style="font-size:0.77em;color:#0ff;background:#181f26;padding:2px 10px;border-radius:9px;margin-left:4px;">${escapeHTML(c)}</span>`).join("") : ""}
-        </div>
-        <div style="font-size:0.93em;color:#8fffff;">
-          Skapare:
-          <a href="profile-view.html?uid=${thread.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;font-size:1.02em;">
-            ${userObj.name}
-          </a>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;">
-        <img src="${userObj.photoURL}" alt="profilbild" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #00ffcc;box-shadow:0 0 6px #00ffcc80;">
-        ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-left:3px;">✖</button>` : ""}
-      </div>
+    <div class="thread-header">
+  <div class="thread-main">
+    <div style="font-size:1.17em;font-weight:700;">${escapeHTML(thread.title)}</div>
+    <div style="margin: 7px 0 4px 0;">
+      ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span style="font-size:0.77em;color:#0ff;background:#181f26;padding:2px 10px;border-radius:9px;margin-right:6px;">${escapeHTML(c)}</span>`).join("") : ""}
     </div>
+  </div>
+  <div class="thread-creator-info">
+    <img src="${userObj.photoURL}" alt="profilbild" class="creator-avatar">
+    <div class="creator-label">Skapare:</div>
+    <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
+    ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-top:4px;">✖</button>` : ""}
+  </div>
+</div>
     <div class="thread-desc">${escapeHTML(thread.description)}</div>
     <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
       <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
