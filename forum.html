@@ -542,31 +542,27 @@ list.innerHTML += `
       </div>
     </div>
     <div class="thread-desc">${escapeHTML(thread.description)}</div>
-    <!-- Resten av din kod för emoji, kommentarer, inlägg etc följer här! -->
+    <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
+      <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
+      <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
+      ${userReaction && currentUser
+        ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
+        : ""}
+      <span class="emoji-summary">${emojiSummary(reactions)}</span>
+      <div class="emoji-popup"></div>
+      <div class="emoji-viewer-list"></div>
+    </div>
+    <div class="thread-content" id="threadContent-${thread.id}"></div>
+    ${currentUser ? `
+      <form class="add-post-form" data-threadid="${thread.id}">
+        <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+        <button type="submit">Lägg till inlägg</button>
+      </form>
+    ` : `
+      <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+    `}
+  </div>
 `;
-            </div>
-            <div class="thread-desc">${escapeHTML(thread.description)}</div>
-            <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
-              <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
-              <span class="emoji-toggle-arrow"${currentUser ? '' : ' style="opacity:0.5;cursor:not-allowed;"'}>&#9654;</span>
-              ${userReaction && currentUser
-                ? `<button class="emoji-user-pick" title="${t('delete_confirm')}">${emojis.find(e => e.key === userReaction.emoji)?.emoji || "❓"}</button>`
-                : ""}
-              <span class="emoji-summary">${emojiSummary(reactions)}</span>
-              <div class="emoji-popup"></div>
-              <div class="emoji-viewer-list"></div>
-            </div>
-            <div class="thread-content" id="threadContent-${thread.id}"></div>
-            ${currentUser ? `
-              <form class="add-post-form" data-threadid="${thread.id}">
-                <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-                <button type="submit">Lägg till inlägg</button>
-              </form>
-            ` : `
-              <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-            `}
-          </div>`;
-      }
       setupEmojiRow();
       addThreadListeners();
     }
