@@ -5855,16 +5855,15 @@ themeSelect.addEventListener('change', function(e) {
     });
 
     // Efter att currentUser och profil laddats...
-document.getElementById('saveNameColorBtn').onclick = async function() {
+
+document.getElementById('saveNameColorBtn').onclick = async function() { 
   const color = document.getElementById('nameColorPicker').value;
   if (!currentUser) return alert("Du måste vara inloggad!");
   await setDoc(doc(db, "profiles", currentUser.uid), { nameColor: color }, { merge: true });
-  const status = document.getElementById('nameColorStatus');
-  status.textContent = "Färgen sparad!";
-  status.style.color = "#00ff00";
-  setTimeout(() => { status.textContent = ""; }, 1800);
+  const msg = document.getElementById('colorSavedMsg');
+  msg.style.display = "block";
+  setTimeout(() => { msg.style.display = "none"; }, 1800);
 };
-
     // Förhandsgranska vald bild
     document.getElementById('profile-pic').addEventListener('change', function(e) {
       const file = e.target.files[0];
