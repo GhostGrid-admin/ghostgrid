@@ -96,7 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (document.getElementById("profile-username")) {
         document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
       }
-      if (data.nameColor) colorPicker.value = data.nameColor;
+      if (data.nameColor) {
+  colorPicker.value = data.nameColor;
+  // Sätt färg på användarnamnet
+  const profileNameElem = document.getElementById("profile-username");
+  if (profileNameElem) {
+    profileNameElem.style.color = data.nameColor;
+  }
+}
       if (data.profileTheme) themeSelect.value = data.profileTheme;
     }
 
@@ -107,11 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // SPARA FÄRG
     saveColorBtn.onclick = async () => {
-      const color = colorPicker.value;
-      await setDoc(profileRef, { nameColor: color }, { merge: true });
-      colorSavedMsg.style.display = "block";
-      setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
-    };
+  const color = colorPicker.value;
+  await setDoc(profileRef, { nameColor: color }, { merge: true });
+  // Sätt färg direkt när man sparar
+  const profileNameElem = document.getElementById("profile-username");
+  if (profileNameElem) {
+    profileNameElem.style.color = color;
+  }
+  colorSavedMsg.style.display = "block";
+  setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
+};
 
     // SPARA KOD + TEMA
     saveBtn.onclick = async () => {
