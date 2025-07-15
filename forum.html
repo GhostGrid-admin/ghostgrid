@@ -11,24 +11,29 @@
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
+  gap: 0;
 }
 .thread-main {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
+  padding-right: 90px; /* Gör plats för skapare-biten */
 }
 .thread-creator-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100px;
-  min-width: 90px;
-  margin-left: 18px;
+  width: 76px; /* Minskat från 100px */
+  min-width: 70px;
+  margin-left: 0;
   margin-top: 0;
-  position: relative;
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  z-index: 1;
 }
 .creator-avatar {
-  width: 56px;
-  height: 56px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: 2px solid #00ffcc;
   margin-bottom: 4px;
@@ -37,19 +42,25 @@
   box-shadow: 0 0 10px #00ffcc55;
 }
 .creator-label {
-  font-size: 0.95em;
+  font-size: 0.9em;
   color: #d0d0d0;
   margin-bottom: 1px;
+  text-align: center;
+  white-space: nowrap;
 }
 .creator-name {
-  font-size: 1.09em;
+  font-size: 0.99em;
   font-weight: bold;
   color: #20ffe0 !important;
   margin-bottom: 0;
   margin-top: 1px;
   text-align: center;
   text-decoration: underline;
-  word-break: break-all;
+  word-break: break-word;
+  line-height: 1.1;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .thread-delete-btn {
   background: none;
