@@ -8,32 +8,58 @@
   <style>
     .thread-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
+  padding: 16px 18px 0 18px;
   position: relative;
-  gap: 0;
 }
+
 .thread-main {
-  flex: 1 1 0;
+  flex: 1;
   min-width: 0;
-  padding-right: 90px; /* Gör plats för skapare-biten */
+  padding-right: 120px; /* Gör plats för skapare-rutan till höger */
 }
+
+.thread-title {
+  font-size: 1.19em;
+  font-weight: 700;
+  color: #20ffe0;
+  margin-bottom: 4px;
+  word-break: break-word;
+  line-height: 1.18;
+}
+
+.thread-categories {
+  margin-bottom: 8px;
+}
+
+.thread-category {
+  font-size: 0.8em;
+  color: #0ff;
+  background: #181f26;
+  padding: 2px 10px;
+  border-radius: 9px;
+  margin-right: 6px;
+  display: inline-block;
+}
+
 .thread-creator-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 76px; /* Minskat från 100px */
-  min-width: 70px;
-  margin-left: 0;
-  margin-top: 0;
   position: absolute;
   top: 12px;
   right: 18px;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 88px;
+  z-index: 2;
+  background: none;
+  padding: 0;
 }
+
 .creator-avatar {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 2px solid #00ffcc;
   margin-bottom: 4px;
@@ -41,27 +67,30 @@
   background: #0a0a0a;
   box-shadow: 0 0 10px #00ffcc55;
 }
+
 .creator-label {
-  font-size: 0.9em;
+  font-size: 0.98em;
   color: #d0d0d0;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
   text-align: center;
   white-space: nowrap;
 }
+
 .creator-name {
-  font-size: 0.99em;
+  font-size: 1.04em;
   font-weight: bold;
   color: #20ffe0 !important;
-  margin-bottom: 0;
-  margin-top: 1px;
+  margin: 0 0 0 0;
   text-align: center;
   text-decoration: underline;
   word-break: break-word;
-  line-height: 1.1;
+  line-height: 1.15;
   max-width: 100%;
   white-space: normal;
   overflow-wrap: anywhere;
+  display: block;
 }
+
 .thread-delete-btn {
   background: none;
   border: none;
@@ -598,16 +627,16 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
   <div class="thread" data-threadid="${thread.id}">
     <div class="thread-header">
   <div class="thread-main">
-    <div style="font-size:1.17em;font-weight:700;">${escapeHTML(thread.title)}</div>
-    <div style="margin: 7px 0 4px 0;">
-      ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span style="font-size:0.77em;color:#0ff;background:#181f26;padding:2px 10px;border-radius:9px;margin-right:6px;">${escapeHTML(c)}</span>`).join("") : ""}
+    <div class="thread-title">${escapeHTML(thread.title)}</div>
+    <div class="thread-categories">
+      ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span class="thread-category">${escapeHTML(c)}</span>`).join("") : ""}
     </div>
   </div>
   <div class="thread-creator-info">
     <img src="${userObj.photoURL}" alt="profilbild" class="creator-avatar">
     <div class="creator-label">Skapare:</div>
     <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
-    ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd" style="margin-top:4px;">✖</button>` : ""}
+    ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
   </div>
 </div>
     <div class="thread-desc">${escapeHTML(thread.description)}</div>
