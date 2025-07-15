@@ -86,24 +86,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const uid = user.uid;
     const profileRef = doc(db, "profiles", uid);
 
-    // Hämta profil
+    // Hämta profil och LADDA FÄRG
     const snap = await getDoc(profileRef);
     if (snap.exists()) {
       const data = snap.data();
       codeField.value = data.profileCode || "";
       document.getElementById("profile-email").textContent = "E-post: " + user.email;
+
       // Om du har "profile-username" på sidan
       if (document.getElementById("profile-username")) {
         document.getElementById("profile-username").textContent = "Användarnamn: " + (user.displayName || "okänd");
       }
+
+      // --- Ladda in färgen från Firestore och sätt på både färgväljare och namn! ---
       if (data.nameColor) {
-  colorPicker.value = data.nameColor;
-  // Sätt färg på användarnamnet
-  const profileNameElem = document.getElementById("profile-username");
-  if (profileNameElem) {
-    profileNameElem.style.color = data.nameColor;
-  }
-}
+        colorPicker.value = data.nameColor;
+        const profileNameElem = document.getElementById("profile-username");
+        if (profileNameElem) {
+          profileNameElem.style.color = data.nameColor;
+        }
+        console.log("Laddad färg från Firestore:", data.nameColor);
+      } else {
+        colorPicker.value = "#00ffe0"; // fallback om ingen färg finns
+        const profileNameElem = document.getElementById("profile-username");
+        if (profileNameElem) profileNameElem.style.color = "#00ffe0";
+      }
+
       if (data.profileTheme) themeSelect.value = data.profileTheme;
     }
 
@@ -114,16 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // SPARA FÄRG
     saveColorBtn.onclick = async () => {
-  const color = colorPicker.value;
-  await setDoc(profileRef, { nameColor: color }, { merge: true });
-  // Sätt färg direkt när man sparar
-  const profileNameElem = document.getElementById("profile-username");
-  if (profileNameElem) {
-    profileNameElem.style.color = color;
-  }
-  colorSavedMsg.style.display = "block";
-  setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
-};
+      const color = colorPicker.value;
+      await setDoc(profileRef, { nameColor: color }, { merge: true });
+      // Sätt färg direkt när man sparar
+      const profileNameElem = document.getElementById("profile-username");
+      if (profileNameElem) {
+        profileNameElem.style.color = color;
+      }
+      colorSavedMsg.style.display = "block";
+      setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
+      console.log("Sparad färg till Firestore:", color);
+    };
 
     // SPARA KOD + TEMA
     saveBtn.onclick = async () => {
