@@ -611,16 +611,15 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
           list.innerHTML += `
   <div class="thread" data-threadid="${thread.id}">
     <div class="thread-header">
-  <div class="thread-main">
-    <div class="thread-title">${escapeHTML(thread.title)}</div>
-    <div class="thread-categories">
+  <div class="thread-title">${escapeHTML(thread.title)}</div>
+  <div class="thread-categories-row">
+    <div class="categories-wrap">
       ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span class="thread-category">${escapeHTML(c)}</span>`).join("") : ""}
     </div>
-  </div>
-  <div class="thread-creator-info">
-    <div class="creator-label">Skapare:</div>
-    <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
-    ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
+    <div class="thread-creator-info">
+      Skapare: <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
+      ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
+    </div>
   </div>
 </div>
     <div class="thread-desc">${escapeHTML(thread.description)}</div>
