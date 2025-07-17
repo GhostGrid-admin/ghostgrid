@@ -6,33 +6,34 @@
   <title>Forum – GhostGrid</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-.thread-header { 
-  padding: 16px 18px 0 18px;
+.thread-header {
+  padding: 10px 16px 10px 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
+  background: none;
 }
+
 .thread-title {
   font-size: 1.19em;
   font-weight: 700;
   color: #20ffe0;
-  margin-bottom: 7px;
+  margin-bottom: 4px;
   word-break: break-word;
   line-height: 1.18;
   text-align: left;
   width: 100%;
-  padding-left: 2px;
+  display: block;
 }
+
 .thread-categories-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
   gap: 8px;
   margin-bottom: 2px;
   margin-top: 2px;
-  width: 100%;
 }
 .categories-wrap {
   display: flex;
@@ -52,18 +53,17 @@
   display: inline-block;
 }
 .thread-creator-info {
-  width: 100%;
-  text-align: right;
   color: #ff00cc;
   font-size: 0.97em;
   font-style: italic;
-  margin-top: 0;
-  margin-bottom: 2px;
   white-space: nowrap;
+  padding-left: 0;
+  min-width: 0;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   gap: 7px;
+  margin: 0 0 7px 0;
+  text-align: left;
 }
 
 .creator-name {
