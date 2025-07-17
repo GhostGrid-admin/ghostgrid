@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="style.css" />
   <style>
 .thread-header { 
-  padding: 16px 18px 0 18px;
+  padding: 16px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .thread-title {
@@ -17,9 +20,11 @@
   margin-bottom: 4px;
   word-break: break-word;
   line-height: 1.18;
-  text-align: center;
+  text-align: left;
   width: 100%;
   display: block;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .thread-categories-row {
@@ -118,7 +123,15 @@
     .own-category-btn { background: #00ffcc; color: #181f26; border: none; font-weight: bold; padding: 7px 14px; border-radius: 7px; font-size: 1.04em; box-shadow: 0 0 8px #00ffcc99; cursor: pointer;}
     .thread-list { margin-top: 12px;}
     .thread { border: 1.5px solid #00ffcc; border-radius: 9px; margin-bottom: 24px; background: #181f26; box-shadow: 0 0 9px #00ffcc22;}
-    .thread-desc { font-size: 1.11em; color: #e0ffff; padding: 0 18px 8px 18px;}
+    .thread-desc {
+  font-size: 1.11em;
+  color: #e0ffff;
+  padding: 0 0 8px 0;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+}
     .thread-content { padding: 10px 18px 18px 18px;}
     .emoji-row-collapsed { display: flex; align-items: center; gap: 8px; margin: 7px 0 3px 0; user-select: none; width: fit-content; position: relative;}
     .emoji-main-btn { font-size: 1.3em; background: none; border: none; cursor: pointer; outline: none; padding: 2px 6px;}
