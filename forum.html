@@ -7,43 +7,39 @@
   <link rel="stylesheet" href="style.css" />
   <style>
 .thread-header { 
-  padding: 18px 24px 0 24px;
+  padding: 16px 18px 0 18px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
-
 .thread-title {
   font-size: 1.19em;
   font-weight: 700;
   color: #20ffe0;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
   word-break: break-word;
   line-height: 1.18;
   text-align: left;
   width: 100%;
-  display: block;
-  padding-left: 0;
+  padding-left: 2px;
 }
-
 .thread-categories-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 8px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 2px;
+  margin-top: 2px;
   width: 100%;
-  padding-left: 0;
 }
-
 .categories-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 8px;
   min-width: 0;
 }
-
 .thread-category {
   background: #0ff;
   color: #181f26;
@@ -55,15 +51,19 @@
   font-weight: bold;
   display: inline-block;
 }
-
 .thread-creator-info {
+  width: 100%;
+  text-align: right;
   color: #ff00cc;
   font-size: 0.97em;
   font-style: italic;
-  padding: 4px 0 2px 0;
-  width: 100%;
-  text-align: left;
-  display: block;
+  margin-top: 0;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 7px;
 }
 
 .creator-name {
@@ -122,10 +122,12 @@
     .thread-desc {
   font-size: 1.11em;
   color: #e0ffff;
-  padding: 6px 0 8px 0;
-  width: 100%;
+  padding: 7px 10px 8px 10px;
+  margin: 0;
   text-align: left;
   word-break: break-word;
+  width: 100%;
+  box-sizing: border-box;
 }
     .thread-content { padding: 10px 18px 18px 18px;}
     .emoji-row-collapsed { display: flex; align-items: center; gap: 8px; margin: 7px 0 3px 0; user-select: none; width: fit-content; position: relative;}
@@ -621,18 +623,18 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
           const canDelete = currentUser && thread.creatorUid === currentUser.uid;
           list.innerHTML += `
   <div class="thread" data-threadid="${thread.id}">
-    <div class="thread-header" style="display:flex; flex-direction:column; align-items:flex-start;">
-      <div class="thread-title" style="text-align:left;width:100%;">${escapeHTML(thread.title)}</div>
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; width:100%;">
-        <div class="categories-wrap" style="display:flex;gap:8px 8px;">
+    <div class="thread-header">
+      <div class="thread-title">${escapeHTML(thread.title)}</div>
+      <div class="thread-categories-row">
+        <div class="categories-wrap">
           ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span class="thread-category">${escapeHTML(c)}</span>`).join("") : ""}
         </div>
-        <div class="thread-creator-info" style="margin-left:auto;">
-          Skapare: <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
-          ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
-        </div>
       </div>
-      <div class="thread-desc" style="text-align:left;width:100%;">${escapeHTML(thread.description)}</div>
+      <div class="thread-creator-info">
+        Skapare: <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
+        ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
+      </div>
+      <div class="thread-desc">${escapeHTML(thread.description)}</div>
     </div>
     <div class="emoji-row-collapsed" data-threadid="${thread.id}" data-type="thread">
       <button class="emoji-main-btn" type="button"${currentUser ? '' : ' disabled title="'+t('login_to_react')+'"'}>😊</button>
