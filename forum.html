@@ -848,11 +848,13 @@ function setupCollapseThreads() {
           posts.map(post => `
             <div class="post" data-postid="${post.id}">
               <div class="post-header">
-                <span style="color:#00ffd9;">${t("user")}: 
-                  <a href="profile-view.html?uid=${post.creatorUid}" class="profile-link" style="color:#00ffd9;text-decoration:underline;">
-                    ${userMap[post.creatorUid]?.name || t("guest")}
-                  </a>
-                </span>
+                <span style="color:${userMap[post.creatorUid]?.nameColor || '#fff'};">
+  ${t("user")}: 
+  <a href="profile-view.html?uid=${post.creatorUid}" class="profile-link" 
+     style="color:${userMap[post.creatorUid]?.nameColor || '#fff'};text-decoration:underline;">
+    ${userMap[post.creatorUid]?.name || t("guest")}
+  </a>
+</span>
                 ${currentUser && post.creatorUid === currentUser.uid ? `<button class="post-delete-btn" data-postid="${post.id}" title="${t('delete_confirm')}">✖</button>` : ""}
               </div>
               <div class="post-content">${escapeHTML(post.text)}</div>
