@@ -586,15 +586,16 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
 
       // --- LADDA ANVÄNDARE ---
       async function fetchUsers() {
-        userMap = {};
-        const snap = await getDocs(collection(db, "profiles"));
-        snap.docs.forEach(docu => {
-          userMap[docu.id] = {
-            name: docu.data().nickname || docu.data().displayName || t("guest"),
-            photoURL: docu.data().photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(docu.data().nickname || docu.data().displayName || "Guest")
-          };
-        });
-      }
+  userMap = {};
+  const snap = await getDocs(collection(db, "profiles"));
+  snap.docs.forEach(docu => {
+    userMap[docu.id] = {
+      name: docu.data().nickname || docu.data().displayName || t("guest"),
+      photoURL: docu.data().photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(docu.data().nickname || docu.data().displayName || "Guest"),
+      nameColor: docu.data().nameColor || "#fff" // Standardfärg om ingen finns!
+    };
+  });
+}
 
       // --- EMOJI LOGIK ---
       async function loadReactions(refCol) {
@@ -645,7 +646,7 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
   for (let thread of showThreads) {
     const reactions = await loadReactions(collection(db, "forumThreads", thread.id, "reactions"));
     const userReaction = currentUser ? reactions.find(r => r.user === currentUser.uid) : null;
-    let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest" };
+    let userObj = userMap[thread.creatorUid] || { name: t("guest"), photoURL: "https://ui-avatars.com/api/?name=Guest", nameColor: "#fff" };
     const canDelete = currentUser && thread.creatorUid === currentUser.uid;
     list.innerHTML += `
   <div class="thread thread-collapsed" data-threadid="${thread.id}">
@@ -656,9 +657,13 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
           ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span class="thread-category">${escapeHTML(c)}</span>`).join("") : ""}
         </div>
         <div class="thread-creator-info" style="margin-left:8px;">
-          Skapare: <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link">${userObj.name}</a>
-          ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
-        </div>
+  Skapare:
+  <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link"
+     style="color:${userObj.nameColor};text-decoration:underline;font-weight:bold;">
+    ${userObj.name}
+  </a>
+  ${canDelete ? `<button class="thread-delete-btn" data-threadid="${thread.id}" title="Radera tråd">✖</button>` : ""}
+</div>
       </div>
     </div>
     <div class="thread-extra" style="display:none;">
