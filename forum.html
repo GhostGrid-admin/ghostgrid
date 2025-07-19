@@ -679,14 +679,15 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
         <div class="emoji-viewer-list"></div>
       </div>
       <div class="thread-content" id="threadContent-${thread.id}"></div>
-      ${currentUser ? `
-        <form class="add-post-form" data-threadid="${thread.id}">
-          <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-          <button type="submit">Lägg till inlägg</button>
-        </form>
-      ` : `
-        <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
-      `}
+     ${currentUser ? `
+  <form class="add-post-form" data-threadid="${thread.id}">
+    <div style="color:#fff;font-size:1.18em;margin-bottom:4px;font-weight:bold;">Kommentera:</div>
+    <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
+    <button type="submit">Lägg till inlägg</button>
+  </form>
+` : `
+  <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
+`}
     </div>
   </div>
   `;
