@@ -5830,29 +5830,46 @@ themeSelect.addEventListener('change', function(e) {
 });
 
     // ---------- LOGIK OCH SPARA -----------
+const colorSavedMsg = document.getElementById("colorSavedMsg");
+const logoutLink    = document.getElementById("logoutLink");
 
+colorPicker.addEventListener('input', function() {
+  if (document.getElementById("profile-username")) {
+    document.getElementById("profile-username").style.color = colorPicker.value;
+  }
+});
+    
     let currentUser = null;
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
-        const snap = await getDoc(doc(db, "profiles", user.uid));
-        if (snap.exists()) {
-          const data = snap.data();
-          document.getElementById('nickname').value = data.nickname || '';
-          if (data.profileTheme) themeSelect.value = data.profileTheme;
-          document.getElementById('custom-code').value = data.profileCode || '';
-          if (data.profilePicUrl) {
-            const pic = document.getElementById('profilePicPreview');
-            pic.src = data.profilePicUrl;
-            pic.style.display = 'block';
-            document.getElementById('profilePicNotice').textContent = lang === "en" ? "Profile picture loaded." : "Profilbild hämtad.";
-            document.getElementById('profilePicNotice').style.display = "block";
-            setTimeout(() => { document.getElementById('profilePicNotice').style.display = "none"; }, 1500);
-          }
+  if (user) {
+    currentUser = user;
+    document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
+    const snap = await getDoc(doc(db, "profiles", user.uid));
+    if (snap.exists()) {
+      const data = snap.data();
+      document.getElementById('nickname').value = data.nickname || '';
+      if (data.profileTheme) themeSelect.value = data.profileTheme;
+      document.getElementById('custom-code').value = data.profileCode || '';
+      if (data.profilePicUrl) {
+        const pic = document.getElementById('profilePicPreview');
+        pic.src = data.profilePicUrl;
+        pic.style.display = 'block';
+        document.getElementById('profilePicNotice').textContent = lang === "en" ? "Profile picture loaded." : "Profilbild hämtad.";
+        document.getElementById('profilePicNotice').style.display = "block";
+        setTimeout(() => { document.getElementById('profilePicNotice').style.display = "none"; }, 1500);
+      }
+      // === LÄGG TILL DETTA BLOCK ===
+      if (data.nameColor) {
+        document.getElementById('nameColorPicker').value = data.nameColor;
+        // Om du visar användarnamnet nånstans med ID (t.ex. profile-username), färga det också:
+        if (document.getElementById("profile-username")) {
+          document.getElementById("profile-username").style.color = data.nameColor;
         }
       }
-    });
+      // =============================
+    }
+  }
+});
 
     // Efter att currentUser och profil laddats...
 
