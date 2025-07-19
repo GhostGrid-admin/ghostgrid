@@ -681,9 +681,11 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
       <div class="thread-content" id="threadContent-${thread.id}"></div>
      ${currentUser ? `
   <form class="add-post-form" data-threadid="${thread.id}">
-    <div style="color:#fff;font-size:1.18em;margin-bottom:4px;font-weight:bold;">Kommentera:</div>
-    <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000"></textarea>
-    <button type="submit">Lägg till inlägg</button>
+    <div style="padding-left:18px;">
+      <div style="color:#fff;font-size:1.18em;margin-bottom:4px;font-weight:bold;">Kommentera:</div>
+      <textarea id="postDesc-${thread.id}" rows="4" maxlength="2000" style="width:98%;max-width:99%;"></textarea>
+      <button type="submit" style="margin-top:9px;">Lägg till inlägg</button>
+    </div>
   </form>
 ` : `
   <div style="padding:7px 0 0 0;color:#aaa;font-size:0.96em;text-align:center;">${t("login_to_comment")}</div>
