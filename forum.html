@@ -656,8 +656,8 @@ input[type="checkbox"]:focus-visible, .category-checkbox-label:focus-visible {
         <div class="categories-wrap">
           ${Array.isArray(thread.categories) ? thread.categories.map(c => `<span class="thread-category">${escapeHTML(c)}</span>`).join("") : ""}
         </div>
-        <div class="thread-creator-info" style="margin-left:8px; color:${userObj.nameColor};">
-  Skapare:
+        <div class="thread-creator-info" style="margin-left:8px;">
+  <span style="color:${userObj.nameColor};">Skapare:</span>
   <a href="profile-view.html?uid=${thread.creatorUid}" class="creator-name profile-link"
      style="color:${userObj.nameColor};text-decoration:underline;font-weight:bold;">
     ${userObj.name}
