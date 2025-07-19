@@ -5769,8 +5769,8 @@
 
     const lang = localStorage.getItem("lang") === "en" ? "en" : "sv";
 
-    // Meny
-    document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
+  // MENY
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navMobile = document.getElementById('navMobile');
 
@@ -5799,208 +5799,205 @@
   if (logoutDesktopBtn) {
     logoutDesktopBtn.onclick = doLogout;
   }
-});
 
-function doLogout() {
-  firebase.auth().signOut().then(() => {
-    window.location.href = "login.html";
+  function doLogout() {
+    firebase.auth().signOut().then(() => {
+      window.location.href = "login.html";
+    });
+  }
+
+  // DROPDOWN TEMA
+  const themeSelect = document.getElementById("theme");
+  themeSelect.innerHTML = "";
+  themeSelect.appendChild(new Option(lang === "en" ? "Custom code (advanced!)" : "Egen kod (avancerat!)", "custom"));
+  Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key], key)));
+  Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key], key)));
+  Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key], key)));
+
+  themeSelect.addEventListener('change', function(e) {
+    const val = e.target.value;
+    let code = "";
+    if (themeTemplates[val]) {
+      if (typeof themeTemplates[val] === "object" && (themeTemplates[val].sv || themeTemplates[val].en)) {
+        code = themeTemplates[val][lang] || "";
+      } else {
+        code = themeTemplates[val];
+      }
+    }
+    document.getElementById('custom-code').value = code;
   });
-}
 
-    // Teman till dropdown
-    const themeSelect = document.getElementById("theme");
-    themeSelect.innerHTML = "";
-    themeSelect.appendChild(new Option(lang === "en" ? "Custom code (advanced!)" : "Egen kod (avancerat!)", "custom"));
-    Object.keys(dec).forEach(key => themeSelect.appendChild(new Option(dec[key], key)));
-    Object.keys(life).forEach(key => themeSelect.appendChild(new Option(life[key], key)));
-    Object.keys(music).forEach(key => themeSelect.appendChild(new Option(music[key], key)));
+  // ---------- LOGIK OCH SPARA -----------
+  const colorSavedMsg = document.getElementById("colorSavedMsg");
+  const logoutLink    = document.getElementById("logoutLink");
+  const colorPicker   = document.getElementById("nameColorPicker");
 
-themeSelect.addEventListener('change', function(e) {
-  const val = e.target.value;
-  let code = "";
-  if (themeTemplates[val]) {
-    // Om objektet är ett språkobjekt (har sv/en)
-    if (typeof themeTemplates[val] === "object" && (themeTemplates[val].sv || themeTemplates[val].en)) {
-      code = themeTemplates[val][lang] || "";
-    } else {
-      code = themeTemplates[val];
+  // Live-preview på färg
+  colorPicker.addEventListener('input', function() {
+    if (document.getElementById("profile-username")) {
+      document.getElementById("profile-username").style.color = colorPicker.value;
     }
-  }
-  document.getElementById('custom-code').value = code;
-});
+  });
 
-    // ---------- LOGIK OCH SPARA -----------
-const colorSavedMsg = document.getElementById("colorSavedMsg");
-const logoutLink    = document.getElementById("logoutLink");
-    const colorPicker = document.getElementById("nameColorPicker");
-
-colorPicker.addEventListener('input', function() {
-  if (document.getElementById("profile-username")) {
-    document.getElementById("profile-username").style.color = colorPicker.value;
-  }
-});
-    
-    let currentUser = null;
-    onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
-    const snap = await getDoc(doc(db, "profiles", user.uid));
-    if (snap.exists()) {
-      const data = snap.data();
-      document.getElementById('nickname').value = data.nickname || '';
-      if (data.profileTheme) themeSelect.value = data.profileTheme;
-      document.getElementById('custom-code').value = data.profileCode || '';
-      if (data.profilePicUrl) {
-        const pic = document.getElementById('profilePicPreview');
-        pic.src = data.profilePicUrl;
-        pic.style.display = 'block';
-        document.getElementById('profilePicNotice').textContent = lang === "en" ? "Profile picture loaded." : "Profilbild hämtad.";
-        document.getElementById('profilePicNotice').style.display = "block";
-        setTimeout(() => { document.getElementById('profilePicNotice').style.display = "none"; }, 1500);
-      }
-      // === LÄGG TILL DETTA BLOCK ===
-      if (data.nameColor) {
-        document.getElementById('nameColorPicker').value = data.nameColor;
-        // Om du visar användarnamnet nånstans med ID (t.ex. profile-username), färga det också:
-        if (document.getElementById("profile-username")) {
-          document.getElementById("profile-username").style.color = data.nameColor;
-        }
-      }
-      // =============================
-    }
-  }
-});
-
-    // Efter att currentUser och profil laddats...
-
-document.getElementById('saveNameColorBtn').onclick = async function() { 
-  const color = document.getElementById('nameColorPicker').value;
-  if (!currentUser) return alert("Du måste vara inloggad!");
-  await setDoc(doc(db, "profiles", currentUser.uid), { nameColor: color }, { merge: true });
-  const msg = document.getElementById('colorSavedMsg');
-  msg.style.display = "block";
-  setTimeout(() => { msg.style.display = "none"; }, 1800);
-};
-    // Förhandsgranska vald bild
-    document.getElementById('profile-pic').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      const pic = document.getElementById('profilePicPreview');
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          pic.src = ev.target.result;
-          pic.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Spara smeknamn
-    document.getElementById('saveNicknameBtn').onclick = async () => {
-      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
-      const newNick = document.getElementById('nickname').value.trim();
-      if (!newNick) {
-        document.getElementById('nicknameStatus').textContent = lang === "en" ? "You must enter a nickname." : "Du måste ange ett smeknamn.";
-        return;
-      }
-      const q = query(collection(db, "profiles"), where("nickname", "==", newNick));
-      const snap = await getDocs(q);
-      let taken = false;
-      snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
-      if (taken) {
-        document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname is already taken!" : "Smeknamnet är upptaget!";
-        return;
-      }
-      await setDoc(doc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
-      document.getElementById('nicknameStatus').style.color = "#00ff00";
-      document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname saved!" : "Smeknamn sparat!";
-      setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
-    };
-
-    // Spara kod/tema
-    document.getElementById('saveBtn').onclick = async () => {
-      if (!currentUser) return;
-      await setDoc(doc(db, "profiles", currentUser.uid), {
-        profileCode: document.getElementById('custom-code').value,
-        profileTheme: themeSelect.value
-      }, { merge: true });
-      document.getElementById('saveNotice').style.display = "block";
-      setTimeout(() => document.getElementById('saveNotice').style.display = "none", 3000);
-    };
-
-    // Spara profilbild
-    document.getElementById('saveProfilePicBtn').onclick = async () => {
-      const profilePicInput = document.getElementById('profile-pic');
-      const notice = document.getElementById('profilePicNotice');
-      notice.style.display = "block";
-      notice.textContent = "";
-      if (!currentUser) {
-        notice.textContent = lang === "en" ? "You are not logged in." : "Du är inte inloggad.";
-        setTimeout(() => { notice.style.display = "none"; }, 2200);
-        return;
-      }
-      const file = profilePicInput.files[0];
-      if (!file) {
-        notice.textContent = lang === "en" ? "No file selected." : "Ingen bild vald.";
-        setTimeout(() => { notice.style.display = "none"; }, 2000);
-        return;
-      }
-      try {
-        const storageRef = ref(storage, `profile_pics/${currentUser.uid}/profile.jpg`);
-        await uploadBytes(storageRef, file);
-        const downloadUrl = await getDownloadURL(storageRef);
-        await setDoc(doc(db, "profiles", currentUser.uid), {
-          profilePicUrl: downloadUrl
-        }, { merge: true });
-        document.getElementById('profilePicPreview').src = downloadUrl;
-        document.getElementById('profilePicPreview').style.display = 'block';
-        notice.innerHTML = `<span style="font-size:1.6em;color:#00ff00;vertical-align:-4px;">&#10003;</span> Profilbild sparad!`;
-        notice.style.display = "block";
-        setTimeout(() => { notice.style.display = "none"; }, 2500);
-      } catch (err) {
-        notice.textContent = lang === "en" ? "Error uploading file." : "Fel vid uppladdning.";
-        setTimeout(() => { notice.style.display = "none"; }, 3500);
-      }
-    };
-
-    // Visa profil
-    window.goToProfileView = function() {
-      if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
-      window.location.href = `profile-view.html?uid=${currentUser.uid}`;
-    };
-
-    // Preview
-    const preview = document.getElementById("fullscreenPreview");
-    const profileContent = document.getElementById("profileContent");
-    const editBtn = document.getElementById("editProfileBtn");
-
-    document.getElementById('btn-view-profile').addEventListener('click', async () => {
-      if (!currentUser) {
-        alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
-        return;
-      }
-      const docRef = doc(db, "profiles", currentUser.uid);
-      const docSnap = await getDoc(docRef);
-      let profilePicHtml = "";
-      if (docSnap.exists()) {
-        const data = docSnap.data();
+  let currentUser = null;
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+      document.getElementById('profile-email').innerText = (lang === "en" ? "Email:" : "E-post:") + " " + (user.email || "");
+      const snap = await getDoc(doc(db, "profiles", user.uid));
+      if (snap.exists()) {
+        const data = snap.data();
+        document.getElementById('nickname').value = data.nickname || '';
+        if (data.profileTheme) themeSelect.value = data.profileTheme;
+        document.getElementById('custom-code').value = data.profileCode || '';
         if (data.profilePicUrl) {
-          profilePicHtml = `<img src="${data.profilePicUrl}" alt="Profilbild" style="display:block; margin: 0 auto 20px auto; width: 120px; height: 120px; border-radius: 50%;">`;
+          const pic = document.getElementById('profilePicPreview');
+          pic.src = data.profilePicUrl;
+          pic.style.display = 'block';
+          document.getElementById('profilePicNotice').textContent = lang === "en" ? "Profile picture loaded." : "Profilbild hämtad.";
+          document.getElementById('profilePicNotice').style.display = "block";
+          setTimeout(() => { document.getElementById('profilePicNotice').style.display = "none"; }, 1500);
+        }
+        // === FÄRG VID LADDA PROFIL ===
+        if (data.nameColor) {
+          document.getElementById('nameColorPicker').value = data.nameColor;
+          if (document.getElementById("profile-username")) {
+            document.getElementById("profile-username").style.color = data.nameColor;
+          }
         }
       }
-      profileContent.innerHTML = profilePicHtml + document.getElementById('custom-code').value;
-      preview.classList.remove("hidden");
-      editBtn.classList.remove("hidden");
-    });
+    }
+  });
 
-    editBtn.addEventListener("click", () => {
-      preview.classList.add("hidden");
-    });
+  // Spara färg
+  document.getElementById('saveNameColorBtn').onclick = async function() { 
+    const color = document.getElementById('nameColorPicker').value;
+    if (!currentUser) return alert("Du måste vara inloggad!");
+    await setDoc(doc(db, "profiles", currentUser.uid), { nameColor: color }, { merge: true });
+    colorSavedMsg.textContent = "✅ Färg sparad!";
+    colorSavedMsg.style.display = "block";
+    setTimeout(() => { colorSavedMsg.style.display = "none"; }, 1800);
+  };
 
-    document.getElementById("logoutLink").addEventListener("click", () => {
-      auth.signOut().then(() => location.href = "login.html");
-    });
+  // Förhandsgranska vald bild
+  document.getElementById('profile-pic').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const pic = document.getElementById('profilePicPreview');
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        pic.src = ev.target.result;
+        pic.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Spara smeknamn
+  document.getElementById('saveNicknameBtn').onclick = async () => {
+    if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+    const newNick = document.getElementById('nickname').value.trim();
+    if (!newNick) {
+      document.getElementById('nicknameStatus').textContent = lang === "en" ? "You must enter a nickname." : "Du måste ange ett smeknamn.";
+      return;
+    }
+    const q = query(collection(db, "profiles"), where("nickname", "==", newNick));
+    const snap = await getDocs(q);
+    let taken = false;
+    snap.forEach(docu => { if (docu.id !== currentUser.uid) taken = true; });
+    if (taken) {
+      document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname is already taken!" : "Smeknamnet är upptaget!";
+      return;
+    }
+    await setDoc(doc(db, "profiles", currentUser.uid), { nickname: newNick }, { merge: true });
+    document.getElementById('nicknameStatus').style.color = "#00ff00";
+    document.getElementById('nicknameStatus').textContent = lang === "en" ? "Nickname saved!" : "Smeknamn sparat!";
+    setTimeout(() => { document.getElementById('nicknameStatus').textContent = ""; }, 2500);
+  };
+
+  // Spara kod/tema
+  document.getElementById('saveBtn').onclick = async () => {
+    if (!currentUser) return;
+    await setDoc(doc(db, "profiles", currentUser.uid), {
+      profileCode: document.getElementById('custom-code').value,
+      profileTheme: themeSelect.value
+    }, { merge: true });
+    document.getElementById('saveNotice').style.display = "block";
+    setTimeout(() => document.getElementById('saveNotice').style.display = "none", 3000);
+  };
+
+  // Spara profilbild
+  document.getElementById('saveProfilePicBtn').onclick = async () => {
+    const profilePicInput = document.getElementById('profile-pic');
+    const notice = document.getElementById('profilePicNotice');
+    notice.style.display = "block";
+    notice.textContent = "";
+    if (!currentUser) {
+      notice.textContent = lang === "en" ? "You are not logged in." : "Du är inte inloggad.";
+      setTimeout(() => { notice.style.display = "none"; }, 2200);
+      return;
+    }
+    const file = profilePicInput.files[0];
+    if (!file) {
+      notice.textContent = lang === "en" ? "No file selected." : "Ingen bild vald.";
+      setTimeout(() => { notice.style.display = "none"; }, 2000);
+      return;
+    }
+    try {
+      const storageRef = ref(storage, `profile_pics/${currentUser.uid}/profile.jpg`);
+      await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(storageRef);
+      await setDoc(doc(db, "profiles", currentUser.uid), {
+        profilePicUrl: downloadUrl
+      }, { merge: true });
+      document.getElementById('profilePicPreview').src = downloadUrl;
+      document.getElementById('profilePicPreview').style.display = 'block';
+      notice.innerHTML = `<span style="font-size:1.6em;color:#00ff00;vertical-align:-4px;">&#10003;</span> Profilbild sparad!`;
+      notice.style.display = "block";
+      setTimeout(() => { notice.style.display = "none"; }, 2500);
+    } catch (err) {
+      notice.textContent = lang === "en" ? "Error uploading file." : "Fel vid uppladdning.";
+      setTimeout(() => { notice.style.display = "none"; }, 3500);
+    }
+  };
+
+  // Visa profil
+  window.goToProfileView = function() {
+    if (!currentUser) return alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+    window.location.href = `profile-view.html?uid=${currentUser.uid}`;
+  };
+
+  // Preview
+  const preview = document.getElementById("fullscreenPreview");
+  const profileContent = document.getElementById("profileContent");
+  const editBtn = document.getElementById("editProfileBtn");
+
+  document.getElementById('btn-view-profile').addEventListener('click', async () => {
+    if (!currentUser) {
+      alert(lang === "en" ? "You are not logged in." : "Du är inte inloggad.");
+      return;
+    }
+    const docRef = doc(db, "profiles", currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    let profilePicHtml = "";
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (data.profilePicUrl) {
+        profilePicHtml = `<img src="${data.profilePicUrl}" alt="Profilbild" style="display:block; margin: 0 auto 20px auto; width: 120px; height: 120px; border-radius: 50%;">`;
+      }
+    }
+    profileContent.innerHTML = profilePicHtml + document.getElementById('custom-code').value;
+    preview.classList.remove("hidden");
+    editBtn.classList.remove("hidden");
+  });
+
+  editBtn.addEventListener("click", () => {
+    preview.classList.add("hidden");
+  });
+
+  document.getElementById("logoutLink").addEventListener("click", () => {
+    auth.signOut().then(() => location.href = "login.html");
+  });
   </script>
 </body>
 </html>
